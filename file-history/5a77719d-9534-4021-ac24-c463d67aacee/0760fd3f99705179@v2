@@ -1,0 +1,622 @@
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
+using Firstronic.Framework.Functions;
+using Firstronic.Framework.UI;
+using NPOI.SS.Formula.Functions;
+using System;
+using System.Data;
+using System.Web;
+using System.Web.Mvc;
+
+namespace Firstronic.Models.Menus
+{
+  public partial class MenuIndex
+  {
+    public static Nav GetMenuIndex()
+    {
+
+      DataTable dtProductionBuildings = Firstronic.Framework.Functions.Queries.GetDatatableFromQuery("SELECT [Building_Key] ,[Building_Code] FROM [COMMON_BUILDING] WHERE [PRODUCTION]=1");
+
+      var nav = new Nav();
+      var url = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+      var homes = new Dropdown(Resources.Menu.Home, url.Action("Index", "Home", new { Area = "" }));
+
+      var Dashboards = new Dropdown(Resources.Menu.Dashboards, url.Action("Index", "TVs", new { Area = "Dashboards" }));
+
+      /* ===========================================
+          AREAS DASHBOARD TVS
+      ============================================ */
+
+      var areastvs = new Dropdown("Areas");
+
+      DataTable dtAreas = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable("WHERE ActiveReport=1 and Area_Type_ID in (1,2) and AreaID in (select AreaID from PD_idt_stations)");
+
+      foreach (DataRow rowArea in dtAreas.Rows)
+      {
+        var stationstvs = new Dropdown(rowArea["Area"].ToString(), url.Action("Index", "Areas", new { Area = "Dashboards", id = rowArea[0].ToString() }));
+
+        //foreach (DataRow rowBuilding in dtProductionBuildings.Rows)
+        //{
+        //  stationstvs.Dropdowns.Add(new Dropdown(rowBuilding["Building_Code"].ToString(), url.Action("Index", "Areas", new { Area = "Dashboards", id = rowArea[0].ToString(), Building_Key = rowBuilding["Building_Key"].ToString() })));
+        //}
+
+        areastvs.Dropdowns.Add(stationstvs);
+      }
+
+      /* ===========================================
+          TICKETS DASHBOARD TVS
+      ============================================ */
+      var areasttickets = new Dropdown("Tickets Dashboard", url.Action("Dashboard", "Reports", new { Area = "Tickets" }));
+
+      foreach (DataRow rowArea in dtAreas.Rows)
+      {
+        var stationstvs = new Dropdown(rowArea["Area"].ToString(), url.Action("Dashboard", "Reports", new { Area = "Tickets", AreaID = rowArea[0].ToString() }));
+        areasttickets.Dropdowns.Add(stationstvs);
+      }
+
+      /* ===========================================
+          Downtime DASHBOARD TVS
+      ============================================ */
+      var areasdowntime = new Dropdown("Downtime Dashboard", url.Action("Index", "Downtime", new { Area = "Dashboards" }));
+
+      foreach (DataRow rowArea in dtAreas.Rows)
+      {
+        var stationstvs = new Dropdown(rowArea["Area"].ToString(), url.Action("Index", "Downtime", new { Area = "Dashboards", id = rowArea[0].ToString() }))
+        {
+
+        };
+
+        //foreach (DataRow rowBuilding in dtProductionBuildings.Rows)
+        //{
+        //  stationstvs.Dropdowns.Add(new Dropdown(rowBuilding["Building_Code"].ToString(), url.Action("Index", "Downtime", new { Area = "Dashboards", id = rowArea[0].ToString(), Building_Key = rowBuilding["Building_Key"].ToString() })));
+        //}
+
+        areasdowntime.Dropdowns.Add(stationstvs);
+      }
+
+      /* ===========================================
+          CHANGEOVERS DASHBOARD TVS
+      ============================================ */
+      var areaschangeovers = new Dropdown("Changeovers");
+
+      foreach (DataRow rowArea in dtAreas.Rows)
+      {
+        var stationstvs = new Dropdown(rowArea["Area"].ToString(), url.Action("ChangeOvers", "Areas", new { Area = "Dashboards", id = rowArea[0].ToString() }));
+        areaschangeovers.Dropdowns.Add(stationstvs);
+      }
+
+
+      var areas = new Dropdown(Resources.Menu.Departments)
+      {
+        Dropdowns = {
+          new Dropdown(Resources.Menu.Dashboards,url.Action("Index", "Portal",new { Area="Dashboards"})){
+             Dropdowns = {
+                //new Dropdown("Summary", url.Action("Index", "TVs",new { Area="Dashboards"}),"TV,Dashboard,packout"),
+                new Dropdown("3D Layout", url.Action("Index", "FloorShop",new { Area="Dashboards"}),"tv, layout, 3d, mapa, workcenter"){
+                   Dropdowns = {
+                        new Dropdown("JRZ", url.Action("Index", "FloorShop",new { Area="Dashboards"}),"tv, layout, 3d, mapa, workcenter"),
+                        new Dropdown("ELP", url.Action("Index", "FloorShop",new { Area="Dashboards",Building_Key="7611"}),"tv, layout, 3d, mapa, workcenter"),
+                    }
+                },
+
+                new Dropdown(DropdownType.Divider),
+                new Dropdown("OEE", url.Action("OEE", "Manufacturing",new { Area="Dashboards"}),"efficency, oee, quality,availability"){
+                  Dropdowns = {
+                    new Dropdown("Today", url.Action("OEE", "Manufacturing",new { Area="Dashboards",year=DateTime.Now.Year,month=DateTime.Now.Month,day=DateTime.Now.Day}),"efficency, oee, quality,availability"),
+                        new Dropdown("Weekly", url.Action("OEE", "Manufacturing",new { Area="Dashboards"}),"efficency, oee, quality,availability")
+                    }
+                },
+                areastvs,
+                areasttickets,
+                areaschangeovers,
+                areasdowntime,
+                new Dropdown(DropdownType.Divider),
+                new Dropdown("Material Loaded SMT", url.Action("MaterialLoaded", "Areas",new { Area="Dashboards", id="1"})),
+                new Dropdown("Material in WIP", url.Action("Index", "WIP",new { Area="Dashboards"})),
+                new Dropdown("Packout Chart", url.Action("Index", "Packout",new { Area="Dashboards"})){
+                   Dropdowns = {
+                        new Dropdown("Packout Chart", url.Action("Index", "Packout",new { Area="Dashboards"})),
+                        new Dropdown("Packout Set Goals", url.Action("SetGoals", "Packout",new { Area="Production"}))
+                    }
+                },
+                new Dropdown("SMT Placements", url.Action("Placements", "SMT",new { Area="Dashboards"})){
+                  Dropdowns = {
+                        new Dropdown("Placements", url.Action("Placements", "SMT",new { Area="Dashboards"})),
+                        new Dropdown("Placements Set Goals", url.Action("SetPlacementsGoals", "SMT",new { Area="Dashboards"}))
+                    }
+                },
+                new Dropdown(DropdownType.Divider),
+                new Dropdown("Cells TVs", url.Action("Cells", "TVs",new { Area="Dashboards"}),"TV,Dashboard,Tablero,Hora"),
+                new Dropdown("Stations TVs", url.Action("Stations", "TVs",new { Area="Dashboards"}),"TV,Dashboard,Tablero,Hora"),
+            }
+          },
+          new Dropdown(Resources.Menu.Engineering, url.Action("Index", "Portal",new { Area="Engineering"})){
+            Dropdowns = {
+              new Dropdown("Part Numbers")
+              {
+                Dropdowns = {
+                //new Dropdown(DropdownType.Divider),
+                //new Dropdown("Assembly Instruction", url.Action("Index", "Editor", new { Area = "Instructions" })),
+                //new Dropdown(DropdownType.Divider),
+                new Dropdown("Part Numbers", url.Action("Index", "PartNumber", new { Area = "Engineering" })),
+                new Dropdown("Part Numbers Setups", url.Action("Index", "Setups", new { Area = "Engineering" })),
+                new Dropdown("Part Numbers Setup Validation", url.Action("Verify", "PartSetupValidation", new { Area = "Engineering" })),
+                new Dropdown("Part Numbers Rates", url.Action("Index", "Rates", new { Area = "Engineering" }))
+                }
+              },
+              new Dropdown(Resources.Menu.Tools)
+              {
+                Dropdowns = {
+                  new Dropdown("Tools", url.Action("Index", "Tools", new { Area = "Engineering" })),
+                  new Dropdown("ToolType", url.Action("Index", "ToolType", new { Area = "Engineering" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Feeders", url.Action("Index", "Feeders", new { Area = "Engineering" })),
+                  new Dropdown("Stencils", url.Action("Index", "Stencils", new { Area = "Engineering" })),
+                  new Dropdown("SolderPaste", url.Action("Index", "SolderPaste", new { Area = "Engineering" }))
+                }
+              },
+              //new Dropdown(Resources.Menu.Reports)
+              //{
+              //  Dropdowns = {
+              //  //new Dropdown(DropdownType.Divider),
+              //  new Dropdown("NPIs", url.Action("NPIReports", "Reports", new { Area = "Engineering" })),
+              //  }
+              //},
+              new Dropdown("Other Labels", url.Action("Index", "OthersLabels", new { Area = "Engineering" })),
+              new Dropdown(DropdownType.Divider),
+              new Dropdown("Customer Management", url.Action("Index", "Customer", new { Area = "Engineering" }))
+            }
+          },
+          new Dropdown("IS", url.Action("Index", "Portal",new { Area="IS"})){
+            Dropdowns = {
+              //new Dropdown(Resources.Menu.Projects)
+              //{
+              //  Dropdowns = {
+              //  //new Dropdown("Projects", url.Action("Index", "Projects", new { Area = "IS" })),
+              //  //new Dropdown("Releases", url.Action("Index", "Releases", new { Area = "IS" }))
+              //  }
+              //},
+              new Dropdown(Resources.Menu.Trainings)
+              {
+                Dropdowns = {
+                //new Dropdown(DropdownType.Divider),
+                new Dropdown(Resources.Menu.Trainings, url.Action("Index", "Trainings", new { Area = "IT" }))
+                }
+              }
+            }
+          },
+          new Dropdown(Resources.Menu.Manage, url.Action("Index", "Portal",new { Area="Manage"})){
+            Dropdowns = {
+              new Dropdown(Resources.Menu.Agents + " Dashboards",url.Action("Index", "Agents",new { Area="Manage"}),"Services,Status"){
+                 Dropdowns = {
+                  new Dropdown(Resources.Menu.Agents,url.Action("List", "Agents",new { Area="Manage"}),"Services,Status"),
+                }
+              },
+              new Dropdown("CFT")
+              {
+                Dropdowns = {
+                new Dropdown("CFT", url.Action("Index", "CommonCFT", new { Area = "Manage" }))
+                }
+              },
+              new Dropdown("Extractors", url.Action("Index", "Extractors", new { Area = "Manage" })),
+              new Dropdown("ExtractorsAOI", url.Action("Index", "ExtractorsAOI", new { Area = "Manage" })),
+              new Dropdown("Racks", url.Action("Index", "Racks", new { Area = "Manage" })),
+              new Dropdown("Stations")
+              {
+                Dropdowns = {
+                //new Dropdown(DropdownType.Divider),
+                new Dropdown("Areas", url.Action("Index", "Areas", new { Area = "Manage" })),
+                new Dropdown("Bonus", url.Action("Index", "Bonus", new { Area = "Manage" })),
+                new Dropdown("Cells", url.Action("Index", "Cells", new { Area = "Manage" })),
+                new Dropdown("Stations", url.Action("Index", "Station", new { Area = "Manage" })),
+                new Dropdown("Processes", url.Action("Index", "Processes", new { Area = "Manage" })),
+                new Dropdown("Areas Relation", url.Action("Index", "AreasRelation", new { Area = "Manage" })),
+                }
+              },
+              new Dropdown("Settings", url.Action("Index", "Settings", new { Area = "Manage" })),
+              new Dropdown("Users")
+              {
+                Dropdowns = {
+                //new Dropdown(DropdownType.Divider),
+                new Dropdown("Role", url.Action("Index", "Role", new { Area = "Manage" })),
+                new Dropdown("Positions", url.Action("Index", "Position", new { Area = "Manage" })),
+                new Dropdown("Users", url.Action("Index", "User", new { Area = "Manage" }))
+                }
+              }
+            }
+          },
+          new Dropdown(Resources.Menu.Manufacturing, url.Action("Index", "Portal",new { Area="Manufacturing"})){
+            Dropdowns = {
+              new Dropdown("OEE", url.Action("OEE", "Manufacturing",new { Area="Dashboards"}),"efficency, oee, quality,availability"),
+              new Dropdown(DropdownType.Divider),
+              new Dropdown(Resources.Menu.Reports)
+              {
+                Dropdowns = {
+                  new Dropdown("Feeder Reworks", url.Action("Feeder_Report", "Reports", new { Area = "Manufacturing" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("SMT SPI", url.Action("SMTSPI", "Reports", new { Area = "Manufacturing" })),
+                  new Dropdown("SMT AOI", url.Action("SMTAOI", "Reports", new { Area = "Manufacturing" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("SMT Pick & Place", url.Action("SMTPickAndPlace", "Reports", new { Area = "Manufacturing" })),
+                  new Dropdown("SMT Pick & Place Logs", url.Action("SMTPickAndPlaceLogs", "Reports", new { Area = "Manufacturing" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Wave AOI", url.Action("WaveAOI", "Reports", new { Area = "Manufacturing" })),
+                }
+              },
+              new Dropdown(Resources.Menu.Members)
+              {
+                Dropdowns = {
+                  new Dropdown("Technicals", url.Action("Index", "TechnicalUsers", new { Area = "Manufacturing" }))
+                }
+              }
+            }
+          },
+          new Dropdown(Resources.Menu.Materials, url.Action("Index", "Portal",new { Area="Materials"})){
+            Dropdowns = {
+               new Dropdown("Kanban")
+              {
+                Dropdowns = {
+                  new Dropdown("Dashboard", url.Action("Dashboard", "Kanban", new { Area = "Materials" })),
+                  //new Dropdown("Parts", url.Action("Index", "Kanban", new { Area = "Materials" }))
+                }
+              },
+              //new Dropdown("Material Controlled")
+              //{
+              //  Dropdowns = {
+              //    new Dropdown("IC's In Transit", url.Action("InTransit", "BackFlash", new { Area = "Materials" })),
+              //    new Dropdown("IC's Report", url.Action("PartDetails", "BackFlash", new { Area = "Materials" })),
+              //    new Dropdown("IC's Controlled List", url.Action("List", "BackFlash", new { Area = "Materials" })),
+              //    new Dropdown("WIP Controlled List", url.Action("List", "WIPMaximum", new { Area = "Materials" })),
+              //  }
+              //},
+              new Dropdown(Resources.Menu.Reports)
+              {
+                Dropdowns = {
+                  //new Dropdown("Master Inventory", url.Action("Inventory", "Reports", new { Area = "Materials" }),"Inventory,Master,ELP,Warehouse"),
+                  new Dropdown("PLB", url.Action("PLB", "Receiving", new { Area = "Materials" })),
+                  new Dropdown("InTransit Report", url.Action("InTransitReport", "Reports", new { Area = "Materials" })),
+                  new Dropdown(DropdownType.Divider),
+                  //new Dropdown("MLS Expired Report", url.Action("MSLExpired", "Reports", new { Area = "Materials" })),
+                  //new Dropdown("Part Backflash Report", url.Action("PartDetails", "BackFlash", new { Area = "Materials" })),
+                  new Dropdown("Receiving Reels Report", url.Action("ReceivingReels", "Reports", new { Area = "Materials" })),
+                  new Dropdown("Splices Serials Report", url.Action("SerialWrongMerge", "BackFlash", new { Area = "Materials" }),"Splice,Merge,Empate"),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Bin Clasification", url.Action("BinClassification", "Reports", new { Area = "Materials" })),
+                  new Dropdown("Part Consumption", url.Action("Part_Consuption", "Reports", new { Area = "Materials" })),
+                  //new Dropdown("Part Cost History", url.Action("Cost_Comparation", "Reports", new { Area = "Materials" })),
+                  new Dropdown("Container Reidentification", url.Action("ContainerReidentification", "Reports", new { Area = "Materials" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Shortages", url.Action("Index", "Shortages", new { Area = "Materials" })),
+                  new Dropdown("Warehouse Response Time", url.Action("ResponseTime", "Reports", new { Area = "Materials" })),
+                }
+              },
+              new Dropdown("MSL")
+              {
+                Dropdowns = {
+                new Dropdown("MSL Reset", url.Action("MSLReset", "MSLRemove", new { Area = "Materials" }),"MSL,Horneo,Expirado,Expired")
+                }
+              },
+              new Dropdown("Tool Crib")
+              {
+                Dropdowns = {
+                  new Dropdown("Items", url.Action("Index", "ToolCrib_Itmes", new { Area = "Materials" })),
+                  new Dropdown("Items Usage Report", url.Action("ItemUsage", "ToolCrib_Itmes", new { Area = "Materials" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Coat/Batas", url.Action("Index", "Coat", new { Area = "Personnel" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Solder Paste", url.Action("Index", "ToolCrib_SolderPaste", new { Area = "Materials" })),
+                  new Dropdown("Solder Paste Out", url.Action("OutSolderPaste", "ToolCrib_SolderPaste", new { Area = "Materials" })),
+                  new Dropdown("Solder Paste Report", url.Action("SolderPaste", "Reports", new { Area = "Manufacturing" }))
+                }
+              },
+              //new Dropdown("Tools")
+              //{
+              //  Dropdowns = {
+              //  new Dropdown("Cycle count", url.Action("Index", "CycleCount", new { Area = "Mobile" }))
+              //  }
+              //},
+              new Dropdown("Warehouse")
+              {
+                Dropdowns = {
+                //new Dropdown(DropdownType.Divider),
+                new Dropdown("Inicio", url.Action("Index", "Warehouse", new { Area = "Materials" })),
+                new Dropdown("Serial Adjustment", url.Action("SerialAdjustment", "Warehouse", new { Area = "Materials" })),
+                new Dropdown("Material In", url.Action("MaterialIn", "Warehouse", new { Area = "Materials" })),
+                new Dropdown("Material Out", url.Action("MaterialOut_List", "Warehouse", new { Area = "Materials" })),
+                new Dropdown("FIFO Ignore", url.Action("Index", "Fifo", new { Area = "Materials" })),
+                new Dropdown(DropdownType.Divider),
+                new Dropdown("Re-identification Part No", url.Action("Reindentification", "Warehouse", new { Area = "Materials" })),
+                new Dropdown("Container Purge Part No", url.Action("Purge", "Warehouse", new { Area = "Materials" })),
+                new Dropdown("Container InTransit To OK", url.Action("MoveInTransittoOK", "Warehouse", new { Area = "Materials" })),
+                new Dropdown("Container OK To InTransit", url.Action("MoveOKToInstransit", "Warehouse", new { Area = "Materials" })),
+                new Dropdown("Retire from Consigment", url.Action("MoveFromConsigment", "Warehouse", new { Area = "Materials" })),
+                new Dropdown("Move to MATERIAL HOLD", url.Action("Add", "MaterialHold", new { Area = "Materials" })),
+                new Dropdown("Move MATERIAL HOLD to OK", url.Action("AddToOk", "MaterialHold", new { Area = "Materials" })),
+                new Dropdown("Move to Customer Consigned", url.Action("Add", "CustomerCosnsigned", new { Area = "Materials" }))
+                }
+              },
+
+              new Dropdown("MPN Approval", url.Action("ListMPNAlternatives", "Receiving", new {Area = "Materials"}))
+            }
+          },
+          new Dropdown(Resources.Menu.Mobile,url.Action("Index", "SMT",new { Area="Mobile"})){
+          },
+          new Dropdown(Resources.Menu.Personnel, url.Action("Index", "Portal",new { Area="Personnel"})){
+            Dropdowns = {              
+              new Dropdown("Teams (Bonus)")
+              {
+                Dropdowns = {
+                //new Dropdown(DropdownType.Divider),
+                  new Dropdown("Report", url.Action("BonusHistory", "Reports", new { Area = "Personnel" })),
+                  new Dropdown("Set Users", url.Action("BonusPosition", "FloorShop", new { Area = "Personnel" })),
+                  new Dropdown("Edit Users", url.Action("GetActives", "BonusPosition", new { Area = "Personnel" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Load Direct Personel List", url.Action("HCtoBeFirst", "Reports", new { Area = "Production" })),
+                  new Dropdown("QA Cells Approved", url.Action("Index", "QAApproved", new { Area = "Personnel" })),
+                  new Dropdown("QA User Lock", url.Action("Index","QAUserLock", new {Area = "Personnel"})),
+                }
+              },
+              new Dropdown("Visitors",url.Action("Index", "Visitors", new {Area = "Personnel"}))
+              {
+
+              }
+            }
+          },
+          new Dropdown("Planning", url.Action("Index", "Portal",new { Area="Planning"})){
+             Dropdowns = {
+              new Dropdown("Planning Tool", url.Action("Index", "Status",new { Area="Planning"})),
+              new Dropdown("Planning Balance", url.Action("Balance", "Status",new { Area="Planning"})),
+              new Dropdown("Job Hint", url.Action("Index", "Hint",new { Area="Planning"})),
+              //new Dropdown("Job Package Status", url.Action("JobStatus", "Planning", new { Area = "Production" }))
+            }
+          },
+          new Dropdown(Resources.Menu.Production, url.Action("Index", "Portal",new { Area="Production"})){
+            Dropdowns = {
+              new Dropdown("AssemblyInstructions", url.Action("Index", "AssemblyInstructions", new { Area = "Dashboards" }),"Ayuda visual, Instruccion de trabajo"),
+              new Dropdown(DropdownType.Divider),
+              new Dropdown("Full Production Report", url.Action("ProductionSummary", "Reports", new { Area = "Production" }),"Production Summary, Full Report"){
+                Dropdowns = {
+                  new Dropdown("Full Production Report", url.Action("ProductionSummary", "Reports", new { Area = "Production" }),"Production Summary, Full Report"),
+                  new Dropdown("Full Production Report By Station", url.Action("ProductionFullReport", "Reports", new { Area = "Production" }),"Production Summary, Full Report")
+                }
+              },
+              new Dropdown(DropdownType.Divider),
+              new Dropdown("Add Shortage", url.Action("Index", "Shortages", new { Area = "Production" })),
+              new Dropdown(DropdownType.Divider),
+              new Dropdown(Resources.Menu.Members)
+              {
+                Dropdowns = {
+                  new Dropdown("Leaders", url.Action("Index", "LeadersUsers", new { Area = "Production" }))
+                }
+              },
+              new Dropdown("Packout")
+              {
+                Dropdowns = {
+                //new Dropdown(DropdownType.Divider),
+                  new Dropdown("Set Daily Goals", url.Action("List", "GoalDaily", new { Area = "Production" })),
+                  new Dropdown("Daily Goals Report", url.Action("Report", "GoalDaily", new { Area = "Production" })),
+                  new Dropdown("Set Month Goals", url.Action("SetGoals", "Packout", new { Area = "Production" })),
+                }
+              },
+              new Dropdown("Rework")
+              {
+                Dropdowns = {
+                  new Dropdown("History", url.Action("ProductionFailReason", "Rework", new { Area = "Production" })),
+                  new Dropdown("History by Components", url.Action("ProductionFailReason_Components", "Rework", new { Area = "Production" })),
+                }
+              },
+              new Dropdown("Others Reports")
+              {
+                Dropdowns = {
+                  new Dropdown("Grade Validation", url.Action("GradeValidation", "Reports", new { Area = "Production" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Station Efficency", url.Action("StationEficency", "Reports", new { Area = "Production" })),
+                  new Dropdown("Station Efficency Areas", url.Action("StationEficency_Areas", "Reports", new { Area = "Production" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Schedule Production SMT", url.Action("SchedulePlanning", "Reports", new { Area = "Production" })),
+                  new Dropdown("Changeovers", url.Action("changingmodels", "Reports", new { Area = "Production" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Reprint Shipping Labels", url.Action("ReprintsShippingLabels", "Reports", new { Area = "Production" })),
+                  new Dropdown("PLEX Transactions", url.Action("PlexTransactions", "Reports", new { Area = "Production" })),
+                  new Dropdown("PLEX vs BeFirst", url.Action("PlexVSBeFirst_Area", "Reports", new { Area = "Production" })),
+                  new Dropdown("Hanwha vs BeFirst", url.Action("ProductionVsHanwha", "Reports", new { Area = "Production" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Reels On Line", url.Action("StationReels", "Reports", new { Area = "Production" })),
+                }
+              }
+            }
+          },
+          new Dropdown(Resources.Menu.Quality, url.Action("Index", "Portal",new { Area="Quality"})){
+            Dropdowns = {
+              new Dropdown("Task Manager", url.Action("Index", "TaskManager", new { Area = "Quality" })),
+              new Dropdown("Defects")
+              {
+                Dropdowns = {
+                  new Dropdown("Defects", url.Action("Index", "Defects", new { Area = "Quality" }))
+                }
+              },
+              new Dropdown("CAPAS")
+              {
+                Dropdowns = {
+                  new Dropdown("Capa Audit", url.Action("StartCapaAudit", "Capas", new { Area = "Quality" })),
+                  new Dropdown("Capas Report", url.Action("CapasReport", "Capas", new { Area = "Quality" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Capas Questions", url.Action("List", "CapasQuestions", new { Area = "Quality"})),
+                  new Dropdown("Capas Areas", url.Action("List", "CapasAreas", new { Area = "Quality" })),
+                  new Dropdown("Capas Auditors", url.Action("List", "Auditors", new { Area = "Quality" }))
+                 }
+              },
+              new Dropdown("ESD")
+              {
+                Dropdowns = {
+                  new Dropdown("ESD Audit", url.Action("List", "ESDaudit", new { Area = "Quality" }))
+                }
+              },
+               new Dropdown("5S")  //quitar comentario
+              {
+                Dropdowns = {
+                  //  new Dropdown("5S Audit", url.Action("Start5SAudit", "Poll5S", new { Area = "Quality" })),
+                      new Dropdown("Start 5S Audit", url.Action("Create", "Poll5S", new { Area = "Quality" })),
+                     new Dropdown("Pending 5S Audits", url.Action("List", "Poll5S", new { Area = "Quality" })),
+                  // new Dropdown("Result Poll 5S", url.Action("Index", "Poll5S", new { Area = "Quality" })),
+                  new Dropdown("Download Poll 5S", url.Action("DescargarCsv", "Poll5S", new { Area = "Quality" })),
+
+                    new Dropdown(DropdownType.Divider),
+                  new Dropdown("5S Questions", url.Action("List", "Poll5SQuestions", new { Area = "Quality"})), // OK
+                   new Dropdown("5S Areas", url.Action("List", "Areas5S", new { Area = "Quality" })), // OK
+                }
+              },
+              new Dropdown("FirstPiece", url.Action("Index", "FirstPiece", new { Area = "Quality" }))
+              {
+                 Dropdowns = {
+                  //new Dropdown(DropdownType.Divider),
+                  new Dropdown("Report", url.Action("FirstPiece", "Reports", new { Area = "Quality" }))
+                }
+              },
+              new Dropdown("Measurement", url.Action("List", "Measurement", new { Area = "Quality" })),
+              new Dropdown("Supplier Defective Add", url.Action("Add", "SupplierDefective", new { Area = "Quality" })),
+              new Dropdown("Internal Defective Add", url.Action("Add", "InternalDefective", new { Area = "Quality" })),
+              new Dropdown("Part Numbers", url.Action("Index", "PartNumber", new { Area = "Quality" }))
+              {
+                Dropdowns = {
+                  new Dropdown("Part Numbers", url.Action("Index", "PartNumber", new { Area = "Quality" })),
+                  new Dropdown("Rabbits", url.Action("List", "Rabbits", new { Area = "Quality" })),
+                  new Dropdown("Rabbits Control", url.Action("List", "RabbitsDelivery", new { Area = "Quality" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("AOI CirRef Locks", url.Action("List", "Inspection", new { Area = "Quality" })),
+                  new Dropdown("Rework Locks", url.Action("List", "InspectionRework", new { Area = "Quality" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("QA Alerts", url.Action("List", "Alerts", new { Area = "Quality" })),
+                  new Dropdown("QA Reminders", url.Action("Index", "Reminders", new { Area = "Quality" })),
+                }
+              },
+              new Dropdown("Particle Counter")
+              {
+                Dropdowns = {
+                //new Dropdown(DropdownType.Divider),,
+                  new Dropdown("Dashboards", url.Action("Index", "ParticleCounter", new { Area = "Quality" })),
+                  new Dropdown("Data List", url.Action("List", "ParticleCounter", new { Area = "Quality" })),
+                  new Dropdown("Zones List", url.Action("List", "ParticleCounterZones", new { Area = "Quality" }))
+                }
+              },
+              new Dropdown("Process Audits")
+              {
+                Dropdowns = {
+                  new Dropdown("Process Audit", url.Action("StartAudit", "ProcessAudits", new { Area = "Quality" })),
+                  new Dropdown("Process Report", url.Action("AuditReport", "ProcessAudits", new { Area = "Quality" })),
+                  new Dropdown("Process Audit Questions", url.Action("Index", "ProcessAudits", new { Area = "Quality" })),
+                 }
+              },
+              //new Dropdown(Resources.Menu.Reports)
+              //{
+              //  Dropdowns = {
+              //    //new Dropdown(DropdownType.Divider),
+              //    new Dropdown("First Piece", url.Action("FirstPiece", "Reports", new { Area = "Quality" })),
+              //    new Dropdown("Scrap", url.Action("Scrap", "Reports", new { Area = "Quality" })),
+              //  }
+              //},
+              new Dropdown("Scrap", url.Action("Scrap", "Reports", new { Area = "Quality" }))
+              {
+                Dropdowns = {
+                  new Dropdown("Scrap Add", url.Action("Scrap", "Reports", new { Area = "Quality" })),
+                  new Dropdown("Scrap Recover", url.Action("RecoverScrap", "Scrap", new { Area = "Quality" }))
+                }
+              },
+              new Dropdown(Resources.Menu.Units)
+              {
+                Dropdowns = {
+                  new Dropdown("Mark Unit as Defective", url.Action("DefectiveProduction", "Units", new { Area = "Quality" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Move Unit To Scrap", url.Action("MoveToScrap", "Units", new { Area = "Quality" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Release Unit Danlaw", url.Action("ReleaseToProduction", "ReleaseDanlaw", new { Area = "Quality" })),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Release Unit", url.Action("ReleaseToProduction", "Units", new { Area = "Quality" })),
+                  new Dropdown("Release Locked Unit", url.Action("ReleaseLockUnitsToProduction", "Units", new { Area = "Quality" }))
+                }
+              }
+            }
+          },
+          new Dropdown("Tickets", url.Action("IndexAll", "Portal",new { Area="Tickets"})){
+             Dropdowns = {
+              new Dropdown("Open", url.Action("CurrentOpen", "Reports",new { Area="Tickets"})),
+              new Dropdown("All", url.Action("IndexAll", "Reports",new { Area="Tickets"})),
+              areasttickets
+            }
+          },
+          new Dropdown("Tracking",url.Action("Index", "Portal",new { Area="Tracking"})){
+            Dropdowns = {
+              new Dropdown(Resources.Menu.Containers, url.Action("ContainerMovements", "Container", new { Area = "Tracking" }))
+              {
+                Dropdowns = {
+                  new Dropdown("Container Movements", url.Action("ContainerMovements", "Container", new { Area = "Tracking" }),"Serial,PLEX"),
+                 }
+              },
+              new Dropdown(Resources.Menu.Tools)
+              {
+                Dropdowns = {
+                  new Dropdown("Cleanness History", url.Action("GetCleaningsDaily", "Tools", new { Area = "Tracking" })),
+                 }
+              },
+              new Dropdown(Resources.Menu.Setup, url.Action("GetValidations", "SetupCheck", new { Area = "Tracking" }))
+              {
+                Dropdowns = {
+                  new Dropdown("Setup History", url.Action("GetValidations", "SetupCheck", new { Area = "Tracking" })),
+                 }
+              },
+              new Dropdown(Resources.Menu.Units, url.Action("History", "Units", new { Area = "Tracking" }))
+              {
+                Dropdowns = {
+                  new Dropdown("Unit History", url.Action("History", "Units", new { Area = "Tracking" }),"Tracking,Unit,Rastreo,History,Historial"),
+                  new Dropdown("Units in Box", url.Action("Box", "Units", new { Area = "Tracking" }),"Tracking,Unit,Rastreo,History,Historial,Box"),
+                  new Dropdown("Units Position", url.Action("SerialPosition", "Units", new { Area = "Tracking" }),"Tracking,Unit,Rastreo,Position"),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Serial Replace", url.Action("Replace", "Units", new { Area = "Tracking" }),"Tracking,Unit,Rastreo,Replace,Reemplazo"),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Unit BOM", url.Action("Index", "BOMUsed", new { Area = "Tracking" }),"MPN"),
+                  new Dropdown("Manufacture PN Tracking", url.Action("Index", "ManufactureParts", new { Area = "Tracking" }),"MPN"),
+                  new Dropdown(DropdownType.Divider),
+                  new Dropdown("Road Map Unit", url.Action("RoadMap", "Tracking", new { Area = "Tracking" })),
+                  new Dropdown("Tester Records", url.Action("TesterRecords", "Units", new { Area = "Tracking" })),
+                  new Dropdown("What Is Next? Unit", url.Action("WhatIsNext", "Units", new { Area = "Tracking" }),"Tracking,Unit Tracking")
+                 }
+              }
+            }
+          }
+         }
+      };
+
+
+      var Mobile = new Dropdown(Resources.Menu.Mobile, url.Action("Index", "Portal", new { Area = "Mobile" }));
+
+      var Languages = new Dropdown(Resources.Menu.Languages)
+      {
+        Dropdowns = {
+          new Dropdown(Resources.Menu.English, url.Action("ChangeLanguage", "Home", new { Area = "",lang ="en" })),
+          new Dropdown(Resources.Menu.Spanish, url.Action("ChangeLanguage", "Home", new { Area = "",lang ="es"  }))
+        }
+      };
+
+      var Search = new Dropdown(Resources.Menu.Search, url.Action("Help", "Page", new { Area = "" }));
+
+      var Exits = new Dropdown(Resources.Menu.Exit)
+      {
+        Dropdowns = {
+          new Dropdown(Resources.Menu.Log_Out, url.Action("LogOff", "Account", new { Area = "" })),
+          new Dropdown(Resources.Menu.Exit, url.Action("Index", "Home", new { Area = "" }))
+        }
+      };
+
+      nav.Dropdowns.Add(homes);
+      nav.Dropdowns.Add(areas);
+      nav.Dropdowns.Add(Mobile);
+      nav.Dropdowns.Add(Dashboards);
+      nav.Dropdowns.Add(Languages);
+      nav.Dropdowns.Add(Search);
+      nav.Dropdowns.Add(Exits);
+
+      return nav;
+    }
+  }
+}

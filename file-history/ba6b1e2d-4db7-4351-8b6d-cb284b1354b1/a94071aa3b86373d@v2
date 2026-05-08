@@ -1,0 +1,393 @@
+---
+title: Serialization Array Order Remapping by Area and Side
+doc_id: INT-008
+version: 1.0
+date: 2026-05-06
+category: Integration
+status: Implemented
+---
+
+# Serialization Array Order Remapping by Area and Side
+
+## Overview
+
+The BeFirst scanner array serialization system now supports area and side-specific serialization order remapping. This allows different manufacturing areas (SMT, AOI, etc.) and different board sides (Top/Bottom) to use different scanning sequences without duplicating base configurations.
+
+## Problem Statement
+
+Machines in different manufacturing areas read serial numbers in different sequences due to machine-specific reading patterns. The original system only supported a single serialization order per part, requiring manual adjustments or workarounds when parts moved between areas.
+
+## Solution Architecture
+
+### Remapping Table Approach
+
+Instead of duplicating configurations, we use a lightweight remapping table that transforms the default serialization order for specific AreaID/Side combinations.
+
+**Key Concept:**
+- Base configuration remains unchanged in `PART_OPERATION_SERIALIZATION_ARRAY_INDEX`
+- New table `PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP` stores index transformations
+- Example: In SMT area (AreaID=5), original index 4 becomes new index 5
+
+**Benefits:**
+- No migration required
+- No changes to existing data
+- Simple LEFT JOIN logic
+- Storage efficient (only stores differences)
+- Backward compatible
+
+## Database Schema
+
+### New Table: PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP
+
+```sql
+CREATE TABLE [dbo].[PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP] (
+    [AutoID]         INT           IDENTITY (1, 1) NOT NULL,
+    [PartID]         INT           NULL,
+    [AreaID]         INT           NOT NULL,
+    [Side]           NVARCHAR (10) NOT NULL,
+    [OriginalIndex]  INT           NOT NULL,
+    [RemappedIndex]  INT           NOT NULL,
+    [Facility_Key]   INT           NULL,
+    [Part_Key]       INT           NULL,
+    [CreatedDate]    DATETIME      DEFAULT (GETDATE()) NULL,
+    [ModifiedDate]   DATETIME      DEFAULT (GETDATE()) NULL,
+    CONSTRAINT [PK_PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP] PRIMARY KEY CLUSTERED ([AutoID] ASC)
+);
+```
+
+**Indexes:**
+- `IX_Remap_PartArea` - Performance index on (PartID, AreaID, Side)
+- `UQ_Remap_PartAreaOriginal` - Unique constraint ensuring one remap per PartID+AreaID+Side+OriginalIndex
+
+### Example Data
+
+| PartID | AreaID | Side | OriginalIndex | RemappedIndex |
+|--------|--------|------|---------------|---------------|
+| 12345  | 5      | A    | 1             | 1             |
+| 12345  | 5      | A    | 2             | 3             |
+| 12345  | 5      | A    | 3             | 2             |
+| 12345  | 5      | A    | 4             | 5             |
+| 12345  | 5      | A    | 5             | 4             |
+
+This means: In SMT area (AreaID=5), Side A, positions 2 and 3 are swapped, and positions 4 and 5 are swapped.
+
+## Query Pattern
+
+### With Remapping (Portal & Service)
+
+```sql
+SELECT
+    IDX.AutoID,
+    IDX.PartID,
+    IDX.MasterID,
+    IDX.PositionID,
+    ISNULL(REMAP.RemappedIndex, IDX.ToIndex) AS ToIndex,
+    IDX.Col,
+    IDX.Row
+FROM PART_OPERATION_SERIALIZATION_ARRAY_INDEX IDX
+LEFT JOIN PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP REMAP
+    ON IDX.PartID = REMAP.PartID
+    AND REMAP.AreaID = @AreaID
+    AND REMAP.Side = @Side
+    AND IDX.ToIndex = REMAP.OriginalIndex
+WHERE IDX.PartID = @PartID
+ORDER BY ISNULL(REMAP.RemappedIndex, IDX.ToIndex) ASC
+```
+
+**Key Logic:** `ISNULL(REMAP.RemappedIndex, IDX.ToIndex)` - Use remapped index if exists, otherwise use original.
+
+## Portal Implementation
+
+### Entity Model
+
+**File:** `BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs`
+
+New entity classes:
+- `tbl_Part_Operation_Serialization_Array_Index_Remap` - Base entity
+- `tbl_Part_Operation_Serialization_Array_Index_Remap_FULL` - Extended entity with PartNumber and AreaName
+
+### Controller Methods
+
+**File:** `BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs`
+
+**Updated Method:**
+- `GetActivateScannerArrayData(int id, int areaId = 0, string side = "DEFAULT")` - Now supports AreaID and Side parameters
+
+**New Methods:**
+1. `GetSerializationRemap(int partId, int areaId, string side)` - Get existing remapping for AreaID/Side
+2. `SaveSerializationRemap(int partId, int areaId, string side, List<RemapItem> remaps)` - Save remapping configuration
+3. `DeleteSerializationRemap(int partId, int areaId, string side)` - Delete remapping (returns to default)
+4. `GetSerializationRemapList(int partId)` - List all area/side combinations with remappings
+
+### Authorization
+
+All remapping methods require: `BF Administrator` or `BF Part Edit` roles
+
+## Service Integration
+
+**File:** `BeFirst_Production\BeFirst\Produccion\frm_MergeLabels_MergeKeyence_Positions.vb`
+
+**Updated Method:** `loadEmptyTable()`
+
+The service automatically applies remapping based on:
+- `ExData.Selected_Area.AreaID` - Current manufacturing area
+- `ExData.Side` - Current board side
+
+**Behavior:**
+- If remapping exists for current AreaID/Side → use remapped order
+- If no remapping exists → use default order
+- No code changes needed in calling code
+
+## Usage Workflow
+
+### 1. Create Base Configuration (Existing Process)
+
+1. Open Part Number configuration page
+2. Configure scanner array using existing "Activate Scanner" functionality
+3. Define default serialization order (ToIndex values)
+4. Save configuration
+
+### 2. Create Area/Side Remapping (New Feature)
+
+1. Navigate to "Serialization Order Remapping" section
+2. Select Area (dropdown from PD_idt_areas)
+3. Select Side (A, B, or DEFAULT)
+4. Click "Load Remapping" or "Create New Remapping"
+5. System displays base configuration with editable remapped indexes
+6. Modify remapped index values as needed
+7. Click "Save Remapping"
+
+### 3. View Existing Remappings
+
+1. Remapping list shows all Area/Side combinations with active remappings
+2. Click on an entry to edit existing remapping
+3. Click "Delete Remapping" to remove and return to default order
+
+### 4. Production Usage
+
+1. Service automatically detects current AreaID and Side
+2. Queries apply appropriate remapping if exists
+3. Scanner positions display in remapped order
+4. Serial number processing follows remapped sequence
+5. No user intervention required
+
+## Testing Strategy
+
+### Database Testing
+
+```sql
+-- Test 1: Verify table exists
+SELECT * FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_NAME = 'PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP';
+
+-- Test 2: Create test remapping
+INSERT INTO PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP
+(PartID, AreaID, Side, OriginalIndex, RemappedIndex)
+VALUES
+(12345, 5, 'A', 1, 1),
+(12345, 5, 'A', 2, 3),
+(12345, 5, 'A', 3, 2),
+(12345, 5, 'A', 4, 5),
+(12345, 5, 'A', 5, 4);
+
+-- Test 3: Query with remapping
+SELECT
+    IDX.ToIndex AS OriginalIndex,
+    ISNULL(REMAP.RemappedIndex, IDX.ToIndex) AS EffectiveIndex
+FROM PART_OPERATION_SERIALIZATION_ARRAY_INDEX IDX
+LEFT JOIN PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP REMAP
+    ON IDX.PartID = REMAP.PartID
+    AND REMAP.AreaID = 5
+    AND REMAP.Side = 'A'
+    AND IDX.ToIndex = REMAP.OriginalIndex
+WHERE IDX.PartID = 12345
+ORDER BY ISNULL(REMAP.RemappedIndex, IDX.ToIndex);
+```
+
+### Portal Testing
+
+1. Load part with base config → should display original order
+2. Select AreaID + Side → click "Create Remapping"
+3. Modify remapped index values → save
+4. Reload remapping → should show saved values
+5. Load scanner array with AreaID/Side → should show remapped order
+6. Delete remapping → area/side returns to default order
+
+### Service Testing
+
+1. Part with no remapping → uses default order
+2. Part with SMT remapping → service at SMT area uses remapped order
+3. Part with SMT remapping → service at different area uses default order
+4. Serial number processing → follows remapped ToIndex sequence
+5. Visual grid → positions appear in remapped order
+
+### Regression Testing
+
+- Existing parts continue working (no remapping = original order)
+- No changes to base configuration tables
+- Services default to original order if no remapping exists
+
+## Deployment Steps
+
+### 1. Database (5 minutes)
+
+```sql
+-- Execute table creation script
+-- File: BeFirst_Database_MES_Database\MES\dbo\Tables\PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP.sql
+```
+
+### 2. Portal (10 minutes)
+
+1. Deploy updated `PartNumber.cs` (new entity classes)
+2. Deploy updated `PartNumberController.cs` (updated method + new methods)
+3. Deploy updated `_CreateOrUpdate.cshtml` (new UI section + JavaScript)
+4. Restart IIS application pool
+
+### 3. Service (15 minutes)
+
+1. Stop BeFirst Production service
+2. Deploy updated `frm_MergeLabels_MergeKeyence_Positions.vb`
+3. Restart BeFirst Production service
+
+### 4. Validation (10 minutes)
+
+1. Verify table exists in database
+2. Test Portal remapping UI
+3. Test Service with remapped part
+4. Verify existing parts still work
+
+**Total Deployment Time:** ~40 minutes
+
+## Rollback Plan
+
+### If Issues Occur
+
+1. **Portal:** Redeploy previous version (remapping methods will fail but won't break existing functionality)
+2. **Service:** Redeploy previous version (will use original query without remapping)
+3. **Database:** Keep table (data preserved for re-deployment), or drop table if needed
+
+**Data Loss Risk:** None (base tables unchanged, remapping table is additive)
+
+## Benefits
+
+1. **Non-Invasive:** No changes to existing tables
+2. **Zero Migration:** No data migration required
+3. **Backward Compatible:** Parts without remapping use original order automatically
+4. **Simple Logic:** Base configuration + optional transformation
+5. **Storage Efficient:** Only stores differences
+6. **Flexible:** Support any area/side combination
+7. **Performance:** Single LEFT JOIN query
+8. **Maintainable:** Update remapping without touching base config
+
+## Comparison: Remapping vs Full Duplication
+
+| Aspect | Remapping Approach ✅ | Full Duplication ❌ |
+|--------|---------------------|-------------------|
+| Migration | None required | All records need AreaID/Side |
+| Storage | Only differences | Full config per area/side |
+| Code Changes | Minimal (LEFT JOIN) | Extensive (all CRUD) |
+| Deployment Risk | Low (new table) | High (schema changes) |
+| Rollback | Easy (drop table) | Difficult (restore backup) |
+| Understanding | Intuitive (1→3 mapping) | Complex (fallback logic) |
+| Performance | Single LEFT JOIN | CTE with UNIONs |
+| Maintenance | Update remapping only | Update multiple configs |
+
+## Technical Specifications
+
+### Repositories Affected
+
+1. **BeFirst_Database_MES_Database** - New table script
+2. **BeFirst_Portal** - Entity model, controller, view updates
+3. **BeFirst_Production** - Service query update
+4. **BeFirst_Docs** - Documentation updates
+
+### Files Modified
+
+| Repository | File | Change Type |
+|------------|------|-------------|
+| BeFirst_Database_MES_Database | MES\dbo\Tables\PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP.sql | NEW |
+| BeFirst_Portal | Areas\Engineering\Models\PartNumber.cs | ADD entity classes |
+| BeFirst_Portal | Areas\Engineering\Controllers\PartNumberController.cs | UPDATE method + ADD methods |
+| BeFirst_Portal | Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml | ADD UI section |
+| BeFirst_Production | Produccion\frm_MergeLabels_MergeKeyence_Positions.vb | UPDATE query |
+
+### Performance Impact
+
+- Query performance: Minimal (single LEFT JOIN with indexed columns)
+- Storage: Minimal (only stores differences, typical 5-10 rows per part/area/side)
+- UI responsiveness: No impact (asynchronous AJAX calls)
+
+## Future Enhancements
+
+Possible future improvements:
+1. Bulk remapping import/export (CSV, Excel)
+2. Copy remapping between parts
+3. Visual drag-and-drop remapping editor
+4. Remapping audit log
+5. Remapping versioning
+
+## Support and Troubleshooting
+
+### Common Issues
+
+**Issue:** Remapping not applied in service
+- **Check:** Verify AreaID and Side values match exactly
+- **Check:** Verify remapping exists in database for that combination
+
+**Issue:** Duplicate key error when saving remapping
+- **Cause:** Trying to insert duplicate OriginalIndex for same PartID+AreaID+Side
+- **Solution:** Delete existing remapping first (SaveSerializationRemap does this automatically)
+
+**Issue:** Visual positions appear in wrong order
+- **Check:** Verify ORDER BY clause uses remapped index
+- **Check:** Clear browser cache if Portal displays stale data
+
+### SQL Diagnostic Queries
+
+```sql
+-- Check if remapping exists for specific part/area/side
+SELECT * FROM PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP
+WHERE PartID = ? AND AreaID = ? AND Side = ?;
+
+-- See effective order with remapping
+SELECT
+    IDX.ToIndex AS OriginalIndex,
+    ISNULL(REMAP.RemappedIndex, IDX.ToIndex) AS EffectiveIndex,
+    IDX.MasterID,
+    IDX.PositionID
+FROM PART_OPERATION_SERIALIZATION_ARRAY_INDEX IDX
+LEFT JOIN PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP REMAP
+    ON IDX.PartID = REMAP.PartID
+    AND REMAP.AreaID = ?
+    AND REMAP.Side = ?
+    AND IDX.ToIndex = REMAP.OriginalIndex
+WHERE IDX.PartID = ?
+ORDER BY ISNULL(REMAP.RemappedIndex, IDX.ToIndex);
+
+-- List all remappings for a part
+SELECT
+    R.AreaID,
+    PA.Area AS AreaName,
+    R.Side,
+    COUNT(*) AS RemapCount
+FROM PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP R
+LEFT JOIN PD_idt_areas PA ON R.AreaID = PA.AreaID
+WHERE R.PartID = ?
+GROUP BY R.AreaID, PA.Area, R.Side;
+```
+
+## Contact
+
+**For Technical Support:**
+- IT Manager: Eduardo D. Marquez (GR_IT@safaricircuits.com)
+- Repository: `S:\01_Repos\BeFirst_Portal`, `S:\01_Repos\BeFirst_Production`
+
+**For Documentation Updates:**
+- Repository: `S:\01_Repos\BeFirst_Docs`
+- Create feature branch and submit PR
+
+## Change Log
+
+| Date | Version | Author | Description |
+|------|---------|--------|-------------|
+| 2026-05-06 | 1.0 | Claude Code | Initial implementation |

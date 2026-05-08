@@ -1,0 +1,2975 @@
+﻿using APIs_BeFirst.Framework.Functions;
+using APIs_BeFirst.Models;
+using APIs_BeFirst.Models.DataBase;
+using APIs_BeFirst.Models.Response;
+
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
+
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using System.Data;
+using System.Net.WebSockets;
+using APIs_BeFirst.Models.Database;
+using Microsoft.AspNetCore.Http.HttpResults;
+
+
+namespace APIs_BeFirst.Service.Station
+{
+    public class StationService : ModelBase, IStationService
+    {
+
+        protected readonly ProdMesDbContext _context;
+        public StationService(ProdMesDbContext context) : base(context)
+        {
+            _context = context;
+        }
+
+        // Async Tasks
+        public async Task<bool> AddAsync(string StationName, string Area)
+        {
+
+            bool newModel = false;
+
+
+
+            var dtStations = await _context.PartStations
+                                            .Where(P => P.StationName == StationName)
+                                            .Select(P => P.StationId)
+                                            .ToListAsync();
+
+
+            if (dtStations.Count() > 0)
+            {
+                throw new InvalidOperationException("Duplicate Station Name");
+            }
+
+            int AreaID = 0;
+
+
+
+            var dtArea = await _context.PartOperationAreas
+                                    .Where(Po => Po.Area == Area)
+                                    .Select(Po => Po.AreaId)
+                                    .ToListAsync();
+            //
+
+            if (dtArea.Count() > 0)
+            {
+                AreaID = int.Parse(dtArea.FirstOrDefault().ToString());
+            }
+
+            if (AreaID == 0)
+            {
+                throw new InvalidOperationException("Invalid Area");
+            }
+
+
+            var station = new PartStation
+            {
+                StationName = StationName,
+                AreaId = AreaID,
+                IsActive = true,
+                DownTimeCodeId = 0,
+                LastPieceTime = DateTime.Now,
+                LastPartId = -1,
+                LastJob = -1,
+                LastJobText = "-1",
+                LastJobType = -1,
+                LastJobQty = 0,
+                LastJobQtyBuild = -1,
+                LastHourQty = 0,
+                LastRate = 9999,
+                LastSide = "A",
+                BeFirstActive = false,
+                LockStatus = false,
+                LastFormat = "",
+                DashVisible = false,
+                ProdVisible = false,
+                LockMachines = false,
+                Alias = "",
+                LastBinId = 0,
+                PlcName = "",
+                WorkcenterKey = -1,
+                WorkcenterKeyKanban = -1,
+                WorkcenterPlcName = "",
+                WorkcenterPlcNameKanban = "",
+                AutoId = 0,
+                FacilityKey = 0,
+                AllowPlexTransactions = false,
+                WorkcenterKey1 = -1,
+                WorkcenterKey2 = -1,
+                WorkcenterKeyKanban1 = -1,
+                WorkcenterKeyKanban2 = -1,
+                WorkcenterPlcName1 = "",
+                WorkcenterPlcName2 = "",
+                WorkcenterPlcNameKanban1 = "",
+                WorkcenterPlcNameKanban2 = "",
+                AllowLoadMaterial = true,
+                CustomLabels = false,
+                AllowPlexTransactions2 = false,
+                SetupId = 0,
+                ShareLacation = "",
+                BuildingKey = 0,
+                SortNo = 0,
+                AbleToLock = false,
+                Wiplocation = ""
+            };
+
+            _context.PartStations.Add(station);
+            await _context.SaveChangesAsync();
+
+            dtStations = await _context.PartStations
+                                        .Where(P => P.StationName == StationName)
+                                        .Select(P => P.StationId)
+                                        .ToListAsync();
+
+            if (dtStations.Count() > 0)
+            {
+                newModel = true;
+            }
+
+            return newModel;
+        }
+
+        public async Task<StationResponse> GetAsync(int StationID = 0, string StationName = "")
+        {
+
+            var newModel = new StationResponse();
+
+            var dtExist = await _context.PartStations
+                            .Where(s => s.StationId == StationID || s.StationName == StationName)
+                            .Join(_context.PartOperationAreas,
+                                station => station.AreaId,
+                                area => area.AreaId,
+                                (station, area) => new
+                                {
+                                    StationName = station.Alias == "" ? station.StationName : station.Alias,
+                                    StationID = station.StationId,
+                                    AreaID = area.AreaId,
+                                    Area = area.Area,
+                                    Workcenter_Key = station.WorkcenterKey1,
+                                    Workcenter_Kanban_Key = station.WorkcenterKeyKanban1
+                                })
+                            .OrderBy(r => r.AreaID)
+                            .ThenBy(r => r.StationName)
+                            .ToArrayAsync();
+
+
+            if (dtExist.Count() > 0)
+            {
+                newModel.StationID = int.Parse(dtExist.FirstOrDefault().StationID.ToString());
+                newModel.StationName = dtExist.FirstOrDefault().StationName.ToString();
+                newModel.AreaID = int.Parse(dtExist.FirstOrDefault().AreaID.ToString());
+                newModel.AreaName = dtExist.FirstOrDefault().Area.ToString();
+                newModel.Workcenter_Key = int.Parse(dtExist.FirstOrDefault().Workcenter_Key.ToString());
+                newModel.Workcenter_Kanban_Key = int.Parse(dtExist.FirstOrDefault().Workcenter_Kanban_Key.ToString());
+
+                return newModel;
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid StationID");
+            }
+
+        }
+
+        public async Task<bool> IsAuthorizedAsync(string Hostname, int StationID = 0)
+        {
+            bool newModel = false;
+
+            var dtDetails = await _context.PartStationAuthorizeds
+                                    .Where(psa => psa.MachineName == Hostname
+                                               && psa.IsActive == true
+                                               && (StationID == 0 || psa.StationId == StationID))
+                                    .Select(psa => new
+                                    {
+                                        psa.AutoId,
+                                        psa.StationId
+                                    })
+                                    .ToListAsync();
+
+
+            if (dtDetails.Count() > 0)
+            {
+                newModel = true;
+            }
+            else
+            {
+
+                var dtDetailsName = await _context.PartStations
+                                                  .Where(Ps => Ps.StationId == StationID && Ps.StationName == Hostname)
+                                                  .Select(Ps => Ps.StationId)
+                                                  .ToListAsync();
+
+                if (dtDetailsName.Count() > 0)
+                {
+                    newModel = true;
+                }
+            }
+
+            return newModel;
+
+        }
+
+        public async Task<List<StationResponse>> GetAuthorizedAsync(string Hostname)
+        {
+
+            List<StationResponse> newModel = new List<StationResponse>();
+
+            var setting = await _context.Settings
+                                        .Where(s => s.Description == "Station_ShowPackoutOption")
+                                        .Select(s => s.Result)
+                                        .FirstOrDefaultAsync();
+
+            // Usa un nombre diferente para la variable de salida en TryParse
+            bool addPackout = bool.TryParse(setting, out bool isPackoutEnabled) ? isPackoutEnabled : false;
+
+            int PackoutAreaID = await _context.Settings
+                                                .Where(S => S.Description == "packout_area_id")
+                                                .Select(s => Convert.ToInt32(s.Result))
+                                                .FirstOrDefaultAsync();
+
+            var dtDetails = await _context.PartStations
+                                            .Where(s => _context.PartStationAuthorizeds
+                                                            .Where(psa => psa.MachineName == Hostname && psa.IsActive == true)
+                                                            .Select(psa => psa.StationId)
+                                                            .Contains(s.StationId)
+                                                        || s.StationName == Hostname)
+                                            .Join(_context.PartOperationAreas,
+                                                    s => s.AreaId,
+                                                    a => a.AreaId,
+                                                    (s, a) => new
+                                                    {
+                                                        StationName = a.Area + " - " + (s.Alias == "" ? s.StationName : s.Alias),
+                                                        s.StationId,
+                                                        a.AreaId,
+                                                        a.Area
+                                                    })
+                                            .OrderBy(x => x.AreaId)
+                                            .ThenBy(x => x.StationName)
+                                            .ToListAsync();
+
+
+            foreach (var row in dtDetails)
+            {
+                StationResponse newThing = new StationResponse();
+
+                newThing.StationID = int.Parse(row.StationId.ToString());
+                newThing.StationName = row.StationName.ToString();
+                newThing.AreaID = int.Parse(row.AreaId.ToString());
+                newThing.AreaName = row.Area.ToString();
+
+                newModel.Add(newThing);
+
+                if (addPackout && (newThing.AreaID == 8))
+                {
+                    StationResponse newThingPackout = new StationResponse();
+
+                    newThingPackout.StationID = int.Parse(row.StationId.ToString());
+                    newThingPackout.StationName = row.StationName.ToString() + " [PACKOUT]";
+                    newThingPackout.AreaID = PackoutAreaID;
+
+                    newThingPackout.AreaName = await _context.PartOperationAreas
+                                                                .Where(p => p.AreaId == newThingPackout.AreaID)
+                                                                .Select(p => p.Area)
+                                                                .FirstOrDefaultAsync();
+
+
+                    newModel.Add(newThingPackout);
+                }
+            }
+
+
+            return newModel;
+
+        }
+
+        public async Task<OEE> GetOEEAsync(int StationID, int year = 0, int month = 0, int day = 0, int shift = 0, bool getLastSaved = false)
+        {
+
+            OEE newModel = new OEE();
+
+            newModel.StationID = StationID;
+            newModel.year = year;
+            newModel.month = month;
+            newModel.day = day;
+
+            if (year == 0 || month == 0 || day == 0)
+            {
+                year = DateTime.Now.Year;
+                month = DateTime.Now.Month;
+                day = DateTime.Now.Day;
+            }
+
+            DateTime beginDate = new DateTime(year, month, day, 0, 0, 0);
+
+            DateTime todaydate = DateTime.Now.Date;
+
+            if (DateTime.Now.Hour < 6)
+            {
+                todaydate = DateTime.Now.Date.AddDays(-1);
+            }
+
+
+            var dtDetails = await _context.PartStations
+                                        .Join(_context.PartOperationAreas,
+                                                s => s.AreaId,
+                                                a => a.AreaId,
+                                                (s, a) => new
+                                                {
+                                                    s.StationId,
+                                                    s.StationName,
+                                                    a.Area,
+                                                    AreaID = a.AreaId,
+                                                    s.AddDate
+                                                })
+                                        .Where(s => s.StationId == StationID)
+                                        .ToListAsync();
+
+
+            bool isNew = false;
+
+            if (dtDetails.Count() > 0)
+            {
+                newModel.StationName = dtDetails.FirstOrDefault().StationName.ToString();
+                newModel.AreaName = dtDetails.FirstOrDefault().Area.ToString();
+                newModel.AreaID = int.Parse(dtDetails.FirstOrDefault().AreaID.ToString());
+
+                DateTime dtNow = DateTime.Now;
+                DateTime dtAdd = DateTime.Parse(dtDetails.FirstOrDefault().AddDate.ToString());
+
+                if (dtAdd > beginDate) // if (dtAdd > beginDate || dtNow.Minute > 9)
+                {
+                    isNew = true;
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid StationID");
+            }
+
+            var dtExist = await _context.PartStationOees
+                                        .Where(oee => oee.StationId == StationID && oee.TrnDate == beginDate)
+                                        .Select(oee => new
+                                        {
+                                            oee.StationId,
+                                            oee.TrnDate,
+                                            oee.Total,
+                                            oee.Availability,
+                                            oee.Efficency,
+                                            oee.Quality,
+                                            oee.MinutesProgrammed,
+                                            oee.MinutesAvailability,
+                                            oee.MinutesEfficency,
+                                            oee.MinutesQuality,
+                                            oee.EfficencyRetest,
+                                            oee.MinutesEfficencyRetest,
+                                            MinutesLostWithTickets = oee.MinutesLostWithTickets ?? 0,
+                                            MinutesLostWithoutTickets = oee.MinutesLostWithoutTickets ?? 0
+                                        })
+                                        .ToListAsync();
+
+
+            var dtExistTemporal = await _context.PartStationOeeTemporals
+                                                    .Where(oee => oee.StationId == StationID && oee.TrnDate > DateTime.UtcNow.AddMinutes(-20))
+                                                    .OrderByDescending(oee => oee.TrnDate)
+                                                    .Select(oee => new
+                                                    {
+                                                        oee.StationId,
+                                                        oee.TrnDate,
+                                                        oee.Total,
+                                                        oee.Availability,
+                                                        oee.Efficency,
+                                                        oee.Quality,
+                                                        oee.MinutesProgrammed,
+                                                        oee.MinutesAvailability,
+                                                        oee.MinutesEfficency,
+                                                        oee.MinutesQuality,
+                                                        oee.EfficencyRetest,
+                                                        oee.MinutesEfficencyRetest,
+                                                        MinutesLostWithTickets = oee.MinutesLostWithTickets ?? 0,
+                                                        MinutesLostWithoutTickets = oee.MinutesLostWithoutTickets ?? 0
+                                                    })
+                                                    .FirstOrDefaultAsync();
+
+            if ((dtExist.Count() > 0 && beginDate < todaydate && shift == 0) || (isNew)) // OBTENER FIJO DEL DIA 
+            {
+                double TOTALMINUTES_DAY = 1440; // Day MINUTES
+                double TOTALMINUTES_DAY_ABLESTOWORK = TOTALMINUTES_DAY; // Day MINUTES WORKED
+
+                double OEE_MinutesProgrammed = TOTALMINUTES_DAY; // OEE GENERAL AVAILABLE
+                double OEE_MinutesAvailables = TOTALMINUTES_DAY; // OEE GENERAL AVAILABLE TO RUN
+                double OEE_MinutesWorked = 0; // OEE GENERAL AVAILABLE RUN
+
+                double Availability = 0;
+                double eficency = 0;
+                double quality = 0;
+
+
+                double OEE_MinutesLostWithTickets = 0; // OEE GENERAL AVAILABLE
+                double OEE_MinutesLostWithoutTickets = 0; // OEE GENERAL AVAILABLE TO RUN
+
+
+                if (isNew)
+                {
+                    newModel.Availability = 1;
+                    newModel.Efficency = 1;
+                    newModel.Efficency_Retest = 0;
+                    newModel.Quality = 1;
+                    newModel.Total = 1;
+
+                    newModel.MinutesProgrammed = OEE_MinutesProgrammed;
+                    newModel.MinutesAvailables = OEE_MinutesAvailables;
+                    newModel.MinutesWorked = OEE_MinutesAvailables;
+                    newModel.MinutesWorked_Retest = 0;
+                    newModel.MinutesOEE = OEE_MinutesAvailables;
+
+                    newModel.MinutesLostWithTickets = OEE_MinutesLostWithTickets;
+                    newModel.MinutesLostWithOutTickets = OEE_MinutesLostWithoutTickets;
+                }
+                else
+                {
+                    newModel.Availability = double.Parse(dtExist.FirstOrDefault().Availability.ToString());
+                    newModel.Efficency = double.Parse(dtExist.FirstOrDefault().Efficency.ToString());
+                    newModel.Efficency_Retest = double.Parse(dtExist.FirstOrDefault().EfficencyRetest.ToString());
+                    newModel.Quality = double.Parse(dtExist.FirstOrDefault().Quality.ToString());
+                    newModel.Total = double.Parse(dtExist.FirstOrDefault().Total.ToString());
+
+                    newModel.MinutesProgrammed = double.Parse(dtExist.FirstOrDefault().MinutesProgrammed.ToString());
+                    newModel.MinutesAvailables = double.Parse(dtExist.FirstOrDefault().MinutesAvailability.ToString());
+                    newModel.MinutesWorked = double.Parse(dtExist.FirstOrDefault().MinutesEfficency.ToString());
+                    newModel.MinutesWorked_Retest = double.Parse(dtExist.FirstOrDefault().MinutesEfficencyRetest.ToString());
+                    newModel.MinutesOEE = double.Parse(dtExist.FirstOrDefault().MinutesQuality.ToString());
+
+                    newModel.MinutesLostWithTickets = double.Parse(dtExist.FirstOrDefault().MinutesLostWithTickets.ToString());
+                    newModel.MinutesLostWithOutTickets = double.Parse(dtExist.FirstOrDefault().MinutesLostWithoutTickets.ToString());
+                }
+            }
+            else if (getLastSaved && dtExistTemporal != null) // OBTENER TEMPORAL 
+            {
+                double TOTALMINUTES_DAY = 1440; // Day MINUTES
+                double TOTALMINUTES_DAY_ABLESTOWORK = TOTALMINUTES_DAY; // Day MINUTES WORKED
+
+                double OEE_MinutesProgrammed = TOTALMINUTES_DAY; // OEE GENERAL AVAILABLE
+                double OEE_MinutesAvailables = TOTALMINUTES_DAY; // OEE GENERAL AVAILABLE TO RUN
+                double OEE_MinutesWorked = 0; // OEE GENERAL AVAILABLE RUN
+                double OEE_MinutesWorkedRetest = 0; // OEE GENERAL AVAILABLE RUN
+
+                double Availability = 0;
+                double eficency = 0;
+                double eficency_retest = 0;
+                double quality = 0;
+
+                double OEE_MinutesLostWithTickets = 0; // OEE GENERAL AVAILABLE
+                double OEE_MinutesLostWithoutTickets = 0; // OEE GENERAL AVAILABLE TO RUN
+
+
+                if (isNew)
+                {
+                    newModel.Availability = 1;
+                    newModel.Efficency = 1;
+                    newModel.Efficency_Retest = 0;
+                    newModel.Quality = 1;
+                    newModel.Total = 1;
+
+                    newModel.MinutesProgrammed = OEE_MinutesProgrammed;
+                    newModel.MinutesAvailables = OEE_MinutesAvailables;
+                    newModel.MinutesWorked = OEE_MinutesAvailables;
+                    newModel.MinutesWorked_Retest = 0;
+                    newModel.MinutesOEE = OEE_MinutesAvailables;
+
+
+                    newModel.MinutesLostWithTickets = OEE_MinutesLostWithTickets;
+                    newModel.MinutesLostWithOutTickets = OEE_MinutesLostWithoutTickets;
+                }
+                else
+                {
+
+
+                    newModel.Availability = double.Parse(dtExistTemporal.Availability.ToString());
+                    newModel.Efficency = double.Parse(dtExistTemporal.Efficency.ToString()); ;
+                    newModel.Efficency_Retest = double.Parse(dtExistTemporal.EfficencyRetest.ToString());
+                    newModel.Quality = double.Parse(dtExistTemporal.Quality.ToString());
+                    newModel.Total = double.Parse(dtExistTemporal.Total.ToString());
+
+                    newModel.MinutesProgrammed = double.Parse(dtExistTemporal.MinutesProgrammed.ToString());
+                    newModel.MinutesAvailables = double.Parse(dtExistTemporal.MinutesAvailability.ToString());
+                    newModel.MinutesWorked = double.Parse(dtExistTemporal.MinutesEfficency.ToString());
+                    newModel.MinutesWorked_Retest = double.Parse(dtExistTemporal.MinutesEfficencyRetest.ToString());
+                    newModel.MinutesOEE = double.Parse(dtExistTemporal.MinutesQuality.ToString());
+
+                    newModel.MinutesLostWithTickets = double.Parse(dtExistTemporal.MinutesLostWithTickets.ToString());
+                    newModel.MinutesLostWithOutTickets = double.Parse(dtExistTemporal.MinutesLostWithoutTickets.ToString());
+
+                }
+            }
+            else
+            {
+                DateTime Current = new DateTime(year, month, day, 6, 0, 0);
+
+                if (shift == 2)
+                {
+                    Current = Current.AddHours(+12); // Second Shift
+                }
+
+                DateTime seguida = Current; // Start Time
+
+                newModel.Date = seguida;
+
+                DateTime dateEnd = Current.AddHours(+24); // End Time
+
+                if (shift > 0)
+                {
+                    dateEnd = Current.AddHours(+12); // End Time
+                }
+
+                string STATION_ID = StationID.ToString();
+
+                List<int> iData = new List<int>();
+
+                double TOTALMINUTES_DAY = 1440; // Day MINUTES
+
+                if (shift > 0)
+                {
+                    TOTALMINUTES_DAY = 720; // Day MINUTES
+                }
+
+                double TOTALMINUTES_DAY_ABLESTOWORK = TOTALMINUTES_DAY; // Day MINUTES WORKED
+
+                double OEE_MinutesProgrammed = TOTALMINUTES_DAY; // OEE GENERAL AVAILABLE
+                double OEE_MinutesAvailables = TOTALMINUTES_DAY; // OEE GENERAL AVAILABLE TO RUN
+                double OEE_MinutesWorked = 0; // OEE GENERAL AVAILABLE RUN
+                double OEE_MinutesWorked_retest = 0; // OEE GENERAL AVAILABLE RUN
+
+                double OEE_MinutesLostWithTickets = 0; // OEE GENERAL AVAILABLE
+                double OEE_MinutesLostWithoutTickets = 0; // OEE GENERAL AVAILABLE TO RUN
+
+                if (DateTime.Now < dateEnd)
+                {
+                    DateTime dt = DateTime.Now;
+
+                    TimeSpan d = TimeSpan.FromMinutes(60);
+
+                    DateTime nexthour = new DateTime((dt.Ticks + d.Ticks - 1) / d.Ticks * d.Ticks, dt.Kind);
+
+                    TimeSpan ts = DateTime.Now - seguida;
+                    TOTALMINUTES_DAY_ABLESTOWORK = ts.TotalMinutes;
+
+                    OEE_MinutesProgrammed = TOTALMINUTES_DAY_ABLESTOWORK;
+                    OEE_MinutesAvailables = TOTALMINUTES_DAY_ABLESTOWORK;
+
+                }
+                else
+                {
+
+                }
+
+                //double efficencysumary = 0;
+                //double efficencysumary_retest = 0;
+
+                double Availability = 0;
+                double eficency = 0;
+                double eficency_retest = 0;
+                double quality = 0;
+
+                int Units_Defects = 0;
+                int Units_total = 0;
+
+                bool Station_Downtime_Sensors = await _context.PartStationDowntimeSensors
+                                                              .Where(p => p.StationId == StationID)
+                                                              .Select(p => Convert.ToBoolean(p.StationId))
+                                                              .FirstOrDefaultAsync();
+                var setting = await _context.Settings
+                                            .Where(s => s.Description == "DownTime_From_Tickets")
+                                            .Select(d => d.Result)
+                                            .FirstOrDefaultAsync();
+
+                bool usetickets = bool.TryParse(setting, out bool isPackoutEnabled) ? isPackoutEnabled : false;
+
+                //GET DATA AND STORE IN DATATABLE...
+                //Check if had substations
+                var dtSubstation = await _context.PartStationSubstations
+                                                .Where(p => p.StationId == StationID)
+                                                .Select(p => p.SubStationId)
+                                                .ToListAsync();
+                var dtProductionAllDay = new List<ProductionData>();
+                bool hasSubstations = dtSubstation.Count() > 0;
+                bool isNewTable = true;
+
+
+                dtProductionAllDay = await _context.PdTblUnitsTrackingNews
+                                           .AsNoTracking()
+                                           .Join(_context.Parts,
+                                               h => h.PartId,
+                                               pn => pn.PartId,
+                                               (h, pn) => new { h, pn })
+                                           .GroupJoin(_context.PartStationStandardRates,
+                                               hpn => new { PartID = (int)hpn.pn.PartId, StationID = hpn.h.StationId, JobSide = hpn.h.JobSide }, // Claves para el LEFT JOIN
+                                               sr => new { PartID = (int)sr.PartId, StationID = sr.StationId, JobSide = sr.Side }, // Claves para el LEFT JOIN
+                                               (hpn, srGroup) => new { hpn.h, hpn.pn, srGroup })// Agrupa los resultados del JOIN
+                                           .SelectMany(
+                                               x => x.srGroup.DefaultIfEmpty(), // Simula el LEFT JOIN asegurando que no se excluyan registros
+                                               (x, sr) => new { x.h, x.pn, sr }) // Desestructura los datos para el siguiente procesamiento
+                                           .Where(x => x.h.StationId == StationID &&
+                                                       x.h.TrnDate >= seguida &&
+                                                       x.h.TrnDate < seguida.AddHours(24))
+                                           .GroupBy(x => new
+                                           {
+                                               Year = x.h.TrnDate.Value.Year,
+                                               Month = x.h.TrnDate.Value.Month,
+                                               Day = x.h.TrnDate.Value.Day,
+                                               Hour = x.h.TrnDate.Value.Hour,
+                                               x.h.StationId,
+                                               x.pn.PartNumber,
+                                               x.pn.PartId,
+                                               x.h.JobSide
+                                           })
+                                           .Select(g => new ProductionData
+                                           {
+                                               Year = g.Key.Year,
+                                               Month = g.Key.Month,
+                                               Day = g.Key.Day,
+                                               Hour = g.Key.Hour,
+                                               StationId = g.Key.StationId,
+                                               PartNumber = g.Key.PartNumber,
+                                               PartId = (int)g.Key.PartId,
+                                               JobSide = g.Key.JobSide,
+                                               Qty = g.Count(x => x.h.Ssnindex == 1),
+                                               Good = g.Count(x => x.h.IsGood == true && x.h.Ssnindex == 1),
+                                               Bad = g.Count(x => x.h.IsGood == false && x.h.Ssnindex == 1),
+                                               Debugeo = 0,
+                                               Stations = g.Select(x => x.h.StationId).Distinct().Count(),
+                                               Rate = g.Max(x => x.sr.Rate != null ? x.sr.Rate : 0),
+                                               Retest = g.Count(x => x.h.Ssnindex > 1)
+                                           })
+                                           .ToListAsync();
+
+                if (hasSubstations)
+                {
+                    var SubStationsIds = await _context.PartStationSubstations
+                        .Where(p => p.StationId == StationID)
+                        .Select(p => p.SubStationId)
+                        .ToListAsync();
+
+                    dtProductionAllDay = await _context.PdTblUnitsTrackingNews
+                                                    .Join(_context.Parts,
+                                                        h => h.PartId,
+                                                        pn => pn.PartId,
+                                                        (h, pn) => new { h, pn })
+                                                    .GroupJoin(_context.PartStationStandardRates,
+                                                            hpn => new { PartID = (int)hpn.pn.PartId, StationID = hpn.h.StationId, JobSide = hpn.h.JobSide }, // Claves para el LEFT JOIN
+                                                            sr => new { PartID = (int)sr.PartId, StationID = sr.StationId, JobSide = sr.Side }, // Claves para el LEFT JOIN
+                                                    (hpn, sr) => new { hpn.h, hpn.pn, sr }) // Agrupa los resultados del JOIN
+                                                    .SelectMany(
+                                                        x => x.sr.DefaultIfEmpty(), // Simula el LEFT JOIN asegurando que no se excluyan registros
+                                                        (x, sr) => new { x.h, x.pn, sr }) // Desestructura los datos para el siguiente procesamiento
+                                                    .Where(x => SubStationsIds.Contains(x.h.StationId) &&
+                                                                x.h.TrnDate >= seguida &&
+                                                                x.h.TrnDate < seguida.AddHours(24))
+                                                    .GroupBy(x => new
+                                                    {
+                                                        Year = x.h.TrnDate.Value.Year,
+                                                        Month = x.h.TrnDate.Value.Month,
+                                                        Day = x.h.TrnDate.Value.Day,
+                                                        Hour = x.h.TrnDate.Value.Hour,
+                                                        x.h.StationId,
+                                                        x.pn.PartNumber,
+                                                        x.pn.PartId,
+                                                        x.h.JobSide
+                                                    })
+                                                    .Select(g => new ProductionData
+                                                    {
+                                                        Year = g.Key.Year,
+                                                        Month = g.Key.Month,
+                                                        Day = g.Key.Day,
+                                                        Hour = g.Key.Hour,
+                                                        StationId = g.Key.StationId,
+                                                        PartNumber = g.Key.PartNumber,
+                                                        PartId = (int)g.Key.PartId,
+                                                        JobSide = g.Key.JobSide,
+                                                        Qty = g.Count(x => x.h.Ssnindex == 1),
+                                                        Good = g.Count(x => x.h.IsGood == true && x.h.Ssnindex == 1),
+                                                        Bad = g.Count(x => x.h.IsGood == false && x.h.Ssnindex == 1),
+                                                        Debugeo = 0,
+                                                        Stations = g.Select(x => x.h.StationId).Distinct().Count(),
+                                                        Rate = g.Max(x => x.sr.Rate != null ? x.sr.Rate : 0),
+                                                        Retest = g.Count(x => x.h.Ssnindex > 1)
+                                                    })
+                                                    .ToListAsync();
+
+                }
+
+                int limitallday = seguida.Hour + 24;
+                int limitallshift = seguida.Hour + 12;
+
+                List<Task<HourOEE>> tasks = new List<Task<HourOEE>>();
+                List<HourOEE> responses = new List<HourOEE>();
+
+                for (int i = seguida.Hour; i < (shift == 0 ? limitallday : limitallshift); i++)
+                {
+                    //Debug.WriteLine(i);
+                    seguida = seguida.AddHours(+1);
+
+                    //tasks.Add(
+                    var result = await GetOEEHourAsync(StationID, seguida, dateEnd, usetickets, dtProductionAllDay);
+                    responses.Add(result);
+
+                }
+
+                // Procesar respuestas
+                foreach (HourOEE hourdetail in responses)
+                {
+                    OEE_MinutesProgrammed = OEE_MinutesProgrammed - hourdetail.Downtime_Programmed;
+                    OEE_MinutesAvailables = OEE_MinutesAvailables - hourdetail.Downtime_Programmed - hourdetail.Downtime_NoProgrammed; // DAY AVAILABLE
+                    OEE_MinutesWorked = OEE_MinutesWorked + hourdetail.HOUR_WORKEDMINUTES;
+                    OEE_MinutesWorked_retest = OEE_MinutesWorked_retest + hourdetail.HOUR_WORKEDMINUTES_RETEST;
+                    Units_Defects = Units_Defects + hourdetail.Units_Defects;
+                    Units_total = Units_total + hourdetail.Units_total;
+
+
+                    OEE_MinutesLostWithTickets = OEE_MinutesLostWithTickets + hourdetail.MinutesLostWithTickets; // OEE GENERAL AVAILABLE
+                    OEE_MinutesLostWithoutTickets = OEE_MinutesLostWithoutTickets + hourdetail.MinutesLostWithOutTickets; // OEE GENERAL AVAILABLE TO RUN
+                }
+
+                int minuteschangeoves = 0;
+
+                //Remove changeovers from minutes availables
+                OEE_MinutesProgrammed = OEE_MinutesProgrammed - minuteschangeoves;
+
+                OEE_MinutesAvailables = OEE_MinutesAvailables - minuteschangeoves;
+
+                // RESULTS
+
+                if (OEE_MinutesProgrammed <= 0)
+                {
+                    Availability = 0;
+                }
+                else
+                {
+                    Availability = (double)OEE_MinutesAvailables / OEE_MinutesProgrammed;
+                }
+
+                if (OEE_MinutesAvailables <= 0)
+                {
+                    eficency = 0;
+                    eficency_retest = 0;
+                }
+                else
+                {
+                    eficency = ((double)OEE_MinutesWorked / OEE_MinutesAvailables);
+                    eficency_retest = ((double)OEE_MinutesWorked_retest / OEE_MinutesAvailables);
+                }
+
+                try
+                {
+                    if ((Units_total - Units_Defects) == 0 || Units_total == 0)
+                    {
+                        quality = 0;
+                    }
+                    else
+                    {
+                        quality = ((double)(Units_total - Units_Defects) / Units_total);
+                    }
+                }
+                catch
+                {
+
+                }
+
+                newModel.Availability = Availability;
+                newModel.Efficency = eficency;
+                newModel.Efficency_Retest = eficency_retest;
+                newModel.Quality = quality;
+                newModel.Total = Availability * eficency * quality;
+
+                newModel.MinutesProgrammed = OEE_MinutesProgrammed;
+                newModel.MinutesAvailables = OEE_MinutesAvailables;
+                newModel.MinutesWorked = OEE_MinutesWorked;
+                newModel.MinutesWorked_Retest = OEE_MinutesWorked_retest;
+                newModel.MinutesOEE = (newModel.MinutesWorked * quality);
+
+                newModel.MinutesLostWithOutTickets = OEE_MinutesLostWithoutTickets;
+                newModel.MinutesLostWithTickets = OEE_MinutesLostWithTickets;
+
+                if (beginDate < todaydate && shift == 0)
+                {
+                    var recordsToDelete = await _context.PartStationOees
+                    .Where(pso => pso.StationId == StationID && pso.TrnDate == beginDate)
+                    .ExecuteDeleteAsync();
+
+                    var Record = new PartStationOee
+                    {
+                        StationId = StationID,
+                        TrnDate = beginDate,
+                        Total = newModel.Total,
+                        Availability = newModel.Availability,
+                        Efficency = newModel.Efficency,
+                        Quality = newModel.Quality,
+                        MinutesProgrammed = newModel.MinutesProgrammed,
+                        MinutesAvailability = newModel.MinutesAvailables,
+                        MinutesEfficency = newModel.MinutesWorked,
+                        MinutesQuality = newModel.MinutesWorked * quality,
+                        EfficencyRetest = newModel.Efficency_Retest,
+                        MinutesEfficencyRetest = newModel.MinutesWorked_Retest,
+                        MinutesLostWithTickets = newModel.MinutesLostWithTickets,
+                        MinutesLostWithoutTickets = newModel.MinutesLostWithOutTickets
+                    };
+
+                    _context.PartStationOees.Add(Record);
+                    await _context.SaveChangesAsync();
+
+                }
+
+
+                var recordsToDeleteTem = await _context.PartStationOeeTemporals
+                                        .Where(p => p.StationId == StationID && p.TrnDate < DateTime.UtcNow.AddHours(-24))
+                                        .ExecuteDeleteAsync();
+
+
+                var newRecord = new PartStationOeeTemporal
+                {
+                    StationId = StationID,
+                    TrnDate = beginDate,
+                    Total = newModel.Total,
+                    Availability = newModel.Availability,
+                    Efficency = newModel.Efficency,
+                    Quality = newModel.Quality,
+                    MinutesProgrammed = newModel.MinutesProgrammed,
+                    MinutesAvailability = newModel.MinutesAvailables,
+                    MinutesEfficency = newModel.MinutesWorked,
+                    MinutesQuality = newModel.MinutesWorked * quality,
+                    EfficencyRetest = newModel.Efficency_Retest,
+                    MinutesEfficencyRetest = newModel.MinutesWorked_Retest,
+                    MinutesLostWithTickets = newModel.MinutesLostWithTickets,
+                    MinutesLostWithoutTickets = newModel.MinutesLostWithOutTickets
+                };
+
+                _context.PartStationOeeTemporals.Add(newRecord);
+                await _context.SaveChangesAsync();
+
+            }
+
+
+            return newModel;
+
+        }
+
+        public async Task<HourOEE> GetHourOEEAsync(int StationID, int year = 0, int month = 0, int day = 0, int hour = 6, bool getLastSaved = false)
+        {
+            try
+            {
+                HourOEE newModel = new HourOEE();
+
+                if (year == 0 || month == 0 || day == 0)
+                {
+                    year = DateTime.Now.Year;
+                    month = DateTime.Now.Month;
+                    day = DateTime.Now.Day;
+                }
+
+                DateTime timeStart = new DateTime(year, month, day, hour, 0, 0);
+
+                DateTime seguida = timeStart.AddHours(+1);
+
+                DateTime dateEnd = new DateTime(year, month, day, 6, 0, 0);
+
+                if (hour < 0)
+                {
+
+                }
+                else
+                {
+                    dateEnd = dateEnd.AddDays(+1);
+                }
+
+
+                var setting = await _context.Settings
+                                                .Where(d => d.Description == "DownTime_From_Tickets")
+                                                .Select(d => d.Result)
+                                                .FirstOrDefaultAsync();
+
+                bool usetickets = bool.TryParse(setting, out bool isPackoutEnabled) ? isPackoutEnabled : false;
+
+                HourOEE hourdetail = await GetOEEHourAsync(StationID, seguida, dateEnd, usetickets, new List<ProductionData>());
+
+                newModel = hourdetail;
+
+                return newModel;
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new InvalidOperationException(ex.Message); // Devuelve un mensaje de error
+            }
+        }
+
+        public async Task<HourOEE> GetOEEHourAsync(int StationID, DateTime timehourEnd, DateTime dateEnd, bool usetickets, List<ProductionData> dtProductionAllDay)
+        {
+            HourOEE newModel = new HourOEE();
+
+            newModel.StationID = StationID;
+            newModel.Units_Defects = 0;
+            newModel.Units_total = 0;
+
+            newModel.year = timehourEnd.AddHours(-1).Year;
+            newModel.month = timehourEnd.AddHours(-1).Month;
+            newModel.day = timehourEnd.AddHours(-1).Day;
+            newModel.hour = timehourEnd.AddHours(-1).Hour;
+
+            if (timehourEnd.AddHours(-1) > DateTime.Now) //if (timehourEnd.AddHours(-1) > DateTime.Now || DateTime.Now.Minute > 9)
+            {
+                newModel.Downtime_Programmed = 0;
+                newModel.Downtime_NoProgrammed = 0;
+                newModel.Units_Defects = 0;
+                newModel.Units_total = 0;
+                newModel.HOUR_WORKEDMINUTES = 0;
+                newModel.HOUR_WORKEDMINUTES_RETEST = 0;
+
+                newModel.MinutesProgrammed = 0;
+                newModel.MinutesAvailability = 0;
+
+                newModel.HOUR_Availability = 0;
+
+                newModel.MinutesEfficency = 0;
+
+                newModel.HOUR_Efficency = 0;
+
+                newModel.MinutesEfficency_Retest = 0;
+
+                newModel.HOUR_Efficency_Retest = 0;
+
+                newModel.HOUR_Quality = 0;
+
+                newModel.MinutesQuality = 0;
+
+                newModel.HOUR_OEE = 0;
+
+                newModel.MinutesLostWithTickets = 0;
+                newModel.MinutesLostWithOutTickets = 0;
+            }
+            else
+            {
+                bool getfromHistory = false;
+                bool saveHistory = false;
+
+
+                int AreaID = await _context.PartStations.AsNoTracking()
+                                .Where(s => s.StationId == StationID)
+                                .Select(s => Convert.ToInt32(s.AreaId))
+                                .FirstOrDefaultAsync();
+
+
+                var TrnDat = timehourEnd.AddHours(-1);
+                var Hour = timehourEnd.AddHours(-1).Hour;
+
+
+                if (timehourEnd < DateTime.Now)
+                {
+                    saveHistory = true;
+
+                    var dtExist = await _context.PartStationOeeHours
+                        .AsNoTracking()
+                        .Where(p => p.StationId == StationID && p.TrnDate == TrnDat && p.Hour == Hour)
+                        .Select(p => new
+                        {
+                            p.StationId,
+                            p.TrnDate,
+                            p.Hour,
+                            p.Total,
+                            p.Availability,
+                            p.Efficency,
+                            p.Quality,
+                            p.MinutesProgrammed,
+                            p.MinutesAvailability,
+                            p.MinutesEfficency,
+                            p.MinutesQuality,
+                            p.EfficencyRetest,
+                            p.MinutesEfficencyRetest,
+                            p.DowntimeProgrammed,
+                            p.DowntimeNoProgrammed,
+                            p.HourWorkedminutes,
+                            p.HourWorkedminutesRetest,
+                            p.UnitsDefects,
+                            p.UnitsTotal,
+                            MinutesLostWithTickets = p.MinutesLostWithTickets ?? 0,
+                            MinutesLostWithoutTickets = p.MinutesLostWithoutTickets ?? 0
+                        })
+                        .ToArrayAsync();
+
+
+                    if (dtExist.Count() > 0)
+                    {
+
+                        newModel.Downtime_Programmed = (double)dtExist.FirstOrDefault().DowntimeProgrammed;
+                        newModel.Downtime_NoProgrammed = (double)dtExist.FirstOrDefault().DowntimeNoProgrammed;
+
+                        newModel.HOUR_WORKEDMINUTES = (double)dtExist.FirstOrDefault().HourWorkedminutes;
+                        newModel.HOUR_WORKEDMINUTES_RETEST = (double)dtExist.FirstOrDefault().HourWorkedminutesRetest;
+
+                        newModel.HOUR_Availability = (double)dtExist.FirstOrDefault().Availability; //Rows[0]["Availability"];
+                        newModel.HOUR_Efficency = (double)dtExist.FirstOrDefault().Efficency;  //Rows[0]["Efficency"];
+                        newModel.HOUR_Efficency_Retest = (double)dtExist.FirstOrDefault().MinutesEfficencyRetest; //Rows[0]["Efficency_Retest"];
+                        newModel.HOUR_Quality = (double)dtExist.FirstOrDefault().Quality;   //Rows[0]["Quality"];
+                        newModel.HOUR_OEE = (double)dtExist.FirstOrDefault().Total;   //Rows[0]["Total"];
+
+                        newModel.MinutesAvailability = (double)dtExist.FirstOrDefault().MinutesAvailability;//Rows[0]["MinutesAvailability"];
+                        newModel.MinutesProgrammed = (double)dtExist.FirstOrDefault().MinutesProgrammed;//Rows[0]["MinutesProgrammed"];
+                        newModel.MinutesEfficency = (double)dtExist.FirstOrDefault().MinutesEfficency;//Rows[0]["MinutesEfficency"];
+                        newModel.MinutesEfficency_Retest = (double)dtExist.FirstOrDefault().MinutesEfficencyRetest;//Rows[0]["MinutesEfficency_Retest"];
+                        newModel.MinutesQuality = (double)dtExist.FirstOrDefault().MinutesQuality;//Rows[0]["MinutesQuality"];
+
+                        newModel.MinutesLostWithTickets = (double)dtExist.FirstOrDefault().MinutesLostWithTickets;//Rows[0]["MinutesLostWithTickets"];
+                        newModel.MinutesLostWithOutTickets = (double)dtExist.FirstOrDefault().MinutesLostWithoutTickets;//Rows[0]["MinutesLostWithoutTickets"];
+
+                        newModel.Units_Defects = (int)dtExist.FirstOrDefault().UnitsDefects;//Rows[0]["Units_Defects"];
+                        newModel.Units_total = (int)dtExist.FirstOrDefault().UnitsTotal;//Rows[0]["Units_total"];
+
+                        if (newModel.HOUR_OEE > 0) //2024-03-13 EM: Ensure data is calculated. Some data is not updated, investigate why. 
+                        {
+                            getfromHistory = true;
+
+
+                            List<HourOEE_Detail> listHour = new List<HourOEE_Detail>();
+
+                            var dtExistDetails = await _context.PartStationOeeHourDetails
+                                .AsNoTracking()
+                                .Where(p => p.StationId == StationID && p.TrnDate == TrnDat && p.Hour == Hour)
+                                .Select(p => new
+                                {
+                                    p.StationId,
+                                    p.TrnDate,
+                                    p.Hour,
+                                    p.PartNumber,
+                                    p.Goal,
+                                    p.Total,
+                                    p.Good,
+                                    p.Bad,
+                                    p.Fpy,
+                                    p.Efficency,
+                                    p.Downtime,
+                                    p.Comments,
+                                    p.Retest,
+                                    p.EfficencyRetest,
+                                    PartID = p.PartId ?? 0,         // Si es nulo, asigna 0
+                                    Side = p.Side ?? "A",           // Si es nulo, asigna "A"
+                                    Issue1 = p.Issue1 ?? "",        // Si es nulo, asigna ""
+                                    Issue2 = p.Issue2 ?? ""         // Si es nulo, asigna ""
+                                })
+                                .ToListAsync();
+
+
+                            if (dtExistDetails.Count() > 0)
+                            {
+
+                                foreach (var rowGeneral in dtExistDetails)
+                                {
+                                    //Add TO List
+                                    HourOEE_Detail newHour = new HourOEE_Detail();
+
+                                    newHour.Hour = Convert.ToInt32(rowGeneral.Hour); //["Hour"];
+                                    newHour.PN = Convert.ToString(rowGeneral.PartNumber?.ToString() ?? "");//["PartNumber"].ToString();
+                                    newHour.Goal = (int)(double)(rowGeneral.Goal ?? 0);   //["Goal"];
+                                    newHour.Total = (int)(double)(rowGeneral.Total ?? 0); //["Total"];
+                                    newHour.Good = (int)(double)(rowGeneral.Good ?? 0);//["Good"];
+                                    newHour.Bad = (int)(double)(rowGeneral.Bad ?? 0);   //["Bad"];
+                                    newHour.FPY = (double)(rowGeneral.Fpy ?? 0.00); //["FPY"];
+                                    newHour.Efficency = (double)(rowGeneral.Efficency ?? 0.00); //["Efficency"];
+                                    newHour.Downtime = rowGeneral.Downtime.ToString() ?? ""; //["Downtime"].ToString();
+                                    newHour.Comments = rowGeneral.Comments.ToString();   //["Comments"].ToString();
+                                    newHour.Issue1 = rowGeneral.Issue1.ToString(); //["Issue1"].ToString();
+                                    newHour.Issue2 = rowGeneral.Issue2.ToString(); //["Issue2"].ToString();
+                                    newHour.ReTest = (int)(double)(rowGeneral.Retest ?? 0.00);  //["ReTest"];
+                                    newHour.Efficency_ReTest = (double)(rowGeneral.EfficencyRetest ?? 0.00); //["Efficency_ReTest"];
+                                    newHour.PartID = (int)rowGeneral.PartID;  ///["PartID"];
+                                    newHour.Side = rowGeneral.Side.ToString(); ///["Side"].ToString();
+
+                                    listHour.Add(newHour);
+                                }
+                            }
+
+                            List<Tickets> listTickets = new List<Tickets>();
+
+                            var dtTicketsExist = await _context.PartStationOeeHourTickets
+                                .AsNoTracking()
+                                .Where(ticket => ticket.StationId == StationID
+                                                    && ticket.TrnDate.HasValue && ticket.TrnDate.Value.Date == TrnDat.Date
+                                                    && ticket.Hour == Hour)
+                                .Select(ticket => new
+                                {
+                                    ticket.AutoId,
+                                    ticket.StationId,
+                                    ticket.TrnDate,
+                                    ticket.IssueSolveDate,
+                                    ticket.Hour,
+                                    ticket.IssueDescription,
+                                    ticket.IssueComments,
+                                    ticket.IssueType,
+                                    ticket.EquipmentId,
+                                    ticket.MinutesOpen,
+                                    ticket.ReduceProgramation,
+                                    ticket.ReduceAvailability
+                                })
+                                .ToListAsync();
+
+
+                            if (dtTicketsExist.Count() > 0)
+                            {
+                                foreach (var rowGeneral in dtTicketsExist)
+                                {
+                                    //Add TO List
+                                    Tickets newItem = new Tickets();
+                                    newItem.StationID = newModel.StationID;
+                                    newItem.year = timehourEnd.AddHours(-1).Year;
+                                    newItem.month = timehourEnd.AddHours(-1).Month;
+                                    newItem.day = timehourEnd.AddHours(-1).Day;
+                                    newItem.hour = (int)(rowGeneral.Hour ?? 0);//["Hour"];
+                                    newItem.TrnDate = (DateTime)(rowGeneral.TrnDate ?? DateTime.MinValue);  //["TrnDate"];
+                                    newItem.IssueSolveDate = (DateTime)(rowGeneral.IssueSolveDate ?? DateTime.MinValue); //["IssueSolveDate"];
+                                    newItem.MinutesOpen = (float)(rowGeneral.MinutesOpen ?? 0);//["MinutesOpen"].ToString());
+                                    newItem.ReduceProgramation = (bool)(rowGeneral.ReduceProgramation ?? false);// ["ReduceProgramation"];
+                                    newItem.ReduceAvailability = (bool)(rowGeneral.ReduceAvailability ?? false); //["ReduceAvailability"];
+                                    newItem.IssueDescription = rowGeneral.IssueDescription ?? ""; //["IssueDescription"].ToString();
+                                    newItem.IssueComments = rowGeneral.IssueComments ?? "";//["IssueComments"].ToString();
+                                    newItem.IssueType = rowGeneral.IssueType ?? "";//["IssueType"].ToString();
+                                    newItem.EquipmentID = rowGeneral.EquipmentId ?? "";//["EquipmentID"].ToString();
+
+                                    listTickets.Add(newItem);
+                                }
+                            }
+
+                            newModel.Details = listHour;
+                            newModel.Tickets = listTickets;
+                        }
+                    }
+                }
+
+                if (getfromHistory == false)
+                {
+                    newModel.Units_Defects = 0;
+                    newModel.Units_total = 0;
+
+                    if (dtProductionAllDay.Count() == 0)
+                    {
+                        var dtSubstation = await _context.PartStationSubstations
+                                                    .Where(pss => pss.StationId == StationID)
+                                                    .Select(pss => pss.SubStationId)
+                                                    .ToListAsync();
+
+                        var SubStationsIds = await _context.PartStationSubstations
+                        .Where(p => p.StationId == StationID)
+                        .Select(p => p.SubStationId)
+                        .ToListAsync();
+
+
+                        dtProductionAllDay = await _context.PdTblUnitsTrackingNews
+                                .AsNoTracking()
+                                .Where(h => h.AreaId == AreaID &&
+                                            h.TrnDate >= timehourEnd.AddHours(-1) &&
+                                            h.TrnDate <= timehourEnd &&
+                                            h.StationId == StationID)
+                                .Join(_context.Parts,
+                                      h => h.PartId,
+                                      pn => pn.PartId,
+                                      (h, pn) => new { h, pn })
+                                .GroupJoin(_context.PartStationStandardRates,
+                                           x => new { PartID = (int)x.pn.PartId, StationID = x.h.StationId, JobSide = x.h.JobSide }, // Claves para el LEFT JOIN
+                                            r => new { PartID = (int)r.PartId, StationID = r.StationId, JobSide = r.Side }, // Claves para el LEFT JOIN
+                                           (x, rates) => new { x.h, x.pn, Rates = rates })
+                                .SelectMany(x => x.Rates.DefaultIfEmpty(),
+                                            (x, rate) => new { x.h, x.pn, Rate = rate.Rate != null ? rate.Rate : 0 })
+                                .GroupBy(x => new
+                                {
+                                    Year = x.h.TrnDate.Value.Year,
+                                    Month = x.h.TrnDate.Value.Month,
+                                    Day = x.h.TrnDate.Value.Day,
+                                    Hour = x.h.TrnDate.Value.Hour,
+                                    x.h.StationId,
+                                    x.pn.PartNumber,
+                                    x.pn.PartId,
+                                    x.h.JobSide
+                                })
+                                .Select(g => new ProductionData
+                                {
+                                    Year = g.Key.Year,
+                                    Month = g.Key.Month,
+                                    Day = g.Key.Day,
+                                    Hour = g.Key.Hour,
+                                    StationId = g.Key.StationId ?? 0,
+                                    PartNumber = g.Key.PartNumber,
+                                    PartId = (int)g.Key.PartId,
+                                    JobSide = g.Key.JobSide,
+                                    Qty = g.Sum(x => x.h.Ssnindex == 1 ? 1 : 0),
+                                    Good = g.Count(x => x.h.IsGood == true && x.h.Ssnindex == 1),
+                                    Bad = g.Count(x => x.h.IsGood == false && x.h.Ssnindex == 1),
+                                    Debugeo = 0,
+                                    Stations = g.Select(x => x.h.StationId).Distinct().Count(),
+                                    Rate = g.Max(x => x.Rate) ?? 0,
+                                    Retest = g.Sum(x => x.h.Ssnindex > 1 ? 1 : 0)
+                                })
+                                .ToListAsync();
+
+
+                        if (dtSubstation.Count() > 0)
+                        {
+                            dtProductionAllDay = await _context.PdTblUnitsTrackingNews
+                                .AsNoTracking()
+                                .Where(h => h.AreaId == AreaID &&
+                                            h.TrnDate >= timehourEnd.AddHours(-1) &&
+                                            h.TrnDate <= timehourEnd &&
+                                             SubStationsIds.Contains(h.StationId))
+                                .Join(_context.Parts,
+                                        h => h.PartId,
+                                        pn => pn.PartId,
+                                        (h, pn) => new { h, pn })
+                                .GroupJoin(_context.PartStationStandardRates.AsNoTracking(),
+                                            x => new { PartId = (int?)x.pn.PartId, StationId = (int?)x.h.StationId, JobSide = (string?)x.h.JobSide },
+                                            r => new { PartId = (int?)r.PartId, StationId = (int?)r.StationId, JobSide = (string?)r.Side },
+                                            (x, rates) => new { x.h, x.pn, Rates = rates })
+                                .SelectMany(x => x.Rates.DefaultIfEmpty(),
+                                            (x, rate) => new { x.h, x.pn, Rate = rate != null ? rate.Rate : 0 })
+                                .GroupBy(x => new
+                                {
+                                    Year = x.h.TrnDate.Value.Year,
+                                    Month = x.h.TrnDate.Value.Month,
+                                    Day = x.h.TrnDate.Value.Day,
+                                    Hour = x.h.TrnDate.Value.Hour,
+                                    x.h.StationId,
+                                    x.pn.PartNumber,
+                                    x.pn.PartId,
+                                    x.h.JobSide
+                                })
+                                .Select(g => new ProductionData
+                                {
+                                    Year = g.Key.Year,
+                                    Month = g.Key.Month,
+                                    Day = g.Key.Day,
+                                    Hour = g.Key.Hour,
+                                    StationId = g.Key.StationId ?? 0,
+                                    PartNumber = g.Key.PartNumber,
+                                    PartId = (int)g.Key.PartId,
+                                    JobSide = g.Key.JobSide,
+                                    Qty = g.Sum(x => x.h.Ssnindex == 1 ? 1 : 0),
+                                    Good = g.Count(x => x.h.IsGood == true && x.h.Ssnindex == 1),
+                                    Bad = g.Count(x => x.h.IsGood == false && x.h.Ssnindex == 1),
+                                    Debugeo = 0,
+                                    Stations = g.Select(x => x.h.StationId).Distinct().Count(),
+                                    Rate = g.Max(x => x.Rate) ?? 0,
+                                    Retest = g.Sum(x => x.h.Ssnindex > 1 ? 1 : 0)
+                                })
+                                .ToListAsync();
+
+                        }
+                    }
+
+                    DateTime Current = timehourEnd.AddHours(-1);
+
+                    DateTime seguida = timehourEnd;
+
+                    double HOUR_TOTALMINUTES = 60;
+
+                    List<Tickets> listTickets = new List<Tickets>();
+
+                    // AVAILABILITY (TICKETS)
+                    var CURRENT_HOUR = Current;
+
+                    if (DateTime.Now < dateEnd)
+                    {
+                        int totalminutesHourCurrent = (int)Math.Ceiling((CURRENT_HOUR.AddHours(+1) - DateTime.Now).TotalMinutes);
+                        if (totalminutesHourCurrent >= 0 & totalminutesHourCurrent < 60)
+                        {
+                            int totalminutes = 60 - (int)(CURRENT_HOUR.AddHours(+1) - DateTime.Now).TotalMinutes;
+                            if (totalminutes < 60 & totalminutes >= 0)
+                            {
+                                HOUR_TOTALMINUTES = totalminutes;
+                            }
+                        }
+                    }
+
+                    var commnets = "";
+
+                    double downtime_total = 0;
+                    double downtime_programmed = 0; // Tiempo Muerto Programado
+                    double downtime_noprogrammed = 0; //Tiempo Muerto No Programado
+                    double minutes_noworked_withTickect = 0;
+
+                    List<string> myList = new List<string>();
+                    List<double> myTime = new List<double>();
+
+                    var dt_anterior = await GetDownTimePreviousAsync(CURRENT_HOUR, StationID, usetickets);
+
+                    if (dt_anterior.Rows.Count > 0)
+                    {
+                        if (DateTime.Parse(dt_anterior.Rows[0]["Dtend"].ToString()) > CURRENT_HOUR && DateTime.Parse(dt_anterior.Rows[0]["Dtend"].ToString()) < CURRENT_HOUR.AddHours(+1))
+                        {
+                            Tickets newItem = new Tickets();
+                            newItem.StationID = newModel.StationID;
+                            newItem.year = timehourEnd.AddHours(-1).Year;
+                            newItem.month = timehourEnd.AddHours(-1).Month;
+                            newItem.day = timehourEnd.AddHours(-1).Day;
+                            newItem.hour = timehourEnd.AddHours(-1).Hour;
+                            newItem.TrnDate = CURRENT_HOUR;
+                            newItem.IssueSolveDate = dt_anterior.Rows[0].Field<DateTime>("Dtend");
+                            newItem.MinutesOpen = (float)(newItem.IssueSolveDate - newItem.TrnDate).TotalMinutes;
+                            newItem.ReduceProgramation = dt_anterior.Rows[0].Field<bool>("ReduceProgramation");
+                            newItem.ReduceAvailability = dt_anterior.Rows[0].Field<bool>("ReduceAvailability");
+                            newItem.IssueDescription = dt_anterior.Rows[0].Field<string>("Razon");
+                            newItem.IssueComments = "";
+                            newItem.IssueType = dt_anterior.Rows[0].Field<string>("Categoria");
+                            newItem.EquipmentID = "";
+
+                            listTickets.Add(newItem);
+
+                            DateTime ends = dt_anterior.Rows[0].Field<DateTime>("Dtend");
+                            downtime_total = downtime_total + (ends - CURRENT_HOUR).TotalMinutes;
+
+                            if (dt_anterior.Rows[0].Field<bool>("ReduceProgramation"))
+                            {
+                                downtime_programmed = downtime_programmed + (ends - CURRENT_HOUR).TotalMinutes;
+                            }
+                            else if (dt_anterior.Rows[0].Field<bool>("ReduceAvailability") == false)
+                            {
+                                minutes_noworked_withTickect = minutes_noworked_withTickect + (ends - CURRENT_HOUR).TotalMinutes;
+                            }
+                            else
+                            {
+                                downtime_noprogrammed = downtime_noprogrammed + (ends - CURRENT_HOUR).TotalMinutes;
+                            }
+
+                            if (myList.Contains(dt_anterior.Rows[0].Field<string>("Razon")))
+                            {
+                                var indexOfMyDW = myList.IndexOf(dt_anterior.Rows[0].Field<string>("Razon"));
+                                myTime[indexOfMyDW] = myTime[indexOfMyDW] + (ends - CURRENT_HOUR).TotalMinutes;
+                            }
+                            else
+                            {
+                                myList.Add(dt_anterior.Rows[0].Field<string>("Razon"));
+                                myTime.Add((ends - CURRENT_HOUR).TotalMinutes);
+                            }
+                        }
+                        else if (DateTime.Parse(dt_anterior.Rows[0]["Dtend"].ToString()) > CURRENT_HOUR && DateTime.Parse(dt_anterior.Rows[0]["Dtend"].ToString()) >= CURRENT_HOUR.AddHours(+1))
+                        {
+
+                            Tickets newItem = new Tickets();
+                            newItem.StationID = newModel.StationID;
+                            newItem.year = timehourEnd.AddHours(-1).Year;
+                            newItem.month = timehourEnd.AddHours(-1).Month;
+                            newItem.day = timehourEnd.AddHours(-1).Day;
+                            newItem.hour = timehourEnd.AddHours(-1).Hour;
+                            newItem.TrnDate = CURRENT_HOUR;
+                            newItem.IssueSolveDate = CURRENT_HOUR.AddHours(+1);
+                            newItem.MinutesOpen = (float)(newItem.IssueSolveDate - newItem.TrnDate).TotalMinutes;
+                            newItem.ReduceProgramation = dt_anterior.Rows[0].Field<bool>("ReduceProgramation");
+                            newItem.ReduceAvailability = dt_anterior.Rows[0].Field<bool>("ReduceAvailability");
+                            newItem.IssueDescription = dt_anterior.Rows[0].Field<string>("Razon");
+                            newItem.IssueComments = "";
+                            newItem.IssueType = dt_anterior.Rows[0].Field<string>("Categoria");
+                            newItem.EquipmentID = "";
+
+                            listTickets.Add(newItem);
+
+                            DateTime ends = CURRENT_HOUR.AddHours(+1);
+                            downtime_total = downtime_total + (ends - CURRENT_HOUR).TotalMinutes;
+
+                            if (dt_anterior.Rows[0].Field<bool>("ReduceProgramation"))
+                            {
+                                downtime_programmed = downtime_programmed + (ends - CURRENT_HOUR).TotalMinutes;
+                            }
+                            else if (dt_anterior.Rows[0].Field<bool>("ReduceAvailability") == false)
+                            {
+                                minutes_noworked_withTickect = minutes_noworked_withTickect + (ends - CURRENT_HOUR).TotalMinutes;
+                            }
+                            else
+                            {
+                                downtime_noprogrammed = downtime_noprogrammed + (ends - CURRENT_HOUR).TotalMinutes;
+                            }
+
+                            if (myList.Contains(dt_anterior.Rows[0].Field<string>("Razon")))
+                            {
+                                var indexOfMyDW = myList.IndexOf(dt_anterior.Rows[0].Field<string>("Razon"));
+                                myTime[indexOfMyDW] = myTime[indexOfMyDW] + (ends - CURRENT_HOUR).TotalMinutes;
+                            }
+                            else
+                            {
+                                myList.Add(dt_anterior.Rows[0].Field<string>("Razon"));
+                                myTime.Add((ends - CURRENT_HOUR).TotalMinutes);
+                            }
+                        }
+                    }
+
+                    var dt_dia = await GetDowntimeCurrent(CURRENT_HOUR, CURRENT_HOUR.AddHours(+1), StationID, usetickets);
+
+                    if (dt_dia.Rows.Count > 0)
+                    {
+                        for (int tes = 0; tes <= dt_dia.Rows.Count - 1; tes++)
+                        {
+                            Tickets newItem = new Tickets();
+                            newItem.StationID = newModel.StationID;
+                            newItem.year = timehourEnd.AddHours(-1).Year;
+                            newItem.month = timehourEnd.AddHours(-1).Month;
+                            newItem.day = timehourEnd.AddHours(-1).Day;
+                            newItem.hour = timehourEnd.AddHours(-1).Hour;
+                            newItem.TrnDate = dt_dia.Rows[tes].Field<DateTime>("DtStart");
+                            newItem.IssueSolveDate = dt_dia.Rows[tes].Field<DateTime>("Dtend");
+                            newItem.MinutesOpen = (float)(newItem.IssueSolveDate - newItem.TrnDate).TotalMinutes;
+                            newItem.ReduceProgramation = dt_dia.Rows[tes].Field<bool>("ReduceProgramation");
+                            newItem.ReduceAvailability = dt_dia.Rows[tes].Field<bool>("ReduceAvailability");
+                            newItem.IssueDescription = dt_dia.Rows[tes].Field<string>("Razon");
+                            newItem.IssueComments = "";
+                            newItem.IssueType = dt_dia.Rows[tes].Field<string>("Categoria");
+                            newItem.EquipmentID = "";
+
+                            listTickets.Add(newItem);
+
+                            downtime_total = downtime_total + (dt_dia.Rows[tes].Field<DateTime>("Dtend") - dt_dia.Rows[tes].Field<DateTime>("DtStart")).TotalMinutes;
+
+                            if (dt_dia.Rows[tes].Field<bool>("ReduceProgramation"))
+                            {
+                                downtime_programmed = downtime_programmed + (dt_dia.Rows[tes].Field<DateTime>("Dtend") - dt_dia.Rows[tes].Field<DateTime>("DtStart")).TotalMinutes;
+                            }
+                            else if (dt_dia.Rows[tes].Field<bool>("ReduceAvailability") == false)
+                            {
+                                minutes_noworked_withTickect = minutes_noworked_withTickect + (dt_dia.Rows[tes].Field<DateTime>("Dtend") - dt_dia.Rows[tes].Field<DateTime>("DtStart")).TotalMinutes;
+                            }
+                            else
+                            {
+                                downtime_noprogrammed = downtime_noprogrammed + (dt_dia.Rows[tes].Field<DateTime>("Dtend") - dt_dia.Rows[tes].Field<DateTime>("DtStart")).TotalMinutes;
+                            }
+
+                            if (myList.Contains(dt_dia.Rows[tes].Field<string>("Razon")))
+                            {
+                                var indexOfMyDW = myList.IndexOf(dt_dia.Rows[tes].Field<string>("Razon"));
+                                myTime[indexOfMyDW] = myTime[indexOfMyDW] + (dt_dia.Rows[tes].Field<DateTime>("Dtend") - dt_dia.Rows[tes].Field<DateTime>("DtStart")).TotalMinutes;
+                            }
+                            else
+                            {
+                                myList.Add(dt_dia.Rows[tes].Field<string>("Razon"));
+                                myTime.Add((dt_dia.Rows[tes].Field<DateTime>("Dtend") - dt_dia.Rows[tes].Field<DateTime>("DtStart")).TotalMinutes);
+                            }
+                        }
+                    }
+
+                    DataTable dt_siguiente = await GetDowntimeNext(CURRENT_HOUR.AddHours(+1), StationID, usetickets);
+
+                    if (dt_siguiente.Rows.Count > 0)
+                    {
+                        if (DateTime.Parse(dt_siguiente.Rows[0]["DtStart"].ToString()) < CURRENT_HOUR.AddHours(+1) && DateTime.Parse(dt_siguiente.Rows[0]["DtStart"].ToString()) >= CURRENT_HOUR)
+                        {
+                            Tickets newItem = new Tickets();
+                            newItem.StationID = newModel.StationID;
+                            newItem.year = timehourEnd.AddHours(-1).Year;
+                            newItem.month = timehourEnd.AddHours(-1).Month;
+                            newItem.day = timehourEnd.AddHours(-1).Day;
+                            newItem.hour = timehourEnd.AddHours(-1).Hour;
+                            newItem.TrnDate = dt_siguiente.Rows[0].Field<DateTime>("Dtstart");
+                            newItem.IssueSolveDate = CURRENT_HOUR.AddHours(+1);
+                            newItem.MinutesOpen = (float)(newItem.IssueSolveDate - newItem.TrnDate).TotalMinutes;
+                            newItem.ReduceProgramation = dt_siguiente.Rows[0].Field<bool>("ReduceProgramation");
+                            newItem.ReduceAvailability = dt_siguiente.Rows[0].Field<bool>("ReduceAvailability");
+                            newItem.IssueDescription = dt_siguiente.Rows[0].Field<string>("Razon");
+                            newItem.IssueComments = "";
+                            newItem.IssueType = dt_siguiente.Rows[0].Field<string>("Categoria");
+                            newItem.EquipmentID = "";
+
+                            listTickets.Add(newItem);
+
+                            DateTime inis = dt_siguiente.Rows[0].Field<DateTime>("Dtstart");
+                            downtime_total = downtime_total + (CURRENT_HOUR.AddHours(+1) - inis).TotalMinutes;
+
+                            if (dt_siguiente.Rows[0].Field<bool>("ReduceProgramation"))
+                            {
+                                downtime_programmed = downtime_programmed + (CURRENT_HOUR.AddHours(+1) - inis).TotalMinutes;
+                            }
+                            else if (dt_siguiente.Rows[0].Field<bool>("ReduceAvailability") == false)
+                            {
+                                minutes_noworked_withTickect = minutes_noworked_withTickect + (CURRENT_HOUR.AddHours(+1) - inis).TotalMinutes;
+                            }
+                            else
+                            {
+                                downtime_noprogrammed = downtime_noprogrammed + (CURRENT_HOUR.AddHours(+1) - inis).TotalMinutes;
+                            }
+
+                            if (myList.Contains(dt_siguiente.Rows[0].Field<string>("Razon")))
+                            {
+                                var indexOfMyDW = myList.IndexOf(dt_siguiente.Rows[0].Field<string>("Razon"));
+                                myTime[indexOfMyDW] = myTime[indexOfMyDW] + (CURRENT_HOUR.AddHours(+1) - inis).TotalMinutes;
+                            }
+                            else
+                            {
+                                myList.Add(dt_siguiente.Rows[0].Field<string>("Razon"));
+                                myTime.Add((CURRENT_HOUR.AddHours(+1) - inis).TotalMinutes);
+                            }
+                        }
+
+                    }
+
+                    for (int cm = 0; cm <= myList.Count - 1; cm++)
+                    {
+                        if (Math.Floor(myTime[cm]) > 0)
+                        {
+                            commnets = commnets + myList[cm] + " (" + Math.Floor(myTime[cm]) + ") ";
+                        }
+                    }
+
+                    if (commnets.Length > 50)
+                    {
+                        commnets = commnets.Substring(0, 50) + "...";
+                    }
+
+                    newModel.Downtime_Programmed = downtime_programmed;
+                    newModel.Downtime_NoProgrammed = downtime_noprogrammed;
+                    newModel.MinutesLostWithTickets = minutes_noworked_withTickect;
+
+                    if (newModel.MinutesLostWithTickets > 60) // If programmed dowtime >60 set the limit at 60
+                    {
+                        newModel.MinutesLostWithTickets = 60;
+                    }
+
+                    newModel.MinutesLostWithOutTickets = 60 - newModel.MinutesLostWithTickets;
+
+                    //// QUALITY
+
+                    var issue1 = "";
+                    var issue2 = "";
+
+
+                    //// EFFICENCY (MINUTES WORKED)
+                    double HOUR_AVAILABLEMINUTES = HOUR_TOTALMINUTES - downtime_programmed - downtime_noprogrammed; // MINUTES AVAILABLE 
+
+                    double hourfactor = 1;
+
+                    if (downtime_noprogrammed > 60) // If programmed dowtime >60 set the limit at 60
+                    {
+                        downtime_noprogrammed = 60;
+                    }
+
+                    double HOUR_WORKEDMINUTES = 0; // Working Minutes worked!
+
+                    double HOUR_WORKEDMINUTES_RETEST = 0; // Working Minutes worked!
+
+                    double working_units_ok = 0;
+
+                    double working_units_bad = 0;
+
+                    double working_units_retest = 0;
+
+                    DataTable dt_general = new DataTable();
+                    dt_general.Columns.Add("Hour", typeof(int));
+                    dt_general.Columns.Add("PN", typeof(string));
+                    dt_general.Columns.Add("Goal", typeof(int));
+                    dt_general.Columns.Add("Total", typeof(int));
+                    dt_general.Columns.Add("Good", typeof(int));
+                    dt_general.Columns.Add("Bad", typeof(int));
+                    dt_general.Columns.Add("FPY", typeof(double));
+                    dt_general.Columns.Add("Efficency", typeof(double));
+                    dt_general.Columns.Add("Downtime", typeof(string));
+                    dt_general.Columns.Add("Comments", typeof(string));
+                    dt_general.Columns.Add("Issue 1", typeof(string));
+                    dt_general.Columns.Add("Issue 2", typeof(string));
+                    dt_general.Columns.Add("ReTest", typeof(int));
+                    dt_general.Columns.Add("Efficency_ReTest", typeof(double));
+                    dt_general.Columns.Add("PartID", typeof(int));
+                    dt_general.Columns.Add("Side", typeof(string));
+
+                    DataTable dtProduction = new DataTable();
+
+                    List<HourOEE_Detail> listHour = new List<HourOEE_Detail>();
+
+                    try
+                    {
+                        List<ProductionData> temp_dtProduction = dtProductionAllDay.Where(p => p.Year == seguida.AddHours(-1).Year && p.Month == seguida.AddHours(-1).Month && p.Day == seguida.AddHours(-1).Day && p.Hour== seguida.AddHours(-1).Hour).ToList();
+
+
+                        dtProduction = DataTables.ConvertToDataTable(temp_dtProduction);
+                    }
+                    catch (Exception exx)
+                    {
+
+                    }
+
+                    int maxrows = dtProduction.Rows.Count;
+                    for (int j = 1; j <= maxrows; j++)
+                    {
+                        DataRow drow = dt_general.NewRow();
+                        drow.SetField("FPY", 0); // FPY
+                        drow.SetField("Efficency", 0); // Efficency
+
+                        drow.SetField("ReTest", 0); // FPY
+                        drow.SetField("Efficency_ReTest", 0); // Efficency
+                        dt_general.Rows.Add(drow);
+                    }
+
+                    if (dtProduction.Rows.Count > 0)
+                    {
+                        int rowid = 0;
+
+                        foreach (DataRow driw in dtProduction.Rows)
+                        {
+                            dt_general.Rows[rowid].SetField("PN", driw["PartNumber"] + " " + driw["JobSide"]);
+
+                            double defaultrate = 9999;
+
+                            double uniteach = 60 / defaultrate; // Unidades deben salir cada x min....
+
+                            double Rate = double.Parse(driw["Rate"].ToString());
+
+                            if (HOUR_AVAILABLEMINUTES == 0)
+                            {
+                                // Keep Same RATE
+                            }
+                            else
+                            {
+                                //hourfactor = HOUR_AVAILABLEMINUTES / hour_minutes;
+
+                                Rate = Rate * hourfactor;
+                            }
+
+                            if (Rate == 0)
+                            {
+                                Rate = defaultrate;
+                            }
+
+                            if (Rate > 0)
+                            {
+                                uniteach = 60 / Rate;
+                            }
+
+                            double workingminutespn = ((int)driw["Good"] + (int)driw["Bad"]) * uniteach;
+
+                            double workignminutespn_retest = ((int)driw["Retest"]) * uniteach;
+
+                            HOUR_WORKEDMINUTES = HOUR_WORKEDMINUTES + workingminutespn;
+
+                            HOUR_WORKEDMINUTES_RETEST = HOUR_WORKEDMINUTES_RETEST + Math.Min(workignminutespn_retest, 60 - workingminutespn);
+
+                            //if (int.Parse(driw["stations"].ToString()) > 1)
+                            //{
+                            //  Rate = Rate * int.Parse(driw["stations"].ToString());
+                            //}
+
+                            if (HOUR_AVAILABLEMINUTES > 0)
+                            {
+                                try
+                                {
+                                    Rate = Rate * (HOUR_AVAILABLEMINUTES / 60);
+                                    if (double.IsNaN(Rate))
+                                    {
+                                        Rate = 0;
+                                    }
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+
+                            dt_general.Rows[rowid].SetField("Goal", Rate);
+                            dt_general.Rows[rowid].SetField("Total", (int)driw["Good"] + (int)driw["Bad"]);
+                            dt_general.Rows[rowid].SetField("Good", driw["Good"]);
+                            dt_general.Rows[rowid].SetField("Bad", driw["Bad"]);
+
+
+                            dt_general.Rows[rowid].SetField("ReTest", driw["Retest"]);
+
+                            double FPY = 0;
+                            try
+                            {
+
+                                var total = int.Parse(driw["Good"].ToString());
+                                var avg = (double)(total) / (int.Parse(driw["Good"].ToString()) + int.Parse(driw["Bad"].ToString()));
+                                FPY = (Math.Round(avg * 100, 0, MidpointRounding.ToEven)) / 100;
+                                if (double.IsNaN(FPY))
+                                {
+                                    FPY = 0;
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+
+                            double effi = 0;
+                            try
+                            {
+                                var total = int.Parse(driw["Good"].ToString()) + int.Parse(driw["Bad"].ToString());
+                                var avg = (double)(total) / (Rate);
+                                effi = (Math.Round(avg * 100, 0, MidpointRounding.ToEven)) / 100;
+
+                                if (double.IsNaN(effi))
+                                {
+                                    effi = 0;
+                                }
+
+                                if (effi > 1)
+                                {
+                                    effi = 1;
+                                }
+
+                            }
+                            catch
+                            {
+
+                            }
+
+                            double effi_retest = 0;
+                            try
+                            {
+                                var total = int.Parse(driw["Retest"].ToString());
+                                var avg = (double)(total) / (Rate);
+                                effi_retest = (Math.Round(avg * 100, 0, MidpointRounding.ToEven)) / 100;
+
+                                if ((effi_retest) + effi > 1)
+                                {
+                                    effi_retest = Math.Min(effi_retest, 1 - effi);
+                                }
+
+                                if ((effi_retest) < 0)
+                                {
+                                    effi_retest = 0;
+                                }
+
+                            }
+                            catch
+                            {
+
+                            }
+
+                            dt_general.Rows[rowid].SetField("Efficency_ReTest", driw["Retest"]);
+
+                            newModel.Units_Defects += (int)driw["Bad"];
+                            newModel.Units_total += (int)driw["Good"] + (int)driw["Bad"];
+
+                            dt_general.Rows[rowid].SetField("FPY", FPY);
+                            dt_general.Rows[rowid].SetField("Efficency", effi);
+                            dt_general.Rows[rowid].SetField("Efficency_ReTest", effi_retest);
+
+                            dt_general.Rows[rowid].SetField("Downtime", Math.Floor(downtime_total));
+                            dt_general.Rows[rowid].SetField("Comments", commnets);
+
+                            dt_general.Rows[rowid].SetField("Issue 1", issue1);
+                            dt_general.Rows[rowid].SetField("Issue 2", issue2);
+
+                            dt_general.Rows[rowid].SetField("PartID", driw["PartID"]);
+                            dt_general.Rows[rowid].SetField("Side", driw["JobSide"]);
+
+                            rowid++;
+                        }
+
+                        if (HOUR_WORKEDMINUTES > HOUR_AVAILABLEMINUTES)
+                        {
+                            HOUR_WORKEDMINUTES = HOUR_AVAILABLEMINUTES;
+                        }
+
+                        //if (HOUR_WORKEDMINUTES > OEE_MinutesAvailables)
+                        //{
+                        //    HOUR_WORKEDMINUTES = OEE_MinutesAvailables;
+                        //}
+
+                        if (HOUR_WORKEDMINUTES_RETEST + HOUR_WORKEDMINUTES > HOUR_AVAILABLEMINUTES)
+                        {
+                            HOUR_WORKEDMINUTES_RETEST = Math.Min(HOUR_WORKEDMINUTES_RETEST, HOUR_AVAILABLEMINUTES - HOUR_WORKEDMINUTES);
+                        }
+
+                        if (HOUR_WORKEDMINUTES_RETEST < 0)
+                        {
+                            HOUR_WORKEDMINUTES_RETEST = 0;
+                        }
+
+                        //Debug.WriteLine("HOUR_WORKEDMINUTES: " + HOUR_WORKEDMINUTES.ToString());
+
+                        string tempoldPN = "";
+
+                        string tempPN = "";
+                        int tempgoal = 0;
+                        int temptotal = 0;
+                        int tempgood = 0;
+                        int tempbad = 0;
+                        int tempretest = 0;
+                        for (int jj = dt_general.Rows.Count - 1; jj >= 0; jj--)
+                        {
+                            try
+                            {
+                                if (dt_general.Rows[jj]["PN"].ToString() == tempPN)
+                                {
+                                    dt_general.Rows[jj].SetField("Goal", (int)dt_general.Rows[jj]["Goal"] + tempgoal);
+                                    dt_general.Rows[jj].SetField("Total", (int)dt_general.Rows[jj]["Total"] + temptotal);
+                                    dt_general.Rows[jj].SetField("Good", (int)dt_general.Rows[jj]["Good"] + tempgood);
+                                    dt_general.Rows[jj].SetField("Bad", (int)dt_general.Rows[jj]["Bad"] + tempbad);
+                                    dt_general.Rows[jj].SetField("ReTest", (int)dt_general.Rows[jj]["ReTest"] + tempretest);
+
+
+                                    tempPN = dt_general.Rows[jj]["PN"].ToString();
+                                    tempgoal = (int)dt_general.Rows[jj]["Goal"];
+                                    temptotal = (int)dt_general.Rows[jj]["Total"];
+                                    tempgood = (int)dt_general.Rows[jj]["Good"];
+                                    tempbad = (int)dt_general.Rows[jj]["Bad"];
+                                    tempretest = (int)dt_general.Rows[jj]["ReTest"];
+
+                                    //DELTE ROW...
+                                    try
+                                    {
+                                        dt_general.Rows[jj + 1].SetField("PN", DBNull.Value);
+                                        dt_general.Rows[jj + 1].SetField("Goal", DBNull.Value);
+                                        dt_general.Rows[jj + 1].SetField("Total", DBNull.Value);
+                                        dt_general.Rows[jj + 1].SetField("Good", DBNull.Value);
+                                        dt_general.Rows[jj + 1].SetField("Bad", DBNull.Value);
+                                        dt_general.Rows[jj + 1].SetField("ReTest", DBNull.Value);
+                                        dt_general.Rows[jj + 1].SetField("FPY", 0);
+                                        dt_general.Rows[jj + 1].SetField("Efficency", 0);
+                                        dt_general.Rows[jj + 1].SetField("Efficency_ReTest", 0);
+
+                                        //dt_general.Rows[jj + 1].Delete();
+                                        dt_general.AcceptChanges();
+                                    }
+                                    catch
+                                    {
+
+                                    }
+                                }
+
+                                tempoldPN = tempPN;
+                                tempPN = dt_general.Rows[jj]["PN"].ToString();
+                                tempgoal = (int)dt_general.Rows[jj]["Goal"];
+                                temptotal = (int)dt_general.Rows[jj]["Total"];
+                                tempgood = (int)dt_general.Rows[jj]["Good"];
+                                tempbad = (int)dt_general.Rows[jj]["Bad"];
+                                tempretest = (int)dt_general.Rows[jj]["ReTest"];
+
+                                working_units_ok = working_units_ok + tempgood;
+                                working_units_bad = working_units_bad + tempbad;
+                                working_units_retest = working_units_retest + tempretest;
+
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                    }
+
+                    if (saveHistory)
+                    {
+
+                        var recordsToDeleteTem = await _context.PartStationOeeHourDetails
+                                       .Where(p => p.StationId == StationID && p.TrnDate == timehourEnd.AddHours(-1) && p.Hour== timehourEnd.AddHours(-1).Hour).ExecuteDeleteAsync();
+                    }
+
+                    foreach (DataRow rowGeneral in dt_general.Rows)
+                    {
+                        //Add TO List
+                        HourOEE_Detail newHour = new HourOEE_Detail();
+
+                        if (rowGeneral["PN"].ToString() != "")
+                        {
+                            newHour.Hour = (int)Current.Hour;
+                            newHour.PN = rowGeneral["PN"].ToString();
+                            newHour.Goal = (int)rowGeneral["Goal"];
+                            newHour.Total = (int)rowGeneral["Total"];
+                            newHour.Good = (int)rowGeneral["Good"];
+                            newHour.Bad = (int)rowGeneral["Bad"];
+                            newHour.FPY = (double)rowGeneral["FPY"];
+                            newHour.Efficency = (double)rowGeneral["Efficency"];
+                            newHour.Downtime = rowGeneral["Downtime"].ToString();
+                            newHour.Comments = rowGeneral["Comments"].ToString();
+                            newHour.Issue1 = rowGeneral["Issue 1"].ToString();
+                            newHour.Issue2 = rowGeneral["Issue 2"].ToString();
+                            newHour.ReTest = (int)rowGeneral["ReTest"];
+                            newHour.Efficency_ReTest = (double)rowGeneral["Efficency_ReTest"];
+                            newHour.PartID = (int)rowGeneral["PartID"];
+                            newHour.Side = rowGeneral["Side"].ToString();
+
+                            listHour.Add(newHour);
+
+                            if (saveHistory)
+                            {
+                                var newRecord = new PartStationOeeHourDetail
+                                {
+                                    StationId = StationID,
+                                    TrnDate = timehourEnd.AddHours(-1),
+                                    PartId = newHour.PartID,
+                                    Side = (newHour.Side ?? "").ToString(),
+                                    Hour = timehourEnd.AddHours(-1).Hour,
+                                    PartNumber = (newHour.PN ?? "").ToString(),
+                                    Goal = newHour.Goal,
+                                    Total = newHour.Total,
+                                    Good= newHour.Good,
+                                    Bad= newHour.Bad,
+                                    Fpy= newHour.FPY,
+                                    Efficency = newHour.Efficency,
+                                    Downtime = double.Parse(newHour.Downtime.ToString()),
+                                    Comments = (newHour.Comments ?? "").ToString(),
+                                    Retest = newHour.ReTest,
+                                    EfficencyRetest = newHour.Efficency_ReTest,
+                                    Issue1 = (newHour.Issue1 ?? "").ToString(),
+                                    Issue2 = (newHour.Issue2 ?? "").ToString()
+                                };
+
+                                _context.PartStationOeeHourDetails.Add(newRecord);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+
+                    }
+
+
+                    if (saveHistory)
+                    {
+                        var recordsToDeleteTem = await _context.PartStationOeeHourTickets
+                                    .Where(p => p.StationId == StationID && p.Date == timehourEnd.AddHours(-1) && p.Hour == timehourEnd.AddHours(-1).Hour)
+                                    .ExecuteDeleteAsync();
+
+                    }
+
+                    foreach (Tickets itemTicket in listTickets)
+                    {
+                        if (saveHistory)
+                        {
+                            var newRecord = new PartStationOeeHourTicket
+                            {
+                                StationId = StationID,
+                                Date = timehourEnd.AddHours(-1),
+                                TrnDate = itemTicket.TrnDate,
+                                IssueSolveDate = itemTicket.IssueSolveDate,
+                                Hour = timehourEnd.AddHours(-1).Hour,
+                                IssueDescription = itemTicket.IssueDescription,
+                                IssueComments = itemTicket.IssueComments,
+                                IssueType = itemTicket.IssueType,
+                                EquipmentId = itemTicket.EquipmentID,
+                                MinutesOpen = itemTicket.MinutesOpen,
+                                ReduceProgramation = itemTicket.ReduceProgramation,
+                                ReduceAvailability = itemTicket.ReduceAvailability
+                            };
+
+                            _context.PartStationOeeHourTickets.Add(newRecord);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
+                    newModel.Details = listHour;
+                    newModel.Tickets = listTickets;
+
+                    try
+                    {
+                        if (dt_general.Rows.Count > 1)
+                        {
+                            for (int jj = dt_general.Rows.Count - 1; jj >= 0; jj--)
+                            {
+                                if (dt_general.Rows[jj]["PN"].ToString() == "" && dt_general.Rows[jj]["PN2"].ToString() == "" && dt_general.Rows[jj]["PN3"].ToString() == "")
+                                {
+                                    dt_general.Rows[jj].Delete();
+                                    dt_general.AcceptChanges();
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+
+                    dt_general.AcceptChanges();
+
+                    newModel.HOUR_WORKEDMINUTES = HOUR_WORKEDMINUTES;
+                    newModel.HOUR_WORKEDMINUTES_RETEST = HOUR_WORKEDMINUTES_RETEST;
+
+                    // HOUR OEE
+                    double HOUR_AVAILABILITY = 0;
+
+                    newModel.MinutesProgrammed = HOUR_TOTALMINUTES;
+                    newModel.MinutesAvailability = HOUR_TOTALMINUTES - downtime_programmed - downtime_noprogrammed;
+
+
+                    try
+                    {
+                        HOUR_AVAILABILITY = (double)(HOUR_TOTALMINUTES - downtime_programmed - downtime_noprogrammed) / (HOUR_TOTALMINUTES - downtime_programmed);
+
+                        if (double.IsNaN(HOUR_AVAILABILITY) || (HOUR_TOTALMINUTES - downtime_programmed) == 0)
+                        {
+                            HOUR_AVAILABILITY = 0;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
+                    newModel.HOUR_Availability = HOUR_AVAILABILITY;
+
+                    double HOUR_EFFICENCY = 0;
+                    newModel.MinutesEfficency = HOUR_WORKEDMINUTES;
+
+                    try
+                    {
+                        HOUR_EFFICENCY = HOUR_WORKEDMINUTES / (HOUR_TOTALMINUTES - downtime_programmed - downtime_noprogrammed);
+                        if (double.IsNaN(HOUR_EFFICENCY))
+                        {
+                            HOUR_EFFICENCY = 0;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
+                    newModel.HOUR_Efficency = HOUR_EFFICENCY;
+
+                    double HOUR_EFFICENCY_RETEST = 0;
+                    newModel.MinutesEfficency_Retest = HOUR_WORKEDMINUTES_RETEST;
+
+                    try
+                    {
+                        HOUR_EFFICENCY_RETEST = HOUR_WORKEDMINUTES_RETEST / (HOUR_TOTALMINUTES - downtime_programmed - downtime_noprogrammed);
+                        if (double.IsNaN(HOUR_EFFICENCY_RETEST))
+                        {
+                            HOUR_EFFICENCY_RETEST = 0;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
+                    newModel.HOUR_Efficency_Retest = HOUR_EFFICENCY_RETEST;
+
+                    double working_units_total = working_units_ok + working_units_bad;
+
+                    if (working_units_total == 0)
+                    {
+                        working_units_total = 1;
+                    }
+
+                    double HOUR_QUALITY = working_units_ok / working_units_total;
+
+                    newModel.HOUR_Quality = HOUR_QUALITY;
+
+                    newModel.MinutesQuality = HOUR_QUALITY * HOUR_WORKEDMINUTES;
+
+                    double HOUR_OEE = HOUR_AVAILABILITY * HOUR_EFFICENCY * HOUR_QUALITY;
+
+                    newModel.HOUR_OEE = HOUR_OEE;
+
+                    if (saveHistory)
+                    {
+                        var recordsToDeleteTem = await _context.PartStationOeeHours
+                                   .Where(p => p.StationId == StationID && p.TrnDate == timehourEnd.AddHours(-1) && p.Hour == timehourEnd.AddHours(-1).Hour)
+                                   .ExecuteDeleteAsync();
+
+                        var newRecord = new PartStationOeeHour
+                        {
+                            StationId = StationID,
+                            TrnDate = timehourEnd.AddHours(-1),
+                            Hour = timehourEnd.AddHours(-1).Hour,
+                            Total = newModel.HOUR_OEE,
+                            Availability = newModel.HOUR_Availability,
+                            Efficency = newModel.HOUR_Efficency,
+                            Quality = newModel.HOUR_Quality,
+                            MinutesProgrammed = newModel.MinutesProgrammed,
+                            MinutesAvailability = newModel.MinutesAvailability,
+                            MinutesEfficency = newModel.MinutesEfficency,
+                            MinutesQuality = newModel.MinutesQuality,
+                            EfficencyRetest = newModel.HOUR_Efficency_Retest,
+                            MinutesEfficencyRetest = newModel.MinutesEfficency_Retest,
+                            DowntimeProgrammed = newModel.Downtime_Programmed,
+                            DowntimeNoProgrammed = newModel.Downtime_NoProgrammed,
+                            HourWorkedminutes = newModel.HOUR_WORKEDMINUTES,
+                            HourWorkedminutesRetest = newModel.HOUR_WORKEDMINUTES_RETEST,
+                            UnitsDefects = newModel.Units_Defects,
+                            UnitsTotal = newModel.Units_total,
+                            MinutesLostWithTickets = newModel.MinutesLostWithTickets,
+                            MinutesLostWithoutTickets = newModel.MinutesLostWithOutTickets
+                        };
+
+                        _context.PartStationOeeHours.Add(newRecord);
+                        await _context.SaveChangesAsync();
+
+                    }
+                }
+            }
+
+            return newModel;
+        }
+
+        public async Task<List<JobResponse>> ScheduleGet(int StationID, int Job_Status_Key = 2396)
+        {
+            var dtJobs = await _context.PartJobs
+                .Where(j => j.AreaId == 1 && j.JobStatusKey == Job_Status_Key && j.StationId == StationID)
+                .Join(_context.PartStations,
+                job => job.StationId,
+                station => station.StationId,
+                (job, station) => new { job, station })
+                .Join(_context.PartOperationAreas,
+                ja => ja.station.AreaId,
+                area => area.AreaId,
+                (ja, area) => new { ja.job, ja.station, area })
+                .Join(_context.Parts,
+                jap => jap.job.PartId,
+                part => part.PartId,
+                (jap, part) => new { jap.job, jap.station, jap.area, part })
+                .GroupJoin(_context.PartJobsQuantityRecordeds,
+                japq => new { JobType = (int?)japq.job.JobType, JobID = (int?)japq.job.JobId, Side = (string?)japq.job.Side, JobChild = (int?)japq.job.ChildId },
+                jobqty => new { JobType = (int?)jobqty.JobType, JobID = (int?)jobqty.JobId, Side = (string?)jobqty.JobSide, JobChild = (int?)jobqty.JobChild },
+                (japq, jobqtys) => new { japq.job, japq.station, japq.area, japq.part, jobqtys })
+                .SelectMany(
+                x => x.jobqtys.DefaultIfEmpty(),
+                (x, jobqty) => new { x.job, x.station, x.area, x.part, jobqty })
+                .GroupJoin(_context.PartStationStandardRates,
+                japqs => new { StationID = (int?)japqs.job.StationId, PartID = (int?)japqs.job.PartId, Side = (string?)japqs.job.Side },
+                rate => new { StationID = (int?)rate.StationId, PartID = (int?)rate.PartId, Side = (string?)rate.Side },
+                (japqs, rates) => new { japqs.job, japqs.station, japqs.area, japqs.part, japqs.jobqty, rates })
+                .SelectMany(
+                x => x.rates.DefaultIfEmpty(),
+                (x, rate) => new { x.job, x.station, x.area, x.part, x.jobqty, rate })
+                .GroupJoin(_context.PartBins,
+                japqsb => new { PartID = (int?)japqsb.job.PartId, BinID = (int?)japqsb.job.GroupMls },
+                bin => new { PartID = (int?)bin.PartId, BinID = (int?)bin.BinId },
+                (japqsb, bins) => new { japqsb.job, japqsb.station, japqsb.area, japqsb.part, japqsb.jobqty, japqsb.rate, bins })
+                .SelectMany(
+                x => x.bins.DefaultIfEmpty(),
+                (x, bin) => new JobResponse
+                {
+                    StationID = x.job.StationId,
+                    StationName = x.station.StationName,
+                    AreaID = x.area.AreaId,
+                    Area = x.area.Area,
+                    JobTypeID = x.job.JobType,
+                    JobID = x.job.Id,
+                    JobNumber = x.job.JobId,
+                    Comments = x.job.Comments,
+                    PartID = (int)x.job.PartId,
+                    PartNumber = x.part.PartNumber,
+                    Side = x.job.Side,
+                    BinID = x.job.GroupMls,
+                    BinName = bin.BinName,
+                    Priority = x.job.Priority,
+                    CPriority = (int)x.job.Cpriority,
+                    Quantity = x.job.Qty,
+                    Balance = x.job.Qty - (x.jobqty.QtyBuild != null ? x.jobqty.QtyBuild ?? 0 : 0),
+                    Builded = x.jobqty.QtyBuild != null ? x.jobqty.QtyBuild ?? 0 : 0,
+                    Rete = x.rate.Rate != null ? x.rate.Rate ?? 10 : 10,
+                    EstimateProductionTime = (int)(((x.job.Qty - (x.jobqty.QtyBuild != null ? x.jobqty.QtyBuild ?? 0 : 0)) / (float)(x.rate.Rate != null ? x.rate.Rate ?? 9999 : 9999)) * 60)
+                })
+            .OrderBy(x => x.Priority)
+            .ToListAsync();
+
+            if (dtJobs == null)
+            {
+                throw new InvalidOperationException("Failed to retrieve the schedule.");
+            }
+
+            return dtJobs;
+
+        }
+
+        public async Task<StationSetupID> AddSetupID(int StationID, int PartID, string Side, int BinID, int JobTypeID, int JobID, string Hostname, string IP)
+        {
+            StationSetupID newModel = new StationSetupID();
+
+            /* CHECK STATION IS AUTHORIZED */
+            var resultAuthorized = await IsAuthorizedAsync(Hostname, StationID);
+
+            if (resultAuthorized == false)
+            {
+                throw new InvalidOperationException("Invalid StationID");
+            }
+            else
+            {
+                bool isAuthorized = resultAuthorized;
+
+                if (isAuthorized == false)
+                {
+                    throw new InvalidOperationException("Hostname Not Authorized");
+                }
+            }
+
+            /* GET Workcenter Values */
+            StationResponse currentStation = new StationResponse();
+
+            var stationResponse = await GetAsync(StationID);
+
+            if (stationResponse == null)
+            {
+                throw new InvalidOperationException("Invalid StationID");
+            }
+            else
+            {
+                currentStation = stationResponse;
+
+                if (currentStation == null)
+                {
+                    throw new InvalidOperationException("Error trying to get StationID");
+                }
+            }
+
+            /* GET JobID/JobTypeID Values if are empty */
+
+            if (JobID == -1)
+            {
+                var responseSchedule = await ScheduleGet(StationID);
+
+                if (responseSchedule == null)
+                {
+                    throw new InvalidOperationException("Invalid StationID");
+                }
+                else
+                {
+                    List<JobResponse> jobList = responseSchedule;
+
+                    if (jobList == null)
+                    {
+                        throw new InvalidOperationException("Error trying to get Current StationID");
+                    }
+
+                    List<JobResponse> samePartID = jobList.Where(j => j.PartID == PartID && j.Side == Side && j.BinID == BinID).OrderBy(j => j.Priority).ToList();
+
+                    if (samePartID.Count > 0)
+                    {
+                        JobID = samePartID.FirstOrDefault().JobID;
+                        JobTypeID = samePartID.FirstOrDefault().JobTypeID;
+                    }
+                }
+            }
+
+            /* CHECK IF EXIST */
+
+            bool addSetup = false;
+            var setupResponse = await SetupIDGet(StationID, Hostname);
+
+            if (setupResponse == null)
+            {
+                addSetup = true;
+            }
+            else
+            {
+                StationSetupID CurrentSetup = setupResponse;
+
+                if (CurrentSetup == null)
+                {
+                    throw new InvalidOperationException("Error trying to get Current SetupID");
+                }
+
+                /* Check if is same Setup*/
+                if (CurrentSetup.JobTypeID == JobTypeID && CurrentSetup.JobID == JobID && CurrentSetup.PartID == PartID && CurrentSetup.Side == Side && CurrentSetup.BinID == BinID)
+                {
+                    newModel = CurrentSetup;
+
+                    var updsetupid = await _context.PartStationSetups
+                        .FirstOrDefaultAsync(x => x.SetupId == CurrentSetup.SetupID);
+
+                    if (updsetupid != null)
+                    {
+                        updsetupid.IsNext = false;
+                        await _context.SaveChangesAsync();
+                    }
+
+                    addSetup = false;
+                }
+                else
+                {
+                    /* If not, Check if is next */
+                    var responseNext = await SetupIDGetNext(StationID, Hostname);
+                    if (responseNext == null)
+                    {
+                        addSetup = true;
+                    }
+                    else
+                    {
+                        StationSetupID NextSetup = responseNext;
+
+                        if (NextSetup == null)
+                        {
+                            addSetup = true;
+                        }
+                        else
+                        {
+                            /* Check if is same Setup*/
+
+                            if (NextSetup.JobTypeID == JobTypeID && NextSetup.JobID == JobID && NextSetup.PartID == PartID && NextSetup.Side == Side && NextSetup.BinID == BinID)
+                            {
+                                newModel = NextSetup;
+
+                                var updpartst = await _context.PartStations
+                                    .FirstOrDefaultAsync(x => x.StationId == StationID);
+                                if (updpartst != null)
+                                {
+                                    updpartst.SetupId = NextSetup.SetupID;
+                                    await _context.SaveChangesAsync();
+                                }
+
+                                var updpartstSetup = await _context.PartStationSetups
+                                    .FirstOrDefaultAsync(x => x.SetupId == NextSetup.SetupID);
+
+                                if (updpartstSetup != null)
+                                {
+                                    updpartstSetup.IsNext = false;
+                                    await _context.SaveChangesAsync();
+                                }
+                            }
+                            else
+                            {
+                                addSetup = true;
+                            }
+                        }
+                    }
+                }
+            }
+            /* If not exist, add new setup */
+
+            if (addSetup)
+            {
+                var newSetupRes = 0;
+                var newSetup = new PartStationSetup
+                {
+                    TrnDate = DateTime.Now,
+                    StationId = StationID,
+                    WorkcenterKey = currentStation.Workcenter_Key,
+                    WorkcenterKanbanKey = currentStation.Workcenter_Kanban_Key,
+                    JobTypeId = JobTypeID,
+                    JobId = JobID,
+                    PartId = PartID,
+                    Side = Side,
+                    BinId = BinID,
+                    IsNext = false
+                };
+                _context.PartStationSetups.Add(newSetup);
+                await _context.SaveChangesAsync();
+
+                if (newSetup != null)
+                {
+                    newSetupRes = 1;
+                    var updPS = await _context.PartStations
+                        .FirstOrDefaultAsync(x => x.StationId == StationID);
+
+                    if (updPS != null)
+                    {
+                        updPS.SetupId = newSetup.SetupId;
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+
+            /* VALIDATE SETUP */
+
+            var responseNew = await SetupIDGet(StationID, Hostname);
+
+            if (responseNew == null)
+            {
+                throw new InvalidOperationException("Error trying to get SetupID");
+            }
+            else
+            {
+                StationSetupID newSetup = responseNew;
+
+                if (newSetup == null)
+                {
+                    throw new InvalidOperationException("Error trying to get Current SetupID");
+                }
+                else
+                {
+                    if (newSetup.JobTypeID == JobTypeID && newSetup.JobID == JobID && newSetup.PartID == PartID && newSetup.Side == Side && newSetup.BinID == BinID)
+                    {
+                        newModel = newSetup;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Setup not ready, please try again.");
+                    }
+                }
+            }
+
+            return newModel;
+        }
+
+        public async Task<StationSetupID> SetupIDGet(int StationID, string Hostname)
+        {
+            var dtStationSetup = await _context.PartStations
+                .Where(station => station.StationId == StationID)
+                .GroupJoin(_context.PartStationSetups,
+                PStations => new { SetupID = (int)PStations.SetupId, StationID = (int?)PStations.StationId },
+                PSSetup => new { SetupID = (int)PSSetup.SetupId, StationID = (int?)PSSetup.StationId },
+                (PStations, PSSetup) => new { PStations, PSSetup })
+                .SelectMany(
+                    x => x.PSSetup.DefaultIfEmpty(),
+                    (x, PSSetup) => new { x.PStations, PSSetup })
+                .GroupJoin(_context.Parts,
+                x => x.PSSetup.PartId,
+                PN => PN.PartId,
+                (x, PNs) => new { x.PSSetup, x.PStations, PNs })
+                .SelectMany(
+                x => x.PNs.DefaultIfEmpty(),
+                (x, PN) => new { x.PSSetup, x.PStations, PN })
+                .GroupJoin(_context.PartOperationAreas,
+                xp => xp.PStations.AreaId,
+                area => area.AreaId,
+                (xp, areas) => new { xp.PSSetup, xp.PStations, xp.PN, areas })
+                .SelectMany(
+                xpa => xpa.areas.DefaultIfEmpty(),
+                (xpa, area) => new { xpa.PSSetup, xpa.PStations, xpa.PN, area })
+                .GroupJoin(_context.PartJobs,
+                xpa => new { JobType = (int?)xpa.PSSetup.JobTypeId, JobID = (int?)xpa.PSSetup.JobId },
+                job => new { JobType = (int?)job.JobType, JobID = (int?)job.Id },
+                (xpa, jobs) => new { xpa.PSSetup, xpa.PStations, xpa.PN, xpa.area, jobs })
+                .SelectMany(
+                xpaj => xpaj.jobs.DefaultIfEmpty(),
+                (xpaj, job) => new { xpaj.PSSetup, xpaj.PStations, xpaj.PN, xpaj.area, job })
+                .GroupJoin(_context.PartBins,
+                xpaj => new { PartID = (int?)xpaj.PSSetup.PartId, BinID = (int?)xpaj.PSSetup.BinId },
+                bin => new { PartID = (int?)bin.PartId, BinID = (int?)bin.BinId },
+                (xpaj, bins) => new { xpaj.PSSetup, xpaj.PStations, xpaj.PN, xpaj.area, xpaj.job, bins })
+                .SelectMany(
+                xpajb => xpajb.bins.DefaultIfEmpty(),
+                (xpajb, bin) => new { xpajb.PSSetup, xpajb.PStations, xpajb.PN, xpajb.area, xpajb.job, bin })
+                .GroupJoin(_context.PdTblRutes,
+                xpajb => new { PartID = (int?)xpajb.PSSetup.PartId, Side = (string?)xpajb.PSSetup.Side, AreaID = (int?)xpajb.PStations.AreaId },
+                rute => new { PartID = (int?)rute.PartId, Side = (string?)rute.Side, AreaID = (int?)rute.AreaId },
+                (xpajb, rutes) => new { xpajb.PSSetup, xpajb.PStations, xpajb.PN, xpajb.area, xpajb.job, xpajb.bin, rutes })
+                .SelectMany(
+                xpajbr => xpajbr.rutes.DefaultIfEmpty(),
+                (xpajbr, rute) => new StationSetupID
+                {
+                    SetupID = xpajbr.PStations.SetupId,
+                    StationID = xpajbr.PSSetup.StationId ?? 0,
+                    StationName = xpajbr.PStations.StationName,
+                    AreaID = xpajbr.PStations.AreaId,
+                    Area = xpajbr.area.Area,
+                    Workcenter_Key = xpajbr.PStations.WorkcenterKey1,
+                    Workcenter_PLC_Name_1 = xpajbr.PStations.WorkcenterPlcName1,
+                    Workcenter_Kanban_Key = xpajbr.PStations.WorkcenterKeyKanban1,
+                    Workcenter_PLC_Name_Kanban_1 = xpajbr.PStations.WorkcenterPlcNameKanban1,
+                    ShareLocation = xpajbr.PStations.ShareLacation ?? "",
+                    WIPLocation = xpajbr.PStations.Wiplocation ?? "",
+                    JobTypeID = xpajbr.PSSetup.JobTypeId,
+                    JobID = xpajbr.PSSetup.JobId,
+                    JobNumber = xpajbr.job.JobId,
+                    PartID = xpajbr.PSSetup.PartId,
+                    PartNumber = xpajbr.PN.PartNumber,
+                    Side = xpajbr.PSSetup.Side,
+                    BinID = xpajbr.PSSetup.BinId ?? 0,
+                    BinName = xpajbr.bin.BinName ?? "",
+                    StageID = rute.Stage,
+                    Regex = xpajbr.PN.PartSerialFormat,
+                    RegexHumanable = xpajbr.PN.PartSerialFormatEasy,
+                    PanelRegex = xpajbr.PN.PartSerialPanelFormat,
+                    PanelRegexHumanable = xpajbr.PN.PartSerialPanelFormatEasy,
+                    Facility_Key = xpajbr.PStations.FacilityKey,
+                    Building_Key = xpajbr.PStations.BuildingKey,
+                    IsNext = xpajbr.PSSetup.IsNext ? 1 : 0
+                })
+                .FirstOrDefaultAsync();
+
+            if (dtStationSetup != null)
+            {
+                string PartFormat = dtStationSetup.Regex;
+                string PartFormatEasy = dtStationSetup.RegexHumanable;
+                string PanelPartFormat = dtStationSetup.PanelRegex;
+                string BinName = dtStationSetup.BinName;
+
+                // UPDATE FORMAT IF BIN>0
+                if (dtStationSetup != null && dtStationSetup.SetupID > 0)
+                {
+
+                    //dtStationSetup[0].Regex = null;
+
+                    var dtFormats = await _context.PartOperationAreasFormats
+                        .Where(x => x.PartId == dtStationSetup.PartID && x.AreaId == dtStationSetup.AreaID)
+                        .Select(x => new
+                        {
+                            x.PackFormat,
+                            Sub_Index = 0,
+                            Sub_Length = 0
+                        })
+                        .ToListAsync();
+
+                    if (dtFormats.Count > 0)
+                    {
+                        dtStationSetup.Regex = "^" + dtFormats[0].PackFormat.ToString() + "$";
+                    }
+
+                    // UPDATE FORMAT IF BIN>0
+                    if (dtStationSetup.BinID > 0)
+                    {
+
+                        string newmodel = dtStationSetup.Regex;
+                        int binsizeinformat = 0;
+
+                        for (int binsize = 1; binsize <= 30; binsize++)
+                        {
+                            string binsizetext = "[";
+                            string binsizetextw = "[";
+
+                            for (int ii = 1; ii <= binsize; ii++)
+                            {
+                                binsizetext += "B";
+                                binsizetextw += "B";
+                            }
+
+                            binsizetext += "]";
+                            binsizetextw += "W]";
+
+                            if (PartFormatEasy.Contains(binsizetext) || PartFormatEasy.Contains(binsizetextw))
+                            {
+                                binsizeinformat = binsize;
+                            }
+                        }
+                        string strBinName = BinName;
+
+                        var strConvertion = await _context.PartBins
+                            .Where(x => x.PartId == dtStationSetup.PartID && x.BinName == BinName && x.IsEnabled == true)
+                            .Select(x => x.Convertion)
+                            .FirstOrDefaultAsync();
+
+                        if (strConvertion!= null && !string.IsNullOrEmpty(strConvertion))
+                        {
+                            strBinName = strConvertion;
+                        }
+
+                        if (strBinName != "General")
+                        {
+                            newmodel = PartFormat.Replace(@"[\w]{" + binsizeinformat + "}", strBinName);
+                            newmodel = PartFormat.Replace(".{" + binsizeinformat + "}", strBinName);
+                        }
+                        PartFormat = newmodel;
+                        dtStationSetup.Regex = PartFormat;
+                        dtStationSetup.PanelRegex = PanelPartFormat;
+                    }
+                    
+                }
+
+            }
+            return dtStationSetup ?? null;
+        }
+
+        public async Task<StationSetupID> SetupIDGetNext(int StationID, string Hostname)
+        {
+            var dtStationSetup = await _context.PartStationSetups
+                .Where(setup => setup.StationId == StationID && setup.IsNext == true)
+                .OrderByDescending(setup => setup.SetupId)
+                .GroupJoin(_context.PartStations,
+                PSSetup => PSSetup.StationId,
+                PStations => PStations.StationId,
+                (PSSetup, PStations) => new { PSSetup, PStations })
+                .SelectMany(
+                    x => x.PStations.DefaultIfEmpty(),
+                    (x, PStation) => new { x.PSSetup, PStation })
+                .GroupJoin(_context.Parts,
+                x => x.PSSetup.PartId,
+                PN => PN.PartId,
+                (x, PNs) => new { x.PStation, x.PSSetup, PNs })
+                .SelectMany(
+                x => x.PNs.DefaultIfEmpty(),
+                (x, PN) => new { x.PSSetup, x.PStation, PN })
+                .GroupJoin(_context.PartOperationAreas,
+                xp => xp.PStation.AreaId,
+                area => area.AreaId,
+                (xp, areas) => new { xp.PSSetup, xp.PStation, xp.PN, areas })
+                .SelectMany(
+                xpa => xpa.areas.DefaultIfEmpty(),
+                (xpa, area) => new { xpa.PSSetup, xpa.PStation, xpa.PN, area })
+                .GroupJoin(_context.PartJobs,
+                xpa => new { JobType = (int?)xpa.PSSetup.JobTypeId, JobID = (int?)xpa.PSSetup.JobId },
+                job => new { JobType = (int?)job.JobType, JobID = (int?)job.Id },
+                (xpa, jobs) => new { xpa.PSSetup, xpa.PStation, xpa.PN, xpa.area, jobs })
+                .SelectMany(
+                xpaj => xpaj.jobs.DefaultIfEmpty(),
+                (xpaj, job) => new { xpaj.PSSetup, xpaj.PStation, xpaj.PN, xpaj.area, job })
+                .GroupJoin(_context.PartBins,
+                xpaj => new { PartID = (int?)xpaj.PSSetup.PartId, BinID = (int?)xpaj.PSSetup.BinId },
+                bin => new { PartID = (int?)bin.PartId, BinID = (int?)bin.BinId },
+                (xpaj, bins) => new { xpaj.PSSetup, xpaj.PStation, xpaj.PN, xpaj.area, xpaj.job, bins })
+                .SelectMany(
+                xpajb => xpajb.bins.DefaultIfEmpty(),
+                (xpajb, bin) => new { xpajb.PSSetup, xpajb.PStation, xpajb.PN, xpajb.area, xpajb.job, bin })
+                .GroupJoin(_context.PdTblRutes,
+                xpajb => new { PartID = (int?)xpajb.PSSetup.PartId, Side = (string?)xpajb.PSSetup.Side, AreaID = (int?)xpajb.PStation.AreaId },
+                rute => new { PartID = (int?)rute.PartId, Side = (string?)rute.Side, AreaID = (int?)rute.AreaId },
+                (xpajb, rutes) => new { xpajb.PSSetup, xpajb.PStation, xpajb.PN, xpajb.area, xpajb.job, xpajb.bin, rutes })
+                .SelectMany(
+                xpajbr => xpajbr.rutes.DefaultIfEmpty(),
+                (xpajbr, rute) => new StationSetupID
+                {
+                    SetupID = xpajbr.PStation.SetupId,
+                    StationID = (int)xpajbr.PSSetup.StationId,
+                    StationName = xpajbr.PStation.StationName,
+                    AreaID = xpajbr.PStation.AreaId,
+                    Area = xpajbr.area.Area,
+                    Workcenter_Key = xpajbr.PStation.WorkcenterKey1,
+                    Workcenter_PLC_Name_1 = xpajbr.PStation.WorkcenterPlcName1,
+                    Workcenter_Kanban_Key = xpajbr.PStation.WorkcenterKeyKanban1,
+                    Workcenter_PLC_Name_Kanban_1 = xpajbr.PStation.WorkcenterPlcNameKanban1,
+                    ShareLocation = xpajbr.PStation.ShareLacation ?? "",
+                    WIPLocation = xpajbr.PStation.Wiplocation ?? "",
+                    JobTypeID = xpajbr.PSSetup.JobTypeId,
+                    JobID = xpajbr.PSSetup.JobId,
+                    JobNumber = (int)xpajbr.job.JobId,
+                    PartID = xpajbr.PSSetup.PartId,
+                    PartNumber = xpajbr.PN.PartNumber,
+                    Side = xpajbr.PSSetup.Side,
+                    BinID = (int)xpajbr.PSSetup.BinId,
+                    BinName = xpajbr.bin.BinName ?? "",
+                    StageID = rute.Stage,
+                    Regex = xpajbr.PN.PartSerialFormat,
+                    RegexHumanable = xpajbr.PN.PartSerialFormatEasy,
+                    PanelRegex = xpajbr.PN.PartSerialPanelFormat,
+                    PanelRegexHumanable = xpajbr.PN.PartSerialPanelFormatEasy,
+                    Facility_Key = xpajbr.PStation.FacilityKey,
+                    Building_Key = xpajbr.PStation.BuildingKey,
+                    IsNext = xpajbr.PSSetup.IsNext ? 1 : 0
+                })
+                .FirstOrDefaultAsync();
+
+            if (dtStationSetup != null)
+            {
+                string PartFormat = dtStationSetup.Regex;
+                string PartFormatEasy = dtStationSetup.RegexHumanable;
+                string PanelPartFormat = dtStationSetup.PanelRegex;
+                string BinName = dtStationSetup.BinName;
+
+                // UPDATE FORMAT IF BIN>0
+                if (dtStationSetup.BinID > 0)
+                {
+
+                    //dtStationSetup[0].Regex = null;
+                    string newmodel = PartFormat;
+
+                    var dtBin = await _context.PartBins
+                        .Where(x => x.PartId == dtStationSetup.PartID && x.IsEnabled == true)
+                        .Select(x => x.PartId)
+                        .ToListAsync();
+
+                    if (dtBin.Count > 0)
+                    {
+                        int binsizeinformat = 0;
+
+                        for (int binsize = 1; binsize <= 30; binsize++)
+                        {
+                            string binsizetext = "[";
+                            string binsizetextw = "[";
+
+                            for (int ii = 1; ii <= binsize; ii++)
+                            {
+                                binsizetext += "B";
+                                binsizetextw += "B";
+                            }
+
+                            binsizetext += "]";
+                            binsizetextw += "W]";
+
+                            if (PartFormatEasy.Contains(binsizetext) || PartFormatEasy.Contains(binsizetextw))
+                            {
+                                binsizeinformat = binsize;
+                            }
+                        }
+                        string strBinName = BinName;
+
+                        var strConvertion = await _context.PartBins
+                            .Where(x => x.PartId == dtStationSetup.PartID && x.BinName == BinName && x.IsEnabled == true)
+                            .Select(x => x.Convertion)
+                            .FirstOrDefaultAsync();
+
+                        if (strConvertion.Length > 0)
+                        {
+                            strBinName = strConvertion;
+                        }
+
+                        if (strBinName != "General")
+                        {
+                            newmodel = PartFormat.Replace(@"[\w]{" + binsizeinformat + "}", strBinName);
+                            newmodel = PartFormat.Replace(".{" + binsizeinformat + "}", strBinName);
+                        }
+                    }
+                    PartFormat = newmodel;
+                }
+                PartFormat = "^" + PartFormat + "$";
+                PanelPartFormat = "^" + PanelPartFormat + "$";
+
+                dtStationSetup.Regex = PartFormat;
+                dtStationSetup.PanelRegex = PanelPartFormat;
+            }
+            return dtStationSetup;
+        }
+
+        public async Task<Boolean> ContainerLoad(int StationID, int Workcenter_Key, string Serial_No, string Feeder_No, string position)
+        {
+            Boolean newModel = false;
+
+            newModel = true;
+
+            return newModel;
+        }
+
+        // Functions
+        #region
+        public async Task<DataTable> GetDownTimePreviousAsync(DateTime Inicio, int StationID, bool usetickets = false)
+        {
+            using (var context = new ProdMesDbContext()) // Nueva instancia de DbContext
+            {
+                var cfDefault = await _context.Settings
+                                .AsNoTracking()
+                .Where(x => x.Description == "DownTime_From_Tickets")
+                .Select(x => x.Result)
+                .FirstOrDefaultAsync();
+
+                if (usetickets || (cfDefault != null && cfDefault == "1"))
+                {
+                    var downTimeList = await _context.PartStationTickets.AsNoTracking()
+                        .Where(x => x.StationId == StationID && x.TrnDate < Inicio)
+                        .Join(_context.ManufacturingTickets,
+                            si => si.IssueId,
+                            ii => ii.IssueId,
+                            (si, ii) => new { si, ii })
+                        .Join(_context.ManufacturingTicketsTypes,
+                            sii => sii.ii.IssueTypeId,
+                            it => it.IssueTypeId,
+                            (sii, it) => new DownTimeDto
+                            {
+                                Dtstart = sii.si.TrnDate,
+                                Dtend = sii.si.IssueSolveDate ?? DateTime.Now,
+                                Razon = sii.ii.IssueDescription,
+                                Categoria = it.IssueType,
+                                ReduceRate = it.ReduceRate,
+                                ReduceProgramation = it.ReduceProgramation,
+                                ReduceAvailability = sii.ii.ReduceAvailability ?? false
+                            })
+                        .OrderByDescending(x => x.Dtstart)
+                        .Take(1)
+                        .ToListAsync();
+
+                    return APIs_BeFirst.Framework.Functions.DataTables.ConvertToDataTable(downTimeList);
+                }
+                else
+                {
+                    var downTimeList = await _context.PartStationDowntimes.AsNoTracking()
+                        .Where(x => x.StationId == StationID && x.Dtstart < Inicio)
+                        .Join(_context.MaintenanceEquipmentDowntimeReasons,
+                            dh => dh.DownTimeCodeId,
+                            dt => dt.DownTimeCodeId,
+                            (dh, dt) => new DownTimeDto
+                            {
+                                Dtstart = (DateTime)dh.Dtstart,
+                                Dtend = (DateTime)dh.Dtend,
+                                Razon = dt.RazonSpecific == "Otro" ? dt.RazonGral : dt.RazonSpecific,
+                                Categoria = "",
+                                ReduceRate = false,
+                                ReduceProgramation = false,
+                                ReduceAvailability = false
+                            })
+                        .OrderByDescending(x => x.Dtstart)
+                        .Take(1)
+                        .ToListAsync();
+
+                    return APIs_BeFirst.Framework.Functions.DataTables.ConvertToDataTable(downTimeList);
+                }
+            }
+        }
+
+        public async Task<DataTable> GetDowntimeCurrent(DateTime Inicio, DateTime Fin, int StationID, bool usetickets = false)
+        {
+            using (var context = new ProdMesDbContext()) // Nueva instancia de DbContext
+            {
+                var cfDefault = await _context.Settings.AsNoTracking()
+                .Where(x => x.Description == "DownTime_From_Tickets")
+                .Select(x => x.Result)
+                .FirstOrDefaultAsync();
+
+                if (usetickets || (cfDefault != null && cfDefault == "1"))
+                {
+                    var downTimeList = await _context.PartStationTickets.AsNoTracking()
+                        .Where(x => x.StationId == StationID && x.TrnDate >= Inicio && (x.IssueSolveDate ?? DateTime.Now) < Fin)
+                        .Join(_context.ManufacturingTickets,
+                            si => si.IssueId,
+                            ii => ii.IssueId,
+                            (si, ii) => new { si, ii })
+                        .Join(_context.ManufacturingTicketsTypes,
+                            sii => sii.ii.IssueTypeId,
+                            it => it.IssueTypeId,
+                            (sii, it) => new DownTimeDto
+                            {
+                                Dtstart = sii.si.TrnDate,
+                                Dtend = sii.si.IssueSolveDate ?? DateTime.Now,
+                                Razon = sii.ii.IssueDescription,
+                                Categoria = it.IssueType,
+                                ReduceRate = it.ReduceRate,
+                                ReduceProgramation = it.ReduceProgramation,
+                                ReduceAvailability = sii.ii.ReduceAvailability ?? false
+                            })
+                        .OrderBy(x => x.Dtstart)
+                        .ToListAsync();
+
+                    return APIs_BeFirst.Framework.Functions.DataTables.ConvertToDataTable(downTimeList);
+                }
+                else
+                {
+                    var downTimeList = await _context.PartStationDowntimes.AsNoTracking()
+                        .Where(x => x.StationId == StationID && x.Dtstart >= Inicio && x.Dtend < Fin)
+                        .Join(_context.MaintenanceEquipmentDowntimeReasons,
+                            dh => dh.DownTimeCodeId,
+                            dt => dt.DownTimeCodeId,
+                            (dh, dt) => new DownTimeDto
+                            {
+                                Dtstart = (DateTime)dh.Dtstart,
+                                Dtend = (DateTime)dh.Dtend,
+                                Razon = dt.RazonSpecific == "Otro" ? dt.RazonGral : dt.RazonSpecific,
+                                Categoria = "",
+                                ReduceRate = false,
+                                ReduceProgramation = false,
+                                ReduceAvailability = false
+                            })
+                        .OrderBy(x => x.Dtstart)
+                        .ToListAsync();
+
+                    return APIs_BeFirst.Framework.Functions.DataTables.ConvertToDataTable(downTimeList);
+                }
+            }
+        }
+
+        public async Task<DataTable> GetDowntimeNext(DateTime Fin, int StationID, bool usetickets = false)
+        {
+            using (var context = new ProdMesDbContext()) // Nueva instancia de DbContext
+            {
+                var cfDefault = await _context.Settings.AsNoTracking()
+                .Where(x => x.Description == "DownTime_From_Tickets")
+                .Select(x => x.Result)
+                .FirstOrDefaultAsync();
+
+                if (usetickets || (cfDefault != null && cfDefault == "1"))
+                {
+                    var downTimeList = await _context.PartStationTickets.AsNoTracking()
+                        .Where(x => x.StationId == StationID && (x.IssueSolveDate ?? DateTime.Now) > Fin)
+                        .Join(_context.ManufacturingTickets,
+                            si => si.IssueId,
+                            ii => ii.IssueId,
+                            (si, ii) => new { si, ii })
+                        .Join(_context.ManufacturingTicketsTypes,
+                            sii => sii.ii.IssueTypeId,
+                            it => it.IssueTypeId,
+                            (sii, it) => new DownTimeDto
+                            {
+                                Dtstart = sii.si.TrnDate,
+                                Dtend = sii.si.IssueSolveDate ?? DateTime.Now,
+                                Razon = sii.ii.IssueDescription,
+                                Categoria = it.IssueType,
+                                ReduceRate = it.ReduceRate,
+                                ReduceProgramation = it.ReduceProgramation,
+                                ReduceAvailability = sii.ii.ReduceAvailability ?? false
+                            })
+                        .OrderBy(x => x.Dtstart)
+                        .Take(1)
+                        .ToListAsync();
+
+                    return APIs_BeFirst.Framework.Functions.DataTables.ConvertToDataTable(downTimeList);
+                }
+                else
+                {
+                    var downTimeList = await _context.PartStationDowntimes.AsNoTracking()
+                        .Where(x => x.StationId == StationID && x.Dtend > Fin)
+                        .Join(_context.MaintenanceEquipmentDowntimeReasons,
+                            dh => dh.DownTimeCodeId,
+                            dt => dt.DownTimeCodeId,
+                            (dh, dt) => new DownTimeDto
+                            {
+                                Dtstart = (DateTime)dh.Dtstart,
+                                Dtend = (DateTime)dh.Dtend,
+                                Razon = dt.RazonSpecific == "Otro" ? dt.RazonGral : dt.RazonSpecific,
+                                Categoria = "",
+                                ReduceRate = false,
+                                ReduceProgramation = false,
+                                ReduceAvailability = false
+                            })
+                        .OrderBy(x => x.Dtstart)
+                        .Take(1)
+                        .ToListAsync();
+
+                    return APIs_BeFirst.Framework.Functions.DataTables.ConvertToDataTable(downTimeList);
+                }
+            }
+        }
+
+        public async Task<List<T>> ConvertDataTableToListAsync<T>(DataTable table) where T : class, new()
+        {
+            return await Task.Run(() =>
+            {
+                List<T> list = new List<T>();
+
+                foreach (DataRow row in table.Rows)
+                {
+                    T obj = new T();
+                    foreach (var prop in typeof(T).GetProperties())
+                    {
+                        if (table.Columns.Contains(prop.Name) && row[prop.Name] != DBNull.Value)
+                        {
+                            prop.SetValue(obj, Convert.ChangeType(row[prop.Name], prop.PropertyType));
+                        }
+                    }
+                    list.Add(obj);
+                }
+                return list;
+            });
+        }
+
+        public async Task<List<StationNPIIssueResponse>> GetNPIIssuesAsync(int StationID)
+        {
+            try
+            {
+                var results = await _context.PartStationTickets
+                    .Where(pst => pst.StationId == StationID && pst.IssueSolveDate == null)
+                    .Join(_context.ManufacturingTicketsTypes,
+                          pst => pst.IssueTypeId,
+                          mtt => mtt.IssueTypeId,
+                          (pst, mtt) => new { pst, mtt })
+                    .Where(x => x.mtt.IssueType == "NPI")
+                    .Join(_context.ManufacturingTickets,
+                          x => x.pst.IssueId,
+                          mt => mt.IssueId,
+                          (x, mt) => new { x.pst, x.mtt, mt })
+                    .OrderByDescending(x => x.pst.TrnDate)
+                    .Select(x => new StationNPIIssueResponse
+                    {
+                        IssueType = x.mtt.IssueType ?? string.Empty,
+                        IssueID = x.pst.IssueId ?? 0,
+                        IssueDescription = x.mt.IssueDescription ?? string.Empty
+                    })
+                    .ToListAsync();
+
+                return results;
+            }
+            catch (Exception)
+            {
+                return new List<StationNPIIssueResponse>();
+            }
+        }
+
+        public async Task<StationInfoResponse?> GetStationInfoAsync(int StationID)
+        {
+            try
+            {
+                var result = await _context.PartStations
+                    .Where(ps => ps.StationId == StationID)
+                    .Select(ps => new StationInfoResponse
+                    {
+                        StationName = ps.StationName ?? string.Empty,
+                        LastPartID = ps.LastPartId ?? 0,
+                        LastJob = ps.LastJob ?? 0,
+                        LastJobText = ps.LastJobText ?? string.Empty,
+                        LastJobType = ps.LastJobType ?? 0,
+                        LastSide = ps.LastSide ?? string.Empty,
+                        LastFormat = ps.LastFormat ?? string.Empty,
+                        LastBinID = ps.LastBinId,
+                        Workcenter_Key = ps.WorkcenterKey,
+                        Workcenter_Key_Kanban = ps.WorkcenterKeyKanban,
+                        Workcenter_PLC_Name = ps.WorkcenterPlcName ?? string.Empty,
+                        Workcenter_PLC_Name_Kanban = ps.WorkcenterPlcNameKanban ?? string.Empty
+                    })
+                    .FirstOrDefaultAsync();
+
+                return result;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        #endregion
+    }
+}

@@ -1,0 +1,867 @@
+# project_division_bom.py
+from odoo import api, fields, models
+
+from odoo.addons.common_logging.logging_bootstrap import get_addon_loggers
+
+from .bom_balance_audit import (
+    BOM_BALANCE_EXPENSE_FIELD_NAMES,
+    BOM_BALANCE_KEY_BY_FIELD,
+    PROJECT_TO_AUDIT,
+    amounts_differ,
+)
+
+LOG = get_addon_loggers("project_bom")
+
+class ProjectInstallation(models.Model):
+    _name = 'project.installation'
+    _description = 'Project Installation Definition'
+    
+    name = fields.Char(string='Installation Name', required=True)
+    installation_number = fields.Char(string='Installation Number', required=True, copy=False)
+    
+    _sql_constraints = [
+        ('installation_number_unique', 
+         'unique(installation_number)', 
+         'The installation number must be unique!')
+    ]
+
+
+class ProjectDivisionBOMItem(models.Model):
+    _name = 'project.division.bom.item'
+    _description = 'Project Division BOM Line Item'
+    
+    installation_id = fields.Many2one(
+        'x.installation',   
+        string='Division',
+        required=True
+    )
+    _rec_name = 'installation_id'
+
+    installation_number = fields.Char(
+        string='Division Number',
+        related='installation_id.installation_number',
+        store=True,
+        readonly=True,
+    )
+
+    total_hours = fields.Float(string='Total Hours', compute='_compute_total_hours', store=True)
+    labor_cost = fields.Monetary(string='Labor Cost', currency_field='currency_id')
+    materials_cost = fields.Monetary(string='Materials', currency_field='currency_id')
+    
+    labor_title_ids = fields.One2many(
+        'project.labor.title.bom.line',
+        'division_bom_id',
+        string='Labor Titles'
+    )
+
+    project_id = fields.Many2one('project.project', string='Project', required=True, ondelete='cascade')
+
+    total_cost = fields.Monetary(
+        string='Total', 
+        compute='_compute_total_cost', 
+        store=True, 
+        currency_field='currency_id'
+    )
+    
+    @api.depends('labor_cost', 'materials_cost')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.labor_cost + record.materials_cost
+
+    currency_id = fields.Many2one(
+        'res.currency', 
+        related='project_id.company_id.currency_id', 
+        store=True
+    )
+
+    @api.depends('labor_title_ids.man_hours')
+    def _compute_total_hours(self):
+        for record in self:
+            record.total_hours = sum(record.labor_title_ids.mapped('man_hours'))
+
+
+class ProjectProjectInherit(models.Model):
+    _inherit = 'project.project' 
+
+    x_division_bom_ids = fields.One2many(
+        'project.division.bom.item', 
+        'project_id', 
+        string='Division BOM Items'
+    )
+
+    x_bom_grand_total = fields.Monetary(
+        string='BOM Grand Total',
+        compute='_compute_bom_grand_total',
+        store=True,
+        currency_field='company_currency', 
+    )
+
+    company_currency = fields.Many2one(
+        related='company_id.currency_id',
+        string="Company Currency",
+        readonly=True
+    )
+    
+    @api.depends('x_division_bom_ids.total_cost')
+    def _compute_bom_grand_total(self):
+        for project in self:
+            project.x_bom_grand_total = sum(project.x_division_bom_ids.mapped('total_cost'))
+
+    # --- BOM Summary report / adjustments (same model; keep here so fields always register) ---
+    x_bom_summary_items_adjustment = fields.Monetary(
+        string="Materials (Estimated Budget)",
+        currency_field="company_currency",
+        default=0.0,
+        help="Positive or negative adjustment for Item Materials total",
+    )
+    x_bom_summary_labor_adjustment = fields.Monetary(
+        string="Labor (Estimated Budget)",
+        currency_field="company_currency",
+        default=0.0,
+        help="Positive or negative adjustment for Labor total",
+    )
+    x_bom_summary_equipment_adjustment = fields.Monetary(
+        string="Equipment (Estimated Budget)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Positive or negative adjustment for Equipment Materials total",
+    )
+    x_bom_summary_travel_adjustment = fields.Monetary(
+        string="Travel (Estimated Budget)",
+        currency_field="company_currency",
+        default=0.0,
+        help="Positive or negative adjustment for Travel Expenses total",
+    )
+    x_bom_summary_subcontractor_adjustment = fields.Monetary(
+        string="Subcontractor (Estimated Budget)",
+        currency_field="company_currency",
+        default=0.0,
+        help="Positive or negative adjustment for Subcontractor total",
+    )
+
+    x_bom_summary_freight_adjustment = fields.Monetary(
+        string="Freight (Estimated Budget)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Positive or negative adjustment for freight",
+    )
+    x_bom_summary_bond_adjustment = fields.Monetary(
+        string="Bond (Estimated Budget)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Positive or negative adjustment for bond",
+    )
+    x_bom_summary_miscellaneous_adjustment = fields.Monetary(
+        string="Miscellaneous (Estimated Budget)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Positive or negative adjustment for miscellaneous",
+    )
+    x_bom_summary_reserve_adjustment = fields.Monetary(
+        string="Contingency Reserve (Estimated Budget)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Positive or negative adjustment for contingency reserve",
+    )
+
+    # --- Buyout fields (before project release) ---
+    x_bom_summary_items_buyout = fields.Monetary(
+        string="Materials (Buyout)",
+        currency_field="company_currency",
+        default=0.0,
+        help="Materials buyout amount before project release",
+    )
+    x_bom_summary_labor_buyout = fields.Monetary(
+        string="Labor (Buyout)",
+        currency_field="company_currency",
+        default=0.0,
+        help="Labor buyout amount before project release",
+    )
+    x_bom_summary_equipment_buyout = fields.Monetary(
+        string="Equipment (Buyout)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Equipment buyout amount before project release",
+    )
+    x_bom_summary_travel_buyout = fields.Monetary(
+        string="Travel (Buyout)",
+        currency_field="company_currency",
+        default=0.0,
+        help="Travel buyout amount before project release",
+    )
+    x_bom_summary_subcontractor_buyout = fields.Monetary(
+        string="Subcontractor (Buyout)",
+        currency_field="company_currency",
+        default=0.0,
+        help="Subcontractor buyout amount before project release",
+    )
+    x_bom_summary_freight_buyout = fields.Monetary(
+        string="Freight (Buyout)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Freight buyout amount before project release",
+    )
+    x_bom_summary_bond_buyout = fields.Monetary(
+        string="Bond (Buyout)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Bond buyout amount before project release",
+    )
+    x_bom_summary_miscellaneous_buyout = fields.Monetary(
+        string="Miscellaneous (Buyout)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Miscellaneous buyout amount before project release",
+    )
+    x_bom_summary_reserve_buyout = fields.Monetary(
+        string="Contingency Reserve (Buyout)",
+        currency_field="company_currency_id",
+        default=0.0,
+        help="Contingency reserve buyout amount before project release",
+    )
+
+    x_bom_summary_items_current_expense = fields.Monetary(
+        string="Materials (Current Expense)",
+        currency_field="company_currency",
+        default=0.0,
+    )
+    x_bom_summary_labor_current_expense = fields.Monetary(
+        string="Labor (Current Expense)",
+        currency_field="company_currency",
+        default=0.0,
+    )
+    x_bom_summary_equipment_current_expense = fields.Monetary(
+        string="Equipment (Current Expense)",
+        currency_field="company_currency_id",
+        default=0.0,
+    )
+    x_bom_summary_travel_current_expense = fields.Monetary(
+        string="Travel (Current Expense)",
+        currency_field="company_currency",
+        default=0.0,
+    )
+    x_bom_summary_subcontractor_current_expense = fields.Monetary(
+        string="Subcontractor (Current Expense)",
+        currency_field="company_currency",
+        default=0.0,
+    )
+    x_bom_summary_freight_current_expense = fields.Monetary(
+        string="Freight (Current Expense)",
+        currency_field="company_currency_id",
+        default=0.0,
+    )
+    x_bom_summary_bond_current_expense = fields.Monetary(
+        string="Bond (Current Expense)",
+        currency_field="company_currency_id",
+        default=0.0,
+    )
+    x_bom_summary_miscellaneous_current_expense = fields.Monetary(
+        string="Miscellaneous (Current Expense)",
+        currency_field="company_currency_id",
+        default=0.0,
+    )
+    x_bom_summary_reserve_current_expense = fields.Monetary(
+        string="Contingency Reserve (Current Expense)",
+        currency_field="company_currency_id",
+        default=0.0,
+    )
+
+    x_bom_summary_items_balance = fields.Monetary(
+        string="Materials Balance",
+        currency_field="company_currency",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_labor_balance = fields.Monetary(
+        string="Labor Balance",
+        currency_field="company_currency",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_equipment_balance = fields.Monetary(
+        string="Equipment Balance",
+        currency_field="company_currency_id",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_travel_balance = fields.Monetary(
+        string="Travel Balance",
+        currency_field="company_currency",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_subcontractor_balance = fields.Monetary(
+        string="Subcontractor Balance",
+        currency_field="company_currency",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_freight_balance = fields.Monetary(
+        string="Freight Balance",
+        currency_field="company_currency_id",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_bond_balance = fields.Monetary(
+        string="Bond Balance",
+        currency_field="company_currency_id",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_miscellaneous_balance = fields.Monetary(
+        string="Miscellaneous Balance",
+        currency_field="company_currency_id",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_reserve_balance = fields.Monetary(
+        string="Contingency Reserve Balance",
+        currency_field="company_currency_id",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_balance_grand = fields.Monetary(
+        string="Balance Total",
+        currency_field="company_currency",
+        compute="_compute_bom_balance_for_display",
+    )
+    x_bom_summary_total_current_expense = fields.Monetary(
+        string="BOM Current Expense Total",
+        currency_field="company_currency",
+        compute="_compute_bom_balance_for_display",
+    )
+
+    x_bom_balance_audit_ids = fields.One2many(
+        "project.bom.balance.audit",
+        "project_id",
+        string="Current Expense History",
+    )
+
+    @api.depends(
+        "x_bom_summary_items_buyout",
+        "x_bom_summary_labor_buyout",
+        "x_bom_summary_equipment_buyout",
+        "x_bom_summary_travel_buyout",
+        "x_bom_summary_subcontractor_buyout",
+        "x_bom_summary_freight_buyout",
+        "x_bom_summary_bond_buyout",
+        "x_bom_summary_miscellaneous_buyout",
+        "x_bom_summary_reserve_buyout",
+        "x_bom_summary_items_current_expense",
+        "x_bom_summary_labor_current_expense",
+        "x_bom_summary_equipment_current_expense",
+        "x_bom_summary_travel_current_expense",
+        "x_bom_summary_subcontractor_current_expense",
+        "x_bom_summary_freight_current_expense",
+        "x_bom_summary_bond_current_expense",
+        "x_bom_summary_miscellaneous_current_expense",
+        "x_bom_summary_reserve_current_expense",
+    )
+    def _compute_bom_balance_for_display(self):
+        for project in self:
+            project.x_bom_summary_items_balance = (
+                project.x_bom_summary_items_buyout
+                - project.x_bom_summary_items_current_expense
+            )
+            project.x_bom_summary_labor_balance = (
+                project.x_bom_summary_labor_buyout
+                - project.x_bom_summary_labor_current_expense
+            )
+            project.x_bom_summary_equipment_balance = (
+                project.x_bom_summary_equipment_buyout
+                - project.x_bom_summary_equipment_current_expense
+            )
+            project.x_bom_summary_travel_balance = (
+                project.x_bom_summary_travel_buyout
+                - project.x_bom_summary_travel_current_expense
+            )
+            project.x_bom_summary_subcontractor_balance = (
+                project.x_bom_summary_subcontractor_buyout
+                - project.x_bom_summary_subcontractor_current_expense
+            )
+            project.x_bom_summary_freight_balance = (
+                project.x_bom_summary_freight_buyout
+                - project.x_bom_summary_freight_current_expense
+            )
+            project.x_bom_summary_bond_balance = (
+                project.x_bom_summary_bond_buyout
+                - project.x_bom_summary_bond_current_expense
+            )
+            project.x_bom_summary_miscellaneous_balance = (
+                project.x_bom_summary_miscellaneous_buyout
+                - project.x_bom_summary_miscellaneous_current_expense
+            )
+            project.x_bom_summary_reserve_balance = (
+                project.x_bom_summary_reserve_buyout
+                - project.x_bom_summary_reserve_current_expense
+            )
+            project.x_bom_summary_balance_grand = (
+                project.x_bom_summary_items_balance
+                + project.x_bom_summary_labor_balance
+                + project.x_bom_summary_equipment_balance
+                + project.x_bom_summary_travel_balance
+                + project.x_bom_summary_subcontractor_balance
+                + project.x_bom_summary_freight_balance
+                + project.x_bom_summary_bond_balance
+                + project.x_bom_summary_miscellaneous_balance
+                + project.x_bom_summary_reserve_balance
+            )
+            project.x_bom_summary_total_current_expense = (
+                project.x_bom_summary_items_current_expense
+                + project.x_bom_summary_labor_current_expense
+                + project.x_bom_summary_equipment_current_expense
+                + project.x_bom_summary_travel_current_expense
+                + project.x_bom_summary_subcontractor_current_expense
+                + project.x_bom_summary_freight_current_expense
+                + project.x_bom_summary_bond_current_expense
+                + project.x_bom_summary_miscellaneous_current_expense
+                + project.x_bom_summary_reserve_current_expense
+            )
+
+    @api.depends(
+        "x_bom_summary_items_adjustment",
+        "x_bom_summary_labor_adjustment",
+        "x_bom_summary_equipment_adjustment",
+        "x_bom_summary_travel_adjustment",
+        "x_bom_summary_subcontractor_adjustment",
+        "x_bom_summary_freight_adjustment",
+        "x_bom_summary_bond_adjustment",
+        "x_bom_summary_miscellaneous_adjustment",
+        "x_bom_summary_reserve_adjustment",
+        "x_bom_summary_items_buyout",
+        "x_bom_summary_labor_buyout",
+        "x_bom_summary_equipment_buyout",
+        "x_bom_summary_travel_buyout",
+        "x_bom_summary_subcontractor_buyout",
+        "x_bom_summary_freight_buyout",
+        "x_bom_summary_bond_buyout",
+        "x_bom_summary_miscellaneous_buyout",
+        "x_bom_summary_reserve_buyout",
+        "x_bom_summary_items_current_expense",
+        "x_bom_summary_labor_current_expense",
+        "x_bom_summary_equipment_current_expense",
+        "x_bom_summary_travel_current_expense",
+        "x_bom_summary_subcontractor_current_expense",
+        "x_bom_summary_freight_current_expense",
+        "x_bom_summary_bond_current_expense",
+        "x_bom_summary_miscellaneous_current_expense",
+        "x_bom_summary_reserve_current_expense",
+        "item_bom_ids.final_estimated_price",
+        "x_division_bom_ids",
+        "labor_bom_line_ids.total_labor_price_sum",
+        "travel_expense_ids.total_travel_expense_cost",
+    )
+    def _compute_bom_totals_for_display(self):
+        for project in self:
+            totals = project.get_bom_summary_totals()
+            total_adjustment = (
+                totals["items_adjustment"]
+                + totals["labor_adjustment"]
+                + totals["travel_adjustment"]
+                + totals["subcontractor_adjustment"]
+                + totals["equipment_adjustment"]
+                + totals["freight_adjustment"]
+                + totals["bond_adjustment"]
+                + totals["miscellaneous_adjustment"]
+                + totals["reserve_adjustment"]
+            )
+            
+            project.x_bom_summary_total_items = totals["total_items"]
+            project.x_bom_summary_total_labor = totals["total_labor"]
+            project.x_bom_summary_total_travel = totals["total_travel"]
+            project.x_bom_summary_total_subcontractor = totals["total_subcontractor"]
+            project.x_bom_summary_calculated_total = totals["grand_total"]
+            project.x_bom_summary_total_adjustment = total_adjustment
+            project.x_bom_summary_total_buyout = totals.get("total_buyout_sum", 0.0)
+            project.x_bom_summary_modified_total = totals["modified_grand_total"]
+
+            # Calculate profit percentage: (Buyout - Current Expense) / Buyout × 100
+            total_buyout = totals.get("total_buyout_sum", 0.0)
+            total_current_expense = totals.get("total_current_expense_sum", 0.0)
+            if total_buyout > 0:
+                project.x_bom_summary_profit_percentage = ((total_buyout - total_current_expense) / total_buyout) * 100
+            else:
+                project.x_bom_summary_profit_percentage = 0.0
+
+    x_bom_summary_total_items = fields.Monetary(
+        string="Calculated Materials Total",
+        currency_field="company_currency",
+        compute="_compute_bom_totals_for_display",
+        store=False,
+    )
+    x_bom_summary_total_labor = fields.Monetary(
+        string="Calculated Labor Total",
+        currency_field="company_currency",
+        compute="_compute_bom_totals_for_display",
+        store=False,
+    )
+    x_bom_summary_total_travel = fields.Monetary(
+        string="Calculated Travel Total",
+        currency_field="company_currency",
+        compute="_compute_bom_totals_for_display",
+        store=False,
+    )
+    x_bom_summary_total_subcontractor = fields.Monetary(
+        string="Calculated Subcontractor Total",
+        currency_field="company_currency",
+        compute="_compute_bom_totals_for_display",
+        store=False,
+    )
+    x_bom_summary_calculated_total = fields.Monetary(
+        string="Calculated Grand Total (BOM)",
+        currency_field="company_currency",
+        compute="_compute_bom_totals_for_display",
+        store=False,
+        help="Sum of all costs before adjustments.",
+    )
+    x_bom_summary_total_adjustment = fields.Monetary(
+        string="Total Adjustment Amount",
+        currency_field="company_currency",
+        compute="_compute_bom_totals_for_display",
+        store=False,
+        help="Sum of all cost adjustments applied.",
+    )
+    x_bom_summary_total_buyout = fields.Monetary(
+        string="Total Buyout Amount",
+        currency_field="company_currency",
+        compute="_compute_bom_totals_for_display",
+        store=False,
+        help="Sum of all buyout amounts before project start.",
+    )
+    x_bom_summary_profit_percentage = fields.Float(
+        string="Profit %",
+        compute="_compute_bom_totals_for_display",
+        store=False,
+        help="Profit percentage: (Buyout - Current Expense) / Buyout × 100",
+    )
+    x_bom_summary_modified_total = fields.Monetary(
+        string="Final Modified Grand Total",
+        currency_field="company_currency",
+        compute="_compute_bom_totals_for_display",
+        store=False,
+        help="Calculated Grand Total + Total Adjustment.",
+    )
+
+    def bom_summary_currency_for_report(self):
+        """Singleton currency for QWeb; ``company_currency`` can be empty if ``company_id`` is unset."""
+        self.ensure_one()
+        cur = self.company_currency or self.company_id.currency_id
+        if not cur and "currency_id" in self._fields:
+            cur = self.currency_id
+        return cur or self.env.company.currency_id
+
+    def bom_summary_format_amount(self, amount):
+        """Format money for the BOM summary report (never call ``.format`` on empty currency)."""
+        self.ensure_one()
+        return self.bom_summary_currency_for_report().format(amount or 0.0)
+
+    def get_bom_summary_data(self):
+        self.ensure_one()
+        LOG.info(
+            "Starting BOM summary data retrieval for project_id=%s name=%s",
+            self.id,
+            self.name,
+        )
+        data = []
+        if not self.x_division_bom_ids:
+            LOG.warning(
+                "Project %s has no divisions (x_division_bom_ids). Returning empty data.",
+                self.id,
+            )
+            return []
+
+        for division in self.x_division_bom_ids:
+            LOG.info(
+                "Processing division_id=%s installation=%s",
+                division.id,
+                division.installation_id.display_name if division.installation_id else "",
+            )
+            if not division.id or isinstance(division.id, models.NewId):
+                LOG.warning(
+                    "Skipping unsaved division (NewId). Division will be processed after save."
+                )
+                continue
+
+            items = self.item_bom_ids.filtered(
+                lambda line: line.division_bom_id.id == division.id
+            )
+            labor_titles = division.labor_title_ids
+
+            labor_type = self.env["project.labor.type.bom.line"].search(
+                [
+                    ("project_id", "=", self.id),
+                    ("division_bom_id", "=", division.id),
+                ],
+                limit=1,
+            )
+            if labor_type:
+                LOG.info(
+                    "Division %s labor type id=%s total_techs_qty=%f total_man_hours_bom=%f",
+                    division.id,
+                    labor_type.id,
+                    labor_type.total_techs_qty,
+                    labor_type.total_man_hours_bom,
+                )
+            else:
+                LOG.info(
+                    "Division %s: no labor type line (report will show empty crew section).",
+                    division.id,
+                )
+
+            labor_bom = self.env["project.labor.bom.line"].search(
+                [
+                    ("project_id", "=", self.id),
+                    ("division_bom_id", "=", division.id),
+                ],
+                limit=1,
+            )
+            if labor_bom:
+                LOG.info(
+                    "Division %s labor BOM id=%s total_price=%f",
+                    division.id,
+                    labor_bom.id,
+                    labor_bom.total_labor_price_sum,
+                )
+            else:
+                LOG.info(
+                    "Division %s: no labor BOM line (report will show warning).",
+                    division.id,
+                )
+
+            travel = self.env["project.travel.expense.line"].search(
+                [
+                    ("project_id", "=", self.id),
+                    ("division_bom_id", "=", division.id),
+                ],
+                limit=1,
+            )
+            if travel:
+                LOG.info(
+                    "Division %s travel expense id=%s total_cost=%f",
+                    division.id,
+                    travel.id,
+                    travel.total_travel_expense_cost,
+                )
+            else:
+                LOG.info(
+                    "Division %s: no travel expense line (report will show warning).",
+                    division.id,
+                )
+
+            data.append(
+                {
+                    "division": division,
+                    "items": items,
+                    "labor_titles": labor_titles,
+                    "labor_bom": labor_bom or False,
+                    "labor_type": labor_type or False,
+                    "travel": travel or False,
+                }
+            )
+
+        LOG.summary(
+            "BOM summary data packaged for project_id=%s divisions=%s",
+            self.id,
+            len(data),
+            surface_to_main=False,
+        )
+        return data
+
+    def get_bom_summary_totals(self):
+        self.ensure_one()
+        data = self.get_bom_summary_data()
+        total_labor = 0.0
+        total_travel = 0.0
+        total_items = 0.0
+
+        for division_data in data:
+            if division_data.get("labor_bom"):
+                total_labor += division_data["labor_bom"].total_labor_price_sum
+            if division_data.get("travel"):
+                total_travel += division_data["travel"].total_travel_expense_cost
+            if division_data.get("items"):
+                total_items += sum(
+                    division_data["items"].mapped("final_estimated_price")
+                )
+
+        modified_items = total_items + self.x_bom_summary_items_adjustment
+        modified_labor = total_labor + self.x_bom_summary_labor_adjustment
+        modified_travel = total_travel + self.x_bom_summary_travel_adjustment
+        modified_subcontractor = 0.0 + self.x_bom_summary_subcontractor_adjustment
+        modified_equipment = 0.0 + self.x_bom_summary_equipment_adjustment
+        modified_freight = 0.0 + self.x_bom_summary_freight_adjustment
+        modified_bond = 0.0 + self.x_bom_summary_bond_adjustment
+        modified_miscellaneous = 0.0 + self.x_bom_summary_miscellaneous_adjustment
+        modified_reserve = 0.0 + self.x_bom_summary_reserve_adjustment
+
+        grand_total = total_labor + total_travel + total_items
+        modified_grand_total = (
+            modified_items + modified_labor + modified_travel + modified_subcontractor + modified_equipment + modified_freight + modified_bond + modified_miscellaneous + modified_reserve
+        )
+
+        LOG.summary(
+            "BOM totals computed for project_id=%s labor=%f travel=%f items=%f grand_total=%f modified_total=%f",
+            self.id,
+            total_labor,
+            total_travel,
+            total_items,
+            grand_total,
+            modified_grand_total,
+            surface_to_main=False,
+        )
+
+        items_buyout = self.x_bom_summary_items_buyout
+        labor_buyout = self.x_bom_summary_labor_buyout
+        equipment_buyout = self.x_bom_summary_equipment_buyout
+        travel_buyout = self.x_bom_summary_travel_buyout
+        subcontractor_buyout = self.x_bom_summary_subcontractor_buyout
+        freight_buyout = self.x_bom_summary_freight_buyout
+        bond_buyout = self.x_bom_summary_bond_buyout
+        miscellaneous_buyout = self.x_bom_summary_miscellaneous_buyout
+        reserve_buyout = self.x_bom_summary_reserve_buyout
+
+        items_current = self.x_bom_summary_items_current_expense
+        labor_current = self.x_bom_summary_labor_current_expense
+        equipment_current = self.x_bom_summary_equipment_current_expense
+        travel_current = self.x_bom_summary_travel_current_expense
+        subcontractor_current = self.x_bom_summary_subcontractor_current_expense
+        freight_current = self.x_bom_summary_freight_current_expense
+        bond_current = self.x_bom_summary_bond_current_expense
+        miscellaneous_current = self.x_bom_summary_miscellaneous_current_expense
+        reserve_current = self.x_bom_summary_reserve_current_expense
+
+        items_balance = items_buyout - items_current
+        labor_balance = labor_buyout - labor_current
+        equipment_balance = equipment_buyout - equipment_current
+        travel_balance = travel_buyout - travel_current
+        subcontractor_balance = subcontractor_buyout - subcontractor_current
+        freight_balance = freight_buyout - freight_current
+        bond_balance = bond_buyout - bond_current
+        miscellaneous_balance = miscellaneous_buyout - miscellaneous_current
+        reserve_balance = reserve_buyout - reserve_current
+        balance_grand_total = (
+            items_balance
+            + labor_balance
+            + equipment_balance
+            + travel_balance
+            + subcontractor_balance
+            + freight_balance
+            + bond_balance
+            + miscellaneous_balance
+            + reserve_balance
+        )
+        total_estimated_budget_adjustment = (
+            self.x_bom_summary_items_adjustment
+            + self.x_bom_summary_labor_adjustment
+            + self.x_bom_summary_equipment_adjustment
+            + self.x_bom_summary_travel_adjustment
+            + self.x_bom_summary_subcontractor_adjustment
+            + self.x_bom_summary_freight_adjustment
+            + self.x_bom_summary_bond_adjustment
+            + self.x_bom_summary_miscellaneous_adjustment
+            + self.x_bom_summary_reserve_adjustment
+        )
+        total_buyout_sum = (
+            items_buyout
+            + labor_buyout
+            + equipment_buyout
+            + travel_buyout
+            + subcontractor_buyout
+            + freight_buyout
+            + bond_buyout
+            + miscellaneous_buyout
+            + reserve_buyout
+        )
+        total_current_expense_sum = (
+            items_current
+            + labor_current
+            + equipment_current
+            + travel_current
+            + subcontractor_current
+            + freight_current
+            + bond_current
+            + miscellaneous_current
+            + reserve_current
+        )
+
+        return {
+            "total_labor": total_labor,
+            "total_travel": total_travel,
+            "total_items": total_items,
+            "total_subcontractor": 0.0,
+            "grand_total": grand_total,
+            "items_adjustment": self.x_bom_summary_items_adjustment,
+            "labor_adjustment": self.x_bom_summary_labor_adjustment,
+            "equipment_adjustment": self.x_bom_summary_equipment_adjustment,
+            "travel_adjustment": self.x_bom_summary_travel_adjustment,
+            "subcontractor_adjustment": self.x_bom_summary_subcontractor_adjustment,
+            "freight_adjustment": self.x_bom_summary_freight_adjustment,
+            "bond_adjustment": self.x_bom_summary_bond_adjustment,
+            "miscellaneous_adjustment": self.x_bom_summary_miscellaneous_adjustment,
+            "reserve_adjustment": self.x_bom_summary_reserve_adjustment,
+            "items_buyout": items_buyout,
+            "labor_buyout": labor_buyout,
+            "equipment_buyout": equipment_buyout,
+            "travel_buyout": travel_buyout,
+            "subcontractor_buyout": subcontractor_buyout,
+            "freight_buyout": freight_buyout,
+            "bond_buyout": bond_buyout,
+            "miscellaneous_buyout": miscellaneous_buyout,
+            "reserve_buyout": reserve_buyout,
+            "total_buyout_sum": total_buyout_sum,
+            "items_current_expense": items_current,
+            "labor_current_expense": labor_current,
+            "equipment_current_expense": equipment_current,
+            "travel_current_expense": travel_current,
+            "subcontractor_current_expense": subcontractor_current,
+            "freight_current_expense": freight_current,
+            "bond_current_expense": bond_current,
+            "miscellaneous_current_expense": miscellaneous_current,
+            "reserve_current_expense": reserve_current,
+            "items_balance": items_balance,
+            "labor_balance": labor_balance,
+            "equipment_balance": equipment_balance,
+            "travel_balance": travel_balance,
+            "subcontractor_balance": subcontractor_balance,
+            "freight_balance": freight_balance,
+            "bond_balance": bond_balance,
+            "miscellaneous_balance": miscellaneous_balance,
+            "reserve_balance": reserve_balance,
+            "balance_grand_total": balance_grand_total,
+            "total_estimated_budget_adjustment": total_estimated_budget_adjustment,
+            "total_current_expense_sum": total_current_expense_sum,
+            "modified_items": modified_items,
+            "modified_labor": modified_labor,
+            "modified_travel": modified_travel,
+            "modified_subcontractor": modified_subcontractor,
+            "modified_equipment": modified_equipment,
+            "modified_freight": modified_freight,
+            "modified_bond": modified_bond,
+            "modified_miscellaneous": modified_miscellaneous,
+            "modified_reserve": modified_reserve,
+            "modified_grand_total": modified_grand_total,
+        }
+
+    def _bom_balance_expense_snapshot(self):
+        self.ensure_one()
+        return {f: self[f] for f in BOM_BALANCE_EXPENSE_FIELD_NAMES}
+
+    def write(self, vals):
+        expense_in_vals = [k for k in BOM_BALANCE_EXPENSE_FIELD_NAMES if k in vals]
+        old_snapshots = {}
+        if expense_in_vals and not self.env.context.get("bom_balance_skip_audit"):
+            old_snapshots = {p.id: p._bom_balance_expense_snapshot() for p in self}
+        res = super().write(vals)
+        if expense_in_vals and not self.env.context.get("bom_balance_skip_audit"):
+            Audit = self.env["project.bom.balance.audit"].sudo()
+            for p in self:
+                old = old_snapshots[p.id]
+                new = p._bom_balance_expense_snapshot()
+                changed_keys = [
+                    BOM_BALANCE_KEY_BY_FIELD[f]
+                    for f in BOM_BALANCE_EXPENSE_FIELD_NAMES
+                    if amounts_differ(old[f], new[f])
+                ]
+                if not changed_keys:
+                    continue
+                create_vals = {
+                    "project_id": p.id,
+                    "changed_field_keys": changed_keys,
+                }
+                for proj_f in BOM_BALANCE_EXPENSE_FIELD_NAMES:
+                    create_vals[PROJECT_TO_AUDIT[proj_f]] = new[proj_f]
+                Audit.with_context(bom_balance_audit_from_project_write=True).create(
+                    create_vals
+                )
+        return res

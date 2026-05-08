@@ -1,0 +1,12 @@
+using APIs_BeFirst.Models.Request;
+using APIs_BeFirst.Models.Response;
+
+namespace APIs_BeFirst.Service.Quality
+{
+    public interface IQualityService
+    {
+        Task<List<LockedUnitResponse>> GetLockedUnitsAsync(string sn);
+        Task<bool> AddLockedUnitAsync(LockedUnitRequest request);
+        Task<bool> DeleteLockedUnitsAsync(string sn, string commentPattern);
+    }
+}

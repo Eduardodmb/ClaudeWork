@@ -1,0 +1,214 @@
+# Context Review - Week {{date:WW YYYY}}
+
+**Review date:** {{date:YYYY-MM-DD}}
+**Reviewer:** Eduardo Marquez
+**Duration:** 30 minutes (target)
+
+---
+
+## 1. Stale Content Analysis (>90 days)
+
+```dataview
+TABLE file.mtime as "Last Modified", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills" OR "04-Commands"
+WHERE file.mtime < date(today) - dur(90 days)
+SORT file.mtime ASC
+LIMIT 20
+```
+
+### Triage Actions
+
+**Keep + Update:**
+- [ ] `filename.md` - Still relevant, needs refresh
+
+**Archive (Move to 99-Archive):**
+- [ ] `filename.md` - Outdated, no longer applicable
+
+**Promote:**
+- [ ] `filename.md` - Learning → Skill (validated pattern)
+
+**Consolidate:**
+- [ ] Merge `file1.md` + `file2.md` into single doc
+
+---
+
+## 2. Recent Additions (This Week)
+
+```dataview
+TABLE file.ctime as "Created", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills"
+WHERE file.ctime > date(today) - dur(7 days)
+SORT file.ctime DESC
+```
+
+### Quality Check
+
+- [ ] All items have proper tags? (domain, type, status)
+- [ ] Descriptions clear and actionable?
+- [ ] Links to related concepts added?
+- [ ] Promotion path clear (idea → learning → skill)?
+
+---
+
+## 3. Untagged Content (Needs Classification)
+
+```dataview
+TABLE file.mtime as "Last Modified"
+FROM "02-Learnings"
+WHERE !file.tags OR length(file.tags) = 0
+SORT file.name ASC
+```
+
+### Tagging Actions
+
+**Domain tags to add:**
+- [ ] `#befirst` - BeFirst platform specific
+- [ ] `#infrastructure` - IT infrastructure
+- [ ] `#team` - Team processes
+- [ ] `#devops` - DevOps workflows
+
+**Type tags:**
+- [ ] `#learning` - Captured insight
+- [ ] `#skill` - Reusable expertise
+- [ ] `#reference` - Documentation
+
+**Status tags:**
+- [ ] `#validated` - Production-ready
+- [ ] `#in-progress` - Being refined
+- [ ] `#archived` - Obsolete
+
+---
+
+## 4. Personal Context Updates
+
+### What changed this week?
+
+**New preferences discovered:**
+-
+
+**Decision patterns noticed:**
+-
+
+**Frustrations encountered:**
+-
+
+**Things that worked well:**
+-
+
+### CLAUDE.md Updates Needed
+
+- [ ] Update "Current Focus Areas" section
+- [ ] Add new technical preferences (SQL, APIs, etc.)
+- [ ] Document stakeholder context (Julien, Arturo, Scott)
+- [ ] Add new decision framework rules
+
+**Quick link:** [[01-Personal-Context/CLAUDE.md]]
+
+---
+
+## 5. Promotion Candidates
+
+```dataview
+TABLE file.mtime as "Created", file.tags as "Tags"
+FROM "02-Learnings/_claude-learning/best-practices"
+WHERE contains(file.tags, "validated")
+  AND file.mtime < date(today) - dur(30 days)
+SORT file.mtime ASC
+```
+
+### Promote to Skills?
+
+- [ ] `learning-name.md` → Skill? **Yes/No** (Reason: )
+
+---
+
+## 6. Graph View Insights
+
+**Open graph view:** Press `Ctrl+G`
+
+**Observations:**
+- Isolated nodes found: (list)
+- New clusters emerging: (domains)
+- Core concepts identified: (most-linked files)
+
+**Actions:**
+- [ ] Link isolated files to related concepts
+- [ ] Add overview/index file for cluster X
+- [ ] Review core concept Y for accuracy
+
+---
+
+## 7. Context Quality Metrics
+
+| Metric | This Week | Last Week | Trend | Target |
+|--------|-----------|-----------|-------|--------|
+| Total learnings | [count] | [count] | ↑/↓/→ | Growing |
+| Total skills | [count] | [count] | ↑/↓/→ | 10+ |
+| Stale items (>90d) | [count] | [count] | ↑/↓/→ | <5 |
+| Untagged items | [count] | [count] | ↑/↓/→ | 0 |
+| CLAUDE.md age (days) | [count] | [count] | ↑/↓/→ | <30 |
+
+**Status:** 🟢 Healthy | 🟡 Needs Attention | 🔴 Action Required
+
+---
+
+## 8. This Week's Wins
+
+**Context improvements made:**
+-
+
+**New insights captured:**
+-
+
+**Better Claude sessions noticed:**
+-
+
+---
+
+## 9. Action Items for Next Week
+
+- [ ]
+- [ ]
+- [ ]
+
+---
+
+## 10. Claude Feedback
+
+**What worked well this week?**
+-
+
+**What needs improvement?**
+-
+
+**New patterns to capture?**
+-
+
+**Corrections I made to Claude:**
+- (Propose CLAUDE.md learning additions)
+
+---
+
+## Review Summary
+
+**Time spent:** [X] minutes
+**Stale items addressed:** [count]
+**Files archived:** [count]
+**Promotions:** [count]
+**New tags added:** [count]
+**CLAUDE.md updated:** Yes/No
+
+**Overall context health:** 🟢 / 🟡 / 🔴
+
+**Next review:** {{date+7d:YYYY-MM-DD}} (Friday, 4:00 PM)
+
+---
+
+## Notes
+
+(Any additional observations, ideas, or reminders)
+
+---
+
+**Template version:** 1.0
+**Created:** 2026-05-08

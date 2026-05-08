@@ -1,0 +1,210 @@
+# Setup Symbolic Links to ~/.claude/ Directory
+# Purpose: Create links in Obsidian vault pointing to actual Claude context files
+# Must run on EACH computer (links are computer-specific)
+# Run as Administrator for symbolic links
+
+param(
+    [string]$VaultPath = "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude",
+    [string]$ClaudePath = "C:\Users\emarquez\.claude"
+)
+
+Write-Host ""
+Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "  Claude Context Vault - Link Setup" -ForegroundColor Cyan
+Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "This script creates symbolic links from Obsidian vault to ~/.claude/" -ForegroundColor White
+Write-Host ""
+Write-Host "Vault location: $VaultPath" -ForegroundColor Yellow
+Write-Host "Claude directory: $ClaudePath" -ForegroundColor Yellow
+Write-Host ""
+
+# Check if running as Administrator
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+if (-not $isAdmin) {
+    Write-Host "⚠ WARNING: Not running as Administrator" -ForegroundColor Red
+    Write-Host "   Symbolic links may fail. Falling back to directory junctions." -ForegroundColor Yellow
+    Write-Host "   For best results: Right-click PowerShell → 'Run as Administrator'" -ForegroundColor Yellow
+    Write-Host ""
+
+    $continue = Read-Host "Continue anyway? (Y/N)"
+    if ($continue -ne "Y" -and $continue -ne "y") {
+        Write-Host "Exiting. Re-run as Administrator for full functionality." -ForegroundColor Red
+        exit 1
+    }
+    Write-Host ""
+}
+
+# Verify Claude directory exists
+if (-not (Test-Path $ClaudePath)) {
+    Write-Host "✗ ERROR: Claude directory not found: $ClaudePath" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "This usually means:" -ForegroundColor Yellow
+    Write-Host "  1. Claude Code is not installed on this computer" -ForegroundColor Gray
+    Write-Host "  2. The username is different (check path)" -ForegroundColor Gray
+    Write-Host ""
+    Write-Host "To fix:" -ForegroundColor White
+    Write-Host "  - Install Claude Code first, or" -ForegroundColor Gray
+    Write-Host "  - Update `$ClaudePath parameter if username differs" -ForegroundColor Gray
+    Write-Host ""
+    exit 1
+}
+
+Write-Host "✓ Claude directory found" -ForegroundColor Green
+Write-Host ""
+
+# Verify vault directory exists
+if (-not (Test-Path $VaultPath)) {
+    Write-Host "✗ ERROR: Vault directory not found: $VaultPath" -ForegroundColor Red
+    Write-Host "   Wait for OneDrive to sync, then re-run this script." -ForegroundColor Yellow
+    Write-Host ""
+    exit 1
+}
+
+Write-Host "✓ Vault directory found" -ForegroundColor Green
+Write-Host ""
+
+# Define links to create
+$links = @(
+    @{
+        Source = "$ClaudePath\CLAUDE.md"
+        Target = "$VaultPath\01-Personal-Context\CLAUDE.md"
+        Type = "File"
+        Description = "Personal CLAUDE.md"
+    },
+    @{
+        Source = "$ClaudePath\learning"
+        Target = "$VaultPath\02-Learnings\_claude-learning"
+        Type = "Directory"
+        Description = "Learning files"
+    },
+    @{
+        Source = "$ClaudePath\skills"
+        Target = "$VaultPath\03-Skills\_claude-skills"
+        Type = "Directory"
+        Description = "Skill files"
+    },
+    @{
+        Source = "$ClaudePath\commands"
+        Target = "$VaultPath\04-Commands\_claude-commands"
+        Type = "Directory"
+        Description = "Command files"
+    },
+    @{
+        Source = "$ClaudePath\reference"
+        Target = "$VaultPath\05-Reference\_claude-reference"
+        Type = "Directory"
+        Description = "Reference docs"
+    }
+)
+
+Write-Host "Creating links..." -ForegroundColor Green
+Write-Host ""
+
+$successCount = 0
+$skipCount = 0
+$failCount = 0
+
+foreach ($link in $links) {
+    Write-Host "• $($link.Description):" -NoNewline
+
+    # Check if target already exists
+    if (Test-Path $link.Target) {
+        # Check if it's already a link
+        $item = Get-Item $link.Target -Force
+        if ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) {
+            Write-Host " Already linked ✓" -ForegroundColor DarkGreen
+            $skipCount++
+        } else {
+            Write-Host " Exists (not a link) - Skipping" -ForegroundColor Yellow
+            $skipCount++
+        }
+        continue
+    }
+
+    # Check if source exists
+    if (-not (Test-Path $link.Source)) {
+        Write-Host " Source not found ✗" -ForegroundColor Red
+        $failCount++
+        continue
+    }
+
+    try {
+        if ($isAdmin) {
+            # Create symbolic link (requires admin)
+            New-Item -ItemType SymbolicLink -Path $link.Target -Target $link.Source -Force -ErrorAction Stop | Out-Null
+            Write-Host " Created (symlink) ✓" -ForegroundColor Green
+            $successCount++
+        } else {
+            # Fallback for non-admin
+            if ($link.Type -eq "Directory") {
+                # Use junction for directories (no admin needed)
+                cmd /c mklink /J "$($link.Target)" "$($link.Source)" 2>&1 | Out-Null
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Host " Created (junction) ✓" -ForegroundColor Green
+                    $successCount++
+                } else {
+                    Write-Host " Failed ✗" -ForegroundColor Red
+                    $failCount++
+                }
+            } else {
+                # Files: copy instead of symlink
+                Copy-Item -Path $link.Source -Destination $link.Target -Force
+                Write-Host " Copied (no admin) ⚠" -ForegroundColor Yellow
+                Write-Host "       Note: Changes won't sync back to ~/.claude/" -ForegroundColor DarkYellow
+                $successCount++
+            }
+        }
+    } catch {
+        Write-Host " Failed: $($_.Exception.Message) ✗" -ForegroundColor Red
+        $failCount++
+    }
+}
+
+# Summary
+Write-Host ""
+Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "  Setup Complete" -ForegroundColor Cyan
+Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Results:" -ForegroundColor White
+Write-Host "  ✓ Created: $successCount" -ForegroundColor Green
+Write-Host "  → Skipped: $skipCount" -ForegroundColor Yellow
+Write-Host "  ✗ Failed: $failCount" -ForegroundColor Red
+Write-Host ""
+
+if ($failCount -gt 0) {
+    Write-Host "⚠ Some links failed to create." -ForegroundColor Red
+    Write-Host "   Try running as Administrator for full functionality." -ForegroundColor Yellow
+    Write-Host ""
+}
+
+# Verify one link works
+Write-Host "Verification:" -ForegroundColor White
+$testPath = "$VaultPath\01-Personal-Context\CLAUDE.md"
+if (Test-Path $testPath) {
+    $item = Get-Item $testPath -Force
+    if ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) {
+        Write-Host "  ✓ Links working correctly (symbolic link detected)" -ForegroundColor Green
+    } else {
+        $size = $item.Length
+        if ($size -gt 0) {
+            Write-Host "  ⚠ File exists but not linked (copy fallback)" -ForegroundColor Yellow
+        } else {
+            Write-Host "  ✗ File exists but appears empty" -ForegroundColor Red
+        }
+    }
+} else {
+    Write-Host "  ✗ Verification failed - CLAUDE.md not accessible" -ForegroundColor Red
+}
+Write-Host ""
+
+# Next steps
+Write-Host "Next steps:" -ForegroundColor Cyan
+Write-Host "  1. Open Obsidian" -ForegroundColor White
+Write-Host "  2. Open folder as vault: $VaultPath" -ForegroundColor White
+Write-Host "  3. Install Dataview plugin (Settings → Community plugins)" -ForegroundColor White
+Write-Host "  4. Open: 00-Dashboard/Context-Quality-Dashboard.md" -ForegroundColor White
+Write-Host ""
+Write-Host "Press any key to exit..."
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")

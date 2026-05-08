@@ -1,0 +1,180 @@
+S:\01_Repos\BeFirst_Docs\docs\05_API.md:486:- **Distributed cache**: Redis for shared caching (optional)
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:48:- Check database query performance (use SQL Profiler)
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:49:- Verify network latency to database servers
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:174:- Check service-specific log files in `C:\Logs\Services\{ServiceName}\`
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:184:- Configuration file missing or malformed
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:249:### 1. Job Fails with "Error Date file properties" (Code 4)
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:269:- Create `Settings.conf` file in that directory
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:271:- Check file permissions (read access required)
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:313:- Verify file encoding (ISO-8859-15 or UTF-8)
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:322:- Verify job script path is correct
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:341:- Verify network connectivity: `ping 10.122.40.10`
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:502:| ETL | 4 | Error in date file properties | See "Error Date file properties" above |
+S:\01_Repos\BeFirst_Docs\docs\examples\README.md:33:See individual repository README files for configuration examples:
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:3:All notable changes to the BeFirst platform documentation are documented in this file.
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:114:- Keysight test plans (text file-based interface)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:118:- Updated repository count from 13 to 14 across all documentation files
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:133:- v1.5.1: Daily error log files for check-in operations
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:153:- Skip guard added before all three `publicar()` merge trigger points in `frm_HGTech.vb` (TypeID 1, 2, 3 paths)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:345:- Individual repository documentation (per repo README files)
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:72:- Upload files for import (CSV, Excel)
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:293:Parse test results file (XML, CSV, JSON)
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:347:Send via API, SFTP, or file drop
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:496:**Laser Skip feature:** When a part number is configured in `PART_OPERATION_SERIALIZATION_LASER_SKIP`, the `SkipLaserSerialization` flag is loaded as `True` during casilla selection. In `frm_HGTech`, all three TypeID merge paths (TypeID 1, 2, 3) include a skip guard before calling `publicar()`:
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:681:2. Test plan writes test data to input files:
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:726:6. Executable writes results to output files:
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:732:7. Test plan reads output files and continues test execution
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:868:- **200 with error**: Detect error responses in 200 OK responses, log to error files
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:887:- Text file-based interface for Keysight test plan integration
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:1128:- Review service-specific log files
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:5:The BeFirst Documentation Builder is a Python-based tool that converts markdown files into professional HTML documentation deliverables. It provides configurable document ordering, dynamic navigation generation, and support for both single-page and multi-page outputs.
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:13:5. [Configuration File Format](#configuration-file-format)
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:57:Generate a single HTML file with all documentation:
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:87:Simply open the generated HTML file in your web browser:
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:199:| `--output PATH` | Custom output path (overrides config) | `--output custom-docs.html` |
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:203:| `--config-file PATH` | Custom configuration file path | `--config-file myconfig.yaml` |
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:231:Configuration files use **YAML** format and are stored in `config/docs_builder.yaml`.
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:244:        files:
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:245:          - path: "docs/FILE1.md"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:247:          - path: "docs/FILE2.md"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:265:| `output` | Yes | Output file path relative to project root |
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:274:| `files` | Yes | List of markdown files in this section |
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:280:| `path` | Yes | Path to markdown file (relative to project root) |
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:302:        files:
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:303:          - path: "docs/01_README.md"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:305:          - path: "docs/08_SETUP.md"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:309:        files:
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:310:          - path: "docs/05_API.md"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:312:          - path: "docs/04_DATABASE.md"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:324:Open the generated HTML file in your browser to verify the output.
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:331:4. **File Paths**: Always use paths relative to the project root
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:341:- All documents combined into one HTML file
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:342:- Single file easy to share via email or network
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:358:**Output:** One HTML file (e.g., `befirst-complete-documentation.html`)
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:363:- Separate HTML file for each document
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:378:**Output:** Directory with multiple HTML files:
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:385:└── ... (more files)
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:392:### Error: "Configuration file not found"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:405:**Problem:** A markdown file specified in the configuration doesn't exist.
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:408:1. Check the file path in `config/docs_builder.yaml`
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:409:2. Verify the file exists: `dir docs\FILENAME.md` (Windows) or `ls docs/FILENAME.md` (Unix)
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:410:3. Fix the path in configuration or create the missing file
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:436:**Problem:** Generated HTML file is too large for efficient single-page output.
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:525:        files:
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:526:          - path: "docs/10_ORCHESTRATION.md"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:528:          - path: "docs/06_WORKFLOWS.md"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:530:          - path: "docs/09_TROUBLESHOOTING.md"
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:615:5. **Naming Conventions**: Use descriptive output file names with dates or versions
+S:\01_Repos\BeFirst_Docs\docs\11_BUILD_DOCS_GUIDE.md:637:3. **Check configuration** - Verify paths and syntax in `config/docs_builder.yaml`
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:71:**Deployment**: ClickOnce (network share)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:89:│  5. Update project file (InstallUrl, PublishUrl, Version)    │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:102:│  4. Copy files to X:\MES_Software\Production (overwrite)     │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:103:│  5. Clean temp files                                         │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:117:- **Purpose**: On-premises build and deployment within Safari network
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:123:| `PROJECT_FILE` | `Produccion.vbproj` | VB.NET project file name |
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:128:| `GRA1_DEPLOY_PATH` | `X:\MES_Software\Production` | Network share for deployment |
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:150:- No hard-coded paths (uses GitHub Actions standard location)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:157:- No hard-coded Visual Studio paths
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:246:    path: Production_2_0_26057_1435.zip
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:312:- **Overwrite mode** - Replaces existing files
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:313:- **No cleanup** - Does NOT delete files in destination that aren't in the ZIP
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:314:- Preserves any additional files that exist in the deployment directory
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:335:│  4. Copy to deployment share                                    │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:338:                     │ Copy files
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:346:│  - Application Files/       (Versioned app files)               │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:354:│  - Initial install: Run setup.exe from network share            │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:365:3. ClickOnce installs app to user profile: `%LOCALAPPDATA%\Apps\2.0\[random]\Produccion.exe`
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:373:5. Downloads only changed files (via `.deploy` file extensions)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:475:- Separate network shares for each facility
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:478:- Configuration files deployed per facility (app.config with facility-specific settings)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:491:- Network access to deployment shares
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:509:- Network share should be writable only by runner service account
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:510:- End-users need read-only access to deployment share
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:558:- **Format**: ZIP file containing entire ClickOnce `Publish` directory
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:568:│       └── [Config files].config.deploy
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:581:- For audit/compliance, consider archiving to network share or S3
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:625:- Missing NuGet.config file
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:648:- Check error message for specific file/line number
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:654:**Symptom**: `Copy-Item` fails with "Access to the path is denied"
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:658:- Files locked by running application on network share
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:659:- Network share offline or unreachable
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:669:# Check for locked files
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:678:- Network share unreachable from user workstation
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:694:- `ApplicationVersion` not correctly updated in project file
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:719:- ✅ Isolated network segment - Runner server in controlled VLAN
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:721:- ⚠️ **Risk**: Service account has write access to deployment share
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:724:- No secrets currently stored in workflow (all network-internal)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:746:- ✅ Deployment share writable only by runner service account
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:770:- **Deploy to GRA1 LOCAL** - Deployment progress, file copy status
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:807:   - Separate workflow files per facility (GRA1, JUA1, JUA2)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:829:   - Archive backups to long-term storage (network archive or S3)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:947:- **Publish**: ClickOnce publish to network share
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:954:- Network share write access
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:956:**Note**: Can reuse BeFirst_Production workflow pattern with different project paths and deployment URLs.
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:977:- **Deploy**: Copy to test equipment workstations or network share
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:983:- Network access to deployment share
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:1124:- **Build**: Validate RDL files (XML schema validation)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:1189:**Full workflow file**: `.github/workflows/dotnet-Production.yml` in BeFirst_Production repository
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:177:- **Text file interface**: Input/output files for test plan communication
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:197:2. Executable reads configuration from text files (ssn.txt, datos_ICT.txt, Config.ini)
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:200:5. Writes results to text files for test plan consumption
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:221:- configparser - Configuration file parsing
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:224:- json, socket - Data handling and network utilities
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:231:py -m PyInstaller --onefile --icon=favicon.ico API_ICTv1.1.py --name=API_ICTv1.7.3
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:848:**Description:** External files (CSV, XML) loaded via ETL jobs.
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:856:- Auditable file trail
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:862:- Manual file delivery
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:864:- Error handling for malformed files
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:880:  - VPN connection to corporate network
+S:\01_Repos\BeFirst_Docs\docs\01_README.md:35:- VPN access to corporate network
+S:\01_Repos\BeFirst_Docs\docs\01_README.md:223:Generated HTML files are saved to `deliverables/` and can be opened in any browser, shared with stakeholders, or converted to PDF.
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:71:- **Primary**: PROD_DWH (via shared SSRS data source)
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:141:5. DataImport (file import operations)
+S:\01_Repos\BeFirst_Docs\docs\integrations\README.md:10:| [shared-configuration.md](shared-configuration.md) | Shared configuration patterns: Azure AD, databases, credentials |
+S:\01_Repos\BeFirst_Docs\docs\integrations\README.md:16:Most components integrate through shared databases:
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md:21:- **VPN** connection to corporate network
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md:129:sc create "BeFirst_{ServiceName}" binPath="C:\path\to\service.exe"
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md:223:- Open `.sqlproj` files in Visual Studio
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md:314:- **Deployment**: ClickOnce to network share (`X:\MES_Software\Production`)
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md:331:4. Publish to network share
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md:332:5. Users run `setup.exe` from share
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md:336:2. Right-click project → Publish → Create Profile
+S:\01_Repos\BeFirst_Docs\docs\integrations\shared-configuration.md:5:Multiple repositories in the BeFirst ecosystem share common configuration patterns, database connections, and organizational constants.
+S:\01_Repos\BeFirst_Docs\docs\integrations\shared-configuration.md:61:| BeFirst_ETL | Context XML files + Settings.conf | Talend `system.encryption.key.v1` |
+S:\01_Repos\BeFirst_Docs\docs\integrations\shared-configuration.md:65:> **Security note:** Credentials should never be committed to Git. All repositories use `.gitignore` to exclude sensitive configuration files.
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:137:- **configparser** - Configuration file parsing (Config.ini)
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:142:- **aiofiles** - Async file I/O operations
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:145:- **PyInstaller** - Executable packaging (--onefile flag for standalone .exe)
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:160:- Input files: ssn.txt, datos_ICT.txt, operacion.txt
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:161:- Output files: Result.txt, datos.txt, hijas.txt, program.log
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:169:- Keysight test plans (proprietary integration via text file interface)
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:281:- Inbound HTTPS from users (corporate network or VPN)
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:325:| Network file shares | Supplier bond files | ETL |
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:358:| ETL | Log4j 2 | Console output or log files |
+S:\01_Repos\BeFirst_Docs\docs\07_DEPENDENCIES.md:365:- **SQL Server Profiler/Extended Events** (Database performance)
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:321:**PART_OPERATION_SERIALIZATION_LASER_SKIP** — Flags part numbers that should skip the laser serialization merge step in `frm_HGTech`. When a part's ID is present in this table, the `SkipLaserSerialization` flag is set to `True` during casilla load and all three merge trigger paths in `frm_HGTech` bypass `publicar()`. Managed via Engineering area Part Number management screen → Serialization tab.
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:501:Server: (internal network)
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:540:| Supplier files | BeFirst_ETL | PROD_DWH | ODS_BOND_* | On file arrival |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:573:- **Connection credentials**: Stored in encrypted configuration files or Azure Key Vault
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:574:- **No shared passwords**: Each application has dedicated service accounts
+S:\01_Repos\BeFirst_Docs\docs\integrations\etl-to-dwh.md:42:- **Frequency:** As data files arrive
+S:\01_Repos\BeFirst_Docs\docs\10_ORCHESTRATION.md:17:- **Executable**: Shell script that calls the Talend `.bat` file
+S:\01_Repos\BeFirst_Docs\docs\10_ORCHESTRATION.md:125:4. **Talend Job Launch**: Shell script invokes the Talend `.bat` file
+S:\01_Repos\BeFirst_Docs\docs\10_ORCHESTRATION.md:154:JS7 configuration files (`.workflow.json`, `.schedule.json`, `.calendar.json`) are exported from the JS7 Controller and can be stored temporarily in `helpers/js7/` for reference during development. However, **the JS7 Controller is the source of truth** for production orchestration.
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:470:- **Internal network**: Application servers on internal network segments
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:477:- **No plaintext secrets**: Configuration files use encrypted values
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:498:3. **File-based integration**: ETL supplier bond files (CSV/XML)
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:505:- **Network infrastructure**: Shared corporate network and VPN
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:528:- **ClickOnce deployment** - Desktop apps auto-update from network shares
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:539:| **ClickOnce** | Desktop apps (Production, Planning) | Network share deployment, automatic updates |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:560:- **Monolithic databases vs microservices data**: Chose shared databases for simpler integration and queries
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:561:- **VB.NET services**: Legacy codebase, proven reliability, gradual modernization path
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio:1:<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.5.2 Chrome/142.0.7444.265 Electron/39.6.1 Safari/537.36" version="29.5.2">
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio:427:</mxfile>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\job-execution.md:61:    loop For each line in file
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md:19:| Automatic Data Acquisition | BeFirst_Services (equipment monitoring services) + BeFirst_APIs (machine write path) |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md:26:- **BeFirst_APIs**: MES Engine (data read/expose via REST) AND Data Acquisition (machine/tester data write path)
+S:\01_Repos\BeFirst_Docs\docs\diagrams\module-structure.md:55:        S[Settings<br/>File path config]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\README.md:22:For architecture diagrams in documentation files, see:
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg:2:<!-- Do not edit this file with editors other than draw.io -->
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg:4:[Omitted long matching line]

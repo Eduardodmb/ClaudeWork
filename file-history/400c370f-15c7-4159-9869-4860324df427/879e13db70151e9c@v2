@@ -1,0 +1,56 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace APIs_BeFirst.Models.Request
+{
+    /// <summary>
+    /// Request model for AOI (Automated Optical Inspection) machine data submission
+    /// Matches MachinesExtractorAoiDatum entity structure
+    /// </summary>
+    public class AOIDataRequest
+    {
+        [Required]
+        [StringLength(100)]
+        public string Sn { get; set; }  // Serial number
+
+        [Required]
+        public int Aoiid { get; set; }
+
+        [Required]
+        public int StationId { get; set; }
+
+        [Required]
+        public int PartId { get; set; }
+
+        [Required]
+        [StringLength(1)]
+        public string Side { get; set; }  // "T" (Top) or "B" (Bottom)
+
+        public DateTime? Trndate { get; set; }  // Transaction date
+
+        public bool IsGood { get; set; }  // Pass/Fail result
+
+        public bool? IsRework { get; set; }
+
+        [StringLength(50)]
+        public string? RefCir { get; set; }  // Component reference designator
+
+        [StringLength(50)]
+        public string? DefectDesc { get; set; }  // Defect description
+
+        public bool? UserPass { get; set; }  // Manual review result
+
+        [StringLength(50)]
+        public string? UserDesc { get; set; }  // User description
+
+        [Required]
+        public int Position { get; set; }  // Board position in panel
+
+        public float? Xmisfit { get; set; }  // X misalignment
+        public float? Ymisfit { get; set; }  // Y misalignment
+        public float? Xpos { get; set; }      // X position
+        public float? Ypos { get; set; }      // Y position
+
+        public int? FacilityKey { get; set; }
+        public int? AreaId { get; set; }
+    }
+}

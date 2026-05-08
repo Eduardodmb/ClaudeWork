@@ -1,0 +1,184 @@
+# Quick Start Guide
+
+**Get started with your Claude Context Management vault in 10 minutes**
+
+---
+
+## Step 1: Install Obsidian (2 min)
+
+1. Go to: https://obsidian.md/
+2. Download and install
+3. No account needed (works with local files)
+
+---
+
+## Step 2: Open This Vault (1 min)
+
+1. Launch Obsidian
+2. Click **"Open folder as vault"**
+3. Navigate to: `C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude`
+4. Click **"Open"**
+
+You should now see this folder structure in Obsidian.
+
+---
+
+## Step 3: Install Dataview Plugin (3 min)
+
+**REQUIRED** for dashboard queries to work.
+
+1. Click **Settings** (gear icon, bottom-left)
+2. Go to **Community plugins**
+3. Click **"Turn off restricted mode"** (if prompted)
+4. Click **"Browse"**
+5. Search: **Dataview**
+6. Click **Install**
+7. Click **Enable**
+
+**Optional but recommended:**
+- Calendar (schedule reviews)
+- Templater (auto-fill templates)
+- Tag Wrangler (manage tags)
+
+---
+
+## Step 4: Run Setup Script (2 min)
+
+**Creates links to your `~/.claude/` directory**
+
+1. Open **PowerShell as Administrator**
+   - Right-click Start menu → **"Windows PowerShell (Admin)"**
+
+2. Run:
+   ```powershell
+   cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude\.setup"
+   .\setup-links.ps1
+   ```
+
+3. Wait for completion:
+   ```
+   ✓ Created: 5
+   → Skipped: 0
+   ✗ Failed: 0
+   ```
+
+4. Press any key to exit
+
+**What it does:** Creates symbolic links so editing files in Obsidian saves changes to `~/.claude/` automatically.
+
+---
+
+## Step 5: Verify Setup (1 min)
+
+1. In Obsidian, open: **`01-Personal-Context/CLAUDE.md`**
+2. You should see your personal context section
+3. If empty:
+   - Re-run setup script as Administrator
+   - Check that `C:\Users\emarquez\.claude\CLAUDE.md` exists
+
+---
+
+## Step 6: Explore! (1 min)
+
+**Open the dashboard:**
+- Navigate to: `00-Dashboard/Context-Quality-Dashboard.md`
+
+**Try the graph view:**
+- Press `Ctrl+G`
+- See visual map of your context files
+
+**Check Dataview queries:**
+- Dashboard should show tables of files
+- If empty: Wait 5 seconds for indexing, or restart Obsidian
+
+---
+
+## You're Ready!
+
+### Weekly Routine (Every Friday, 4:00 PM)
+
+1. Open: `00-Dashboard/Context-Quality-Dashboard.md`
+2. Create new review: `00-Dashboard/Reviews/2026-W19-Review.md`
+3. Copy template from: `Context-Review-Weekly-TEMPLATE.md`
+4. Follow checklist (takes ~30 minutes)
+5. Update: `01-Personal-Context/CLAUDE.md`
+
+### Monthly Deep Dive (First Monday of Month)
+
+1. Copy template from: `Context-Deep-Dive-Monthly-TEMPLATE.md`
+2. Deep review (takes ~60 minutes)
+3. Archive old content
+4. Promote learnings to skills
+5. Plan next month's focus
+
+---
+
+## Key Features
+
+| Feature | Shortcut | Purpose |
+|---------|----------|---------|
+| **Graph View** | `Ctrl+G` | Visual map of context |
+| **Command Palette** | `Ctrl+P` | Search all commands |
+| **Quick Switcher** | `Ctrl+O` | Jump to any file |
+| **Search** | `Ctrl+Shift+F` | Full-text search |
+| **Tag Pane** | Right sidebar | Browse by tags |
+
+---
+
+## Folder Guide
+
+| Folder | Contents |
+|--------|----------|
+| `00-Dashboard/` | Quality dashboards, review templates |
+| `01-Personal-Context/` | Link to your CLAUDE.md |
+| `02-Learnings/` | Link to ~/.claude/learning |
+| `03-Skills/` | Link to ~/.claude/skills |
+| `04-Commands/` | Link to ~/.claude/commands |
+| `05-Reference/` | Link to ~/.claude/reference |
+| `99-Archive/` | Old/stale context (moved here) |
+| `.setup/` | Setup scripts for new computers |
+
+**Folders 01-05 are symbolic links** - edit files there, changes save to `~/.claude/` instantly.
+
+---
+
+## Need Help?
+
+**Setup issues?**
+- See: `.setup/SETUP-INSTRUCTIONS.md`
+- Re-run setup script as Administrator
+
+**Multi-computer setup?**
+- See: `.setup/SETUP-INSTRUCTIONS.md` → "Second/Third Computer"
+
+**Context review process?**
+- See: Main `README.md` in vault root
+- Or: `C:\Users\emarquez\.claude\learning\context-review-system.md`
+
+**Dataview queries not working?**
+1. Verify Dataview plugin is enabled
+2. Wait 5 seconds for indexing
+3. Restart Obsidian
+
+---
+
+## What's Next?
+
+**Today:**
+- [ ] Explore graph view (Ctrl+G)
+- [ ] Browse your learnings in 02-Learnings
+- [ ] Check personal context in 01-Personal-Context/CLAUDE.md
+
+**This Friday:**
+- [ ] Block 30 minutes at 4:00 PM
+- [ ] Do first weekly review
+- [ ] Update "Current Focus Areas" in CLAUDE.md
+
+**Next Month:**
+- [ ] Schedule 60-minute deep dive (first Monday)
+- [ ] Review context quality trends
+- [ ] Archive old content
+
+---
+
+**You're all set! Open `Context-Quality-Dashboard.md` to start.**

@@ -1,0 +1,53 @@
+Imports System.IO
+Imports System.Net
+Imports System.Text
+Imports Newtonsoft.Json
+
+''' <summary>
+''' Stations API Module - Handles all station-related API calls
+''' </summary>
+Module Stations
+
+    ''' <summary>
+    ''' Get station information by StationID
+    ''' Replaces: SELECT LastPartID, LastJob, ... FROM PART_STATIONS WHERE StationID=...
+    ''' Endpoint: /Station/GetStationInfo
+    ''' </summary>
+    Public Function GetStationInfo(ByVal stationId As Integer) As StationInfoResponse
+
+        Dim resultado As StationInfoResponse = Nothing
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "StationID", .Value = stationId})
+
+        Dim APIResponse As APIResponse = API_Call("/Station/GetStationInfo", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of StationInfoResponse)(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+End Module
+
+#Region "Data Classes"
+
+''' <summary>
+''' Station Info Response (matches StationInfoResponse from API)
+''' </summary>
+Public Class StationInfoResponse
+    Public Property LastPartID As Integer
+    Public Property LastJob As Integer
+    Public Property LastJobText As String
+    Public Property LastJobType As Integer
+    Public Property LastSide As String
+    Public Property LastFormat As String
+    Public Property LastBinID As Integer
+    Public Property Workcenter_Key As Integer
+    Public Property Workcenter_Key_Kanban As Integer
+    Public Property Workcenter_PLC_Name As String
+    Public Property Workcenter_PLC_Name_Kanban As String
+End Class
+
+#End Region

@@ -1,0 +1,9 @@
+namespace APIs_BeFirst.Models.Response
+{
+    public class PartNumberResponse
+    {
+        public string PartNumber { get; set; } = string.Empty;
+        public int PartID { get; set; }
+        public int ArrQty { get; set; }
+    }
+}

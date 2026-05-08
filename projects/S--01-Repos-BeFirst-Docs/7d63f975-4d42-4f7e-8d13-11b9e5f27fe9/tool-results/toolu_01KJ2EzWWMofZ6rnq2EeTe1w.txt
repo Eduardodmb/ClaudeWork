@@ -1,0 +1,470 @@
+29-            ' Create service-specific directory if it doesn't exist
+30-            If Not Directory.Exists(serviceDirectory) Then
+31-                Directory.CreateDirectory(serviceDirectory)
+32-                Console.WriteLine("Created directory: " & serviceDirectory)
+33-            End If
+34:        Catch ex As Exception
+35-            Console.WriteLine("ERROR creating service directory: " & ex.Message)
+36-        End Try
+37-    End Sub
+38-
+39-    '--------------------------------------------------------
+40-    '--------------------------------------------------------
+41-
+42:    Public Function ServiceCode() As Boolean
+43-
+44-        Dim Result As Boolean = True
+45-
+46-        Dim executeCorrectly As Integer = 3
+47-        Dim executeMessage = ""
+--
+138-                                     New SqlParameter("@trndate", trn)})
+139-
+140-                                                If dt_contar.Rows.Count > 0 Then
+141-                                                    currentindex = dt_contar.Rows(0).Item(0)
+142-                                                End If
+143:                                            Catch ex As Exception
+144-                                                WriteToFile("Error getting current index: " & ex.Message)
+145-                                            End Try
+146-
+147-                                            currentindex += 1
+148-
+--
+186-                                         New SqlParameter("@areaid", areaid)})
+187-
+188-                                                    If dt_contar4.Rows.Count > 0 Then
+189-                                                        stageid = dt_contar4.Rows(0).Item(0)
+190-                                                    End If
+191:                                                Catch ex As Exception
+192-                                                    WriteToFile("Error getting stage: " & ex.Message)
+193-                                                End Try
+194-
+195-                                                Dim userid As Integer = 0
+196-                                                Dim opid As String = row.Item("BADGE").ToString()
+--
+202-
+203-                                                Try
+204-                                                    If row.Item("TESTMODE").ToString().Length > 3 Then
+205-                                                        TESTMODE = row.Item("TESTMODE").ToString()
+206-                                                    End If
+207:                                                Catch ex As Exception
+208-                                                End Try
+209-
+210-                                                If dt_masmt.Rows.Count > 0 Or TESTMODE = "PANEL" Then
+211-
+212-                                                    Dim dt_c As DataTable = BeConn.GetDt("SELECT Child,parente FROM PD_tbl_parents_smt WHERE parente in (Select parente FROM PD_tbl_parents_smt where child=@child)",
+--
+422-                                                 New SqlParameter("@areaid", areaid),
+423-                                                 New SqlParameter("@groupmls", 0),
+424-                                                 New SqlParameter("@stageid", wipStageid),
+425-                                                 New SqlParameter("@isactive", 1)})
+426-                                                        End If
+427:                                                    Catch ex As Exception
+428-                                                        WriteToFile("Error updating WIP: " & ex.Message)
+429-                                                    End Try
+430-
+431-                                                End If
+432-                                            Else
+--
+488-
+489-                                                If dt_contar2.Rows.Count > 0 Then
+490-                                                    partid = dt_contar2.Rows(0).Item(0)
+491-                                                End If
+492-                                            End If
+493:                                        Catch ex As Exception
+494-                                            WriteToFile("Error finding partid: " & ex.Message)
+495-                                        End Try
+496-
+497-                                        Dim currentindex As Integer = 0
+498-
+--
+504-                                 New SqlParameter("@trndate", trn)})
+505-
+506-                                            If dt_contar.Rows.Count > 0 Then
+507-                                                currentindex = dt_contar.Rows(0).Item(0)
+508-                                            End If
+509:                                        Catch ex As Exception
+510-                                            WriteToFile("Error getting current index: " & ex.Message)
+511-                                        End Try
+512-
+513-                                        currentindex += 1
+514-
+--
+522-                                        If row.Item("FAILCODE") > 0 Then
+523-                                            status = "0"
+524-                                            isgood = False
+525-                                            Try
+526-                                                Failredesc = row.Item("FailureDesc").ToString()
+527:                                            Catch ex As Exception
+528-                                            End Try
+529-                                        End If
+530-
+531-                                        Dim nestid As Integer = 1
+532-
+--
+544-                                     New SqlParameter("@areaid", areaid)})
+545-
+546-                                                If dt_contar4.Rows.Count > 0 Then
+547-                                                    stageid = dt_contar4.Rows(0).Item(0)
+548-                                                End If
+549:                                            Catch ex As Exception
+550-                                                WriteToFile("Error getting stage: " & ex.Message)
+551-                                            End Try
+552-
+553-                                            Dim userid As Integer = 0
+554-                                            Dim opid As String = row.Item("BADGE").ToString()
+--
+631-                                                 New SqlParameter("@areaid", areaid),
+632-                                                 New SqlParameter("@groupmls", 0),
+633-                                                 New SqlParameter("@stageid", wipStageid),
+634-                                                 New SqlParameter("@isactive", 1)})
+635-                                                        End If
+636:                                                    Catch ex As Exception
+637-                                                        WriteToFile("Error updating WIP: " & ex.Message)
+638-                                                    End Try
+639-                                                Else
+640-                                                    Try
+641-                                                        Dim dt_contar4 As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@ssn",
+--
+676-                                                 New SqlParameter("@stationid", stationid),
+677-                                                 New SqlParameter("@areaid", areaid),
+678-                                                 New SqlParameter("@groupmls", 0),
+679-                                                 New SqlParameter("@isactive", 1)})
+680-                                                        End If
+681:                                                    Catch ex As Exception
+682-                                                        WriteToFile("Error updating WIP: " & ex.Message)
+683-                                                    End Try
+684-                                                End If
+685-
+686:                                            Catch ex As Exception
+687-                                                WriteToFile("Error in main process: " & ex.Message)
+688-                                            End Try
+689-                                        End If
+690-                                    Next
+691-                                End If
+--
+728-
+729-                                                If dt_contar2.Rows.Count > 0 Then
+730-                                                    partid = dt_contar2.Rows(0).Item(0)
+731-                                                End If
+732-                                            End If
+733:                                        Catch ex As Exception
+734-                                            WriteToFile("Error finding partid: " & ex.Message)
+735-                                        End Try
+736-
+737-                                        Dim currentindex As Integer = 0
+738-
+--
+744-                                 New SqlParameter("@trndate", trn)})
+745-
+746-                                            If dt_contar.Rows.Count > 0 Then
+747-                                                currentindex = dt_contar.Rows(0).Item(0)
+748-                                            End If
+749:                                        Catch ex As Exception
+750-                                            WriteToFile("Error getting current index: " & ex.Message)
+751-                                        End Try
+752-
+753-                                        currentindex += 1
+754-
+--
+791-                                     New SqlParameter("@areaid", areaid)})
+792-
+793-                                                If dt_contar4.Rows.Count > 0 Then
+794-                                                    stageid = dt_contar4.Rows(0).Item(0)
+795-                                                End If
+796:                                            Catch ex As Exception
+797-                                                WriteToFile("Error getting stage: " & ex.Message)
+798-                                            End Try
+799-
+800-                                            Dim userid As Integer = 0
+801-                                            Dim opid As String = row.Item("BADGEID").ToString()
+--
+805-                                    {New SqlParameter("@opid", opid)})
+806-
+807-                                                If dt_contar4.Rows.Count > 0 Then
+808-                                                    userid = dt_contar4.Rows(0).Item(0)
+809-                                                End If
+810:                                            Catch ex As Exception
+811-                                                WriteToFile("Error getting userid: " & ex.Message)
+812-                                            End Try
+813-
+814-                                            Dim nestidValue As String = If(row.IsNull("NESTID"), "", row.Item("NESTID").ToString())
+815-                                            Dim idValue As Object = row.Item("ID")
+--
+890-                                                 New SqlParameter("@areaid", areaid),
+891-                                                 New SqlParameter("@groupmls", 0),
+892-                                                 New SqlParameter("@stageid", wipStageid),
+893-                                                 New SqlParameter("@isactive", 1)})
+894-                                                        End If
+895:                                                    Catch ex As Exception
+896-                                                        WriteToFile("Error updating WIP: " & ex.Message)
+897-                                                    End Try
+898-                                                Else
+899-                                                    Try
+900-                                                        Dim dt_contar4 As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@ssn",
+--
+935-                                                 New SqlParameter("@stationid", stationid),
+936-                                                 New SqlParameter("@areaid", areaid),
+937-                                                 New SqlParameter("@groupmls", 0),
+938-                                                 New SqlParameter("@isactive", 1)})
+939-                                                        End If
+940:                                                    Catch ex As Exception
+941-                                                        WriteToFile("Error updating WIP: " & ex.Message)
+942-                                                    End Try
+943-                                                End If
+944-
+945:                                            Catch ex As Exception
+946-                                                WriteToFile("Error in main process: " & ex.Message)
+947-                                            End Try
+948-                                        End If
+949-                                    Next
+950-                                End If
+--
+970-                                    If stationInfo.areaID > 0 Then
+971-                                        configAreaID = stationInfo.areaID
+972-                                    Else
+973-                                        WriteToFile("WARN: Could not get areaID from Station API, using default: " & configAreaID)
+974-                                    End If
+975:                                Catch ex As Exception
+976-                                    WriteToFile("WARN: Error getting station info from API: " & ex.Message & ", using default areaID: " & configAreaID)
+977-                                End Try
+978-
+979-                                If String.IsNullOrEmpty(directory) Then
+980-                                    WriteToFile("ERROR: Directory not configured in extractor record")
+--
+1029-                                                        partid = partResponse.partID
+1030-                                                    Else
+1031-                                                        WriteToFile("WARN: Part number not found via API: " & partNumber)
+1032-                                                        Continue For
+1033-                                                    End If
+1034:                                                Catch ex As Exception
+1035-                                                    WriteToFile("ERROR finding partid via API: " & ex.Message)
+1036-                                                    Continue For
+1037-                                                End Try
+1038-
+1039-                                                ' Step 1: Check if setup exists (optional but recommended)
+--
+1049-                                                        ' No setup exists, create one
+1050-                                                        WriteToFile("No setup found, creating new setup")
+1051-                                                        currentSetup = Units.AddSetup(configStationID, partid, "A", 0, hostname)
+1052-                                                        WriteToFile("Setup created - SetupID: " & currentSetup.setupID)
+1053-                                                    End If
+1054:                                                Catch ex As Exception
+1055-                                                    WriteToFile("ERROR in setup: " & ex.Message)
+1056-                                                    ' Continue anyway, CheckIn might still work
+1057-                                                End Try
+1058-
+1059-                                                ' Step 2: Check in the unit
+--
+1072-                                                    Else
+1073-                                                        WriteToFile("ERROR: Check-in failed - Message: '" & If(checkInResult.message, "(empty)") & "'")
+1074-                                                        WriteToFile("CheckIn response - checkIn: " & checkInResult.checkIn & ", SSN: " & checkInResult.ssn & ", SSNPanel: " & checkInResult.ssnPanel)
+1075-                                                        Continue For
+1076-                                                    End If
+1077:                                                Catch ex As Exception
+1078-                                                    WriteToFile("ERROR in CheckIn: " & ex.Message)
+1079-                                                    WriteToFile("Exception details: " & ex.ToString())
+1080-                                                    Continue For
+1081-                                                End Try
+1082-
+--
+1088-                                                    Dim currentSetup As SetupResponse = Units.GetSetup(configStationID, hostname)
+1089-                                                    If currentSetup.setupID > 0 Then
+1090-                                                        setupID = currentSetup.setupID
+1091-                                                        stageID = currentSetup.stageID
+1092-                                                    End If
+1093:                                                Catch ex As Exception
+1094-                                                    WriteToFile("WARN: Could not get setup info: " & ex.Message)
+1095-                                                End Try
+1096-
+1097-                                                Try
+1098-                                                    ' Determine result status
+--
+1127-                                                                If testCollection.Length > 50 Then
+1128-                                                                    testCollection = testCollection.Substring(0, 49) ' Truncate if too long for database field)
+1129-                                                                End If
+1130-
+1131-                                                                failureDesc = testCollection
+1132:                                                            Catch ex As Exception
+1133-                                                                WriteToFile("WARN: Could not log test parameters: " & ex.Message)
+1134-                                                            End Try
+1135-                                                        End If
+1136-                                                    End If
+1137-
+--
+1158-                                                            {New SqlParameter("@tablename", tableName)})
+1159-                                                    Else
+1160-                                                        WriteToFile("ERROR: Check-out failed - " & checkOutResult.message)
+1161-                                                    End If
+1162-
+1163:                                                Catch ex As Exception
+1164-                                                    WriteToFile("ERROR in CheckOut: " & ex.Message)
+1165-                                                End Try
+1166-
+1167-                                            Next ' End of line processing
+1168-
+--
+1175-                                                End If
+1176-
+1177-                                                Dim archivePath As String = Path.Combine(archiveDir, Path.GetFileName(filePath))
+1178-                                                File.Move(filePath, archivePath)
+1179-                                                WriteToFile("File archived: " & archivePath)
+1180:                                            Catch ex As Exception
+1181-                                                WriteToFile("WARN: Could not archive file: " & ex.Message)
+1182-                                                ' Try to delete the file if moving fails
+1183-                                                Try
+1184-                                                    File.Delete(filePath)
+1185-                                                    WriteToFile("File deleted: " & filePath)
+1186-                                                Catch ex2 As Exception
+1187-                                                    WriteToFile("ERROR: Could not delete file: " & ex2.Message)
+1188-                                                End Try
+1189-                                            End Try
+1190-
+1191:                                        Catch ex As Exception
+1192-                                            WriteToFile("ERROR processing file " & filePath & ": " & ex.Message)
+1193-                                        End Try
+1194-                                    Next ' End of file processing
+1195-
+1196:                                Catch ex As Exception
+1197-                                    WriteToFile("ERROR accessing directory: " & ex.Message)
+1198-                                Finally
+1199-                                    ' Disconnect from network share
+1200-                                    If networkConnection IsNot Nothing Then
+1201-                                        Try
+1202-                                            networkConnection.Dispose()
+1203-                                            WriteToFile("Disconnected from network path")
+1204:                                        Catch ex As Exception
+1205-                                            WriteToFile("WARN: Error disconnecting from network: " & ex.Message)
+1206-                                        End Try
+1207-                                    End If
+1208-                                End Try
+1209-
+1210-                            End If
+1211-
+1212-                        Next
+1213-                    End If
+1214-
+1215:                Catch ex As Exception
+1216-                    WriteToFile(strServiceName & " Service Error on: {0} " + ex.Message + ex.StackTrace)
+1217-                End Try
+1218-
+1219-            ElseIf ExData.CONF_Company_NO = 3 Then
+1220-
+--
+1265-                                {New SqlParameter("@pn", "%" & pn & "%")})
+1266-
+1267-                                            If dt_contar.Rows.Count > 0 Then
+1268-                                                partid = dt_contar.Rows(0).Item(0)
+1269-                                            End If
+1270:                                        Catch ex As Exception
+1271-                                            WriteToFile("Error finding partid: " & ex.Message)
+1272-                                            Continue For
+1273-                                        End Try
+1274-
+1275-                                        Dim currentindex As Integer = 0
+--
+1284-                                 New SqlParameter("@side", areaside)})
+1285-
+1286-                                            If dt_contar.Rows.Count > 0 Then
+1287-                                                currentindex = dt_contar.Rows(0).Item(0)
+1288-                                            End If
+1289:                                        Catch ex As Exception
+1290-                                            WriteToFile("Error getting current index: " & ex.Message)
+1291-                                            Continue For
+1292-                                        End Try
+1293-
+1294-                                        currentindex += 1
+--
+1306-                                                isgood = False
+1307-                                                If Not IsDBNull(row.Item("overall_status")) Then
+1308-                                                    Failredesc = row.Item("overall_status").ToString()
+1309-                                                End If
+1310-                                            End If
+1311:                                        Catch ex As Exception
+1312-
+1313-                                        End Try
+1314-
+1315-
+1316-                                        Try
+--
+1319-                                            Dim rowssta() = dt_stati.Select("StationName='" & tester.Replace("'", "''") & "' and areaid='" & areaid & "'")
+1320-
+1321-                                            If rowssta.Length > 0 Then
+1322-                                                stationid = rowssta(0).Item(0)
+1323-                                            End If
+1324:                                        Catch ex As Exception
+1325-
+1326-                                        End Try
+1327-
+1328-                                        If partid <> 0 Then
+1329-                                            Dim stageid As Integer = -99
+--
+1335-                                     New SqlParameter("@areaid", areaid)})
+1336-
+1337-                                                If dt_contar4.Rows.Count > 0 Then
+1338-                                                    stageid = dt_contar4.Rows(0).Item(0)
+1339-                                                End If
+1340:                                            Catch ex As Exception
+1341-                                                WriteToFile("Error getting stage: " & ex.Message)
+1342-                                                Continue For
+1343-                                            End Try
+1344-
+1345-                                            Dim userid As Integer = 0
+--
+1547-                                 New SqlParameter("@comments", Failredesc),
+1548-                                 New SqlParameter("@nestid", nestid)})
+1549-                                                    End If
+1550-                                                End If
+1551-
+1552:                                            Catch ex As Exception
+1553-                                                WriteToFile("Error updating WIP: " & ex.Message)
+1554-                                            End Try
+1555-                                        End If
+1556-                                    Next
+1557-                                End If
+1558-                            End If
+1559-                        Next
+1560-                    End If
+1561-
+1562:                Catch ex As Exception
+1563-                    WriteToFile(strServiceName & " Service Error on: {0} " + ex.Message + ex.StackTrace)
+1564-                End Try
+1565-
+1566-            End If
+1567-
+1568:        Catch ex As Exception
+1569-            WriteToFile(strServiceName & " Service Error on: {0} " + ex.Message + ex.StackTrace)
+1570-        End Try
+1571-
+1572-        If executeCorrectly = 3 Then
+1573-            BeAgent.Active("Execute End")
+--
+1577-            BeAgent.Serious(executeMessage)
+1578-        End If
+1579-
+1580-
+1581-        Return Result
+1582:    End Function
+1583-
+1584-    '########################################################
+1585-    '--------------------------------------------------------
+1586-    '--------------------------------------------------------
+1587-    '########################################################
+1588-
+1589-    Private Function IsValidTableName(tableName As String) As Boolean
+1590-        ' Only allow alphanumeric characters and underscores
+1591-        Return System.Text.RegularExpressions.Regex.IsMatch(tableName, "^[a-zA-Z0-9_]+$")
+1592:    End Function
+1593-
+1594-    '2020-02-08 EM: Use for try errors.
+1595-    Dim intentos As Integer = 0
+1596-    Dim lastpiece As DateTime
+1597-    Dim partid As Integer
+--
+1618-                            %>
+1619-                        </tr>
+1620-                    %>
+1621-                </tbody>
+1622-            </table>.ToString()
+1623:    End Function
+1624-End Module

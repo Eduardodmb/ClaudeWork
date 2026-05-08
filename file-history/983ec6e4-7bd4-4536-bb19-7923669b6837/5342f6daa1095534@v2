@@ -1,0 +1,66 @@
+import openpyxl
+from openpyxl import load_workbook
+from datetime import datetime
+
+# Load the workbook
+file_path = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\01_IT_Checklist_GR_EMAR.xlsx"
+wb = load_workbook(file_path)
+ws = wb.active
+
+# Get the max row and column
+max_row = ws.max_row
+max_col = ws.max_column
+
+print(f"Processing {max_row} rows and {max_col} columns")
+print(f"Columns A-F will not be modified")
+print(f"Starting from column G (index 7)...")
+
+# Process each row starting from row 2 (assuming row 1 is header)
+for row_idx in range(2, max_row + 1):
+    # Collect all non-empty values from column G onwards with their column dates
+    timeline_data = []
+
+    for col_idx in range(7, max_col + 1):  # Start from column G (index 7)
+        cell_value = ws.cell(row=row_idx, column=col_idx).value
+
+        if cell_value is not None and str(cell_value).strip() != "":
+            # Get the date from the header row (row 1) for this column
+            header_value = ws.cell(row=1, column=col_idx).value
+
+            # Format the entry with date prefix if header exists
+            if header_value:
+                # Try to parse and format the date
+                try:
+                    if isinstance(header_value, datetime):
+                        date_str = header_value.strftime("%m-%d")
+                    else:
+                        date_str = str(header_value)
+
+                    # Add date prefix if not already present
+                    if not str(cell_value).startswith(date_str):
+                        formatted_value = f"{date_str} {cell_value}"
+                    else:
+                        formatted_value = str(cell_value)
+                except:
+                    formatted_value = f"{header_value} {cell_value}"
+            else:
+                formatted_value = str(cell_value)
+
+            timeline_data.append(formatted_value)
+
+    # Clear all cells from column G onwards in this row
+    for col_idx in range(7, max_col + 1):
+        ws.cell(row=row_idx, column=col_idx).value = None
+
+    # Write back the timeline data starting from column G
+    for idx, value in enumerate(timeline_data, start=7):
+        ws.cell(row=row_idx, column=idx).value = value
+
+    if timeline_data:
+        print(f"Row {row_idx}: Consolidated {len(timeline_data)} entries")
+
+# Save the modified workbook
+output_path = file_path  # Overwrite the original file
+wb.save(output_path)
+print(f"\nFile saved successfully: {output_path}")
+print("\nTimeline created - empty cells removed and entries prefixed with dates")

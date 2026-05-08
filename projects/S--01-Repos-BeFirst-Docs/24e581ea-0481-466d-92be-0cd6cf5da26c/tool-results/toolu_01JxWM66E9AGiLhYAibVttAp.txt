@@ -1,0 +1,421 @@
+3-Imports System.IO
+4-Imports System.IO.Ports
+5-Imports System.Media
+6-Imports System.Net
+7-Imports System.Net.Mail
+8:Imports System.Net.Sockets
+9-Imports System.Speech.Synthesis
+10-Imports System.Text
+11-Imports System.Text.RegularExpressions
+12-'Imports Microsoft.Office.Core
+13-'Imports Microsoft.Office.Interop
+--
+66-
+67-    Private lastunit_date As DateTime
+68-
+69-    Private AOIforRework As Boolean = False
+70-
+71:#Region "TCPSettings"
+72:    Dim tcp_Client_Conenction As TcpClient
+73:    ' Per-casilla TCP state (keyed by casilla number 1-6)
+74-    Dim tcp_Listeners As New Dictionary(Of Integer, TcpListener)
+75-    Dim tcp_IsRunning As New Dictionary(Of Integer, Boolean)
+76-    Dim tcp_PreviousSerials As New Dictionary(Of Integer, String)
+77-    Dim tcp_Types As New Dictionary(Of Integer, String)
+78-#End Region
+--
+937-        End If
+938-    End Sub
+939-
+940-#End Region
+941-
+942:#Region "TCP as SERVER"
+943-    Private Sub tcp_StopServer(casilla As Integer)
+944-        Try
+945-            If tcp_IsRunning.ContainsKey(casilla) Then
+946-                tcp_IsRunning(casilla) = False
+947-            End If
+--
+958-            ' Stop existing listener for this casilla if already running
+959-            tcp_StopServer(casilla)
+960-
+961-            Dim tcpRows As DataRowCollection
+962-            Select Case casilla
+963:                Case 1 : tcpRows = ExData.Selected_Area.Casilla1.AreasToTCP.Rows
+964:                Case 2 : tcpRows = ExData.Selected_Area.Casilla2.AreasToTCP.Rows
+965:                Case 3 : tcpRows = ExData.Selected_Area.Casilla3.AreasToTCP.Rows
+966:                Case 4 : tcpRows = ExData.Selected_Area.Casilla4.AreasToTCP.Rows
+967:                Case 5 : tcpRows = ExData.Selected_Area.Casilla5.AreasToTCP.Rows
+968:                Case 6 : tcpRows = ExData.Selected_Area.Casilla6.AreasToTCP.Rows
+969-                Case Else : Return
+970-            End Select
+971-
+972-            If tcpRows.Count = 0 Then Return
+973-
+974:            Dim firstTCP As DataRow = tcpRows(0)
+975:            If firstTCP("CLIENT_OR_SERVER").ToString() <> "SERVER" Then Return
+976-
+977:            tcp_Types(casilla) = firstTCP("TCP_TYPE").ToString()
+978-            tcp_PreviousSerials(casilla) = ""
+979-            tcp_IsRunning(casilla) = True
+980-
+981:            Dim listener As New TcpListener(IPAddress.Parse(firstTCP("IP").ToString()), CInt(firstTCP("Port")))
+982:            listener.Server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, True)
+983-            listener.Start()
+984-            tcp_Listeners(casilla) = listener
+985-
+986-            Task.Run(Sub()
+987-                         While tcp_IsRunning.ContainsKey(casilla) AndAlso tcp_IsRunning(casilla)
+988-                             Try
+989:                                 Dim client As TcpClient = listener.AcceptTcpClient()
+990:                                 Me.Invoke(Sub() lblscanner.Text = "Casilla " & casilla & " Connected: " & client.Client.RemoteEndPoint.ToString())
+991-                                 Task.Run(Sub() server_Handle_Client(client, casilla))
+992:                             Catch ex As SocketException
+993-                                 If Not (tcp_IsRunning.ContainsKey(casilla) AndAlso tcp_IsRunning(casilla)) Then Exit While
+994-                             End Try
+995-                         End While
+996-                     End Sub)
+997-        Catch ex As Exception
+998:            MessageBox.Show("TCP Server Error (Casilla " & casilla & "): " & ex.Message)
+999-        End Try
+1000-    End Sub
+1001-
+1002:    Private Sub server_Handle_Client(client As TcpClient, casilla As Integer)
+1003-        Try
+1004-            Using stream As NetworkStream = client.GetStream()
+1005-                Dim buffer(1024) As Byte
+1006-                Dim bytesRead As Integer = stream.Read(buffer, 0, buffer.Length)
+1007-                Dim receivedMessage As String = Encoding.ASCII.GetString(buffer, 0, bytesRead).Trim()
+--
+4742-
+4743-                    If Data_From_Extractor = True Then
+4744-                        tmr_extractor.Start()
+4745-                    End If
+4746-
+4747:                    If ExData.Selected_Area.Casilla1.AreasToTCP.Rows.Count > 0 Then
+4748:                        Dim firstTCP = ExData.Selected_Area.Casilla1.AreasToTCP.Rows(0)
+4749:                        lblEscanerAutomatico.Text = firstTCP("CLIENT_OR_SERVER").ToString()
+4750-                        Task.Run(Sub() tcp_SERVER_Add(1))
+4751-                    End If
+4752-
+4753-                    tbl_sel1.Enabled = True
+4754-                Else
+--
+4817-
+4818-                    If Data_From_Extractor = True Then
+4819-                        tmr_extractor.Start()
+4820-                    End If
+4821-
+4822:                    If ExData.Selected_Area.Casilla2.AreasToTCP.Rows.Count > 0 Then
+4823:                        Dim firstTCP = ExData.Selected_Area.Casilla2.AreasToTCP.Rows(0)
+4824:                        lblEscanerAutomatico.Text = firstTCP("CLIENT_OR_SERVER").ToString()
+4825-                        Task.Run(Sub() tcp_SERVER_Add(2))
+4826-                    End If
+4827-
+4828-                    tbl_sel2.Enabled = True
+4829-                Else
+--
+4892-
+4893-                    If Data_From_Extractor = True Then
+4894-                        tmr_extractor.Start()
+4895-                    End If
+4896-
+4897:                    If ExData.Selected_Area.Casilla3.AreasToTCP.Rows.Count > 0 Then
+4898:                        Dim firstTCP = ExData.Selected_Area.Casilla3.AreasToTCP.Rows(0)
+4899:                        lblEscanerAutomatico.Text = firstTCP("CLIENT_OR_SERVER").ToString()
+4900-                        Task.Run(Sub() tcp_SERVER_Add(3))
+4901-                    End If
+4902-
+4903-                    tbl_sel3.Enabled = True
+4904-                Else
+--
+4964-
+4965-                    If Data_From_Extractor = True Then
+4966-                        tmr_extractor.Start()
+4967-                    End If
+4968-
+4969:                    If ExData.Selected_Area.Casilla4.AreasToTCP.Rows.Count > 0 Then
+4970:                        Dim firstTCP = ExData.Selected_Area.Casilla4.AreasToTCP.Rows(0)
+4971:                        lblEscanerAutomatico.Text = firstTCP("CLIENT_OR_SERVER").ToString()
+4972-                        Task.Run(Sub() tcp_SERVER_Add(4))
+4973-                    End If
+4974-
+4975-                    tbl_sel4.Enabled = True
+4976-                Else
+--
+5037-
+5038-                    If Data_From_Extractor = True Then
+5039-                        tmr_extractor.Start()
+5040-                    End If
+5041-
+5042:                    If ExData.Selected_Area.Casilla5.AreasToTCP.Rows.Count > 0 Then
+5043:                        Dim firstTCP = ExData.Selected_Area.Casilla5.AreasToTCP.Rows(0)
+5044:                        lblEscanerAutomatico.Text = firstTCP("CLIENT_OR_SERVER").ToString()
+5045-                        Task.Run(Sub() tcp_SERVER_Add(5))
+5046-                    End If
+5047-
+5048-                    tbl_sel5.Enabled = True
+5049-                Else
+--
+5109-
+5110-                    If Data_From_Extractor = True Then
+5111-                        tmr_extractor.Start()
+5112-                    End If
+5113-
+5114:                    If ExData.Selected_Area.Casilla6.AreasToTCP.Rows.Count > 0 Then
+5115:                        Dim firstTCP = ExData.Selected_Area.Casilla6.AreasToTCP.Rows(0)
+5116:                        lblEscanerAutomatico.Text = firstTCP("CLIENT_OR_SERVER").ToString()
+5117-                        Task.Run(Sub() tcp_SERVER_Add(6))
+5118-                    End If
+5119-
+5120-                    tbl_sel6.Enabled = True
+5121-                Else
+--
+5626-
+5627-    Dim dt_plexvs As Boolean = 0
+5628-
+5629-    Private Sub updateplex(Optional updatebomplex As Boolean = True)
+5630-
+5631:        ExData.frm_loading_title = "Updating Plex Connection"
+5632-        ExData.frm_loading_step = "Review BOM"
+5633-        ExData.frm_loading_Step_n = 20
+5634-        ExData.frm_loading_message = "Verificando BOM de PLEX"
+5635-
+5636-        Dim PleaseWaitForm = New frm_a_d_msgLoadingPlex
+5637-        PleaseWaitForm.Show()
+5638-        PleaseWaitForm.updatedata()
+5639-        System.Windows.Forms.Application.DoEvents()
+5640-
+5641-
+5642:        ExData.frm_loading_title = "Updating Plex Connection"
+5643-        ExData.frm_loading_step = "Review Production Differences"
+5644-        ExData.frm_loading_Step_n = 60
+5645-        ExData.frm_loading_message = "Revisando diferencias en produccion."
+5646-        PleaseWaitForm.updatedata()
+5647-        System.Windows.Forms.Application.DoEvents()
+--
+5663-        'Dim dt As DataTable = BeConn.GetDt("SELECT PD_idt_stations.StationID, case when PD_idt_stations.Alias='' then PD_idt_stations.StationName else PD_idt_stations.Alias end as Station FROM PD_tbl_users_working INNER JOIN  PD_idt_stations ON PD_tbl_users_working.StationID = PD_idt_stations.StationID WHERE ControlID='" & ExData.Selected_User.BeFirst_ControlID & "' AND PD_idt_stations.stationid<>'" & ExData.Selected_Area.Selected_Casilla.StationID & "'")
+5664-
+5665-    End Sub
+5666-
+5667-    Dim ExtractorIgnorePN As String = ""
+5668:    Dim ExtractroPVSConnection As String = ""
+5669-
+5670-    Private Sub tmr_extractor_Tick(sender As Object, e As EventArgs) Handles tmr_extractor.Tick
+5671-
+5672-        z = CInt(tmr_extractor.Interval / 1000)
+5673-
+--
+5680-            End If
+5681-        Next
+5682-
+5683-        If Data_From_Extractor_Type = 2 And frmisOPen = False Then
+5684-            '◘ HERE SET THE Extractor settings...
+5685:            Dim ConnectionString As String = ExData.ConnectionString
+5686:            Dim Connection As New System.Data.SqlClient.SqlConnection(ConnectionString)
+5687-            For Each row As DataRow In dt_Extractors.Rows
+5688:                Dim ConnectionStringCust As String = BeConn.GetString("SELECT [ConnectionString] FROM [IT_Databases_TestRecords] where alias='" & row.Field(Of String)("BaseDatos") & "' and TypeID=1")
+5689:                ExtractroPVSConnection = ConnectionStringCust
+5690:                Dim ConnectionCust As New System.Data.SqlClient.SqlConnection(ConnectionStringCust)
+5691-                If row.Field(Of Integer)("Tipo") = 2 And ExData.CONF_Company_NO = 1 Then
+5692-
+5693-                    Dim trn2 As DateTime = row.Item("Fecha")
+5694-                    Dim tableName As String = row.Item("Tabla")
+5695-                    Dim trnc As Integer = row.Item("indice")
+--
+5698-                    Dim requeststage As Boolean = row.Item("RequestStage")
+5699-
+5700-                    '◘ Selecciono datos
+5701-                    Dim sql_test As String = "Select * From " & tableName & " WHERE ID>'" & trnc & "' and TesterName='" & machinename & "' and TestType='" & machintetype & "' and status<>'3' " & ExtractorIgnorePN & " Order by id asc"
+5702-
+5703:                    Dim command_test As New System.Data.SqlClient.SqlCommand(sql_test, ConnectionCust)
+5704-                    Dim dt_test As New DataTable
+5705-                    Dim adpt_test As New Data.SqlClient.SqlDataAdapter(command_test)
+5706-
+5707-                    Dim maximo As Int64 = row.Field(Of Int64)("indice")
+5708-                    Try
+5709:                        ConnectionCust.Open()
+5710:                        'Connection.Open()
+5711-                        'Obtengo datos
+5712-                        adpt_test.Fill(dt_test)
+5713-
+5714-                        'Reviso todos los valores
+5715-                        For Each subrow As DataRow In dt_test.Rows
+--
+5853-                                                'End If
+5854-
+5855-                                                'TODO MOVE EXTRACTORS TO NEW SERVER BeConn_OLD
+5856-                                                BeConn_OLD.InsertRecords("UPDATE CF_tbl_extractors SET Indice='" & subrow.Item("ID") & "',Fecha='" & trn.ToString("MM\dd\yyyy HH:mm:ss") & "' WHERE autoid='" & row.Field(Of Integer)("autoid") & "'")
+5857-                                                'Dim sql_insertar As String =
+5858:                                                'Dim command_insertar As New System.Data.SqlClient.SqlCommand(sql_insertar, Connection) 'Aqui ejecutamos el comando para SQL en Connection              
+5859-                                                'Try
+5860-                                                '    command_insertar.ExecuteNonQuery()
+5861-
+5862-                                                'Catch ex As Exception
+5863-
+--
+5873-                            End If
+5874-                        Next
+5875-                    Catch ex As Exception
+5876-                        'MsgBox(ex.ToString)
+5877-                    Finally
+5878:                        ConnectionCust.Close()
+5879-                    End Try
+5880-                ElseIf row.Field(Of Integer)("Tipo") = 7 And ExData.CONF_Company_NO = 1 Then
+5881-
+5882-                    Dim trn2 As DateTime = row.Item("Fecha")
+5883-                    Dim tableName As String = row.Item("Tabla")
+--
+5887-                    Dim requeststage As Boolean = row.Item("RequestStage")
+5888-
+5889-                    '◘ Selecciono datos
+5890-                    Dim sql_test As String = "Select * From " & tableName & " WHERE AutoID>'" & trnc & "' and TesterName='" & machinename & "' and TestType='" & machintetype & "' Order by id asc"
+5891-
+5892:                    Dim command_test As New System.Data.SqlClient.SqlCommand(sql_test, ConnectionCust)
+5893-                    Dim dt_test As New DataTable
+5894-                    Dim adpt_test As New Data.SqlClient.SqlDataAdapter(command_test)
+5895-
+5896-                    Dim maximo As Int64 = row.Field(Of Int64)("indice")
+5897-                    Try
+5898:                        ConnectionCust.Open()
+5899:                        Connection.Open()
+5900-                        'Obtengo datos
+5901-                        adpt_test.Fill(dt_test)
+5902-
+5903-                        'Reviso todos los valores
+5904-                        For Each subrow As DataRow In dt_test.Rows
+--
+6004-                                            If partid <> 0 Then
+6005-                                                '2020-05-27 EM: Add if panel for each child
+6006-
+6007-
+6008-                                                Dim sql_insertar As String = "UPDATE CF_tbl_extractors SET Indice='" & subrow.Item("AutoID") & "',Fecha='" & trn.ToString("MM\dd\yyyy HH:mm:ss") & "' WHERE autoid='" & row.Field(Of Integer)("autoid") & "'"
+6009:                                                Dim command_insertar As New System.Data.SqlClient.SqlCommand(sql_insertar, Connection) 'Aqui ejecutamos el comando para SQL en Connection              
+6010-                                                Try
+6011-                                                    command_insertar.ExecuteNonQuery()
+6012-
+6013-                                                Catch ex As Exception
+6014-
+--
+6025-                            End If
+6026-                        Next
+6027-                    Catch ex As Exception
+6028-                        'MsgBox(ex.ToString)
+6029-                    Finally
+6030:                        Connection.Close()
+6031:                        ConnectionCust.Close()
+6032-                    End Try
+6033-                End If
+6034-            Next
+6035-        ElseIf Data_From_Extractor_Type = 14 And frmisOPen = False Then
+6036-
+6037:            Dim ConnectionString As String = BeConn.GetString("SELECT [Result] FROM [CF_idt_defaults] where Description='DataBase_Machines'")
+6038:            Dim Connection As New System.Data.SqlClient.SqlConnection(ConnectionString)
+6039-
+6040-            For Each aoimachine As DataRow In dt_Extractors.Rows
+6041-
+6042-                Dim directoriolecturaGood As String = aoimachine.Item("Directory")
+6043-                Dim directoriosuccessGood As String = aoimachine.Item("Directory")
+--
+6367-                                                'Search index in line 3
+6368-
+6369-                                                Dim counter As Integer = 0
+6370-
+6371-                                                Dim Sql_counter As String = "Select counter from Machines_Extractor_AOI_Programs where partid='" & partid & "' and aoiid='" & AOIID & "' and side='" & sideid & "'"
+6372:                                                Dim command_counter As New System.Data.SqlClient.SqlCommand(Sql_counter, Connection) 'Aqui ejecutamos el comando 
+6373-                                                Dim dt_counter As New DataTable
+6374-                                                Dim adpt_counter As New Data.SqlClient.SqlDataAdapter(command_counter)
+6375-                                                Try
+6376:                                                    Connection.Open()
+6377-                                                    adpt_counter.Fill(dt_counter)
+6378-                                                Catch ex As Exception
+6379-
+6380-                                                Finally
+6381:                                                    Connection.Close()
+6382-                                                End Try
+6383-
+6384-                                                If dt_counter.Rows.Count > 0 Then
+6385-
+6386-                                                    counter = dt_counter.Rows(0).Item(0) + 1
+6387-                                                    Dim sql_insert As String = "UPDATE Machines_Extractor_AOI_Programs SET counter='" & counter & "'  where partid='" & partid & "' and aoiid='" & AOIID & "' and side='" & sideid & "'"
+6388:                                                    Dim command_insert As New System.Data.SqlClient.SqlCommand(sql_insert, Connection)
+6389-                                                    Try
+6390:                                                        Connection.Open()
+6391-                                                        command_insert.ExecuteNonQuery()
+6392-                                                    Catch ex As Exception
+6393-
+6394-                                                    Finally
+6395:                                                        Connection.Close()
+6396-                                                    End Try
+6397-                                                Else
+6398-                                                    counter = 1
+6399-                                                    'Agregamos noparte a base de datos.
+6400-                                                    Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Programs ([AOIID] ,[ProgramName] ,[ArrQty] ,[PartID] ,[Side] ,[Counter]) VALUES ('" & AOIID & "','','" & arraqty & "','" & partid & "','" & sideid & "','1')"
+6401:                                                    Dim command_insert As New System.Data.SqlClient.SqlCommand(sql_insert, Connection)
+6402-                                                    Try
+6403:                                                        Connection.Open()
+6404-                                                        command_insert.ExecuteNonQuery()
+6405-                                                    Catch ex As Exception
+6406-
+6407-                                                    Finally
+6408:                                                        Connection.Close()
+6409-                                                    End Try
+6410-                                                End If
+6411-                                                codigossn = partid & "_pnl_" & AOIID & "_" & counter
+6412-                                            Else
+6413-                                                codigossn = line3
+--
+6577-                                                                                New SqlParameter("@Ypos", SqlDbType.Real) With {.Value = ypos}
+6578-                                                                           }
+6579-
+6580-                                                                    'Significa que ya la agregamos
+6581-                                                                    Dim sql_insert As String = "INSERT INTO [dbo].[Machines_Extractor_AOI_Data] (SN,AOIID,StationID,PartID,Side,Trndate,IsGood,IsRework,RefCir,DefectDesc,UserPass,UserDesc,Position,Xmisfit,Ymisfit,Xpos,Ypos)  VALUES  (@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@UserDesc,@Position,@Xmisfit,@Ymisfit,@Xpos,@Ypos)"
+6582:                                                                    Dim command_insert As New System.Data.SqlClient.SqlCommand(sql_insert, Connection)
+6583-                                                                    command_insert.Parameters.Clear()
+6584-                                                                    command_insert.Parameters.AddRange(insertParameter)
+6585-                                                                    Try
+6586:                                                                        Connection.Open()
+6587-                                                                        command_insert.ExecuteNonQuery()
+6588-                                                                    Catch ex As Exception
+6589-                                                                    Finally
+6590-                                                                        command_insert.Parameters.Clear()
+6591:                                                                        Connection.Close()
+6592-                                                                    End Try
+6593-
+6594-                                                                    If dtLockPosition.Rows.Count > 0 And issn Then
+6595-                                                                        Dim foundDefects = dtLockPosition.Select("CirRef='" & location.Trim & "'")
+6596-                                                                        If foundDefects.Length > 0 Then
+--
+6645-                                                                                New SqlParameter("@Position", SqlDbType.Int) With {.Value = j}
+6646-                                                                           }
+6647-
+6648-                                                        'Significa que ya la agregamos
+6649-                                                        Dim sql_insert As String = "INSERT INTO [dbo].[Machines_Extractor_AOI_Data] (SN,AOIID,StationID,PartID,Side,Trndate,IsGood,IsRework,RefCir,DefectDesc,UserPass,UserDesc,Position)  VALUES  (@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@UserDesc,@Position)"
+6650:                                                        Dim command_insert As New System.Data.SqlClient.SqlCommand(sql_insert, Connection)
+6651-                                                        command_insert.Parameters.Clear()
+6652-                                                        command_insert.Parameters.AddRange(insertParameter)
+6653-                                                        Try
+6654:                                                            Connection.Open()
+6655-                                                            command_insert.ExecuteNonQuery()
+6656-                                                        Catch ex As Exception
+6657-                                                        Finally
+6658-                                                            command_insert.Parameters.Clear()
+6659:                                                            Connection.Close()
+6660-                                                        End Try
+6661-
+6662-                                                    End If
+6663-                                                Next
+6664-                                            End If
+--
+7654-    Private Sub chReworkAOI_CheckedChanged(sender As Object, e As EventArgs) Handles chReworkAOI.CheckedChanged
+7655-
+7656-        'Delete all files in AOI...
+7657-
+7658-        If Data_From_Extractor_Type = 14 Then
+7659:            Dim ConnectionString As String = BeConn.GetString("SELECT [Result] FROM [CF_idt_defaults] where Description='DataBase_Machines'")
+7660:            Dim Connection As New System.Data.SqlClient.SqlConnection(ConnectionString)
+7661-
+7662-            For Each aoimachine As DataRow In dt_Extractors.Rows
+7663-
+7664-                Dim directoriolecturaGood As String = aoimachine.Item("Directory")
+7665-                Dim directoriosuccessGood As String = aoimachine.Item("Directory")

@@ -1,0 +1,117 @@
+@using System.Data;
+@using System.Data.SqlClient;
+@model Firstronic.Areas.Planning.Models.Reports.Building_Selector
+
+@{
+  ViewBag.Title = "Planning Tool";
+  int Planning_Job_Schedule = 2396;
+
+
+}
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <h3 class="md-card-toolbar-heading-text"> @ViewBag.Title </h3>
+      <a href="@Url.Action("Timeline", "Status", new { AreaID = Model.AreaID })" class="md-btn md-btn-small md-btn-primary">
+        <i class="uk-icon-calendar"></i> Timeline View
+      </a>
+    </div>
+  </div>
+  <div class="md-card-content">
+    <div class="uk-grid" uk-grid>
+
+      @foreach (Firstronic.Areas.Planning.Models.tbl_PART_Station Station in Model.listStations)
+      {
+        SqlParameter[] areaParameters = new SqlParameter[]{
+          new SqlParameter("@Job_Status_Key",SqlDbType.Int) {Value = Planning_Job_Schedule},
+          new SqlParameter("@AreaID",SqlDbType.Int) {Value = Model.AreaID},
+          new SqlParameter("@StationID",SqlDbType.Int) {Value = Station.StationID},
+        };
+
+        DataTable dtPlanning = Firstronic.Framework.Queries.GetDatatableFromQuery(@"Select  TOP 100 jobs.ID as ID,jobs.JobType as Type,(CASE WHEN jobs.JobType =  2 THEN 'KB' WHEN jobs.JobType =  3 THEN 'MNTO' ElSE Cast(jobs.JobID as varchar) END) as Job,CONCAT(Cast(PN.PartNumber as varchar),' ',jobs.Side) as PN,jobs.CPriority As CP,jobs.Side as Side,jobs.Priority as Priority, (jobs.Qty - ISNULL(jb.QtyBuild,0)) as Qty, jobs.JobID as JobID,isnull(mc.MetroCarStatusID,-1) as MCI,jobs.GroupMLS,isnull(jr.autoid,0) as 'Ready',isnull(iss.autoid,0) AS Issue ,isnull(Part_Bin.Bin_Name,'NA') as Bin_Name,'' as Ser,'' as Available,isnull([Inventory_Status_ID],0) as Inventory_Status_ID,cast((cast(jobs.Qty - ISNULL(jb.QtyBuild,0) as float) / cast(isnull(effi.Efficence,100)*ISNULL(rat.Rate,10)/100 as float) ) *60 as int) as TiempoMin From (Select * From PD_tbl_jobs_normal WHERE AreaID=@AreaID AND Job_Status_Key=@Job_Status_Key) jobs INNER JOIN CS_idt_partnumbers PN ON jobs.PartID=PN.PartID LEFT JOIN PD_tbl_jobs_qty_build jb ON jobs.JobType=jb.JobType AND jobs.JobID=jb.JobID AND jb.AreaID=@AreaID AND jobs.Side=jb.JobSide AND jobs.ChildID=jb.JobChild LEFT JOIN PD_tbl_stations_rates pr ON pr.StationID=jobs.StationID AND pr.PartID=jobs.PartID AND pr.Side = jobs.Side LEFT JOIN EN_idt_metrocars mc ON mc.JobType = jobs.JobType AND mc.JobSide=jobs.Side AND mc.JobID = jobs.id LEFT JOIN PD_tbl_jobs_ready jr ON jr.JobType = jobs.JobType AND jr.JobID = jobs.id LEFT JOIN Part_Bin ON part_ID=jobs.partid and BIn_ID=jobs.GroupMLS LEFT JOIN (select * from EN_tbl_visualAids_issues where IssueSolved=0) iss ON iss.partid= jobs.PartID and iss.side=jobs.Side LEFT JOIN EN_tbl_efficency_stations effi ON effi.StationID = jobs.StationID  LEFT JOIN PD_tbl_stations_rates100 rat ON rat.StationID =jobs.StationID and rat.Side= jobs.Side and rat.PartID=jobs.PartID	 WHERE jobs.StationID=@StationID and jobs.areaid=@AreaID ORDER BY jobs.Priority asc", areaParameters);
+
+        dtPlanning.Columns.Remove("Issue");
+        dtPlanning.Columns.Remove("ID");
+        dtPlanning.Columns.Remove("Type");
+        dtPlanning.Columns.Remove("CP");
+        dtPlanning.Columns.Remove("Priority");
+        dtPlanning.Columns.Remove("Side");
+        dtPlanning.Columns.Remove("JOBID");
+        dtPlanning.Columns.Remove("MCI");
+        dtPlanning.Columns.Remove("Ready");
+        dtPlanning.Columns.Remove("GroupMLS");
+        dtPlanning.Columns.Remove("Bin_Name");
+        dtPlanning.Columns.Remove("Ser");
+        dtPlanning.Columns.Remove("Available");
+        dtPlanning.Columns.Remove("Inventory_Status_ID");
+
+
+        try
+        {
+          dtPlanning.Columns.Add("Entra", typeof(DateTime));
+          //dtPlanning.Columns.Add("SecondsRequired", typeof(DateTime));
+          DateTime tiempo = DateTime.Now;
+
+          if (dtPlanning.Rows.Count > 0)
+          {
+            dtPlanning.Rows[0]["Entra"] = tiempo;
+            int duration = 0;
+            for(int i = 1; i < dtPlanning.Rows.Count - 1; i++)
+            {
+              duration = (int)dtPlanning.Rows[i - 1]["TiempoMin"];
+              dtPlanning.Rows[i]["Entra"] = ((DateTime)dtPlanning.Rows[i - 1]["Entra"]).AddMinutes(duration);
+            }
+
+            //for (int i = 1; i < dtPlanning.Rows.Count - 1; i++)
+            //{
+            //  dtPlanning.Rows[i]["SecondsRequired"] = ((int)dtPlanning.Rows[i - 1]["TiempoMin"]) * 60;
+            //}
+          }
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+
+        <div class="uk-width-1-3@l uk-width-1-2@s">
+          <div class="dashboard-widget dashboard-widget-top-blue">
+            <div class="dashboard-widget-title text-center fs-14 fw-600">
+              @Station.StationName
+            </div>
+            <div class="dashboard-widget-content">
+              <div class="col-12 mvc-grid">
+                <table border="1">
+                  <thead>
+                    <tr>
+                      @foreach (System.Data.DataColumn col in dtPlanning.Columns)
+                      {
+                        <th>@col.Caption</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach (System.Data.DataRow row2 in dtPlanning.Rows)
+                    {
+                      <tr>
+                        @{
+                          int varcell1 = 1;
+                        }
+                        @foreach (var cell in row2.ItemArray)
+                        {
+                          <td>@cell.ToString() </td>
+                          varcell1++;
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

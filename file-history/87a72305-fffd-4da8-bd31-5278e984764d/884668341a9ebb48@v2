@@ -1,0 +1,175 @@
+# BeFirst Planning Timeline View
+
+## Overview
+
+The Planning Timeline View is a Gantt-chart style visualization of production jobs scheduled across all workcenters/stations. It provides a visual representation of job scheduling, allowing planners to see when jobs enter each line and their expected completion times.
+
+## Features
+
+### Visual Timeline Display
+
+- **Horizontal Timeline**: Jobs are displayed as colored bars on a horizontal timeline
+- **Station Rows**: Each row represents a station/workcenter with its scheduled jobs
+- **Time Markers**: Hourly markers along the top showing time progression
+- **Current Time Indicator**: Red vertical line showing current time position
+- **Horizontal Scrolling**: Scroll right to see future scheduled jobs (up to 48 hours)
+
+### Interactive Elements
+
+- **Job Tooltips**: Hover over any job bar to see detailed information:
+  - Job number
+  - Part number
+  - Quantity
+  - Start time
+  - End time (calculated)
+  - Duration in minutes
+
+- **Zoom Controls**:
+  - Zoom In: Increases detail (more pixels per minute)
+  - Zoom Out: Shows broader view (fewer pixels per minute)
+
+- **Navigation**:
+  - "Current Time" button: Scrolls timeline to current time position
+  - "Table View" button: Returns to traditional table view
+
+### Job Visualization
+
+- **Color Coding**: Jobs are color-coded with gradient backgrounds for visual distinction
+- **Job Duration**: Bar width represents job duration (calculated from TiempoMin)
+- **Job Position**: Bar position represents scheduled start time (Entra field)
+- **Job Information**: Each bar displays job number and part number
+
+## Access
+
+**URL Pattern**: `/Planning/Status/Timeline?AreaID={id}`
+
+**Default**: AreaID = 1 (SMT area)
+
+**Navigation**:
+- From Planning Status table view, click "Timeline View" button in header
+- From Timeline view, click "Table View" to return
+
+## Data Source
+
+The timeline uses the same data as the Planning Status table view:
+
+**Query**: Pulls top 100 jobs from `PD_tbl_jobs_normal` for each station
+**Calculations**:
+- `TiempoMin`: Job duration in minutes (calculated from Qty, Rate, Efficence)
+- `Entra`: Job start time (calculated sequentially from current time + previous job durations)
+
+**Stations**: All active BeFirst stations (`BeFirstActive = 1`) in selected AreaID
+
+## Technical Implementation
+
+### Controller
+
+**Location**: `firstronic\Areas\Planning\Controllers\StatusController.cs`
+
+**Action**: `Timeline(int? AreaID, int Building_Key, int year, int month, int day)`
+
+**Model**: `Firstronic.Areas.Planning.Models.Reports.Building_Selector`
+
+### View
+
+**Location**: `firstronic\Areas\Planning\Views\Status\Timeline.cshtml`
+
+**Styling**: Embedded CSS with gradient backgrounds, responsive design
+
+**JavaScript Features**:
+- Dynamic job positioning based on start time and duration
+- Tooltip generation and positioning
+- Zoom functionality
+- Auto-scroll to current time
+- Auto-refresh every 5 minutes
+
+### Key JavaScript Functions
+
+```javascript
+positionJobs()          // Calculates and applies left position and width for each job bar
+generateTimeMarkers()   // Creates hourly time markers at top of timeline
+setupTooltips()         // Attaches hover events for job detail tooltips
+scrollToNow()          // Scrolls timeline to current time position
+zoomIn() / zoomOut()   // Adjusts pixelsPerMinute scale factor
+```
+
+### CSS Classes
+
+- `.timeline-container`: Main container
+- `.timeline-row`: Each station row
+- `.timeline-station-label`: Station name/info on left
+- `.timeline-track`: Horizontal track where jobs are positioned
+- `.timeline-job`: Individual job bar
+- `.current-time-indicator`: Red vertical line at current time
+
+## Configuration
+
+### Pixels Per Minute (Zoom Level)
+
+**Default**: 2 pixels per minute
+**Range**: 0.5 to unlimited (practical max ~10)
+**Effect**: Controls horizontal spacing of timeline
+
+### Time Range
+
+**Display**: 48 hours (current hour + next 47 hours)
+**Calculation Start**: Midnight of current day (startOfDay)
+**Auto-Refresh**: 5 minutes (300,000ms)
+
+## Use Cases
+
+### Production Planning
+
+- Visualize job flow across all stations
+- Identify bottlenecks where jobs stack up
+- See which stations will be idle
+- Estimate when specific jobs will reach specific stations
+
+### Scheduling
+
+- Validate job sequence makes sense temporally
+- Check for conflicts or gaps
+- Estimate completion times for customer inquiries
+- Plan material delivery timing
+
+### Capacity Planning
+
+- See overall load distribution across stations
+- Identify underutilized workcenters
+- Plan for peak load periods
+- Balance work across shifts
+
+## Future Enhancements
+
+As mentioned by the user, this is the foundation for a more advanced scheduling system. Planned improvements:
+
+1. **Full Schedule View**: Show all workcenters with dependency lines
+2. **Capacity Indicators**: Show production capacity available in time blocks
+3. **Drag-and-Drop**: Allow manual job reordering/rescheduling
+4. **Multi-Line Dependencies**: Show material flow between workcenters
+5. **Real-Time Updates**: WebSocket updates instead of 5-minute refresh
+6. **Historical View**: Compare planned vs actual job timing
+7. **Filter Options**: Filter by part number, job type, priority
+8. **Export**: Export timeline as image or PDF
+
+## Related Views
+
+- **Index** (`/Planning/Status/Index`): Traditional table view of same data
+- **Balance** (`/Planning/Status/Balance`): Hourly production balance view
+
+## Database Tables
+
+- `PD_idt_stations`: Station/workcenter definitions
+- `PD_tbl_jobs_normal`: Production jobs
+- `CS_idt_partnumbers`: Part number master
+- `PD_tbl_jobs_qty_build`: Job build quantities
+- `EN_tbl_efficency_stations`: Station efficiency factors
+- `PD_tbl_stations_rates100`: Station production rates
+
+## Notes
+
+- Jobs are positioned relative to start of day (00:00:00)
+- Timeline assumes sequential job processing (no parallel jobs on same station)
+- Duration calculation includes efficiency and rate factors
+- Job priority determines sequence, not timeline position (position is calculated result)
+- View is read-only (no editing capability in v1)

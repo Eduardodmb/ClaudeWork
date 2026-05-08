@@ -1,0 +1,400 @@
+﻿Imports System.Data.SqlClient
+Imports System.Net.Mail
+
+Public Class frm_a_d_jobAdd
+
+    ' Cache for parts to avoid repeated database queries
+    Private _partsCache As DataTable = Nothing
+    Private _lastSearchText As String = ""
+    Private _isSearching As Boolean = False
+
+    Private Sub FmKanban_Load(sender As Object, e As EventArgs) Handles MyBase.Shown
+        If ExData.default_Language = "en" Then
+            rbline6.Enabled = False
+            rbline7.Enabled = False
+            rbline8.Enabled = False
+            rbline1.Checked = True
+        End If
+
+        'Solo Planners, Gerenetes or Admin pueden agregar
+        If ExFunctions.UserPermission(ExData.Selected_User.ASPNET_ID, "BF Planning Tool Card Info Edit") = False Then
+            Me.Close()
+        Else
+
+            If ExData.Planning_AutoCards_Usage Then
+                MsgBox("Please use pendings cards. Manual creation are disabled. Please set up Kanban Cards in PLEX. Cards are created at 8 am.")
+                Me.Close()
+            Else
+
+                '=== Limpiar campos
+                cbx_kanban.Checked = False
+                cbx_modelo.Text = ""
+                cbx_group.Text = "NA"
+                rbnormal.Checked = True
+                rbline1.Checked = True
+                txt_comments.Text = ""
+                txt_job.Text = ""
+                txt_qty.Text = ""
+                txtPaneles.Text = ""
+
+                '=== Configure ComboBox for lazy loading (NO initial data load)
+                cbx_modelo.DisplayMember = "PartNumber"
+                cbx_modelo.ValueMember = "PartID"
+                cbx_modelo.AutoCompleteMode = AutoCompleteMode.SuggestAppend ' Disable built-in autocomplete
+                cbx_modelo.DropDownStyle = ComboBoxStyle.DropDown
+
+                ' Initialize with empty dataset
+                Dim emptyTable As New DataTable
+                emptyTable.Columns.Add("PartID", GetType(Integer))
+                emptyTable.Columns.Add("PartNumber", GetType(String))
+                cbx_modelo.DataSource = emptyTable
+
+                ' Show instruction to user
+                cbx_modelo.Text = "Type to search parts..."
+            End If
+        End If
+    End Sub
+
+    '=============================================================
+    '=== Lazy Loading Search for Parts (Performance Optimization)
+    '=============================================================
+    Private Sub cbx_modelo_TextChanged(sender As Object, e As EventArgs) Handles cbx_modelo.TextChanged
+        ' Prevent recursive calls and skip if user is selecting from dropdown
+        If _isSearching OrElse cbx_modelo.SelectedValue IsNot Nothing Then
+            Return
+        End If
+
+        Dim searchText As String = cbx_modelo.Text.Trim()
+
+        ' Require at least 2 characters to search (avoids loading too many results)
+        If searchText.Length < 2 Then
+            Return
+        End If
+
+        ' Skip if search text hasn't changed
+        If searchText = _lastSearchText Then
+            Return
+        End If
+
+        _lastSearchText = searchText
+        _isSearching = True
+
+        Try
+            ' Search database with LIKE filter (top 100 results for performance)
+            Dim Parameter() As SqlParameter = New SqlParameter() {
+                New SqlParameter("@SearchText", SqlDbType.NVarChar, 100) With {.Value = "%" & searchText & "%"}
+            }
+
+            Dim SQL As String = "SELECT TOP 100 PartID, PartNumber FROM PART WHERE IsActive = 'True' AND PartNumber LIKE @SearchText ORDER BY PartNumber ASC"
+            Dim da As DataTable = BeConn.GetDt(SQL, Parameter)
+
+            If da.Rows.Count > 0 Then
+                ' Store current cursor position
+                Dim cursorPos As Integer = cbx_modelo.SelectionStart
+
+                ' Update ComboBox data
+                cbx_modelo.DataSource = da
+                cbx_modelo.DisplayMember = "PartNumber"
+                cbx_modelo.ValueMember = "PartID"
+
+                ' Restore cursor and show dropdown
+                cbx_modelo.SelectionStart = cursorPos
+                cbx_modelo.SelectionLength = 0
+                cbx_modelo.DroppedDown = True
+
+                ' Highlight matching portion
+                Cursor.Current = Cursors.Default
+            End If
+
+        Catch ex As Exception
+            ' Silently handle errors during search (user is still typing)
+            System.Diagnostics.Debug.WriteLine("Part search error: " & ex.Message)
+        Finally
+            _isSearching = False
+        End Try
+    End Sub
+
+    Private Sub cbx_modelo_Enter(sender As Object, e As EventArgs) Handles cbx_modelo.Enter
+        ' Clear instruction text when user focuses on the control
+        If cbx_modelo.Text = "Type to search parts..." Then
+            cbx_modelo.Text = ""
+        End If
+    End Sub
+
+    Private Sub cbx_modelo_Leave(sender As Object, e As EventArgs) Handles cbx_modelo.Leave
+        ' Restore instruction text if nothing selected
+        If String.IsNullOrWhiteSpace(cbx_modelo.Text) Then
+            cbx_modelo.Text = "Type to search parts..."
+        End If
+    End Sub
+
+    '=============================================================
+    '=== Botones/Kanban
+    '=============================================================
+    Private Sub cbx_kanban_CheckedChanged(sender As Object, e As EventArgs) Handles cbx_kanban.CheckedChanged
+        Dim Parameter() As SqlParameter = New SqlParameter() _
+                    {
+                            New SqlParameter("@JobType", SqlDbType.Int) With {.Value = ExData.Planning_Type_Kanban}
+                    }
+
+        If cbx_kanban.Checked = True Then
+            txt_job.Enabled = False
+
+            Dim dt As DataTable = BeConn.GetDt("Select top 1 JobID from PD_tbl_jobs_normal Where Jobtype=@JobType order by JobID desc", Parameter)
+
+            If dt.Rows.Count > 0 Then
+                txt_job.Text = dt.Rows(0).Field(Of Integer)("JobID") + 1
+            Else
+                txt_job.Text = 1
+            End If
+        Else
+            txt_job.Enabled = True
+            txt_job.Text = ""
+        End If
+    End Sub
+
+    Private Sub Btn_crearjob_Click(sender As Object, e As EventArgs) Handles Btn_crearjob.Click
+        Dim result As Integer = MessageBox.Show(My.Resources.Messages.Job_confirmOrder, My.Resources.Messages.Job_confirmOrder_title, MessageBoxButtons.YesNoCancel)
+        If result = DialogResult.Yes Then
+
+            If cbx_modelo.SelectedValue > 0 Then
+
+                Dim Notes As String = txt_comments.Text.Replace("'", "").Trim()
+
+                Dim BinID As Integer = cbx_group.SelectedValue
+
+                Dim CPriority As Integer
+                If rbnormal.Checked = True Then
+                    CPriority = 1
+                ElseIf rbmedium.Checked = True Then
+                    CPriority = 2
+                ElseIf rbhigh.Checked = True Then
+                    CPriority = 3
+                ElseIf rbnpi.Checked = True Then
+                    CPriority = 4
+                ElseIf rbblue.Checked = True Then
+                    CPriority = 5
+                Else
+                    CPriority = 1
+                End If
+
+                Dim JobNumber As Integer = 0
+
+                Try
+                    JobNumber = txt_job.Text
+                Catch ex As Exception
+
+                End Try
+
+                Dim JobTypeID As Integer = ExData.Planning_Type_Job
+
+                If cbx_kanban.Checked Then
+                    JobTypeID = ExData.Planning_Type_Kanban
+                End If
+
+                If ch_mnto.Checked Then
+                    JobTypeID = ExData.Planning_Type_Mntos
+                End If
+
+                Dim line As Integer = 0
+
+                Dim dt_stations As DataTable = ExData.PlanningTool_Stations
+
+                'If rbline0.Checked = True Then
+                '    line = 0
+                'ElseIf rbline1.Checked = True And dt_stations.Rows.Count > 0 Then
+                '    line = dt_stations.Rows(0).Item(0)
+                'ElseIf rbline2.Checked = True And dt_stations.Rows.Count > 1 Then
+                '    line = dt_stations.Rows(0).Item(1)
+                'ElseIf rbline3.Checked = True And dt_stations.Rows.Count > 2 Then
+                '    line = dt_stations.Rows(0).Item(2)
+                'ElseIf rbline4.Checked = True And dt_stations.Rows.Count > 3 Then
+                '    line = dt_stations.Rows(0).Item(3)
+                'ElseIf rbline5.Checked = True And dt_stations.Rows.Count > 4 Then
+                '    line = dt_stations.Rows(0).Item(4)
+                'ElseIf rbline6.Checked = True And dt_stations.Rows.Count > 5 Then
+                '    line = dt_stations.Rows(0).Item(5)
+                'ElseIf rbline7.Checked = True And dt_stations.Rows.Count > 6 Then
+                '    line = dt_stations.Rows(0).Item(6)
+                'ElseIf rbline8.Checked = True And dt_stations.Rows.Count > 7 Then
+                '    line = dt_stations.Rows(0).Item(7)
+                'ElseIf rbline9.Checked = True And dt_stations.Rows.Count > 8 Then
+                '    line = dt_stations.Rows(0).Item(8)
+                'Else
+                '    line = 0
+                'End If
+
+                line = 0
+
+                Dim Qty As Integer = 0
+
+                Try
+                    Qty = txt_qty.Text
+                Catch ex As Exception
+
+                End Try
+
+                If JobTypeID = ExData.Planning_Type_Job And JobNumber = 0 Then
+                    MsgBox(My.Resources.Messages.Job_alreadyExist)
+                    txt_job.Select()
+                Else
+                    If Qty < 1 Then
+                        MsgBox(My.Resources.Messages.Job_emptyQuantity)
+                    Else
+
+                        ExFunctions.CreateCard(cbx_modelo.SelectedValue, Qty, 1, JobTypeID, -1, JobNumber, CPriority, BinID, Notes, line)
+
+                        Me.Close()
+                    End If
+                End If
+            Else
+                MsgBox("Select Part Number")
+            End If
+        End If
+    End Sub
+
+    '=============================================================
+    '=== Funciones
+    '=============================================================
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Me.Close()
+    End Sub
+
+
+    Private Sub frm_Add_Jobs_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Try
+            Dim dt_stations As DataTable = ExData.PlanningTool_Stations
+
+            For ii As Integer = 0 To 10
+
+                Dim isactive As Boolean = False
+
+                If dt_stations.Rows.Count > ii Then
+                    isactive = True
+                End If
+
+                If isactive Then
+
+                    Dim stationid As Integer = dt_stations.Rows(ii).Item(0)
+                    Dim stationname As String = dt_stations.Rows(ii).Item(1)
+
+                    Select Case ii
+                        Case 0
+                            rbline1.Text = stationname
+                            rbline1.Enabled = True
+                        Case 1
+                            rbline2.Text = stationname
+                            rbline2.Enabled = True
+                        Case 2
+                            rbline3.Text = stationname
+                            rbline3.Enabled = True
+                        Case 3
+                            rbline4.Text = stationname
+                            rbline4.Enabled = True
+                        Case 4
+                            rbline5.Text = stationname
+                            rbline5.Enabled = True
+                        Case 5
+                            rbline6.Text = stationname
+                            rbline6.Enabled = True
+                        Case 6
+                            rbline7.Text = stationname
+                            rbline7.Enabled = True
+                        Case 7
+                            rbline8.Text = stationname
+                            rbline8.Enabled = True
+                        Case 8
+                            rbline9.Text = stationname
+                            rbline9.Enabled = True
+                    End Select
+                Else
+
+                    Select Case ii
+                        Case 0
+                            rbline1.Text = "Not in use"
+                            rbline1.Enabled = False
+                        Case 1
+                            rbline2.Text = "Not in use"
+                            rbline2.Enabled = False
+                        Case 2
+                            rbline3.Text = "Not in use"
+                            rbline3.Enabled = False
+                        Case 3
+                            rbline4.Text = "Not in use"
+                            rbline4.Enabled = False
+                        Case 4
+                            rbline5.Text = "Not in use"
+                            rbline5.Enabled = False
+                        Case 5
+                            rbline6.Text = "Not in use"
+                            rbline6.Enabled = False
+                        Case 6
+                            rbline7.Text = "Not in use"
+                            rbline7.Enabled = False
+                        Case 7
+                            rbline8.Text = "Not in use"
+                            rbline8.Enabled = False
+                        Case 8
+                            rbline9.Text = "Not in use"
+                            rbline9.Enabled = False
+                    End Select
+                End If
+            Next
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub cbx_modelo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbx_modelo.SelectedIndexChanged
+        ' Skip if no valid selection (happens during lazy loading)
+        If cbx_modelo.SelectedValue Is Nothing OrElse Not IsNumeric(cbx_modelo.SelectedValue) OrElse CInt(cbx_modelo.SelectedValue) <= 0 Then
+            Return
+        End If
+
+        Dim Parameter() As SqlParameter = New SqlParameter() _
+                {
+                        New SqlParameter("@Part_ID", SqlDbType.Int) With {.Value = cbx_modelo.SelectedValue}
+                }
+
+        Dim da As DataTable = BeConn.GetDt("SELECT BIN_ID, Bin_Name FROM Part_Bin WHERE Part_ID=@Part_ID and Is_Enabled = 1 ORDER BY Bin_Name ASC", Parameter)
+
+        cbx_group.DisplayMember = "Bin_Name"
+        cbx_group.ValueMember = "BIN_ID"
+
+        If da.Rows.Count > 0 Then
+            cbx_group.DataSource = da
+        Else
+            Dim tb As New DataTable
+            tb.Columns.Add("Bin_Name", GetType(String))
+            tb.Columns.Add("BIN_ID", GetType(Integer))
+            tb.Rows.Add("NA", 0)
+            cbx_group.DataSource = tb
+        End If
+
+        If ExData.Planning_Tool_is_Kanban_Racks Then
+            cbx_kanban.Enabled = False
+
+            Dim part_key As Integer = BeConn.GetInteger("Select part_key from CS_idt_partnumbers WHERE partid=@Part_ID", Parameter)
+
+            If part_key > 0 Then
+
+                Dim res As DataSource_Result = ds_Kanban_Racks_Get(part_key)
+
+                If res.Dt.Rows.Count > 0 Then
+
+                    cbx_kanban.Checked = True
+
+                Else
+
+                    cbx_kanban.Checked = False
+                    txt_job.Select()
+
+                End If
+            End If
+        End If
+
+
+
+    End Sub
+End Class

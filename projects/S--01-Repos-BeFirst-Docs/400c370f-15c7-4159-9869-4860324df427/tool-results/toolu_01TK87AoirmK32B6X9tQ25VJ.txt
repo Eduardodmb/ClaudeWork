@@ -1,0 +1,203 @@
+491-                                                                                            If rowResult = "PASS" Then
+492-
+493:                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+494-                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir ,@DefectDesc ,@UserPass,@Position)"
+495-
+--
+594-                                                                                                                    }
+595-
+596:                                                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+597-                                                                                                                'sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES"
+598-                                                                                                                'sql_insert &= "("
+--
+611-                                                                                                                'sql_insert &= ")"
+612-
+613:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+614-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position,@UserDesc,@XPOS,@YPOS)"
+615-                                                                                                                'Dim command_insert As New System.Data.SqlClient.SqlCommand(sql_insert, Connection)
+--
+646-
+647-
+648:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+649-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position,@UserDesc,@XPOS,@YPOS)"
+650-
+--
+1107-                                                                                                                    }
+1108-                                                                                            If rowResult = "PASS" Then
+1109:                                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+1110-                                                                                                'sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES"
+1111-                                                                                                'sql_insert &= "("
+--
+1122-                                                                                                'sql_insert &= "'0','" & rowPosition & "'"
+1123-                                                                                                'sql_insert &= ")"
+1124:                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+1125-                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES"
+1126-                                                                                                sql_insert &= "(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position)"
+--
+1207-                                                                                                            If malos.Contains(position) Then
+1208-                                                                                                                'Significa que ya la agregamos
+1209:                                                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+1210-                                                                                                                'sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS) VALUES"
+1211-                                                                                                                'sql_insert &= "("
+--
+1242-                                                                                                                        New SqlParameter("@YPOS", SqlDbType.Real) With {.Value = posY}
+1243-                                                                                                                    }
+1244:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+1245-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS)  VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@UserDesc,@Position,@XPOS,@YPOS)"
+1246-
+--
+1276-
+1277-                                                                                                                malos.Add(position)
+1278:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+1279-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES"
+1280-                                                                                                                sql_insert &= "(@SN,@AOIID,@StationID,@PartID ,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position,@UserDesc,@XPOS,@YPOS)"
+--
+1755-                                                                                            If rowResult = "PASS" Then
+1756-
+1757:                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+1758-                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir ,@DefectDesc ,@UserPass,@Position)"
+1759-
+--
+1858-                                                                                                                    }
+1859-
+1860:                                                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+1861-                                                                                                                'sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES"
+1862-                                                                                                                'sql_insert &= "("
+--
+1875-                                                                                                                'sql_insert &= ")"
+1876-
+1877:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+1878-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position,@UserDesc,@XPOS,@YPOS)"
+1879-                                                                                                                'Dim command_insert As New System.Data.SqlClient.SqlCommand(sql_insert, Connection)
+--
+1910-
+1911-
+1912:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+1913-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position,@UserDesc,@XPOS,@YPOS)"
+1914-
+--
+2389-                                                                                                }
+2390-                                                                                            If rowResult = "PASS" Then
+2391:                                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+2392-                                                                                                'sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES"
+2393-                                                                                                'sql_insert &= "("
+--
+2404-                                                                                                'sql_insert &= "'0','" & rowPosition & "'"
+2405-                                                                                                'sql_insert &= ")"
+2406:                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+2407-                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES"
+2408-                                                                                                sql_insert &= "(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position)"
+--
+2489-                                                                                                            If malos.Contains(position) Then
+2490-                                                                                                                'Significa que ya la agregamos
+2491:                                                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+2492-                                                                                                                'sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS) VALUES"
+2493-                                                                                                                'sql_insert &= "("
+--
+2524-                                                                                                                        New SqlParameter("@YPOS", SqlDbType.Real) With {.Value = posY}
+2525-                                                                                                                    }
+2526:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+2527-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS)  VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@UserDesc,@Position,@XPOS,@YPOS)"
+2528-
+--
+2558-
+2559-                                                                                                                malos.Add(position)
+2560:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+2561-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES"
+2562-                                                                                                                sql_insert &= "(@SN,@AOIID,@StationID,@PartID ,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position,@UserDesc,@XPOS,@YPOS)"
+--
+3039-                                                                                                }
+3040-
+3041:                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+3042-                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir ,@DefectDesc ,@UserPass,@Position)"
+3043-
+--
+3131-                                                                                                    New SqlParameter("@YPOS", SqlDbType.Real) With {.Value = posY}
+3132-                                                                                                }
+3133:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+3134-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS)  VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@UserDesc,@Position,@XPOS,@YPOS)"
+3135-
+--
+3158-                                                                                                    New SqlParameter("@YPOS", SqlDbType.Real) With {.Value = posY}
+3159-                                                                                                }
+3160:                                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+3161-                                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS)  VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@UserDesc,@Position,@XPOS,@YPOS)"
+3162-
+--
+3632-
+3633-                                                                                                    If rowResult = "PASS" Then
+3634:                                                                                                        Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+3635-                                                                                                        sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES"
+3636-                                                                                                        sql_insert &= "("
+--
+3716-                                                                                                                    If malos.Contains(position) Then
+3717-                                                                                                                        'Significa que ya la agregamos
+3718:                                                                                                                        Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+3719-                                                                                                                        sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS) VALUES"
+3720-                                                                                                                        sql_insert &= "("
+--
+3744-                                                                                                                        'Es la primera vez...
+3745-                                                                                                                        malos.Add(position)
+3746:                                                                                                                        Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+3747-                                                                                                                        sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS) VALUES"
+3748-                                                                                                                        sql_insert &= "("
+--
+4272-                                                                            If rowResult = "PASS" Then
+4273-
+4274:                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+4275-                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir ,@DefectDesc ,@UserPass,@Position)"
+4276-
+--
+4375-                                                                                                    }
+4376-
+4377:                                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+4378-                                                                                                'sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES"
+4379-                                                                                                'sql_insert &= "("
+--
+4392-                                                                                                'sql_insert &= ")"
+4393-
+4394:                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+4395-                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position,@UserDesc,@XPOS,@YPOS)"
+4396-                                                                                                'Dim command_insert As New System.Data.SqlClient.SqlCommand(sql_insert, Connection)
+--
+4425-                                                                                                    }
+4426-                                                                                                malos.Add(position)
+4427:                                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+4428-                                                                                                'sql_insert &= "(SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS) VALUES"
+4429-                                                                                                'sql_insert &= "("
+--
+4442-                                                                                                'sql_insert &= ")"
+4443-
+4444:                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+4445-                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position,@UserDesc,@XPOS,@YPOS)"
+4446-
+--
+4923-                                                                                                    }
+4924-                                                                            If rowResult = "PASS" Then
+4925:                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+4926-                                                                                'sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES"
+4927-                                                                                'sql_insert &= "("
+--
+4938-                                                                                'sql_insert &= "'0','" & rowPosition & "'"
+4939-                                                                                'sql_insert &= ")"
+4940:                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+4941-                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position]) VALUES"
+4942-                                                                                sql_insert &= "(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position)"
+--
+5023-                                                                                            If malos.Contains(position) Then
+5024-                                                                                                'Significa que ya la agregamos
+5025:                                                                                                'Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+5026-                                                                                                'sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS) VALUES"
+5027-                                                                                                'sql_insert &= "("
+--
+5058-                                                                                                        New SqlParameter("@YPOS", SqlDbType.Real) With {.Value = posY}
+5059-                                                                                                    }
+5060:                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+5061-                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[UserDesc],[Position],XPOS,YPOS)  VALUES(@SN,@AOIID,@StationID,@PartID,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@UserDesc,@Position,@XPOS,@YPOS)"
+5062-
+--
+5092-
+5093-                                                                                                malos.Add(position)
+5094:                                                                                                Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data "
+5095-                                                                                                sql_insert &= "([SN] ,[AOIID] ,[StationID] ,[PartID] ,[Side],[Trndate] ,[IsGood] ,[IsRework],[RefCir] ,[DefectDesc] ,[UserPass],[Position],[UserDesc],XPOS,YPOS) VALUES"
+5096-                                                                                                sql_insert &= "(@SN,@AOIID,@StationID,@PartID ,@Side,@Trndate,@IsGood,@IsRework,@RefCir,@DefectDesc,@UserPass,@Position,@UserDesc,@XPOS,@YPOS)"

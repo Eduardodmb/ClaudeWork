@@ -1,0 +1,147 @@
+from odoo import models, fields, api
+
+
+class ProjectProject(models.Model):
+    _inherit = 'project.project'
+
+    dashboard_internal_co_total = fields.Monetary(
+        string="Internal Change Orders",
+        compute="_compute_dashboard_metrics",
+        currency_field="currency_id",
+        store=True,
+        help="Sum of all internal change order amounts"
+    )
+
+    dashboard_external_co_total = fields.Monetary(
+        string="External Change Orders",
+        compute="_compute_dashboard_metrics",
+        currency_field="currency_id",
+        store=True,
+        help="Sum of all external change order amounts"
+    )
+
+    dashboard_total_co = fields.Monetary(
+        string="Total Change Orders",
+        compute="_compute_dashboard_metrics",
+        currency_field="currency_id",
+        store=True,
+        help="Sum of all change orders (internal + external)"
+    )
+
+    dashboard_po_total = fields.Monetary(
+        string="Purchase Orders Total",
+        compute="_compute_dashboard_metrics",
+        currency_field="currency_id",
+        store=True,
+        help="Sum of all purchase order amounts linked to this project"
+    )
+
+    dashboard_timesheet_hours = fields.Float(
+        string="Total Timesheet Hours",
+        compute="_compute_dashboard_metrics",
+        store=True,
+        help="Sum of all timesheet hours logged on this project"
+    )
+
+    dashboard_daily_reports_count = fields.Integer(
+        string="Daily Reports Count",
+        compute="_compute_dashboard_metrics",
+        store=True,
+        help="Number of daily reports submitted for this project"
+    )
+
+    dashboard_daily_report_hours = fields.Float(
+        string="Daily Report Hours",
+        compute="_compute_dashboard_metrics",
+        store=True,
+        help="Sum of hours from daily reports"
+    )
+
+    dashboard_total_spent_hours = fields.Float(
+        string="Total Spent Hours",
+        compute="_compute_dashboard_metrics",
+        store=True,
+        help="Sum of timesheet hours and daily report hours"
+    )
+
+    dashboard_hours_balance = fields.Float(
+        string="Hours Balance",
+        compute="_compute_dashboard_hours_balance",
+        store=True,
+        help="Allocated hours (from project) - Total spent hours"
+    )
+
+    dashboard_project_balance = fields.Monetary(
+        string="Project Balance",
+        compute="_compute_dashboard_balance",
+        currency_field="currency_id",
+        store=True,
+        help="Overall project balance calculation"
+    )
+
+    @api.depends(
+        'change_order_ids.dollar_amount',
+        'change_order_ids.external_internal',
+        'timesheet_ids.unit_amount',
+        'daily_ids.hours_spent'
+    )
+    def _compute_dashboard_metrics(self):
+        for project in self:
+            internal_total = 0.0
+            external_total = 0.0
+
+            for co in project.change_order_ids:
+                if co.external_internal == 'internal':
+                    internal_total += co.dollar_amount
+                elif co.external_internal == 'external':
+                    external_total += co.dollar_amount
+
+            project.dashboard_internal_co_total = internal_total
+            project.dashboard_external_co_total = external_total
+            project.dashboard_total_co = internal_total + external_total
+
+            timesheet_hours = 0.0
+            if hasattr(project, 'timesheet_ids'):
+                timesheet_hours = sum(project.timesheet_ids.mapped('unit_amount'))
+
+            project.dashboard_timesheet_hours = timesheet_hours
+
+            daily_count = 0
+            daily_hours = 0.0
+            if hasattr(project, 'daily_ids'):
+                daily_count = len(project.daily_ids)
+                daily_hours = sum(project.daily_ids.mapped('hours_spent'))
+
+            project.dashboard_daily_reports_count = daily_count
+            project.dashboard_daily_report_hours = daily_hours
+            project.dashboard_total_spent_hours = timesheet_hours + daily_hours
+
+            po_total = 0.0
+            if project.account_id:
+                analytic_lines = self.env['account.analytic.line'].search([
+                    ('account_id', '=', project.account_id.id),
+                    ('category', '=', 'vendor_bill')
+                ])
+                po_total = sum(analytic_lines.mapped('amount'))
+
+            project.dashboard_po_total = abs(po_total)
+
+    @api.depends(
+        'x_bom_summary_modified_total',
+        'dashboard_total_co',
+        'dashboard_po_total'
+    )
+    def _compute_dashboard_balance(self):
+        for project in self:
+            bom_total = project.x_bom_summary_modified_total or 0.0
+            co_total = project.dashboard_total_co or 0.0
+            po_total = project.dashboard_po_total or 0.0
+
+            project.dashboard_project_balance = bom_total + co_total - po_total
+
+    @api.depends('allocated_hours', 'dashboard_total_spent_hours')
+    def _compute_dashboard_hours_balance(self):
+        for project in self:
+            allocated = project.allocated_hours or 0.0
+            spent = project.dashboard_total_spent_hours or 0.0
+            project.dashboard_hours_balance = allocated - spent

@@ -1,0 +1,25 @@
+CREATE TABLE [dbo].[PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP] (
+    [AutoID]         INT           IDENTITY (1, 1) NOT NULL,
+    [PartID]         INT           NULL,
+    [AreaID]         INT           NOT NULL,
+    [Side]           NVARCHAR (10) NOT NULL,
+    [OriginalIndex]  INT           NOT NULL,
+    [RemappedIndex]  INT           NOT NULL,
+    [Facility_Key]   INT           NULL,
+    [Part_Key]       INT           NULL,
+    [CreatedDate]    DATETIME      DEFAULT (GETDATE()) NULL,
+    [ModifiedDate]   DATETIME      DEFAULT (GETDATE()) NULL,
+    CONSTRAINT [PK_PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP] PRIMARY KEY CLUSTERED ([AutoID] ASC)
+);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Remap_PartArea]
+    ON [dbo].[PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP]([PartID] ASC, [AreaID] ASC, [Side] ASC);
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_Remap_PartAreaOriginal]
+    ON [dbo].[PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP]([PartID] ASC, [AreaID] ASC, [Side] ASC, [OriginalIndex] ASC)
+    WHERE ([PartID] IS NOT NULL);
+

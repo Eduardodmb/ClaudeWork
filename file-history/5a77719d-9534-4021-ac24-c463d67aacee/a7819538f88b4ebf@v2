@@ -1,0 +1,110 @@
+@model Firstronic.Core.Entities.App.First.tbl_PD_idt_areas_FULL
+
+@{
+  bool isNew = !(Model != null && !String.IsNullOrEmpty(Model.Area));
+}
+
+
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text">Manage Area @Model.Area</h3>
+  </div>
+  <div class="md-card-content">
+    @using (Html.BeginForm())
+    {
+
+      @Html.AntiForgeryToken()
+      @Html.ValidationSummary("", new { @class = "hide" })
+
+      @Html.HiddenFor(y => y.AreaID)
+
+      <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#tabs_4'}">
+        <li class="uk-active" aria-expanded="true"><a href="#">General</a></li>
+        @if (!isNew)
+        {
+          <li class="" aria-expanded="false"><a href="#">Settings</a></li>
+        }
+      </ul>
+
+
+      <ul id="tabs_4" class="uk-switcher uk-margin">
+        <li aria-hidden="false" class="uk-active">
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.Area, new { @class = "m-0 fs-14" })
+
+            @Html.TextBoxFor(y => y.Area, new { @class = "md-input" })
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.Facility_Name, new { @class = "m-0 fs-14" })
+            @Html.DropDownListFor(y => y.Facility_Key, (IEnumerable<SelectListItem>)Model.FacilityList, new { @class = "md-input" })
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.FlowID, new { @class = "m-0 fs-14" })
+            @Html.TextBoxFor(y => y.FlowID, new { @class = "md-input", @Value = Model?.FlowID ?? 7 })
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.PlexOperation, new { @class = "m-0 fs-14" })
+            @Html.DropDownListFor(y => y.PlexOperation, (IEnumerable<SelectListItem>)Model.PlexOperation_List, new { @class = "md-input" })
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.ActiveReport, new { @class = "m-0 fs-14" })
+            @Html.DropDownListFor(y => y.ActiveReport, (IEnumerable<SelectListItem>)Model.ActiveReport_List, new { @class = "md-input" })
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.Active_Inventory, new { @class = "m-0 fs-14" })
+            @Html.DropDownListFor(y => y.Active_Inventory, (IEnumerable<SelectListItem>)Model.Active_Inventory_List, new { @class = "md-input" })
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.Able_To_Lock, new { @class = "m-0 fs-14" })
+            @Html.DropDownListFor(y => y.Able_To_Lock, (IEnumerable<SelectListItem>)Model.Able_To_Lock_List, new { @class = "md-input" })
+          </div>
+          <div class="input-group mb-3">
+            @Html.LabelFor(y => y.Area_Type_ID, new { @class = "m-0 fs-14" })
+            @Html.DropDownListFor(y => y.Area_Type_ID, (IEnumerable<SelectListItem>)Model.Area_Type_List, new { @class = "md-input" })
+
+          @* @Html.LabelFor(y => y.Area_Type_ID, new { @class = "m-0 fs-14" })*@
+          @*  @Html.TextBoxFor(y => y.Area_Type_ID, new { @class = "md-input" })*@
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.Visible, new { @class = "m-0 fs-14" })
+            @Html.DropDownListFor(y => y.Visible, (IEnumerable<SelectListItem>)Model.Visible_List, new { @class = "md-input" })
+          </div>
+        </li>
+        <li aria-hidden="true">
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.RecordPlex, new { @class = "m-0 fs-14" })
+            @Html.DropDownListFor(y => y.RecordPlex, (IEnumerable<SelectListItem>)Model.RecordPlex_List, new { @class = "form-control" })
+          </div>
+        </li>
+      </ul>
+
+      <div class="tab-pane">
+        <div class="form-group">
+          <div class="form-group mt-4 pt-4 border-top">
+            <button type="submit" name="action:@(isNew ? "Create": "Edit")" class="md-btn md-btn-primary md-btn-small">
+              Save
+            </button>
+            <div class="d-inline-block">
+              <span class="mx-2 text-light font-weight-light fs-15">or</span>
+              <i class="fas fa-long-arrow-alt-left fs-13 text-primary o-8"></i>
+              <a href="@Url.Action("Index", "Areas")" class="m-link fs-15"> Back to list</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>
+
+

@@ -1,0 +1,43 @@
+@using Firstronic.Core.Entities.App.First;
+@using NonFactors.Mvc.Grid;
+
+@model IQueryable<tbl_PD_idt_areas_FULL>
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text">Manage Areas</h3>
+  </div>
+  <div class="md-card-content">
+
+    @(Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+
+            columns.Add(model => model.Area).RenderedAs(model => Html.ActionLink(model.Area.ToString(), "Edit", "Areas", new { id = model.AreaID }, new { }));
+            columns.Add(model => model.FlowID);
+            columns.Add(model => model.Facility_Name);
+            columns.Add(model => model.Area_Type_ID);
+            columns.Add(model => model.Visible).Titled("Visible");
+            columns.Add(model => "<a href=\"Agents/Edit/" + model.AreaID + "\" class=\"editbutton\">Edit</a>").RenderedAs(y => Html.ActionLink("Edit", "Edit", new { id = y.AreaID }, new { @class = "editbutton" })).Css("editlink");
+
+        })
+        .Empty("No data found")
+        .Pageable(pager =>
+        {
+            pager.PagesToDisplay = 10;
+            pager.RowsPerPage = 15;
+        })
+        .Filterable()
+        .Sortable()
+  )
+
+    <div class="mn-t-20">
+      <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("Create", "Areas")">
+        @Resources.Actions.Add
+      </a>
+    </div>
+  </div>
+
+</div>
+

@@ -1,0 +1,242 @@
+@using System.Data
+@using NonFactors.Mvc.Grid;
+@using System.Data.SqlClient;
+@using System.Globalization;
+@model Firstronic.Areas.Dashboards.Models.customreport_downtimenew
+
+@{
+  DateTime dia_current = new DateTime(Model.year, Model.month, Model.day);
+  DateTime dia_yesterday = dia_current.AddDays(-1);
+  DateTime dia_tomorrow = dia_current.AddDays(+1);
+
+  var u_yesterday = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_yesterday.Add("year", dia_yesterday.Year);
+  u_yesterday.Add("month", dia_yesterday.Month);
+  u_yesterday.Add("day", dia_yesterday.Day);
+
+  var u_tomorrow = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_tomorrow.Add("year", dia_tomorrow.Year);
+  u_tomorrow.Add("month", dia_tomorrow.Month);
+  u_tomorrow.Add("day", dia_tomorrow.Day);
+
+  Model.current = dia_current;
+  SqlParameter[] parameters = new SqlParameter[]
+      {
+                        new SqlParameter("@AreaID",SqlDbType.Int){Value =Model.areaid}
+                                  };
+  var AreaName = Firstronic.Framework.Queries.GetStringFromQuery("SELECT [Area] FROM [PD_idt_areas] WHERE AreaID=@AreaID", parameters);
+
+  DataTable dt_areas = Firstronic.Framework.Functions.Queries.GetDatatableFromQuery("SELECT [AreaID],[Area] FROM [PD_idt_areas] WHere Area_Type_ID=1 and ActiveReport=1 order by flowid asc");
+
+  string nextareaid = Model.areaid.ToString();
+  string nextarea = AreaName;
+
+  string prevareaid = Model.areaid.ToString();
+  string prevarea = AreaName;
+
+  int index = -1;
+  DataRow[] rows = dt_areas.Select("AreaID='" + Model.areaid + "'");
+  if (rows.Count() > 0)
+  {
+    index = dt_areas.Rows.IndexOf(rows[0]);
+  }
+
+  try
+  {
+    nextareaid = dt_areas.Rows[index + 1][0].ToString();
+    nextarea = dt_areas.Rows[index + 1][1].ToString();
+  }
+  catch
+  {
+    nextareaid = dt_areas.Rows[0][0].ToString();
+    nextarea = dt_areas.Rows[0][1].ToString();
+  }
+
+  try
+  {
+    prevareaid = dt_areas.Rows[index - 1][0].ToString();
+    prevarea = dt_areas.Rows[index - 1][1].ToString();
+  }
+  catch
+  {
+    prevareaid = dt_areas.Rows[dt_areas.Rows.Count - 1][0].ToString();
+    prevarea = dt_areas.Rows[dt_areas.Rows.Count - 1][1].ToString();
+  }
+
+}
+
+@section head{
+  <script src="~/Content/vendor/raphael/raphael.min.js"></script>
+  <script src="~/Content/vendor/morris/morris.js"></script>
+  <link href="~/Content/vendor/morris/morris.css" rel="stylesheet">
+  <script src="~/Content/vendor/d3/d3.v4.min.js"></script>
+  <script src="~/Content/vendor/chartjs/Chart.min.js"></script>
+  <script src="~/Content/vendor/xlsx/xlsx.full.min.js"></script>
+}
+
+
+
+<div class="uk-card md-card mn-b-25">
+  <div class="md-card-content fw-600 fs-14">
+    <div class="uk-clearfix">
+      <div class="uk-float-left">
+        DownTime @AreaName
+        @Html.HiddenFor(y => y.areaid, new { id = "txtStationID" })
+      </div>
+      <div class="uk-float-right">
+        <div class="uk-grid" uk-grid>
+          <div class="uk-width-1-1 text-right fs-12">
+            <a href="~/Dashboards/Downtime/Area/@prevareaid" class="pd-r-20">
+              <span class="material-icons">arrow_left</span> @prevarea
+            </a>
+            <a href="#">
+              @AreaName
+            </a>
+            <a href="~/Dashboards/Downtime/Area/@nextareaid" class="pd-l-20">
+              @nextarea <span class="material-icons">arrow_right</span>
+            </a>
+            <a href="~/Dashboards/Downtime/Index" class="text-c-purple pd-l-20">
+              <i class="fas fa-industry"></i> Go All
+            </a>
+            <a href="~/Dashboards/Portal" class="text-c-purple pd-l-20">
+              <i class="fas fa-caret-square-up"></i> Go Home
+            </a>
+          </div>
+          <div class="uk-width-1-1 text-right uk-margin-small-top fs-12">
+            <a href="@Url.RouteUrl(u_yesterday)"><span class="material-icons">arrow_left</span></a>
+
+            @Html.TextBoxFor(y => y.current, new { @id = "ddlDateUpdate", @Value = Model.current.ToString("MM/dd/yyyy"), style = "width: 80%;text-align: center;font-size: 14px;" })
+
+            <a href="@Url.RouteUrl(u_tomorrow)"><span class="material-icons">arrow_right</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+@{
+  DataTable dt_areas2 = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [AreaID],[Area] FROM [PD_idt_areas] WHere (Area_Type_ID=1  or Area_Type_ID=2) and ActiveReport=1 and areaid = case when @AreaID = 0 then areaid else @AreaID end order by flowid asc", parameters);
+
+}
+
+
+<div class="md-card">
+  <div class="uk-width-medium-1-1  md-card">
+    <div class="md-card-content">
+      <h3 class="heading_a uk-margin-bottom">Down Time Reason</h3>
+      <div id="bar-chart"></div>
+    </div>
+
+    <script type="text/javascript" nonce="@Html.ScriptNonce()">
+        function updatehistory() {
+
+        var data_area = JSON.stringify({
+             'year': @Model.year,
+            'month': @Model.month,
+            'day': @Model.day,
+            'id': '@Model.areaid'
+          });
+
+        var colors_array = ['#bc3c3c', '#79bc3c'];
+
+          //GET DATA FOR BAR
+          $.ajax({
+            type: "POST",
+            data: data_area,
+            url: "/Dashboards/Areas/DWArea",
+            contentType: "application/json; charset=utf-8",
+            success: function (chData) {
+              var aData = $.parseJSON(chData);
+              if (aData.length > 0) {
+                var morrisDonut = Morris.Bar({
+                  element: 'bar-chart',
+                  data: aData,
+                  xkey: 'label',
+                  ykeys: ['value'],
+                  labels: ['Minutes: ']
+                });
+              }
+            },
+            async: false
+          });
+        };
+
+        $(document).ready(function () {
+          updatehistory()
+        })
+    </script>
+  </div>
+
+</div>
+
+
+<div class="md-card">
+  <div class="md-card-content">
+    <h3 class="heading_a uk-margin-bottom">Tickets</h3>
+    @Html.AjaxGrid(Url.Action("Tickets", "Downtime", new { id = Model.areaid, year = Model.year, month = Model.month, day = Model.day }))
+
+    <div class="p-0 input-group mb-3 mn-r-10">
+      <input id="btnExport" type="button" value="Export" class="md-btn md-btn-primary md-btn-small uk-width-1-1" />
+    </div>
+  </div>
+</div>
+
+<div class="md-card">
+  <div class="md-card-content">
+    <h3 class="heading_a uk-margin-bottom">Daily Goal Issues</h3>
+    <div class="mvc-grid mvc-grid-excel-mode">
+      @{
+        SqlParameter[] dtTicketsparameters = new SqlParameter[]{
+                      new SqlParameter("@AreaID",SqlDbType.Int){Value =Model.areaid},
+                      new SqlParameter("@DiaCurrent",SqlDbType.DateTime){Value =dia_current.ToString("MM/dd/yyyy")},
+        };
+
+        DataTable dt_tickets = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT Part_Operation_Packout_Goal_Daily_Details.WrtDate,
+CS_idt_partnumbers.PartNumber, PD_idt_issuestype.IssueType, Part_Operation_Packout_Goal_Daily_Details.ShiftVM, Part_Operation_Packout_Goal_Daily_Details.Hours AS Minutos, Part_Operation_Packout_Goal_Daily_Details.SupervisorComments FROM Part_Operation_Packout_Goal_Daily_Details INNER JOIN CS_idt_partnumbers ON Part_Operation_Packout_Goal_Daily_Details.PartID = CS_idt_partnumbers.PartID INNER JOIN PD_idt_issuestype ON Part_Operation_Packout_Goal_Daily_Details.IssueTypeID = PD_idt_issuestype.IssueTypeID
+WHERE (Part_Operation_Packout_Goal_Daily_Details.AreaID = @AreaID) AND (Part_Operation_Packout_Goal_Daily_Details.TrnDate = @DiaCurrent) Order by WrtDate", dtTicketsparameters);
+      }
+
+      <table border="1">
+        <thead>
+          <tr>
+            @foreach (System.Data.DataColumn col in dt_tickets.Columns)
+            {
+              <th>@col.Caption</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (System.Data.DataRow rowsu in dt_tickets.Rows)
+          {
+            <tr>
+              @foreach (var cell in rowsu.ItemArray)
+              {
+                <td>@cell.ToString()</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  document.getElementById("btnExport").addEventListener('click', function () {
+    /* Create worksheet from HTML DOM TABLE */
+    var wb = XLSX.utils.table_to_book(document.getElementById("ExportYieldDetails"));
+    /* Export to file (start a download) */
+    const d = new Date();
+    let text = moment(d).format('YYYYMMDDHHMMSS');
+
+
+
+    XLSX.writeFile(wb, "Downtime" + text + ".xlsx");
+  });
+</script>

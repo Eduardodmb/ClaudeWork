@@ -1,0 +1,469 @@
+@using System.Data
+@using System.Data.SqlClient
+@using System.Globalization
+
+@model Firstronic.Areas.Dashboards.Models.customreport
+
+@{
+  DateTime dia_current = new DateTime(Model.year, Model.month, Model.day);
+  DateTime dia_yesterday = dia_current.AddDays(-1);
+  DateTime dia_tomorrow = dia_current.AddDays(+1);
+
+  var u_yesterday = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_yesterday.Add("year", dia_yesterday.Year);
+  u_yesterday.Add("month", dia_yesterday.Month);
+  u_yesterday.Add("day", dia_yesterday.Day);
+
+  var u_tomorrow = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_tomorrow.Add("year", dia_tomorrow.Year);
+  u_tomorrow.Add("month", dia_tomorrow.Month);
+  u_tomorrow.Add("day", dia_tomorrow.Day);
+
+
+  Model.current = dia_current;
+
+}
+
+@section head{
+  <script src="~/Content/vendor/peity/jquery.peity.js"></script>
+}
+
+<div class="uk-card md-card mn-b-25">
+  <div class="md-card-content fw-600 fs-14">
+    <div class="uk-clearfix">
+      <div class="uk-float-left">
+        Firstronic Dashboard @dia_current.ToString("yyyy-MM-dd")
+      </div>
+      <div class="uk-float-right  fs-12">
+        <a href="@Url.RouteUrl(u_yesterday)"><span class="material-icons">arrow_left</span></a>
+
+        @Html.TextBoxFor(y => y.current, new { @id = "ddlDateUpdate", @Value = Model.current.ToString("MM/dd/yyyy") })
+
+        <a href="@Url.RouteUrl(u_tomorrow)"><span class="material-icons">arrow_right</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="uk-card">
+
+  <div class="uk-grid">
+    <div class="uk-width-1-5@l uk-width-1-1@s">
+      @{
+        SqlParameter[] ProParameters = new SqlParameter[]
+        {
+          new SqlParameter("@DiaCurrentoAdd6",SqlDbType.DateTime){Value = dia_current.AddHours(+6).ToString("yyyy-MM-dd")},
+          new SqlParameter("@DiaCurrentoAdd30",SqlDbType.DateTime){Value = dia_current.AddHours(+6).AddHours(+24).ToString("MM/dd/yyyy HH:mm:ss")},
+        };
+
+        double Proyection = Firstronic.Framework.Queries.GetDoubleFromQuery(@"SELECT isnull(SUM(Goal*CS_idt_partnumbers.Price),0) as Total
+                    FROM Part_Operation_Packout_Goal_Daily INNER JOIN CS_idt_partnumbers ON Part_Operation_Packout_Goal_Daily.PartID = CS_idt_partnumbers.PartID
+                    WHERE(Part_Operation_Packout_Goal_Daily.TrnDate = @DiaCurrentoAdd6)", ProParameters);
+
+        var production = Firstronic.Framework.Queries.GetDoubleFromQuery(@"SELECT     SUM(PD_tbl_units_packed.SSNQty*Price) AS Total FROM PD_tbl_units_packed WITH(NOLOCK) INNER JOIN CS_idt_partnumbers WITH(NOLOCK) ON PD_tbl_units_packed.PartID = CS_idt_partnumbers.PartID INNER JOIN CS_idt_external_customers WITH(NOLOCK) ON CS_idt_partnumbers.CustomerID = CS_idt_external_customers.CustomerID LEFT JOIN QA_tbl_GP12_review WITH(NOLOCK) ON PD_tbl_units_packed.PartID = QA_tbl_GP12_review.PartID WHERE (PD_tbl_units_packed.IsComplete = 1) and Complete_Date between @DiaCurrentoAdd6 and @DiaCurrentoAdd30 and (packtypeid=1  or PackTypeID = 6)", ProParameters);
+
+      }
+      <div class="md-card">
+        <div class="md-card-content">
+          <div class="uk-float-right uk-margin-top uk-margin-small-right">
+            <a class="portal-link" href="~/Dashboards/Packout/Index">
+              <span class="material-icons">
+                arrow_forward_ios
+              </span>
+            </a>
+          </div>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+            $("span.bar").peity("bar")
+          </script>
+
+          <span class="uk-text-muted uk-text-small">Packout</span>
+          <h3 class="uk-margin-remove"><span class="countUpMe">@production.ToString("C2")</span></h3>
+          <h5 class="uk-margin-remove"><span class="countUpMe"><a href="@Url.Action("List","GoalDaily",new { Area="Production",year=Model.year,month=Model.month,day=Model.day})">Proyeccion @Proyection.ToString("C2")</a></span></h5>
+        </div>
+
+      </div>
+      @{
+
+        DataTable dt_Summary = new DataTable();
+
+        dt_Summary.Columns.Add("Station", typeof(string));
+        dt_Summary.Columns.Add("Mat", typeof(string));
+        dt_Summary.Columns.Add("Ves", typeof(string));
+        dt_Summary.Columns.Add("Total", typeof(string));
+
+        DataTable dt_Stations = Firstronic.Framework.Functions.Queries.GetDatatableFromQuery("SELECT [StationName],[StationID] FROM [PD_idt_stations] where AreaID=1 and DashVisible=1 and (Workcenter_Key_1>0 and Workcenter_Key_Kanban_1>0) order by SortNo asc");
+
+
+        var totalm = 0;
+        var totalv = 0;
+
+        foreach (DataRow station in dt_Stations.Rows)
+        {
+
+          var vespertino = 0;
+
+          try
+          {
+            SqlParameter[] VespertinoParameters = new SqlParameter[]
+            {
+              new SqlParameter("@DiaCurrentAdd18", SqlDbType.DateTime){Value = dia_current.AddHours(+18).ToString("MM/dd/yyyy HH:mm:ss")},
+              new SqlParameter("@DiaCurrentAdd30", SqlDbType.DateTime){Value = dia_current.AddHours(+30).ToString("MM/dd/yyyy HH:mm:ss")},
+              new SqlParameter("@StationID", SqlDbType.Int){Value = station[1].ToString()}
+            };
+
+            vespertino = Firstronic.Framework.Queries.GetIntFromQuery(@"SELECT SUM(CASE WHEN [PD_tbl_units_tracking].JobSide='B' THEN BPlacements WHEN [PD_tbl_units_tracking].JobSide='A' THEN APlacements END) as [Total] FROM [PD_tbl_units_tracking] WITH(NOLOCK,index(idx_Placements)) INNER JOIN CS_idt_partnumbers WITH(NOLOCK) ON[PD_tbl_units_tracking].PartID = CS_idt_partnumbers.PartID WHERE TrnDate between @DiaCurrentAdd18 and @DiaCurrentAdd30 and IsRework = 0 and AreaID = 1 and StationID = @StationID", VespertinoParameters);
+          }
+          catch
+          {
+
+          }
+
+          var matutino = 0;
+
+          try
+          {
+            SqlParameter[] MatutinoParameters = new SqlParameter[]
+            {
+              new SqlParameter("@DiaCurrentAdd6", SqlDbType.DateTime){Value = dia_current.AddHours(+6).ToString("MM/dd/yyyy HH:mm:ss")},
+              new SqlParameter("@DiaCurrentAdd18", SqlDbType.DateTime){Value = dia_current.AddHours(+6).AddHours(+12).ToString("MM/dd/yyyy HH:mm:ss")},
+              new SqlParameter("@StationID", SqlDbType.Int){Value = station[1].ToString()}
+            };
+
+            matutino = Firstronic.Framework.Queries.GetIntFromQuery(@"SELECT SUM(CASE WHEN [PD_tbl_units_tracking].JobSide='B' THEN BPlacements WHEN [PD_tbl_units_tracking].JobSide='A' THEN APlacements END) as [Total] FROM [PD_tbl_units_tracking] WITH(NOLOCK,index(idx_Placements)) INNER JOIN CS_idt_partnumbers WITH(NOLOCK) ON[PD_tbl_units_tracking].PartID = CS_idt_partnumbers.PartID WHERE TrnDate between @DiaCurrentAdd6 and @DiaCurrentAdd18 and IsRework = 0 and AreaID = 1 and StationID = @StationID", MatutinoParameters);
+          }
+          catch
+          {
+
+          }
+
+          dt_Summary.Rows.Add(station[0].ToString(), matutino.ToString("N0"), vespertino.ToString("N0"), (matutino + vespertino).ToString("N0"));
+
+          totalm += matutino;
+
+          totalv += vespertino;
+
+        }
+
+        dt_Summary.Rows.Add("Total", totalm.ToString("N0"), totalv.ToString("N0"), (totalv + totalm).ToString("N0"));
+
+        Double NPIS = -99;
+      }
+
+      <div class="md-card">
+        <div class="md-card-content">
+          <div class="uk-float-right uk-margin-top uk-margin-small-right">
+            <a class="portal-link" href="~/Dashboards/SMT/Placements">
+              <span class="material-icons">
+                arrow_forward_ios
+              </span>
+            </a>
+          </div>
+          <span class="uk-text-muted uk-text-small">Placements</span>
+          <h3 class="uk-margin-remove"><span class="countUpMe">@((totalv + totalm).ToString("N0"))</span></h3>
+        </div>
+      </div>
+      <div class="md-card">
+        <div class="md-card-content">
+          <div class="uk-float-right uk-margin-top uk-margin-small-right">
+            <a class="portal-link" href="~/Engineering/Reports/NPIReports">
+              <span class="material-icons">
+                arrow_forward_ios
+              </span>
+            </a>
+          </div>
+          <span class="uk-text-muted uk-text-small">NPIs</span>
+          @if (NPIS == -99)
+          {
+            <h3 class="uk-margin-remove"><span class="countUpMe">Error</span></h3>
+          }
+          else
+          {
+            <h3 class="uk-margin-remove"><span class="countUpMe">@((NPIS).ToString("N0"))</span></h3>
+          }
+        </div>
+      </div>
+
+      @{
+        Double WIPV = Firstronic.Framework.Functions.Queries.GetDoubleFromQuery(@"SELECT SUM(WIP.Produced * PD_tbl_rutes.Cost) as [Value] FROM (SELECT [PartID],StatusAreaID,JobSide,GroupMLS,SUM([SSNQty]) as Produced
+        FROM [PD_tbl_units_wip] WITH(NOLOCK)
+        where IsActive=1 AND trndate>DATEADD(DAY,-7,GETDATE())
+        Group BY PartID,StatusAreaID,JobSide,GroupMLS) as  WIP
+        INNER JOIN PD_tbl_rutes ON WIP.PartID = PD_tbl_rutes.PartID AND WIP.StatusAreaID = PD_tbl_rutes.AreaID AND WIP.JobSide = PD_tbl_rutes.Side
+        INNER JOIN CS_idt_partnumbers ON WIP.PartID = CS_idt_partnumbers.PartID
+        INNER JOIN PD_idt_areas ON WIP.StatusAreaID = PD_idt_areas.AreaID
+        LEFT JOIN Part_Bin ON WIP.GroupMLS = Part_Bin.Bin_ID AND WIP.PartID = Part_Bin.Part_ID
+        Order By [Value] DESC");
+
+      }
+
+      <div class="md-card">
+        <div class="md-card-content">
+          <div class="uk-float-right uk-margin-top uk-margin-small-right">
+            <a class="portal-link" href="~/Dashboards/WIP/Index">
+              <span class="material-icons">
+                arrow_forward_ios
+              </span>
+            </a>
+          </div>
+          <span class="uk-text-muted uk-text-small">WIP (Current - Last 7 Days) - Under Construction</span>
+          <h3 class="uk-margin-remove"><span class="countUpMe">@((WIPV).ToString("C2"))</span></h3>
+        </div>
+      </div>
+
+      @{
+
+        double WIPCost = Firstronic.Framework.Functions.Queries.GetDoubleFromQuery("SELECT SUM(cast(Part_Operation_Rework_Balance.Balance as bigint)*Price) as Total  FROM Part_Operation_Rework_Balance WITH(NOLOCK) INNER JOIN CS_idt_partnumbers ON Part_Operation_Rework_Balance.PartID = CS_idt_partnumbers.PartID");
+
+      }
+
+      <div class="md-card">
+        <div class="md-card-content">
+          <div class="uk-float-right uk-margin-top uk-margin-small-right">
+            <a class="portal-link" href="~/Dashboards/Reworks">
+              <span class="material-icons">
+                arrow_forward_ios
+              </span>
+            </a>
+          </div>
+          <span class="uk-text-muted uk-text-small">Rework (Current)</span>
+          <h3 class="uk-margin-remove"><span class="countUpMe">@((WIPCost).ToString("C2"))</span></h3>
+        </div>
+      </div>
+
+      <div class="md-card">
+        <div class="md-card-content">
+          <div class="uk-float-right uk-margin-top uk-margin-small-right">
+            <a class="portal-link" href="~/Materials/Shortages">
+              <span class="material-icons">
+                arrow_forward_ios
+              </span>
+            </a>
+          </div>
+          <span class="uk-text-muted uk-text-small">Shortages</span>
+          <h3 class="uk-margin-remove"><span class="countUpMe">Go to Shortages</span></h3>
+        </div>
+      </div>
+
+      <div class="md-card">
+        <div class="md-card-content">
+          <div class="uk-float-right uk-margin-top uk-margin-small-right">
+            <a class="portal-link" href="~/Dashboards/TVs">
+              <span class="material-icons">
+                arrow_forward_ios
+              </span>
+            </a>
+          </div>
+          <span class="uk-text-muted uk-text-small">TVs</span>
+          <h3 class="uk-margin-remove"><span class="countUpMe">Go to TVs</span></h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="uk-width-4-5@l uk-width-1-1@s">
+      <div>
+        <div class="md-card">
+          <div class="md-card-content">
+            <span class="uk-text-muted uk-text-small">Downtime Trend</span>
+
+            @{
+              DataTable dt_downtime = new DataTable();
+
+              DataTable dt_areas = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable(
+                areaTypeIds: new int[] { 1 },
+                activeReport: true);
+
+              DataTable dt_types = Firstronic.Framework.Functions.Queries.GetDatatableFromQuery("SELECT [IssueTypeID] ,[IssueType] FROM [PD_idt_issuestype] WHERE IsVisible =1 order by OrderID asc");
+
+              dt_downtime.Columns.Add("Area");
+
+              DateTime diainicial = dia_current;
+
+              for (int ii = 0; ii < 7; ii++)
+              {
+                dt_downtime.Columns.Add(diainicial.AddDays(-ii).ToString("yyyy-MM-dd"));
+              }
+
+              foreach (DataRow area in dt_areas.Rows)
+              {
+
+                DataRow nrow = dt_downtime.NewRow();
+
+                nrow[0] = area["Area"].ToString();
+
+                for (int ii = 0; ii < 7; ii++)
+                {
+                  SqlParameter[] dwParameters = new SqlParameter[]{
+                    new SqlParameter("@DiaIniAdd30",SqlDbType.DateTime){Value = diainicial.AddDays(-ii).AddHours(+6).AddHours(+24).ToString("MM/dd/yyyy HH:mm:ss")},
+                    new SqlParameter("@DiaIniAdd6",SqlDbType.DateTime){Value = diainicial.AddDays(-ii).AddHours(+6).ToString("MM/dd/yyyy HH:mm:ss")},
+                    new SqlParameter("@AreaID",SqlDbType.Int){Value = area[0]},
+                    new SqlParameter("@DiaInicialAdd6",SqlDbType.DateTime){Value = diainicial.AddDays(-ii).AddHours(+6).ToString("yyyy-MM-dd")}
+                  };
+
+                  int dw = Firstronic.Framework.Queries.GetIntFromQuery(@"SELECT SUM(DATEDIFF(MINUTE,TrnDate,isnull(IssueSolveDate,CASE WHEN GETDATE()<@DiaIniAdd30 THEN GETDATE() ELSE @DiaIniAdd30 END))) as Minutes FROM PD_tbl_station_issues INNER JOIN PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID INNER JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID INNER JOIN PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID WHERE(PD_tbl_station_issues.TrnDate BETWEEN @DiaIniAdd6 and @DiaIniAdd30) AND PD_idt_areas.AreaID=@AreaID", dwParameters);
+
+                  //Check for goaldaily data....
+
+                  int dailygoasl = Firstronic.Framework.Queries.GetIntFromQuery(@"SELECT isnull(SUM(Hours),0) as Minutes FROM [Part_Operation_Packout_Goal_Daily_Details] where AreaID=@AreaID and TrnDate=@DiaInicialAdd6", dwParameters);
+
+                  if (dailygoasl > dw)
+                  {
+                    nrow[ii + 1] = dailygoasl;
+                  }
+                  else
+                  {
+                    nrow[ii + 1] = dw;
+                  }
+                }
+
+                dt_downtime.Rows.Add(nrow);
+
+              }
+
+              <div class="mvc-grid mvc-grid-excel-mode fs-13">
+                <table border="1">
+                  <thead>
+                    <tr>
+                      @foreach (System.Data.DataColumn col in dt_downtime.Columns)
+                      {
+                        <th>@col.Caption</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @{
+                      var areaidx = 0;
+                    }
+                    @foreach (System.Data.DataRow rowsu in dt_downtime.Rows)
+                    {
+                      var areaid = dt_areas.Rows[areaidx][0];
+
+                      var typeidx = -1;
+
+                      var previousvalue = 0;
+                      <tr>
+                        @foreach (var cell in rowsu.ItemArray)
+                        {
+                          if (typeidx >= 0)
+                          {
+                            int newv = int.Parse(cell.ToString());
+
+                            previousvalue = 0;
+
+                            try
+                            {
+                              previousvalue = int.Parse(rowsu[typeidx + 2].ToString());
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+
+                            if (newv > previousvalue)
+                            {
+                              <td><a href="@Url.Action("Area","Downtime",new {year=diainicial.AddDays(typeidx).Year,month=diainicial.AddDays(-typeidx).Month,day=diainicial.AddDays(-typeidx).Day, id=areaid })" class="uk-text-danger"><span class="material-icons uk-text-danger"> arrow_drop_up </span> @cell.ToString()</a></td>
+                            }
+                            else
+                            {
+                              <td><a href="@Url.Action("Area","Downtime",new {year=diainicial.AddDays(typeidx).Year,month=diainicial.AddDays(-typeidx).Month,day=diainicial.AddDays(-typeidx).Day, id=areaid })" class="uk-text-success"><span class="material-icons uk-text-success"> arrow_drop_down </span> @cell.ToString()</a></td>
+                            }
+
+                            previousvalue = newv;
+
+                          }
+                          else
+                          {
+                            <td><a href="@Url.Action("Index","Areas",new {year=Model.year,month=Model.month,day=Model.day, id=areaid })">@cell.ToString()</a></td>
+                          }
+                          typeidx++;
+                        }
+                      </tr>
+
+                      areaidx++;
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@* AREAS LINK *@
+
+<div class="row pb-2 mn-t-30">
+  <div class="col-12">
+    <h3>Overall Equipment Effectiveness</h3>
+  </div>
+</div>
+
+@{
+  dt_areas = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable(
+    areaTypeIds: new int[] { 1, 2 },
+    activeReport: true);
+}
+
+<div>
+  <div class="uk-grid-small  uk-grid-match uk-grid" uk-grid>
+    @foreach (DataRow row in dt_areas.Rows)
+    {
+      <div class="uk-width-1-5@s uk-width-1-10@m">
+        <div class="md-card innerlink">
+          <div class="md-card-content">
+            <h3 class="heading_a uk-margin-bottom">@row["Area"].ToString()</h3>
+            <a class="hide" href="~/Dashboards/Areas/Index/@row["AreaID"].ToString()">
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+    <div class="uk-width-2-3">
+      <div class="md-card innerlink">
+        <div class="md-card-content">
+          <h3 class="heading_a uk-margin-bottom">Plant Layout 3D</h3>
+          <a class="hide" href="~/Dashboards/FloorShop/Index">
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="uk-width-1-3">
+      <div class="md-card innerlink">
+        <div class="md-card-content">
+          <h3 class="heading_a uk-margin-bottom">Team Efficency List</h3>
+          <a class="hide" href="~/Dashboards/Bonus/Index_Individual">
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  // ddlDate update in changes
+  ddlDateUpdate_Update = () => {
+    try {
+      $("body").addClass("loading");
+      WaitingForm_Start()
+    } catch{
+
+    }
+
+    try {
+      var trndate = $("#ddlDateUpdate").val();
+      var res = trndate.split("/");
+      var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname + '?year=' + res[2] + '&month=' + res[0] + '&day=' + res[1];
+      window.location = newURL;
+    } catch (err) {
+
+    }
+  }
+</script>

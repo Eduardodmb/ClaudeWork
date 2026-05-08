@@ -1,0 +1,347 @@
+Imports System.IO
+Imports System.Net
+Imports System.Text
+Imports Newtonsoft.Json
+
+''' <summary>
+''' AOI API Module - Handles all AOI-related API calls
+''' Replaces direct SQL operations with REST API endpoints
+''' </summary>
+Module AOI
+
+    ''' <summary>
+    ''' Get AOI machine configuration by AOIID
+    ''' Replaces: SELECT * FROM Machines_Extractor_AOI WHERE Active='1' AND StationID=...
+    ''' </summary>
+    Public Function GetMachineConfig(ByVal aoiId As Integer) As AOIMachineConfig
+
+        Dim resultado As AOIMachineConfig = New AOIMachineConfig()
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "aoiId", .Value = aoiId})
+
+        Dim APIResponse As APIResponse = API_Call("/AOI/GetMachineConfig", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of AOIMachineConfig)(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Get all active AOI machines for a specific station
+    ''' Replaces: SELECT * FROM Machines_Extractor_AOI WHERE Active='1' AND StationID=...
+    ''' </summary>
+    Public Function GetMachinesByStation(ByVal stationId As Integer) As List(Of AOIMachineConfig)
+
+        Dim resultado As List(Of AOIMachineConfig) = New List(Of AOIMachineConfig)()
+
+        ' Note: This endpoint needs to be created in the API
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "stationId", .Value = stationId})
+
+        Dim APIResponse As APIResponse = API_Call("/AOI/GetMachinesByStation", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of List(Of AOIMachineConfig))(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Get all active AOI machines (no station filter)
+    ''' Replaces: SELECT * FROM Machines_Extractor_AOI WHERE Active='1'
+    ''' </summary>
+    Public Function GetAllActiveMachines() As List(Of AOIMachineConfig)
+
+        Dim resultado As List(Of AOIMachineConfig) = New List(Of AOIMachineConfig)()
+
+        ' Note: This endpoint needs to be created in the API
+        Dim APIResponse As APIResponse = API_Call("/AOI/GetAllActiveMachines", "GET", Nothing)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of List(Of AOIMachineConfig))(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Submit a single AOI inspection record
+    ''' Replaces: INSERT INTO Machines_Extractor_AOI_Data
+    ''' </summary>
+    Public Function SubmitInspection(ByVal request As AOIInspectionRequest) As AOIDataResponse
+
+        Dim resultado As AOIDataResponse = New AOIDataResponse()
+
+        ' Serialize request to JSON
+        Dim jsonBody As String = JsonConvert.SerializeObject(request)
+
+        Dim APIResponse As APIResponse = API_Call_POST("/AOI/SubmitInspection", jsonBody)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of AOIDataResponse)(APIResponse.Response)
+        Else
+            resultado.Success = False
+            resultado.Message = APIResponse.ResponseMessage
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Submit multiple AOI inspection records in batch
+    ''' Replaces: Multiple INSERT INTO Machines_Extractor_AOI_Data statements
+    ''' </summary>
+    Public Function SubmitInspectionBatch(ByVal requests As List(Of AOIInspectionRequest)) As AOIBatchResponse
+
+        Dim resultado As AOIBatchResponse = New AOIBatchResponse()
+
+        ' Serialize request list to JSON
+        Dim jsonBody As String = JsonConvert.SerializeObject(requests)
+
+        Dim APIResponse As APIResponse = API_Call_POST("/AOI/SubmitInspectionBatch", jsonBody)
+
+        If APIResponse.ResponseCode = 200 Or APIResponse.ResponseCode = 207 Then ' 207 = Multi-Status (partial success)
+            resultado = JsonConvert.DeserializeObject(Of AOIBatchResponse)(APIResponse.Response)
+        Else
+            resultado.Success = False
+            If resultado.Errors Is Nothing Then
+                resultado.Errors = New List(Of String)()
+            End If
+            resultado.Errors.Add(APIResponse.ResponseMessage)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Get AOI program counter
+    ''' Replaces: SELECT counter FROM Machines_Extractor_AOI_Programs WHERE...
+    ''' </summary>
+    Public Function GetProgramCounter(ByVal aoiId As Integer, ByVal partId As Integer, ByVal side As String) As AOIProgramCounter
+
+        Dim resultado As AOIProgramCounter = New AOIProgramCounter()
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "aoiId", .Value = aoiId})
+        ParametersTransit.Add(New URLInput With {.Name = "partId", .Value = partId})
+        ParametersTransit.Add(New URLInput With {.Name = "side", .Value = side})
+
+        Dim APIResponse As APIResponse = API_Call("/AOI/GetProgramCounter", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of AOIProgramCounter)(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Update AOI program counter
+    ''' Replaces: UPDATE Machines_Extractor_AOI_Programs SET counter=...
+    ''' </summary>
+    Public Function UpdateProgramCounter(ByVal aoiId As Integer, ByVal partId As Integer, ByVal side As String, ByVal counter As Integer) As Boolean
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "aoiId", .Value = aoiId})
+        ParametersTransit.Add(New URLInput With {.Name = "partId", .Value = partId})
+        ParametersTransit.Add(New URLInput With {.Name = "side", .Value = side})
+        ParametersTransit.Add(New URLInput With {.Name = "counter", .Value = counter})
+
+        Dim APIResponse As APIResponse = API_Call("/AOI/UpdateProgramCounter", "POST", ParametersTransit)
+
+        Return APIResponse.ResponseCode = 200
+    End Function
+
+    ''' <summary>
+    ''' Create or update AOI program (upsert)
+    ''' Replaces: INSERT INTO Machines_Extractor_AOI_Programs or UPDATE
+    ''' </summary>
+    Public Function CreateOrUpdateProgram(ByVal aoiId As Integer, ByVal partId As Integer, ByVal side As String, ByVal arrQty As Integer, ByVal counter As Integer) As Boolean
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "aoiId", .Value = aoiId})
+        ParametersTransit.Add(New URLInput With {.Name = "partId", .Value = partId})
+        ParametersTransit.Add(New URLInput With {.Name = "side", .Value = side})
+        ParametersTransit.Add(New URLInput With {.Name = "arrQty", .Value = arrQty})
+        ParametersTransit.Add(New URLInput With {.Name = "counter", .Value = counter})
+
+        Dim APIResponse As APIResponse = API_Call("/AOI/CreateOrUpdateProgram", "POST", ParametersTransit)
+
+        Return APIResponse.ResponseCode = 200
+    End Function
+
+    ''' <summary>
+    ''' Helper function for POST requests with JSON body
+    ''' </summary>
+    Private Function API_Call_POST(url As String, jsonBody As String) As APIResponse
+
+        ' Check Token Expiration
+        If ExData.BEARER.exipres_time < DateTime.Now Then
+            ExData.BEARER = GeneraOAuth2_ClientCredentials("/Account/GetTokenAsync", BeApi.Username, BeApi.Password)
+        End If
+
+        Dim APIResult As New APIResponse
+        Dim result As String = ""
+
+        Dim protocol As String = "http://"
+        If ExData.SERVERAPIS.Contains("8443") Then
+            protocol = "https://"
+        End If
+
+        Try
+            Dim apiReq As HttpWebRequest = HttpWebRequest.Create(protocol & ExData.SERVERAPIS & url)
+            apiReq.Accept = "application/json"
+            apiReq.Method = "POST"
+            apiReq.ContentType = "application/json"
+            apiReq.KeepAlive = False
+            apiReq.Headers.Add("Authorization", "Bearer " & ExData.BEARER.access_token)
+
+            ' Write JSON body
+            Dim byte1 As Byte() = Encoding.UTF8.GetBytes(jsonBody)
+            apiReq.ContentLength = byte1.Length
+
+            Using newStream As Stream = apiReq.GetRequestStream()
+                newStream.Write(byte1, 0, byte1.Length)
+            End Using
+
+            Dim bearerResp As HttpWebResponse = apiReq.GetResponse()
+
+            Using reader = New StreamReader(bearerResp.GetResponseStream(), Encoding.UTF8)
+                Dim response = reader.ReadToEnd()
+                result = response
+            End Using
+
+            APIResult.ResponseCode = bearerResp.StatusCode
+            APIResult.ResponseMessage = bearerResp.StatusDescription
+
+        Catch ex As WebException
+            Try
+                Dim Response As HttpWebResponse = ex.Response
+                APIResult.ResponseCode = Response.StatusCode
+
+                Using Stream = ex.Response.GetResponseStream()
+                    Using Reader = New StreamReader(Stream)
+                        APIResult.ResponseMessage = Reader.ReadToEnd()
+                    End Using
+                End Using
+            Catch ex2 As Exception
+                APIResult.ResponseCode = 500
+                APIResult.ResponseMessage = ex2.ToString()
+            End Try
+
+        Catch ex As Exception
+            APIResult.ResponseCode = 500
+            APIResult.ResponseMessage = ex.ToString()
+        End Try
+
+        APIResult.Response = result
+        Return APIResult
+    End Function
+
+
+
+
+
+End Module
+
+#Region "Data Classes"
+
+''' <summary>
+''' AOI Machine Configuration (matches MachinesExtractorAoi entity)
+''' </summary>
+Public Class AOIMachineConfig
+    Public Property AutoId As Integer
+    Public Property Aoiid As Integer
+    Public Property MachineName As String
+    Public Property StationId As Integer
+    Public Property PathGood As String
+    Public Property PathGoodSuccess As String
+    Public Property PathBad As String
+    Public Property PathBadSuccess As String
+    Public Property Active As Boolean
+    Public Property Brand As String
+    Public Property FacilityKey As Integer?
+    Public Property UpdatedDate As DateTime?
+    Public Property IsEnabled As Boolean
+    Public Property IsInServer As Boolean
+    Public Property IsInMachine As Boolean
+    Public Property Message As String
+    Public Property MessageDate As DateTime?
+    Public Property Domain As String
+    Public Property UserName As String
+    Public Property Password As String
+    Public Property ExtractorType As Integer
+    Public Property StationName As String
+    Public Property LookingValue As String
+End Class
+
+''' <summary>
+''' AOI Inspection Request (matches AOIDataRequest from API)
+''' </summary>
+Public Class AOIInspectionRequest
+    Public Property Sn As String                  ' Serial number (required)
+    Public Property Aoiid As Integer              ' AOI machine ID (required)
+    Public Property StationId As Integer          ' Station ID (required)
+    Public Property PartId As Integer             ' Part ID (required)
+    Public Property Side As String                ' "T" (Top) or "B" (Bottom) (required)
+    Public Property Trndate As DateTime?          ' Transaction date (optional, defaults to Now)
+    Public Property IsGood As Boolean             ' Pass/Fail result
+    Public Property IsRework As Boolean?          ' Is rework
+    Public Property RefCir As String              ' Component reference designator
+    Public Property DefectDesc As String          ' Defect description
+    Public Property UserPass As Boolean?          ' Manual review result
+    Public Property UserDesc As String            ' User description
+    Public Property Position As Integer           ' Board position in panel (required)
+    Public Property Xmisfit As Single?            ' X misalignment
+    Public Property Ymisfit As Single?            ' Y misalignment
+    Public Property Xpos As Single?               ' X position
+    Public Property Ypos As Single?               ' Y position
+    Public Property FacilityKey As Integer?       ' Facility key
+    Public Property AreaId As Integer?            ' Area ID
+End Class
+
+''' <summary>
+''' AOI Data Response (single record submission)
+''' </summary>
+Public Class AOIDataResponse
+    Public Property Success As Boolean
+    Public Property Message As String
+    Public Property RecordsInserted As Integer?
+    Public Property ProcessedAt As DateTime
+End Class
+
+''' <summary>
+''' AOI Batch Response (multiple records submission)
+''' </summary>
+Public Class AOIBatchResponse
+    Public Property Success As Boolean
+    Public Property TotalRecords As Integer
+    Public Property SuccessfulRecords As Integer
+    Public Property FailedRecords As Integer
+    Public Property Errors As List(Of String)
+    Public Property ProcessedAt As DateTime
+End Class
+
+''' <summary>
+''' AOI Program Counter (matches MachinesExtractorAoiProgram entity)
+''' </summary>
+Public Class AOIProgramCounter
+    Public Property AutoId As Integer
+    Public Property Aoiid As Integer?
+    Public Property ProgramName As String
+    Public Property ArrQty As Integer?
+    Public Property PartId As Integer?
+    Public Property Side As String
+    Public Property Counter As Integer
+    Public Property FacilityKey As Integer?
+End Class
+
+
+
+
+
+#End Region

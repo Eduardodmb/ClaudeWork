@@ -1,0 +1,17 @@
+namespace APIs_BeFirst.Models.Response
+{
+    public class StationInfoResponse
+    {
+        public int LastPartID { get; set; }
+        public int LastJob { get; set; }
+        public string LastJobText { get; set; } = string.Empty;
+        public int LastJobType { get; set; }
+        public string LastSide { get; set; } = string.Empty;
+        public string LastFormat { get; set; } = string.Empty;
+        public int LastBinID { get; set; }
+        public int Workcenter_Key { get; set; }
+        public int Workcenter_Key_Kanban { get; set; }
+        public string Workcenter_PLC_Name { get; set; } = string.Empty;
+        public string Workcenter_PLC_Name_Kanban { get; set; } = string.Empty;
+    }
+}

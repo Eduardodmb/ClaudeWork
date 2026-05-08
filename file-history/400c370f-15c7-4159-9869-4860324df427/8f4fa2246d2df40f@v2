@@ -1,0 +1,92 @@
+﻿Imports Newtonsoft.Json
+
+Module Parts
+    ''' <summary>
+    ''' Get all part numbers with ArrQty (PiecesByPanel)
+    ''' Replaces: SELECT PartNumber, PartID, PiecesByPanel FROM PART
+    ''' </summary>
+    Public Function GetAllPartNumbers() As List(Of PartNumberInfo)
+
+        Dim resultado As List(Of PartNumberInfo) = New List(Of PartNumberInfo)()
+
+        Dim APIResponse As APIResponse = API_Call("/Parts/GetAllParts", "GET", Nothing)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of List(Of PartNumberInfo))(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Get AOI quality change status (locked units configuration)
+    ''' Replaces: SELECT PartID, CirRef, ContainsText, DefectCodeID FROM Quality_Inspection_AOI_ChangeStatus
+    ''' </summary>
+    Public Function GetAOIQualityChangeStatus() As List(Of AOIQualityChangeStatus)
+
+        Dim resultado As List(Of AOIQualityChangeStatus) = New List(Of AOIQualityChangeStatus)()
+
+        Dim APIResponse As APIResponse = API_Call("/Parts/GetAOIQualityChangeStatus", "GET", Nothing)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of List(Of AOIQualityChangeStatus))(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Get merge counter for a part
+    ''' Replaces: SELECT counter FROM PART_OPERATION_SERIALIZATION_MERGE_COUNTER WHERE partid=...
+    ''' </summary>
+    Public Function GetMergeCounter(ByVal partId As Integer) As Integer
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "partId", .Value = partId})
+
+        Dim APIResponse As APIResponse = API_Call("/Parts/GetMergeCounter", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            Return JsonConvert.DeserializeObject(Of Integer)(APIResponse.Response)
+        End If
+
+        Return 0
+    End Function
+
+    ''' <summary>
+    ''' Increment merge counter for a part (auto-creates if doesn't exist)
+    ''' Replaces: UPDATE/INSERT PART_OPERATION_SERIALIZATION_MERGE_COUNTER
+    ''' </summary>
+    Public Function IncrementMergeCounter(ByVal partId As Integer) As Integer
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "partId", .Value = partId})
+
+        Dim APIResponse As APIResponse = API_Call("/Parts/IncrementMergeCounter", "POST", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            Return JsonConvert.DeserializeObject(Of Integer)(APIResponse.Response)
+        End If
+
+        Return 0
+    End Function
+End Module
+
+''' <summary>
+''' Part Number Response
+''' </summary>
+Public Class PartNumberInfo
+    Public Property PartNumber As String
+    Public Property PartID As Integer
+    Public Property ArrQty As Integer
+End Class
+
+''' <summary>
+''' AOI Quality Change Status Response
+''' </summary>
+Public Class AOIQualityChangeStatus
+    Public Property PartID As Integer
+    Public Property CirRef As String
+    Public Property ContainsText As String
+    Public Property DefectCodeID As Integer
+End Class

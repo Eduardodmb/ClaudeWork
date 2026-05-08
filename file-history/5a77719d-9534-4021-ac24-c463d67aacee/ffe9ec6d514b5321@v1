@@ -1,0 +1,103 @@
+@using Firstronic.Core.Entities.App.Production;
+@using NonFactors.Mvc.Grid;
+@using System.Data;
+@using System.Data.SqlClient;
+
+@model WIP_partial
+
+@{
+  DataTable dt_areas = Firstronic.Framework.Functions.Queries.GetDatatableFromQuery("SELECT [AreaID] ,[Area] FROM [PD_idt_areas] Where Area_Type_ID=1 and ActiveReport=1 and Active_Inventory=1 order by FlowID asc");
+
+  DataTable dt_WIP = new DataTable();
+
+  foreach (DataRow drow in dt_areas.Rows)
+  {
+    dt_WIP.Columns.Add(drow["Area"].ToString());
+  }
+
+  DataRow dnew = dt_WIP.NewRow();
+
+  var inidce = 0;
+
+  Double WIPV = Firstronic.Framework.Functions.Queries.GetDoubleFromQuery(@"SELECT SUM(WIP.Produced * PD_tbl_rutes.Cost) as [Value] FROM (SELECT [PartID],StatusAreaID,JobSide,GroupMLS,SUM([SSNQty]) as Produced FROM [PD_tbl_units_wip] where IsActive=1 AND trndate>DATEADD(DAY,-7,GETDATE()) Group BY PartID,StatusAreaID,JobSide,GroupMLS) as  WIP INNER JOIN PD_tbl_rutes ON WIP.PartID = PD_tbl_rutes.PartID AND WIP.StatusAreaID = PD_tbl_rutes.AreaID AND WIP.JobSide = PD_tbl_rutes.Side INNER JOIN CS_idt_partnumbers ON WIP.PartID = CS_idt_partnumbers.PartID INNER JOIN PD_idt_areas ON WIP.StatusAreaID = PD_idt_areas.AreaID LEFT JOIN Part_Bin ON WIP.GroupMLS = Part_Bin.Bin_ID AND WIP.PartID = Part_Bin.Part_ID Order By [Value] DESC");
+
+  foreach (DataRow drow in dt_areas.Rows)
+  {
+
+    SqlParameter[] parameters = new SqlParameter[] { new SqlParameter("@AreaID", SqlDbType.Int) { Value = drow[0].ToString() } };
+
+    dnew[inidce] = Firstronic.Framework.Queries.GetDoubleFromQuery(@"SELECT isnull(SUM(WIP.Produced * PD_tbl_rutes.Cost),0) AS Total FROM(SELECT        PartID, StatusAreaID, JobSide, GroupMLS, SUM(SSNQty) AS Produced FROM            PD_tbl_units_wip WHERE(IsActive = 1) AND StatusAreaID = @AreaID AND(TrnDate > DATEADD(DAY, -7, GETDATE())) GROUP BY PartID, StatusAreaID, JobSide, GroupMLS) AS WIP INNER JOIN PD_tbl_rutes ON WIP.PartID = PD_tbl_rutes.PartID AND WIP.StatusAreaID = PD_tbl_rutes.AreaID AND WIP.JobSide = PD_tbl_rutes.Side INNER JOIN CS_idt_partnumbers ON WIP.PartID = CS_idt_partnumbers.PartID INNER JOIN PD_idt_areas ON WIP.StatusAreaID = PD_idt_areas.AreaID INNER JOIN CS_idt_external_customers ON CS_idt_partnumbers.CustomerID = CS_idt_external_customers.CustomerID LEFT OUTER JOIN Part_Bin ON WIP.GroupMLS = Part_Bin.Bin_ID AND WIP.PartID = Part_Bin.Part_ID ORDER BY Total DESC", parameters);
+
+    inidce++;
+  }
+
+  dt_WIP.Rows.Add(dnew);
+
+}
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text"> WIP Value @WIPV.ToString("C2")</h3>
+  </div>
+  <div class="md-card-content">
+    <div class="mvc-grid mvc-grid-excel-mode fs-13">
+      <table border="1">
+        <thead>
+          <tr>
+            @foreach (System.Data.DataColumn col in dt_WIP.Columns)
+            {
+              <th>@col.Caption</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @{
+            var areaidx = 0;
+          }
+          @foreach (System.Data.DataRow rowsu in dt_WIP.Rows)
+          {
+            var typeidx = 0;
+
+            <tr>
+              @foreach (var cell in rowsu.ItemArray)
+              {
+                <td><a href="@Url.Action("Index","WIP",new {areaid = @dt_areas.Rows[typeidx][0].ToString() })">@Double.Parse(cell.ToString()).ToString("C0")</a></td>
+                typeidx++;
+              }
+            </tr>
+
+            areaidx++;
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="text-right mn-t-10 fs-11">
+      <a href="@Url.Action("Index","WIP",new {areaid = 0 })">Clear Filters</a>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="md-card">
+  <div class="md-card-content">
+    @(Html
+      .Grid(Model.Modelo)
+      .Build(columns =>
+      {
+        columns.Add(model => model.Customer);
+        columns.Add(model => model.PartNumber);
+        columns.Add(model => model.Area);
+        columns.Add(model => model.Side);
+        columns.Add(model => model.BIN);
+        columns.Add(model => model.Quantity).Formatted("{0:N0}");
+        columns.Add(model => model.Total).Formatted("{0:C0}");
+        columns.Add(model => "<a href=\"WIP/Details/" + model.PartID + "\" class=\"editbutton\">Edit</a>").RenderedAs(model => Html.ActionLink("Details", "Details", new { id = model.PartID, areaid = model.AreaID }, new { @class = "editbutton" })).Css("editlink");
+      })
+      .Empty("No data found")
+      .Filterable()
+      .Sortable()
+    )
+  </div>
+</div>
+

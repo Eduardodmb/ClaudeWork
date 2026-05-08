@@ -1,0 +1,16 @@
+namespace APIs_BeFirst.Models.Response
+{
+    public class LockedUnitResponse
+    {
+        public int AutoID { get; set; }
+        public string SN { get; set; } = string.Empty;
+        public int DefectCodeID { get; set; }
+        public int StationID { get; set; }
+        public DateTime TrnDate { get; set; }
+        public int ControlID { get; set; }
+        public int AreaID { get; set; }
+        public string Comments { get; set; } = string.Empty;
+        public DateTime? LockDate { get; set; }
+        public bool IsLocked { get; set; }
+    }
+}

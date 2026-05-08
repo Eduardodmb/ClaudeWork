@@ -1,0 +1,492 @@
+@using System.Data
+@using NonFactors.Mvc.Grid;
+@using System.Data;
+@using System.Data.SqlClient;
+@using System.Globalization;
+@model Firstronic.Areas.Dashboards.Models.customreport_area
+
+@{
+  /**/
+
+  ViewBag.Title = "SMT Loaded Material";
+
+  DateTime dia_current = new DateTime(Model.year, Model.month, Model.day);
+  DateTime dia_yesterday = dia_current.AddDays(-1);
+  DateTime dia_tomorrow = dia_current.AddDays(+1);
+
+  var u_yesterday = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_yesterday.Add("year", dia_yesterday.Year);
+  u_yesterday.Add("month", dia_yesterday.Month);
+  u_yesterday.Add("day", dia_yesterday.Day);
+
+  var u_tomorrow = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_tomorrow.Add("year", dia_tomorrow.Year);
+  u_tomorrow.Add("month", dia_tomorrow.Month);
+  u_tomorrow.Add("day", dia_tomorrow.Day);
+
+  Model.current = dia_current;
+  SqlParameter[] parameters = new SqlParameter[]
+      {
+          new SqlParameter("@AreaID",SqlDbType.Int){Value = Model.areaid},
+      };
+  var AreaName = Firstronic.Framework.Queries.GetStringFromQuery("SELECT [Area] FROM [PD_idt_areas] WHERE AreaID=@AreaID",parameters);
+
+}
+
+
+<div class="uk-card md-card mn-b-25 hide">
+  <div class="md-card-content fw-600 fs-14">
+    <div class="uk-clearfix">
+      <div class="uk-float-left">
+        @AreaName Loaded Material
+      </div>
+      <div class="uk-float-right">
+      </div>
+    </div>
+  </div>
+</div>
+
+@{
+
+  DataTable dt_areas2 = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable(
+    areaTypeIds: new int[] { 1, 2 },
+    activeReport: true,
+    includeAreaIds: Model.areaid == 0 ? null : new int[] { Model.areaid });
+}
+
+@foreach (DataRow row in dt_areas2.Rows)
+{
+  SqlParameter[] Parameters = new SqlParameter[]{
+  new SqlParameter("@Row0",SqlDbType.Int) {Value = Convert.ToInt32(row[0].ToString())},
+};
+
+  DataTable dt_workcentersoee = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT    PD_idt_stations.StationID, PD_idt_stations.StationName, PD_idt_stations.AreaID, PD_idt_stations.IsActive, PD_idt_stations.DownTimeCodeID, PD_idt_stations.LastPieceTime, PD_idt_stations.LastPartID,
+PD_idt_stations.LastJob, PD_idt_stations.LastJobText, PD_idt_stations.LastJobType, PD_idt_stations.LastJobQty, PD_idt_stations.LastJobQtyBuild, PD_idt_stations.LastHourQty, PD_idt_stations.LastRate,
+PD_idt_stations.LastSide, PD_idt_stations.BeFirstActive, PD_idt_stations.LockStatus, PD_idt_stations.LastFormat, PD_idt_stations.DashVisible, PD_idt_stations.ProdVisible, PD_idt_stations.LockMachines,
+PD_idt_stations.Alias, PD_idt_stations.LastBinID, PD_idt_stations.PLC_Name, PD_idt_stations.Workcenter_Key, PD_idt_stations.Workcenter_Key_Kanban, PD_idt_stations.Workcenter_PLC_Name,
+PD_idt_stations.Workcenter_PLC_Name_Kanban, PD_idt_stations.AutoID, PD_idt_stations.Facility_Key, PD_idt_stations.Allow_Plex_Transactions, PD_idt_stations.Workcenter_Key_1, PD_idt_stations.Workcenter_Key_2,
+PD_idt_stations.Workcenter_Key_Kanban_1, PD_idt_stations.Workcenter_Key_Kanban_2, PD_idt_stations.Workcenter_PLC_Name_1, PD_idt_stations.Workcenter_PLC_Name_2,
+PD_idt_stations.Workcenter_PLC_Name_Kanban_1, PD_idt_stations.Workcenter_PLC_Name_Kanban_2, PD_idt_stations.Allow_LoadMaterial, PD_idt_stations.Custom_Labels, PD_idt_stations.Allow_Plex_Transactions_2,
+CS_idt_partnumbers.PartNumber, EN_idt_downtimes_codes.RazonSpecific,datediff(MINUTE,LastPieceTime,GETDATE()) as Downtime
+FROM            PD_idt_stations LEFT JOIN
+CS_idt_partnumbers ON PD_idt_stations.LastPartID = CS_idt_partnumbers.PartID LEFT JOIN
+EN_idt_downtimes_codes ON PD_idt_stations.DownTimeCodeID = EN_idt_downtimes_codes.DownTimeCodeID
+WHERE (PD_idt_stations.AreaID = @Row0) AND (PD_idt_stations.BeFirstActive = 1 or StationID in (Select Stationid from PD_tbl_station_position)) AND StationID not in (SELECT [Sub_Station_ID] FROM [Part_Station_SubStation] WHERE Station_ID<>Sub_Station_ID) Order by PD_idt_stations.SortNo ASC", Parameters);
+
+  foreach (DataRow row_station in dt_workcentersoee.Rows)
+  {
+    SqlParameter[] dtParameters = new SqlParameter[]{
+      new SqlParameter("@StationID",SqlDbType.Int) {Value = Convert.ToInt32(row_station["StationID"].ToString())},
+      new SqlParameter("@Row0",SqlDbType.Int) {Value = Convert.ToInt32(row_station[0].ToString())},
+    };
+
+    DataTable dt_update = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT max(trndate) as trndate FROM [Part_Station_Material_Load_ShouldBe] where StationID=@StationID", dtParameters);
+
+    <div class="uk-grid">
+      <div class="uk-width-1-1">
+        <div class="md-card pd-20">
+          <a class="login-text" href="~/Dashboards/Station/Index/@row_station["StationID"].ToString()?year=@Model.year&month=@Model.month&day=@Model.day">
+            @row_station[1].ToString() @row_station["PartNumber"].ToString() @row_station[14].ToString()
+          </a>
+          @{
+            if (dt_update.Rows.Count > 0)
+            {
+              <span class="fs-11">@dt_update.Rows[0][0].ToString()</span>
+            }
+          }
+          @{
+
+            DataTable dtexiste = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT        CONCAT(CS_idt_partnumbers.PartNumber,Part_Station_Material_Load_ShouldBe.Side) as PN,CONCAT(ISNULL(Part_Station_Material_Load.MachineID, Part_Station_Material_Load_ShouldBe.MachineID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.TableID, Part_Station_Material_Load.TableID), '-',
+                                   ISNULL(Part_Station_Material_Load_ShouldBe.PositionID, Part_Station_Material_Load.PositionID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.DivisionID, Part_Station_Material_Load.DivisionID)) AS MTPD,
+                                   ISNULL(PPS.Part_No, 'NA') AS ShouldBe, CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Serial_No ELSE '' END AS Serial_No,
+                                   CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Balance_Quantity ELSE - 1 END AS Balance_Quantity
+FROM            Part_Station_Material_Load_ShouldBe LEFT JOIN
+                                   CS_idt_partnumbers ON Part_Station_Material_Load_ShouldBe.PartID = CS_idt_partnumbers.PartID LEFT  JOIN
+                                   Part_Station_Material_Load ON Part_Station_Material_Load.StationID = Part_Station_Material_Load_ShouldBe.StationID AND Part_Station_Material_Load.MachineID = Part_Station_Material_Load_ShouldBe.MachineID AND
+                                   Part_Station_Material_Load.TableID = Part_Station_Material_Load_ShouldBe.TableID AND Part_Station_Material_Load.PositionID = Part_Station_Material_Load_ShouldBe.PositionID AND
+                                   Part_Station_Material_Load.DivisionID = Part_Station_Material_Load_ShouldBe.DivisionID  and Part_Station_Material_Load.ExpireTime>GETDATE() LEFT  JOIN
+                                   PART AS PPS ON Part_Station_Material_Load_ShouldBe.Part_Key = PPS.Part_Key LEFT  JOIN
+                                   PART ON Part_Station_Material_Load.Part_Key = PART.Part_Key
+WHERE ((Part_Station_Material_Load_ShouldBe.StationID = @Row0 AND Part_Station_Material_Load_ShouldBe.MachineID > '0'))  Order by MTPD", dtParameters);
+
+            if (dtexiste.Rows.Count > 0)
+            {
+
+
+              <div class="uk-grid">
+                <div class="uk-width-1-4">
+                  Maq 1
+
+                  @{
+                    DataTable dt_m1 = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT        CONCAT(CS_idt_partnumbers.PartNumber,Part_Station_Material_Load_ShouldBe.Side) as PN,CONCAT(ISNULL(Part_Station_Material_Load.MachineID, Part_Station_Material_Load_ShouldBe.MachineID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.TableID, Part_Station_Material_Load.TableID), '-',
+                                                                                 ISNULL(Part_Station_Material_Load_ShouldBe.PositionID, Part_Station_Material_Load.PositionID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.DivisionID, Part_Station_Material_Load.DivisionID)) AS MTPD,
+                                                                                 ISNULL(PPS.Part_No, 'NA') AS ShouldBe, CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Serial_No ELSE '' END AS Serial_No,
+                                                                                 CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Balance_Quantity ELSE - 1 END AS Balance_Quantity
+FROM            Part_Station_Material_Load_ShouldBe LEFT JOIN
+                                                                                 CS_idt_partnumbers ON Part_Station_Material_Load_ShouldBe.PartID = CS_idt_partnumbers.PartID LEFT  JOIN
+                                                                                 Part_Station_Material_Load ON Part_Station_Material_Load.StationID = Part_Station_Material_Load_ShouldBe.StationID AND Part_Station_Material_Load.MachineID = Part_Station_Material_Load_ShouldBe.MachineID AND
+                                                                                 Part_Station_Material_Load.TableID = Part_Station_Material_Load_ShouldBe.TableID AND Part_Station_Material_Load.PositionID = Part_Station_Material_Load_ShouldBe.PositionID AND
+                                                                                 Part_Station_Material_Load.DivisionID = Part_Station_Material_Load_ShouldBe.DivisionID  and Part_Station_Material_Load.ExpireTime>GETDATE()  LEFT  JOIN
+                                                                                 PART AS PPS ON Part_Station_Material_Load_ShouldBe.Part_Key = PPS.Part_Key LEFT  JOIN
+                                                                                 PART ON Part_Station_Material_Load.Part_Key = PART.Part_Key
+WHERE ((Part_Station_Material_Load_ShouldBe.StationID = @Row0  AND Part_Station_Material_Load_ShouldBe.MachineID ='1'))
+                                                                                                                                                                                                              Order by MTPD", dtParameters);
+
+                  }
+                  <div class="mvc-grid mn-t-15 fs-11">
+                    <table border="1">
+                      <thead>
+                        <tr>
+                          @foreach (System.Data.DataColumn col in dt_m1.Columns)
+                          {
+                            <th>@col.Caption</th>
+                          }
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach (System.Data.DataRow rowstation in dt_m1.Rows)
+                        {
+                          var nocol = 1;
+                          <tr>
+                            @foreach (var cell in rowstation.ItemArray)
+                            {
+                              if (rowstation[4].ToString().Contains("-") & nocol > 3)
+                              {
+                                <td class="" style="color:red">@cell.ToString()</td>
+                              }
+                              else
+                              {
+                                <td class="">@cell.ToString()</td>
+                              }
+                              nocol += 1;
+                            }
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="uk-width-1-4">
+                  Maq 2
+
+                  @{
+                    DataTable dt_m2 = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT        CONCAT(CS_idt_partnumbers.PartNumber,Part_Station_Material_Load_ShouldBe.Side) as PN,CONCAT(ISNULL(Part_Station_Material_Load.MachineID, Part_Station_Material_Load_ShouldBe.MachineID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.TableID, Part_Station_Material_Load.TableID), '-',
+                                                                                 ISNULL(Part_Station_Material_Load_ShouldBe.PositionID, Part_Station_Material_Load.PositionID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.DivisionID, Part_Station_Material_Load.DivisionID)) AS MTPD,
+                                                                                 ISNULL(PPS.Part_No, 'NA') AS ShouldBe, CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Serial_No ELSE '' END AS Serial_No,
+                                                                                 CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Balance_Quantity ELSE - 1 END AS Balance_Quantity
+FROM            Part_Station_Material_Load_ShouldBe LEFT JOIN
+                                                                                 CS_idt_partnumbers ON Part_Station_Material_Load_ShouldBe.PartID = CS_idt_partnumbers.PartID LEFT  JOIN
+                                                                                 Part_Station_Material_Load ON Part_Station_Material_Load.StationID = Part_Station_Material_Load_ShouldBe.StationID AND Part_Station_Material_Load.MachineID = Part_Station_Material_Load_ShouldBe.MachineID AND
+                                                                                 Part_Station_Material_Load.TableID = Part_Station_Material_Load_ShouldBe.TableID AND Part_Station_Material_Load.PositionID = Part_Station_Material_Load_ShouldBe.PositionID AND
+                                                                                 Part_Station_Material_Load.DivisionID = Part_Station_Material_Load_ShouldBe.DivisionID  and Part_Station_Material_Load.ExpireTime>GETDATE()  LEFT  JOIN
+                                                                                 PART AS PPS ON Part_Station_Material_Load_ShouldBe.Part_Key = PPS.Part_Key LEFT  JOIN
+                                                                                 PART ON Part_Station_Material_Load.Part_Key = PART.Part_Key
+WHERE ((Part_Station_Material_Load_ShouldBe.StationID = @Row0   AND Part_Station_Material_Load_ShouldBe.MachineID ='2'))
+                                                                                                                                                                                                                    Order by MTPD", dtParameters);
+
+                  }
+                  <div class="mvc-grid mn-t-15 fs-11">
+                    <table border="1">
+                      <thead>
+                        <tr>
+                          @foreach (System.Data.DataColumn col in dt_m2.Columns)
+                          {
+                            <th>@col.Caption</th>
+                          }
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach (System.Data.DataRow rowstation in dt_m2.Rows)
+                        {
+                          var nocol = 1;
+                          <tr>
+                            @foreach (var cell in rowstation.ItemArray)
+                            {
+                              if (rowstation[4].ToString().Contains("-") & nocol > 3)
+                              {
+                                <td class="" style="color:red">@cell.ToString()</td>
+                              }
+                              else
+                              {
+                                <td class="">@cell.ToString()</td>
+                              }
+                              nocol += 1;
+                            }
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="uk-width-1-4">
+                  Maq 3
+
+                  @{
+                    DataTable dt_m3 = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT        CONCAT(CS_idt_partnumbers.PartNumber,Part_Station_Material_Load_ShouldBe.Side) as PN,CONCAT(ISNULL(Part_Station_Material_Load.MachineID, Part_Station_Material_Load_ShouldBe.MachineID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.TableID, Part_Station_Material_Load.TableID), '-',
+                                                                                 ISNULL(Part_Station_Material_Load_ShouldBe.PositionID, Part_Station_Material_Load.PositionID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.DivisionID, Part_Station_Material_Load.DivisionID)) AS MTPD,
+                                                                                 ISNULL(PPS.Part_No, 'NA') AS ShouldBe, CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Serial_No ELSE '' END AS Serial_No,
+                                                                                 CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Balance_Quantity ELSE - 1 END AS Balance_Quantity
+FROM            Part_Station_Material_Load_ShouldBe LEFT JOIN
+                                                                                 CS_idt_partnumbers ON Part_Station_Material_Load_ShouldBe.PartID = CS_idt_partnumbers.PartID LEFT  JOIN
+                                                                                 Part_Station_Material_Load ON Part_Station_Material_Load.StationID = Part_Station_Material_Load_ShouldBe.StationID AND Part_Station_Material_Load.MachineID = Part_Station_Material_Load_ShouldBe.MachineID AND
+                                                                                 Part_Station_Material_Load.TableID = Part_Station_Material_Load_ShouldBe.TableID AND Part_Station_Material_Load.PositionID = Part_Station_Material_Load_ShouldBe.PositionID AND
+                                                                                 Part_Station_Material_Load.DivisionID = Part_Station_Material_Load_ShouldBe.DivisionID  and Part_Station_Material_Load.ExpireTime>GETDATE()  LEFT  JOIN
+                                                                                 PART AS PPS ON Part_Station_Material_Load_ShouldBe.Part_Key = PPS.Part_Key LEFT  JOIN
+                                                                                 PART ON Part_Station_Material_Load.Part_Key = PART.Part_Key
+WHERE ((Part_Station_Material_Load_ShouldBe.StationID = @Row0  AND Part_Station_Material_Load_ShouldBe.MachineID ='3'))
+                                                                                                                                                                                                                          Order by MTPD", dtParameters);
+
+                  }
+                  <div class="mvc-grid mn-t-15 fs-11">
+                    <table border="1">
+                      <thead>
+                        <tr>
+                          @foreach (System.Data.DataColumn col in dt_m3.Columns)
+                          {
+                            <th>@col.Caption</th>
+                          }
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach (System.Data.DataRow rowstation in dt_m3.Rows)
+                        {
+                          var nocol = 1;
+                          <tr>
+                            @foreach (var cell in rowstation.ItemArray)
+                            {
+                              if (rowstation[4].ToString().Contains("-") & nocol > 3)
+                              {
+                                <td class="" style="color:red">@cell.ToString()</td>
+                              }
+                              else
+                              {
+                                <td class="">@cell.ToString()</td>
+                              }
+                              nocol += 1;
+                            }
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="uk-width-1-4">
+                  Maq 4
+
+                  @{
+                    DataTable dt_m4 = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT        CONCAT(CS_idt_partnumbers.PartNumber,Part_Station_Material_Load_ShouldBe.Side) as PN,CONCAT(ISNULL(Part_Station_Material_Load.MachineID, Part_Station_Material_Load_ShouldBe.MachineID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.TableID, Part_Station_Material_Load.TableID), '-',
+                                                                                 ISNULL(Part_Station_Material_Load_ShouldBe.PositionID, Part_Station_Material_Load.PositionID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.DivisionID, Part_Station_Material_Load.DivisionID)) AS MTPD,
+                                                                                 ISNULL(PPS.Part_No, 'NA') AS ShouldBe, CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Serial_No ELSE '' END AS Serial_No,
+                                                                                 CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Balance_Quantity ELSE - 1 END AS Balance_Quantity
+FROM            Part_Station_Material_Load_ShouldBe LEFT JOIN
+                                                                                 CS_idt_partnumbers ON Part_Station_Material_Load_ShouldBe.PartID = CS_idt_partnumbers.PartID LEFT  JOIN
+                                                                                 Part_Station_Material_Load ON Part_Station_Material_Load.StationID = Part_Station_Material_Load_ShouldBe.StationID AND Part_Station_Material_Load.MachineID = Part_Station_Material_Load_ShouldBe.MachineID AND
+                                                                                 Part_Station_Material_Load.TableID = Part_Station_Material_Load_ShouldBe.TableID AND Part_Station_Material_Load.PositionID = Part_Station_Material_Load_ShouldBe.PositionID AND
+                                                                                 Part_Station_Material_Load.DivisionID = Part_Station_Material_Load_ShouldBe.DivisionID  and Part_Station_Material_Load.ExpireTime>GETDATE()  LEFT  JOIN
+                                                                                 PART AS PPS ON Part_Station_Material_Load_ShouldBe.Part_Key = PPS.Part_Key LEFT  JOIN
+                                                                                 PART ON Part_Station_Material_Load.Part_Key = PART.Part_Key
+WHERE ((Part_Station_Material_Load_ShouldBe.StationID = @Row0 AND Part_Station_Material_Load_ShouldBe.MachineID ='4'))                                                                                                                        Order by MTPD", dtParameters);
+
+                  }
+                  <div class="mvc-grid mn-t-15 fs-11">
+                    <table border="1">
+                      <thead>
+                        <tr>
+                          @foreach (System.Data.DataColumn col in dt_m4.Columns)
+                          {
+                            <th>@col.Caption</th>
+                          }
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach (System.Data.DataRow rowstation in dt_m4.Rows)
+                        {
+                          var nocol = 1;
+                          <tr>
+                            @foreach (var cell in rowstation.ItemArray)
+                            {
+                              if (rowstation[4].ToString().Contains("-") & nocol > 3)
+                              {
+                                <td class="" style="color:red">@cell.ToString()</td>
+                              }
+                              else
+                              {
+                                <td class="">@cell.ToString()</td>
+                              }
+                              nocol += 1;
+                            }
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                @if (row_station[0].ToString() == "560")
+                {
+                  <div class="uk-width-1-4">
+                    Maq 5
+
+                    @{
+                      DataTable dt_m5 = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT        CONCAT(CS_idt_partnumbers.PartNumber,Part_Station_Material_Load_ShouldBe.Side) as PN,CONCAT(ISNULL(Part_Station_Material_Load.MachineID, Part_Station_Material_Load_ShouldBe.MachineID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.TableID, Part_Station_Material_Load.TableID), '-',ISNULL(Part_Station_Material_Load_ShouldBe.PositionID, Part_Station_Material_Load.PositionID), '-', ISNULL(Part_Station_Material_Load_ShouldBe.DivisionID, Part_Station_Material_Load.DivisionID)) AS MTPD, ISNULL(PPS.Part_No, 'NA') AS ShouldBe, CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Serial_No ELSE '' END AS Serial_No,CASE WHEN Part_Station_Material_Load_ShouldBe.Part_Key = Part_Station_Material_Load.Part_Key THEN Part_Station_Material_Load.Balance_Quantity ELSE - 1 END AS Balance_Quantity
+FROM            Part_Station_Material_Load_ShouldBe LEFT JOIN CS_idt_partnumbers ON Part_Station_Material_Load_ShouldBe.PartID = CS_idt_partnumbers.PartID LEFT  JOIN Part_Station_Material_Load ON Part_Station_Material_Load.StationID = Part_Station_Material_Load_ShouldBe.StationID AND Part_Station_Material_Load.MachineID = Part_Station_Material_Load_ShouldBe.MachineID AND Part_Station_Material_Load.TableID = Part_Station_Material_Load_ShouldBe.TableID AND Part_Station_Material_Load.PositionID = Part_Station_Material_Load_ShouldBe.PositionID AND Part_Station_Material_Load.DivisionID = Part_Station_Material_Load_ShouldBe.DivisionID  and Part_Station_Material_Load.ExpireTime>GETDATE()  LEFT  JOIN PART AS PPS ON Part_Station_Material_Load_ShouldBe.Part_Key = PPS.Part_Key LEFT  JOIN PART ON Part_Station_Material_Load.Part_Key = PART.Part_Key
+WHERE ((Part_Station_Material_Load_ShouldBe.StationID = @Row0 AND Part_Station_Material_Load_ShouldBe.MachineID ='5'))                                                                                                                        Order by MTPD", dtParameters);
+
+                    }
+                    <div class="mvc-grid mn-t-15 fs-11">
+                      <table border="1">
+                        <thead>
+                          <tr>
+                            @foreach (System.Data.DataColumn col in dt_m5.Columns)
+                            {
+                              <th>@col.Caption</th>
+                            }
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach (System.Data.DataRow rowstation in dt_m5.Rows)
+                          {
+                            var nocol = 1;
+                            <tr>
+                              @foreach (var cell in rowstation.ItemArray)
+                              {
+                                if (rowstation[4].ToString().Contains("-") & nocol > 3)
+                                {
+                                  <td class="" style="color:red">@cell.ToString()</td>
+                                }
+                                else
+                                {
+                                  <td class="">@cell.ToString()</td>
+                                }
+                                nocol += 1;
+                              }
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+            else
+            {
+              // GET PLEX BOM AND Check IT.
+
+              DataTable dtCurrent = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT
+                                            CASE WHEN Stations.Alias = '' THEN Stations.StationName ELSE Stations.Alias END as StationName,
+                                            isnull(PN.PartNumber, '') as PartNumber,
+                                            isnull(jobs.Side, '') as Side,
+                                            ISNULL(Part_Bin.Bin_Name, '') as BIN,
+                                            jobs.ID,
+                                            jobs.JobType,
+                                            jobs.jobid,
+                                            case when jobs.JobType = 1 then Station.Workcenter_Key Else Station.Workcenter_Key_Kanban End as Workcenter_Key,
+                                            Stations.Workcenter_Key_1,
+                                            Stations.Workcenter_Key_2,
+                                            Stations.Workcenter_Key_Kanban_1,
+                                            Stations.Workcenter_Key_Kanban_2,
+                                            Stations.Allow_LoadMaterial,
+                                            isnull(Station.SetupID, 0) as SetupID,
+                                            isnull(PN.PartID, 0) as PartID,
+                                            isnull(Stations.AreaID, 0) as AreaID, isnull(Stations.ShareLacation, '') as ShareLocation, jobs.GroupMLS as BinID
+                                            From  PD_idt_stations Station
+                                            LEFT JOIN PD_idt_stations Stations ON Station.StationID = Stations.StationID
+                                            LEFT JOIN(Select * From PD_tbl_jobs_normal) jobs
+                                            ON jobs.JobType = Station.LastJobType AND jobs.ID = Station.LastJob
+                                            LEFT JOIN CS_idt_partnumbers PN ON jobs.PartID = PN.PartID
+                                            LEFT JOIN Part_Bin ON Part_Bin.Part_ID = jobs.partid and Part_Bin.BIn_ID = jobs.GroupMLS
+                                            WHERE Station.StationID = @Row0", dtParameters);
+
+              if (dtCurrent.Rows.Count > 0)
+              {
+                Firstronic.Framework.BePlex.DataSource_Result ds_BOm = Firstronic.Framework.BePlex.ds_Setup_BOMs_Get_Quickly(dtCurrent.Rows[0]["Workcenter_Key"].ToString());
+
+                ds_BOm.Dt.Columns.Add("Loaded", typeof(string));
+                ds_BOm.Dt.Columns.Add("Position", typeof(string));
+
+                bool distinct = false;
+                string pn = "";
+
+                DataTable dt_new = new DataTable();
+
+                dt_new.Columns.Add("PartNo", typeof(string));
+
+                foreach (DataRow item in ds_BOm.Dt.Rows)
+                {
+                  SqlParameter[] dtLoadeddParameters = new SqlParameter[]{
+                    new SqlParameter("@StationID",SqlDbType.Int) {Value = Convert.ToInt32(dtCurrent.Rows[0]["Workcenter_Key"].ToString())},
+                    new SqlParameter("@Row0",SqlDbType.VarChar) {Value = item[0].ToString()},
+                  };
+
+                  DataTable dt_loadedd = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT   [PART].Part_No,CONCAT([MachineID],'-',[TableID],'-',[PositionID]) as Position FROM            Part_Station_Material_Load INNER JOIN [PART] ON Part_Station_Material_Load.Part_Key = [PART].Part_Key where Part_Station_Material_Load.Workcenter_Key = @StationID and Part_No = @Row0", dtLoadeddParameters);
+
+                  if (dt_loadedd.Rows.Count > 0)
+                  {
+                    item[1] = "OK";
+                    item[2] = dt_loadedd.Rows[0][1].ToString();
+                  }
+                  else
+                  {
+                    dt_new.Rows.Add(item[0].ToString());
+                    distinct = true;
+                  }
+
+                  ds_BOm.Dt.AcceptChanges();
+                }
+
+                <div class="uk-grid">
+                  <div class="uk-width-1-4">
+                    PLEX BOM
+                    <div class="mvc-grid mn-t-15 fs-11">
+                      <table border="1">
+                        <thead>
+                          <tr>
+                            @foreach (System.Data.DataColumn col in ds_BOm.Dt.Columns)
+                            {
+                              <th>@col.Caption</th>
+                            }
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach (System.Data.DataRow rowstation in ds_BOm.Dt.Rows)
+                          {
+                            <tr>
+                              @foreach (var cell in rowstation.ItemArray)
+                              {
+                                if (rowstation[1].ToString() == "")
+                                {
+                                  <td class="" style="color:red">@cell.ToString()</td>
+                                }
+                                else
+                                {
+                                  <td class="">@cell.ToString()</td>
+                                }
+                              }
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="uk-grid">
+      <div class="uk-width-1-1">
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  }
+}
+
+
+

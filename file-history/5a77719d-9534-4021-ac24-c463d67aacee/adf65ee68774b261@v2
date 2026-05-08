@@ -1,0 +1,416 @@
+@using System.Data
+@using System.Globalization
+@using NonFactors.Mvc.Grid;
+@using System.Data;
+@using System.Data.SqlClient;
+@using Firstronic.Framework.APIs;
+
+@model Firstronic.Areas.Dashboards.Models.custom_trndates
+
+@{
+  DateTime dia_current = new DateTime(Model.year, Model.month, Model.day);
+  DateTime dia_yesterday = dia_current.AddDays(-1);
+  DateTime dia_tomorrow = dia_current.AddDays(+1);
+
+  var u_yesterday = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_yesterday.Add("year", dia_yesterday.Year);
+  u_yesterday.Add("month", dia_yesterday.Month);
+  u_yesterday.Add("day", dia_yesterday.Day);
+
+  var u_tomorrow = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_tomorrow.Add("year", dia_tomorrow.Year);
+  u_tomorrow.Add("month", dia_tomorrow.Month);
+  u_tomorrow.Add("day", dia_tomorrow.Day);
+
+  Model.current = dia_current;
+  SqlParameter[] parameters = new SqlParameter[] { new SqlParameter("@AreaID", SqlDbType.Int) { Value = Model.areaid } };
+
+  var AreaName = Firstronic.Framework.Queries.GetStringFromQuery("SELECT [Area] FROM [PD_idt_areas] WHERE AreaID=@AreaID", parameters);
+
+  DataTable dt_areas = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable(
+    areaTypeIds: new int[] { 1 },
+    activeReport: true);
+
+  string nextareaid = Model.areaid.ToString();
+  string nextarea = AreaName;
+
+  string prevareaid = Model.areaid.ToString();
+  string prevarea = AreaName;
+
+  int index = -1;
+  DataRow[] rows = dt_areas.Select("AreaID='" + Model.areaid + "'");
+  if (rows.Count() > 0)
+  {
+    index = dt_areas.Rows.IndexOf(rows[0]);
+  }
+
+  try
+  {
+    nextareaid = dt_areas.Rows[index + 1][0].ToString();
+    nextarea = dt_areas.Rows[index + 1][1].ToString();
+  }
+  catch
+  {
+    nextareaid = dt_areas.Rows[0][0].ToString();
+    nextarea = dt_areas.Rows[0][1].ToString();
+  }
+
+  try
+  {
+    prevareaid = dt_areas.Rows[index - 1][0].ToString();
+    prevarea = dt_areas.Rows[index - 1][1].ToString();
+  }
+  catch
+  {
+    prevareaid = dt_areas.Rows[dt_areas.Rows.Count - 1][0].ToString();
+    prevarea = dt_areas.Rows[dt_areas.Rows.Count - 1][1].ToString();
+  }
+
+}
+
+@section head{
+  <script src="~/Content/vendor/raphael/raphael.min.js"></script>
+  <script src="~/Content/vendor/morris/morris.js"></script>
+  <link href="~/Content/vendor/morris/morris.css" rel="stylesheet">
+}
+
+<div class="uk-card md-card mn-b-25">
+  <div class="md-card-content fw-600 fs-14">
+    <div class="uk-clearfix">
+      <div class="uk-float-left">
+        OEE @dia_current.ToString("yyyy-MM-dd")
+        @Html.HiddenFor(y => y.stationid, new { id = "txtStationID" })
+      </div>
+      <div class="uk-float-right">
+        <div class="uk-grid" uk-grid>
+          <div class="uk-width-1-1 text-right uk-margin-small-top fs-12">
+            <a href="@Url.RouteUrl(u_yesterday)"><span class="material-icons">arrow_left</span></a>
+
+            @Html.TextBoxFor(y => y.current, new { @id = "ddlDateUpdate", @Value = Model.current.ToString("MM/dd/yyyy") })
+
+            <a href="@Url.RouteUrl(u_tomorrow)"><span class="material-icons">arrow_right</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@* MAIN *@
+
+@{
+  DataTable dt_areas2 = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable(
+    areaTypeIds: new int[] { 1, 2 },
+    activeReport: true,
+    includeAreaIds: Model.areaid == 0 ? null : new int[] { Model.areaid });
+}
+
+<div class="md-card">
+  <div class="md-card-content mvc-grid">
+    <table class="table">
+      <tr>
+        <th>Area</th>
+        <th>Description</th>
+        @for (int ii = 0; ii < 7; ii++)
+        {
+          <th>@dia_current.AddDays(-ii).ToString("yyyy-MM-dd")</th>
+        }
+      </tr>
+      @{
+        DataTable dtValuesTotal = new DataTable();
+        for (int ii = 0; ii < 7; ii++)
+        {
+          dtValuesTotal.Columns.Add("col_" + ii, typeof(double));
+        }
+
+        dtValuesTotal.Rows.Add(0, 0, 0, 0, 0, 0, 0); //Total
+        dtValuesTotal.Rows.Add(0, 0, 0, 0, 0, 0, 0); //Availab
+        dtValuesTotal.Rows.Add(0, 0, 0, 0, 0, 0, 0); //Efficecy
+        dtValuesTotal.Rows.Add(0, 0, 0, 0, 0, 0, 0); //Quality
+      }
+      @foreach (DataRow row in dt_areas2.Rows)
+      {
+        DataTable dtValues = new DataTable();
+        for (int ii = 0; ii < 7; ii++)
+        {
+          dtValues.Columns.Add("col_" + ii, typeof(double));
+        }
+
+        dtValues.Rows.Add(0, 0, 0, 0, 0, 0, 0); //Total
+        dtValues.Rows.Add(0, 0, 0, 0, 0, 0, 0); //Availab
+        dtValues.Rows.Add(0, 0, 0, 0, 0, 0, 0); //Efficecy
+        dtValues.Rows.Add(0, 0, 0, 0, 0, 0, 0); //Quality
+        dtValues.Rows.Add(0, 0, 0, 0, 0, 0, 0); //OEE MINUTES
+        dtValues.Rows.Add(0, 0, 0, 0, 0, 0, 0); //AVA MINUTES
+
+        SqlParameter[] dtWorkcentersparameters = new SqlParameter[]{
+          new SqlParameter("@AreaID",SqlDbType.Int){Value = row[0].ToString()},
+        };
+
+        DataTable dt_workcenters = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT PD_idt_stations.StationID, PD_idt_stations.StationName FROM PD_idt_stations WHERE (PD_idt_stations.AreaID = @AreaID) AND (PD_idt_stations.BeFirstActive = 1) Order by PD_idt_stations.StationName ASC", dtWorkcentersparameters);
+
+        if (dt_workcenters.Rows.Count > 0)
+        {
+          for (int ii = 0; ii < 7; ii++)
+          {
+            DateTime dateInfo = dia_current.AddDays(-ii);
+
+            double WorkcenterOK = 0;
+
+            double totalMinutesAvailables = 0;
+            double totalMinutesOEE = 0;
+
+
+            foreach (DataRow row_station in dt_workcenters.Rows)
+            {
+
+              Station.OEE newmodel = Model.Items.FirstOrDefault(n => n.stationID == int.Parse(row_station["StationID"].ToString()) && n.year == dateInfo.Year && n.month == dateInfo.Month && n.day == dateInfo.Day);
+
+              if (newmodel != null)
+              {
+
+                double good = Math.Floor(((newmodel.availability * newmodel.efficency * newmodel.quality)) * 100);
+                double bad = 100 - good;
+
+
+                if (newmodel.total > 0 )
+                {
+                  totalMinutesAvailables = totalMinutesAvailables + newmodel.minutesProgrammed;
+                  totalMinutesOEE = totalMinutesOEE + newmodel.minutesOEE;
+
+                  WorkcenterOK = WorkcenterOK + 1;
+
+                  dtValues.Rows[0][ii] = newmodel.total + (double)dtValues.Rows[0][ii];
+                  dtValues.Rows[1][ii] = newmodel.availability + (double)dtValues.Rows[1][ii];
+                  dtValues.Rows[2][ii] = newmodel.efficency + (double)dtValues.Rows[2][ii];
+                  dtValues.Rows[3][ii] = newmodel.quality + (double)dtValues.Rows[3][ii];
+
+
+                  dtValues.Rows[4][ii] = newmodel.minutesProgrammed + (double)dtValues.Rows[4][ii];
+                  dtValues.Rows[5][ii] = newmodel.minutesOEE + (double)dtValues.Rows[5][ii];
+
+                  if (row[0].ToString() == "1")
+                  {
+                    Console.WriteLine(newmodel.minutesOEE);
+                  }
+                }
+              }
+
+            }
+
+            if (WorkcenterOK == 0)
+            {
+              dtValues.Rows[1][ii] = 0;
+              dtValues.Rows[2][ii] = 0;
+              dtValues.Rows[3][ii] = 0;
+
+              dtValues.Rows[0][ii] = 0;
+
+
+              dtValues.Rows[0][ii] = 0;
+
+              try
+              {
+                dtValues.Rows[0][ii] = 0;
+              }
+              catch (Exception ex)
+              {
+              }
+
+              dtValuesTotal.Rows[1][ii] = 0;
+              dtValuesTotal.Rows[2][ii] = 0;
+              dtValuesTotal.Rows[3][ii] = 0;
+            }
+            else
+            {
+              dtValues.Rows[1][ii] = (double)dtValues.Rows[1][ii] / WorkcenterOK;
+              dtValues.Rows[2][ii] = (double)dtValues.Rows[2][ii] / WorkcenterOK;
+              dtValues.Rows[3][ii] = (double)dtValues.Rows[3][ii] / WorkcenterOK;
+
+
+              dtValues.Rows[0][ii] = 0;
+
+              try
+              {
+                dtValues.Rows[0][ii] = (totalMinutesOEE / totalMinutesAvailables);
+              }
+              catch (Exception ex)
+              {
+              }
+
+              dtValuesTotal.Rows[1][ii] = (double)dtValuesTotal.Rows[1][ii] + (double)dtValues.Rows[1][ii];
+              dtValuesTotal.Rows[2][ii] = (double)dtValuesTotal.Rows[2][ii] + (double)dtValues.Rows[2][ii];
+              dtValuesTotal.Rows[3][ii] = (double)dtValuesTotal.Rows[3][ii] + (double)dtValues.Rows[3][ii];
+            }
+
+
+          }
+
+          int iij = 0;
+          int rowno = 0;
+
+          foreach (DataRow drow in dtValues.Rows)
+          {
+            if (rowno < 4)
+            {
+
+
+              <tr class="@(iij==0?"borderTopSolid":"")">
+                @if (iij == 0)
+                {
+
+                  <td rowspan="4">@row["Area"].ToString()</td>
+                }
+
+                @{
+                  iij = iij + 1;
+                }
+
+                @switch (iij)
+                {
+                  case 1:
+                    <td>Total OEE:</td>
+                    break;
+                  case 2:
+                    <td>Availability</td>
+                    break;
+                  case 3:
+                    <td>Efficency</td>
+                    break;
+                  case 4:
+                    <td>Quality</td>
+                    break;
+                  case 5:
+                    <td>OEE</td>
+                    break;
+                  case 6:
+                    <td>Programmed</td>
+                    break;
+                }
+
+                @for (int ii = 0; ii < 7; ii++)
+                {
+                  if (ii < 6)
+                  {
+                    var previousvalue = double.Parse(drow[ii + 1].ToString());
+                    var newvalue = double.Parse(drow[ii].ToString());
+                    if (newvalue < previousvalue)
+                    {
+                      <td><a href="@Url.Action("Index","Areas",new {year=dia_current.AddDays(-ii).Year,month=dia_current.AddDays(-ii).Month,day=dia_current.AddDays(-ii).Day, id=row[0].ToString() })" class="uk-text-danger"><span class="material-icons uk-text-danger"> arrow_drop_down </span> @((double.Parse(drow[ii].ToString())).ToString("P2"))</a></td>
+                    }
+                    else
+                    {
+                      <td><a href="@Url.Action("Index","Areas",new {year=dia_current.AddDays(-ii).Year,month=dia_current.AddDays(-ii).Month,day=dia_current.AddDays(-ii).Day, id=row[0].ToString() })" class="uk-text-success"><span class="material-icons uk-text-success"> arrow_drop_up </span> @((double.Parse(drow[ii].ToString())).ToString("P2"))</a></td>
+                    }
+                  }
+                  else
+                  {
+                    <td> @((double.Parse(drow[ii].ToString())).ToString("P2"))</td>
+                  }
+                }
+              </tr>
+            }
+            else
+            {
+
+            }
+
+            rowno++;
+          }
+        }
+      }
+
+      @{
+        for (int ii = 0; ii < 7; ii++)
+        {
+          dtValuesTotal.Rows[1][ii] = (double)dtValuesTotal.Rows[1][ii] / dt_areas2.Rows.Count;
+          dtValuesTotal.Rows[2][ii] = (double)dtValuesTotal.Rows[2][ii] / dt_areas2.Rows.Count;
+          dtValuesTotal.Rows[3][ii] = (double)dtValuesTotal.Rows[3][ii] / dt_areas2.Rows.Count;
+
+          dtValuesTotal.Rows[0][ii] = (double)dtValuesTotal.Rows[1][ii] * (double)dtValuesTotal.Rows[2][ii] * (double)dtValuesTotal.Rows[3][ii];
+        }
+
+        int iij2 = 0;
+
+        foreach (DataRow drow in dtValuesTotal.Rows)
+        {
+          <tr class="@(iij2==0?"borderTopSolid":"")">
+            @if (iij2 == 0)
+            {
+              <td rowspan="4">Total</td>
+            }
+
+            @{
+              iij2 = iij2 + 1;
+            }
+
+            @switch (iij2)
+            {
+              case 1:
+                <td>Total OEE:</td>
+                break;
+              case 2:
+                <td>Availability</td>
+                break;
+              case 3:
+                <td>Efficency</td>
+                break;
+              case 4:
+                <td>Quality</td>
+                break;
+            }
+
+            @for (int ii = 0; ii < 7; ii++)
+            {
+              if (ii < 6)
+              {
+                var previousvalue = double.Parse(drow[ii + 1].ToString());
+                var newvalue = double.Parse(drow[ii].ToString());
+                if (newvalue < previousvalue)
+                {
+                  <td class="uk-text-danger"><span class="material-icons uk-text-danger"> arrow_drop_down </span> @((double.Parse(drow[ii].ToString())).ToString("P2"))</td>
+                }
+                else
+                {
+                  <td class="uk-text-success"><span class="material-icons uk-text-success"> arrow_drop_up </span> @((double.Parse(drow[ii].ToString())).ToString("P2"))</td>
+                }
+              }
+              else
+              {
+                <td> @((double.Parse(drow[ii].ToString())).ToString("P2"))</td>
+              }
+            }
+          </tr>
+        }
+      }
+
+
+    </table>
+  </div>
+</div>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+  // ddlDate update in changes
+  ddlDateUpdate_Update = () => {
+
+    try {
+      var trndate = $("#ddlDateUpdate").val();
+      var res = trndate.split("/");
+      var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname + '?year=' + res[2] + '&month=' + res[0] + '&day=' + res[1];
+
+
+      WaitingForm_Start()
+
+      window.location = newURL;
+
+    } catch (err) {
+      var x = 2;
+    }
+
+  }
+</script>
+
+
+

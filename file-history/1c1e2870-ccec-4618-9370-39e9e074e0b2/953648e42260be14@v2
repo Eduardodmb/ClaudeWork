@@ -1,0 +1,385 @@
+# Context Deep Dive - {{date:MMMM YYYY}}
+
+**Review date:** {{date:YYYY-MM-DD}}
+**Reviewer:** Eduardo Marquez
+**Duration:** 60 minutes (target)
+
+---
+
+## Monthly Overview
+
+**Month:** {{date:MMMM YYYY}}
+**Focus areas this month:**
+-
+
+**Key accomplishments:**
+-
+
+**Context growth:**
+- Learnings added: [count]
+- Skills created: [count]
+- Files archived: [count]
+
+---
+
+## 1. Ancient Content Review (>180 days)
+
+```dataview
+TABLE file.mtime as "Last Modified", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills"
+WHERE file.mtime < date(today) - dur(180 days)
+SORT file.mtime ASC
+```
+
+### Archive Decision
+
+**Archive (move to 99-Archive):**
+- [ ] `filename.md` - Reason:
+
+**Keep (still valuable):**
+- [ ] `filename.md` - Reason:
+- [ ] Update modification date to reset staleness timer
+
+---
+
+## 2. Learning → Skill Promotions
+
+```dataview
+TABLE file.mtime as "Created", file.ctime as "Originally Added"
+FROM "02-Learnings/_claude-learning/best-practices"
+WHERE contains(file.tags, "validated")
+  AND file.mtime < date(today) - dur(60 days)
+SORT file.mtime ASC
+```
+
+### Promotion Actions
+
+**Promote to skills:**
+- [ ] `learning-name.md` → Create `03-Skills/[name]/SKILL.md`
+- [ ] Document: What it does, when to use, examples
+- [ ] Add to skills inventory
+
+**Not ready yet:**
+- [ ] `learning-name.md` - Reason: (needs more validation, narrow use case)
+
+---
+
+## 3. Context Quality Audit
+
+### Completeness Check
+
+- [ ] **CLAUDE.md personal section** - Up to date?
+  - Work style current?
+  - Role context accurate?
+  - Current focus areas reflect reality?
+  - Decision framework still valid?
+
+- [ ] **Learning files** - Well-documented?
+  - All have frontmatter (tags, dates)?
+  - Clear descriptions?
+  - Links to related concepts?
+
+- [ ] **Skills** - Production-ready?
+  - Instructions clear?
+  - Examples provided?
+  - When-to-use documented?
+
+### Consistency Check
+
+- [ ] Tag taxonomy consistent across files?
+- [ ] Naming conventions followed?
+- [ ] File organization logical?
+- [ ] No duplicate content?
+
+### Accuracy Check
+
+- [ ] Technical details still accurate?
+- [ ] Process descriptions match current state?
+- [ ] Tool/technology versions current?
+- [ ] Contact information valid?
+
+---
+
+## 4. Domain-Specific Review
+
+### BeFirst Context
+
+```dataview
+TABLE file.mtime as "Updated"
+FROM "02-Learnings" OR "03-Skills"
+WHERE contains(file.tags, "befirst")
+SORT file.mtime DESC
+```
+
+**Health check:**
+- [ ] Database schemas current?
+- [ ] API documentation accurate?
+- [ ] Architecture diagrams up to date?
+- [ ] Stakeholder context valid?
+
+**Gaps identified:**
+-
+
+### Infrastructure Context
+
+```dataview
+TABLE file.mtime as "Updated"
+FROM "02-Learnings" OR "03-Skills"
+WHERE contains(file.tags, "infrastructure")
+SORT file.mtime DESC
+```
+
+**Health check:**
+- [ ] Server information current?
+- [ ] Network topology accurate?
+- [ ] Security policies up to date?
+- [ ] Vendor contacts valid?
+
+**Gaps identified:**
+-
+
+### Team/Process Context
+
+```dataview
+TABLE file.mtime as "Updated"
+FROM "02-Learnings" OR "03-Skills"
+WHERE contains(file.tags, "team") OR contains(file.tags, "process")
+SORT file.mtime DESC
+```
+
+**Health check:**
+- [ ] Org structure current?
+- [ ] Role descriptions accurate?
+- [ ] Workflows documented?
+- [ ] Communication patterns valid?
+
+**Gaps identified:**
+-
+
+---
+
+## 5. Graph Analysis
+
+**Open graph view:** Press `Ctrl+G`
+
+### Structural Patterns
+
+**Well-connected clusters (good):**
+-
+
+**Isolated islands (need integration):**
+-
+
+**Hub files (core concepts):**
+-
+
+### Actions
+
+- [ ] Create index/overview files for major clusters
+- [ ] Link isolated files to related concepts
+- [ ] Review hub files for accuracy (high usage = high importance)
+
+---
+
+## 6. Tag Taxonomy Review
+
+```dataview
+TABLE length(rows) as "Count"
+FROM "02-Learnings" OR "03-Skills"
+WHERE file.tags
+GROUP BY file.tags
+SORT length(rows) DESC
+```
+
+### Tag Health
+
+- [ ] All domain tags represented? (befirst, infrastructure, team)
+- [ ] Type tags consistent? (learning, skill, reference)
+- [ ] Status tags used? (validated, in-progress, archived)
+- [ ] No redundant/duplicate tags?
+
+### Tag Actions
+
+**Rename/merge:**
+- [ ] `old-tag` → `new-tag` (Reason: )
+
+**Add new tags:**
+- [ ] `new-tag` for domain/concept X
+
+**Deprecate:**
+- [ ] `obsolete-tag` (Reason: )
+
+---
+
+## 7. Personal Context Evolution
+
+### CLAUDE.md Updates
+
+**Section:** Work Style & Communication
+- [ ] Changes needed? (What: )
+
+**Section:** Role & Team Context
+- [ ] Changes needed? (What: )
+
+**Section:** BeFirst Platform Preferences
+- [ ] Changes needed? (What: )
+
+**Section:** Current Focus Areas
+- [ ] **Update for next month** (What's changing: )
+
+**Section:** Technical Preferences
+- [ ] New preferences to add? (What: )
+
+### New Sections Needed?
+
+- [ ] Add section: [Name] (Purpose: )
+
+---
+
+## 8. Context Quality Metrics (Trends)
+
+| Metric | This Month | Last Month | 2 Months Ago | Trend |
+|--------|------------|------------|--------------|-------|
+| Total learnings | [count] | [count] | [count] | ↑/↓/→ |
+| Total skills | [count] | [count] | [count] | ↑/↓/→ |
+| Stale items (>90d) | [count] | [count] | [count] | ↑/↓/→ |
+| Ancient items (>180d) | [count] | [count] | [count] | ↑/↓/→ |
+| Untagged items | [count] | [count] | [count] | ↑/↓/→ |
+| CLAUDE.md updates | [count] | [count] | [count] | ↑/↓/→ |
+| Promotions (L→S) | [count] | [count] | [count] | ↑/↓/→ |
+
+**Overall trend:** 🟢 Improving | 🟡 Stable | 🔴 Declining
+
+---
+
+## 9. Claude Session Quality
+
+### This Month's Sessions
+
+**Total sessions:** [estimate]
+**Quality assessment:**
+- 🟢 High-quality responses (Claude knew context): [%]
+- 🟡 Medium (needed some clarification): [%]
+- 🔴 Low (Claude lacked context): [%]
+
+**Patterns noticed:**
+-
+
+**Context gaps that caused issues:**
+-
+
+### Improvements to Make
+
+- [ ] Add context for: [domain/topic]
+- [ ] Clarify preference for: [decision type]
+- [ ] Document pattern: [recurring scenario]
+
+---
+
+## 10. Next Month's Focus
+
+### Priorities for {{date+30d:MMMM YYYY}}
+
+**Context areas to expand:**
+1.
+2.
+3.
+
+**Skills to develop:**
+1.
+2.
+
+**Learnings to promote:**
+-
+
+**Cleanup targets:**
+-
+
+### Success Metrics
+
+**By end of next month:**
+- [ ] Stale items reduced to <5
+- [ ] Untagged items = 0
+- [ ] [X] new skills created
+- [ ] CLAUDE.md "Current Focus" section updated
+- [ ] [Domain] context fully documented
+
+---
+
+## 11. Action Items (Carry Forward)
+
+**From this review:**
+- [ ] Priority item 1
+- [ ] Priority item 2
+- [ ] Priority item 3
+
+**From previous month (incomplete):**
+- [ ]
+- [ ]
+
+---
+
+## 12. Reflection
+
+### What worked this month?
+
+**Context improvements:**
+-
+
+**Process wins:**
+-
+
+**Claude session highlights:**
+-
+
+### What needs improvement?
+
+**Context gaps:**
+-
+
+**Process friction:**
+-
+
+**Session quality issues:**
+-
+
+### Lessons learned
+
+**About context management:**
+-
+
+**About my work style:**
+-
+
+**About Claude interaction:**
+-
+
+### Ideas for next review
+
+-
+
+---
+
+## Review Summary
+
+**Time spent:** [X] minutes
+**Files archived:** [count]
+**Promotions completed:** [count]
+**CLAUDE.md sections updated:** [count]
+**Action items created:** [count]
+
+**Context health:** 🟢 Excellent | 🟡 Good | 🟠 Fair | 🔴 Needs Work
+
+**Next monthly review:** {{date+30d:YYYY-MM-DD}} (First Monday)
+**Next weekly review:** {{date+7d:YYYY-MM-DD}} (Friday, 4:00 PM)
+
+---
+
+## Notes
+
+(Additional observations, patterns, or insights)
+
+---
+
+**Template version:** 1.0
+**Created:** 2026-05-08

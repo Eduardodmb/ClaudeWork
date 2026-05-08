@@ -1,0 +1,370 @@
+using Firstronic.Framework.Entities;
+
+using Firstronic.Core.Entities.App.First;
+using Firstronic.Framework.Data;
+using Firstronic.Framework.Attributes;
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace Firstronic.Areas.Manage.Controllers
+{
+  //===============================================================
+  // CONTROLLER START : Areas
+  //===============================================================
+
+  [Authorize(Roles = "BF Administrator")]
+  public class AreasController : BaseSecurityController
+  {
+    #region Fields
+    private readonly DataContext db;
+    #endregion Fields
+
+    #region Ctor
+    public AreasController()
+    {
+      db = new DataContext();
+    }
+    #endregion Ctor
+
+    public ActionResult Index()
+    {
+      var model = db.Database.SqlQuery<tbl_PD_idt_areas_FULL>($@"SELECT        PD_idt_areas.AreaID, PD_idt_areas.Area, PD_idt_areas.ActiveReport, PD_idt_areas.PlexOperation, PD_idt_areas.FlowID, PD_idt_areas.Active_Inventory, PD_idt_areas.Facility_Key,
+                         Common_Facilities.Facility_Name, PD_idt_areas.Area_Type_ID, PD_idt_areas.Able_To_Lock, PD_idt_areas.Visible
+FROM            PD_idt_areas INNER JOIN
+                         Common_Facilities ON PD_idt_areas.Facility_Key = Common_Facilities.Facility_Key Order by FlowID asc").ToArray().ToList().AsQueryable();
+
+      return View(model);
+    }
+
+
+    // GET:
+    public ActionResult Create()
+    {
+      var model = new tbl_PD_idt_areas_FULL();
+      var FirstronicFacilitiesList = new List<SelectListItem>();
+      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      model.FacilityList = FirstronicFacilitiesList;
+      var ActiveReport_List = new List<SelectListItem>();
+      ActiveReport_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      model.ActiveReport_List = ActiveReport_List;
+      var PlexOperation_List = new List<SelectListItem>();
+      PlexOperation_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      model.PlexOperation_List = PlexOperation_List;
+      var Active_Inventory_List = new List<SelectListItem>();
+      Active_Inventory_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      model.Active_Inventory_List = Active_Inventory_List;
+      var Able_To_Lock_List = new List<SelectListItem>();
+      Able_To_Lock_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      model.Able_To_Lock_List = Able_To_Lock_List;
+
+      var Area_Type_List = new List<SelectListItem>();
+      Area_Type_List = Framework.Functions.Dropdowns.GetAreasTypeList(null);
+      model.Area_Type_List = Area_Type_List;
+
+      var Visible_List = new List<SelectListItem>();
+      Visible_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      model.Visible_List = Visible_List;
+
+      var VerifyPlex_List = new List<SelectListItem>();
+      VerifyPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      model.VerifyPlex_List = VerifyPlex_List;
+      var RecordPlex_List = new List<SelectListItem>();
+      RecordPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      model.RecordPlex_List = RecordPlex_List;
+      var SetUpPlex_List = new List<SelectListItem>();
+      SetUpPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      model.SetUpPlex_List = SetUpPlex_List;
+      var PrintLabelPlex_List = new List<SelectListItem>();
+      PrintLabelPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      model.PrintLabelPlex_List = PrintLabelPlex_List;
+
+      return View(model);
+    }
+
+    [HttpPost]
+    [ValidateInput(false)]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Create")]
+    public ActionResult Create(tbl_PD_idt_areas_FULL model)
+    {
+      if (ModelState.IsValid)
+      {
+
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@Area",SqlDbType.VarChar){Value =(model.Area ?? "").ToString()},
+          new SqlParameter("@ActiveReport",SqlDbType.Bit){Value =model.ActiveReport},
+          new SqlParameter("@PlexOperation",SqlDbType.Bit){Value =model.PlexOperation},
+          new SqlParameter("@FlowID",SqlDbType.Int){Value =model.FlowID},
+          new SqlParameter("@Active_Inventory",SqlDbType.Bit){Value =model.Active_Inventory},
+          new SqlParameter("@Able_To_Lock",SqlDbType.Bit){Value =model.Able_To_Lock},
+          new SqlParameter("@Area_Type_ID",SqlDbType.Int){Value =model.Area_Type_ID},
+          new SqlParameter("@Facility_Key",SqlDbType.Int){Value =model.Facility_Key},
+          new SqlParameter("@Visible",SqlDbType.Bit){Value =model.Visible}
+        };
+
+        var result = Firstronic.Framework.Queries.InsertQuery($@"INSERT INTO [dbo].[PD_idt_areas]
+                   (Area,
+					ActiveReport,
+					PlexOperation,
+					FlowID,
+					Active_Inventory,
+					Able_To_Lock,
+					Area_Type_ID,
+					Facility_Key,
+					Visible)
+					VALUES (@Area,
+					@ActiveReport,
+					@PlexOperation,
+					@FlowID,
+					@Active_Inventory,
+					@Able_To_Lock,
+					@Area_Type_ID,
+					@Facility_Key,
+					@Visible)", parameters
+
+        );
+       
+
+        if (result > 0)
+        {
+          this.NotifySuccess("Successfully saved.");
+          return RedirectToAction("Edit", new { Id = result });
+        }
+        else if (result == 0)
+        {
+          this.NotifySuccess("Record can not save!");
+          return RedirectToAction("Index");
+        }
+        else
+        {
+          this.NotifyError("Error in database.");
+          return RedirectToAction("Index");
+        }
+      }
+
+      return View(model);
+    }
+
+    // GET
+    public ActionResult Edit(int id)
+    {
+
+      SqlParameter[] parameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id},
+      };
+
+      var model0 = Framework.Functions.Utilies.ConvertTo<tbl_PD_idt_areas>(Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT *   FROM PD_idt_areas WHERE AreaID=@Id ", parameters)).FirstOrDefault();
+
+      if (model0 == null)
+      {
+        this.NotifyError("Not found.");
+        return RedirectToAction("List");
+      }
+
+      var FirstronicFacilitiesList = new List<SelectListItem>();
+      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      var ActiveReport_List = new List<SelectListItem>();
+      ActiveReport_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      var PlexOperation_List = new List<SelectListItem>();
+      PlexOperation_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      var Active_Inventory_List = new List<SelectListItem>();
+      Active_Inventory_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      var Able_To_Lock_List = new List<SelectListItem>();
+      Able_To_Lock_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+
+      var Area_Type_List = new List<SelectListItem>();
+      Area_Type_List = Framework.Functions.Dropdowns.GetAreasTypeList(null);
+
+      var Visible_List = new List<SelectListItem>();
+      Visible_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+
+      var VerifyPlex_List = new List<SelectListItem>();
+      VerifyPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      var RecordPlex_List = new List<SelectListItem>();
+      RecordPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      var SetUpPlex_List = new List<SelectListItem>();
+      SetUpPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+      var PrintLabelPlex_List = new List<SelectListItem>();
+      PrintLabelPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+
+      var model = new tbl_PD_idt_areas_FULL
+      {
+        ActiveReport_List = ActiveReport_List,
+        PlexOperation_List = PlexOperation_List,
+        Active_Inventory_List = Active_Inventory_List,
+        Able_To_Lock_List = Able_To_Lock_List,
+        Area_Type_List = Area_Type_List,
+        Visible_List = Visible_List,
+        AreaID = model0.AreaID,
+        Area = model0.Area,
+        ActiveReport = model0.ActiveReport,
+        PlexOperation = model0.PlexOperation,
+        FlowID = model0.FlowID,
+        Active_Inventory = model0.Active_Inventory,
+        Facility_Key = model0.Facility_Key,
+        Able_To_Lock = model0.Able_To_Lock,
+        Area_Type_ID = model0.Area_Type_ID,
+        Visible = model0.Visible,
+        FacilityList = FirstronicFacilitiesList,
+        VerifyPlex_List = VerifyPlex_List,
+        RecordPlex_List = RecordPlex_List,
+        SetUpPlex_List = SetUpPlex_List,
+        PrintLabelPlex_List = PrintLabelPlex_List
+      };
+
+      model.RecordPlex = Firstronic.Framework.Queries.GetBooleanFromQuery($@"SELECT  case when COUNT(*) >0 then cast(1 as bit) else cast(0 as bit) end  FROM PD_tbl_Areas_RecordPlex WHERE areaid=@Id", parameters);
+
+      return View(model);
+    }
+
+    // POST EDIT
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Edit")]
+    public ActionResult Edit(tbl_PD_idt_areas_FULL model)
+    {
+      if (ModelState.IsValid)
+      {
+        var id = model.AreaID;
+
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@Id",SqlDbType.Int){Value = model.AreaID},
+        };
+
+        var record = Framework.Functions.Utilies.ConvertTo<tbl_PD_idt_areas>(Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT *   FROM PD_idt_areas WHERE AreaID=@Id ", parameters)).FirstOrDefault();
+
+
+        if (record is null)
+        {
+          this.NotifyError("Record not found.");
+          return RedirectToAction("Index");
+        }
+
+
+        SqlParameter[] updateParameters = new SqlParameter[]{
+          new SqlParameter("@AreaID",SqlDbType.Int){Value = model.AreaID},
+          new SqlParameter("@Area",SqlDbType.VarChar){Value =(model.Area ?? "").ToString()},
+          new SqlParameter("@ActiveReport",SqlDbType.Bit){Value =model.ActiveReport},
+          new SqlParameter("@PlexOperation",SqlDbType.Bit){Value =model.PlexOperation},
+          new SqlParameter("@FlowID",SqlDbType.Int){Value =model.FlowID},
+          new SqlParameter("@Active_Inventory",SqlDbType.Bit){Value =model.Active_Inventory},
+          new SqlParameter("@Able_To_Lock",SqlDbType.Bit){Value =model.Able_To_Lock},
+          new SqlParameter("@Area_Type_ID",SqlDbType.Int){Value =model.Area_Type_ID},
+          new SqlParameter("@Facility_Key",SqlDbType.Int){Value =model.Facility_Key},
+          new SqlParameter("@Visible",SqlDbType.Bit){Value =model.Visible}
+        };
+
+        var result = Firstronic.Framework.Queries.ExecuteQuery("UPDATE PD_idt_areas SET " +
+          "Area = @Area," +
+          "ActiveReport = @ActiveReport," +
+          "PlexOperation = @PlexOperation," +
+          "FlowID = @FlowID," +
+          "Active_Inventory = @Active_Inventory," +
+          "Able_To_Lock = @Able_To_Lock," +
+          "Area_Type_ID = @Area_Type_ID," +
+          "Facility_Key = @Facility_Key," +
+          "Visible = @Visible  WHERE AreaID = @AreaID", updateParameters);
+
+
+        if (result > 0)
+        {
+
+          var res1 = Firstronic.Framework.Queries.ExecuteQuery($@"DELETE FROM PD_tbl_Areas_RecordPlex WHERE AreaID = @Id", parameters);
+          
+          if (model.RecordPlex == true)
+          {
+            var res4_insert = Firstronic.Framework.Queries.ExecuteQuery($@"INSERT INTO PD_tbl_Areas_RecordPlex VALUES (@Id)", parameters);
+          }
+
+          this.NotifySuccess("Successfully saved.");
+        }
+        else if (result == 0)
+          this.NotifySuccess("Record can not save!");
+        else
+          this.NotifyError("Error in database.");
+
+        return RedirectToAction("Edit", new { id = record.AreaID });
+      }
+
+      return View(model);
+    }
+
+    //===============================================================
+    // DROPDOWNS: FILL STATIONS
+    //===============================================================
+    [HttpPost]
+    [AllowAnonymous]
+    public ActionResult FillStations(int? AreaID, string All = "", int onlyactive = 1)
+    {
+      // All: Means SHOW ALL Option
+
+      SqlParameter[] sqlParameters = new SqlParameter[]{
+          new SqlParameter("@AreaID",SqlDbType.Int){Value = AreaID},
+          new SqlParameter("@onlyactive",SqlDbType.Int){Value = onlyactive}
+      };
+
+      if (AreaID == 0)
+      {
+        All = "ALL";
+      }
+
+      var stations = Firstronic.Framework.Queries.GetSelectedFromQuery(@"SELECT [StationID], StationName as StationName  FROM [PD_idt_stations] Where (@AreaID = 0 OR AreaID=@AreaID)  AND (@onlyactive = -1 OR BeFirstActive=@onlyactive)", sqlParameters);
+
+      if (All == "ALL")
+      {
+        stations = Firstronic.Framework.Queries.GetSelectedFromQuery(@"SELECT 0 as StationID, 'ALL' as StationName UNION ALL SELECT [StationID]
+                  , StationName as StationName  FROM [PD_idt_stations] Where (@AreaID = 0 OR AreaID=@AreaID)  AND (@onlyactive = -1 OR BeFirstActive=@onlyactive)", sqlParameters);
+      }
+
+      return Json(stations, JsonRequestBehavior.AllowGet);
+    }
+
+    //===============================================================
+    // DROPDOWNS: FILL PROCESSES
+    //===============================================================
+    [HttpPost]
+    [AllowAnonymous]
+    public ActionResult FillProcesses(int? AreaID, string All = "", string onlyactive = "-1")
+    {
+
+      SqlParameter[] sqlParameters = new SqlParameter[]{
+          new SqlParameter("@AreaID",SqlDbType.Int){Value = AreaID}
+      };
+
+      var processses = Firstronic.Framework.Queries.GetSelectedFromQuery(@"SELECT [AutoID] ,[ProcessName] FROM [Part_Areas_Processes] where AreaID=@AreaID Order by ProcessName", sqlParameters);
+
+      if (All == "ALL")
+      {
+        processses = Firstronic.Framework.Queries.GetSelectedFromQuery(@"SELECT [AutoID] ,[ProcessName] FROM [Part_Areas_Processes] Order by ProcessName", sqlParameters);
+      }
+
+      return Json(processses, JsonRequestBehavior.AllowGet);
+    }
+    //===============================================================
+    // DROPDOWNS: FILL PROCESSES Assembly Instructions
+    //===============================================================
+    [HttpPost]
+    [AllowAnonymous]
+    public ActionResult FillProcessesAssemblyInstructions(int? AreaID, string All = "", string onlyactive = "-1")
+    {
+
+      SqlParameter[] sqlParameters = new SqlParameter[]{
+          new SqlParameter("@AreaID",SqlDbType.Int){Value = AreaID}
+      };
+
+      var processses = Firstronic.Framework.Queries.GetSelectedFromQuery(@"SELECT[AutoID], [ProcessName] FROM[EN_idt_processname] WHERE([AreaID] = @AreaID)", sqlParameters);
+
+    
+
+      return Json(processses, JsonRequestBehavior.AllowGet);
+    }
+  }
+}

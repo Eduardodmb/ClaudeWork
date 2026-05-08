@@ -1,0 +1,1065 @@
+2026-05-05T19:27:12.547Z [DEBUG] [init] configureGlobalMTLS starting
+2026-05-05T19:27:12.548Z [DEBUG] [init] configureGlobalMTLS complete
+2026-05-05T19:27:12.548Z [DEBUG] [init] configureGlobalAgents starting
+2026-05-05T19:27:12.548Z [DEBUG] [init] configureGlobalAgents complete
+2026-05-05T19:27:12.591Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2026-05-05T19:27:12.603Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-05-05T19:27:12.611Z [DEBUG] [ToolSearch:optimistic] mode=tst-auto, ENABLE_TOOL_SEARCH=undefined, result=true
+2026-05-05T19:27:12.612Z [DEBUG] [STARTUP] Running setup()...
+2026-05-05T19:27:12.612Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2026-05-05T19:27:12.623Z [DEBUG] Loading skills from: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\emarquez\.claude\skills, project=[]
+2026-05-05T19:27:12.629Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at Pw5 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:1200)
+    at oA1 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2071)
+2026-05-05T19:27:12.629Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-05T19:27:12.629Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at f04 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24927)
+    at Object.callback (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:7624:507)
+2026-05-05T19:27:12.629Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at Fy1 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:362:1158)
+2026-05-05T19:27:12.629Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at my1 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:362:1763)
+2026-05-05T19:27:12.629Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at q_8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:962:43470)
+2026-05-05T19:27:12.629Z [DEBUG] Error log sink initialized
+2026-05-05T19:27:12.649Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2026-05-05T19:27:12.649Z [DEBUG] Total plugin skills loaded: 0
+2026-05-05T19:27:12.649Z [DEBUG] Total plugin commands loaded: 0
+2026-05-05T19:27:12.650Z [DEBUG] [STARTUP] setup() completed in 38ms
+2026-05-05T19:27:12.650Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-05-05T19:27:12.666Z [DEBUG] Registered 0 hooks from 0 plugins
+2026-05-05T19:27:12.674Z [DEBUG] [Claude in Chrome] Found chrome profiles: Default
+2026-05-05T19:27:12.685Z [DEBUG] [Claude in Chrome] Found edge profiles: Default, Profile 1, Profile 2, Profile 3
+2026-05-05T19:27:12.688Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\emarquez\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2026-05-05T19:27:12.691Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\verify-app.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.691Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\verify-app.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.691Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\domain-validator.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.691Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\domain-validator.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.692Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\doc-reviewer.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.692Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\doc-reviewer.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.692Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\skill-developer.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.692Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\skill-developer.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.692Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\codebase-locator.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.692Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\codebase-locator.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.692Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\README.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.692Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\README.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.693Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\codebase-analyzer.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.693Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\codebase-analyzer.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.693Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\pattern-finder.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.693Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\pattern-finder.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.693Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\code-simplifier.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.693Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\code-simplifier.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.693Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\oncall-guide.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.693Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\oncall-guide.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.694Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\code-architect.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.694Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\code-architect.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.694Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\knowledge-curator.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.694Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\knowledge-curator.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.694Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\build-validator.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.694Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\build-validator.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.694Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\index-updater.md is missing required 'name' in frontmatter
+2026-05-05T19:27:12.694Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\index-updater.md: Missing required "name" field in frontmatter
+2026-05-05T19:27:12.695Z [DEBUG] Total plugin agents loaded: 0
+2026-05-05T19:27:12.709Z [DEBUG] [Claude in Chrome] Extension not found in any browser
+2026-05-05T19:27:12.723Z [DEBUG] Loaded 46 unique skills (46 unconditional, 0 conditional, managed: 0, user: 7, project: 0, additional: 0, legacy commands: 39)
+2026-05-05T19:27:12.723Z [DEBUG] getSkills returning: 46 skill dir commands, 0 plugin skills, 2 bundled skills
+2026-05-05T19:27:12.724Z [DEBUG] [STARTUP] Commands and agents loaded in 74ms
+2026-05-05T19:27:12.726Z [DEBUG] [STARTUP] Running showSetupScreens()...
+2026-05-05T19:27:12.727Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-05T19:27:12.729Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-05T19:27:12.853Z [DEBUG] [STARTUP] showSetupScreens() completed in 127ms
+2026-05-05T19:27:12.853Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-05-05T19:27:12.853Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-05-05T19:27:12.853Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-05-05T19:27:12.853Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:27:12.853Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:27:12.856Z [DEBUG] Total LSP servers loaded: 0
+2026-05-05T19:27:12.856Z [DEBUG] [STARTUP] MCP configs loaded in 253ms
+2026-05-05T19:27:12.856Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at Gp (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:962:43586)
+2026-05-05T19:27:12.862Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at HVz (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:7619:398)
+2026-05-05T19:27:12.864Z [DEBUG] [Reconnection] computeInitialTeamContext: No teammate context set (not a teammate)
+2026-05-05T19:27:12.870Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009232870
+2026-05-05T19:27:12.870Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:27:12.871Z [DEBUG] Temp file written successfully, size: 36486 bytes
+2026-05-05T19:27:12.871Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:27:12.871Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009232870 to C:\Users\emarquez\.claude.json
+2026-05-05T19:27:12.875Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:27:12.876Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2026-05-05T19:27:12.876Z [DEBUG] LSP manager initialized with 0 servers
+2026-05-05T19:27:12.879Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-05T19:27:12.879Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at Gp (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:962:43586)
+2026-05-05T19:27:12.880Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2026-05-05T19:27:12.880Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:27:12.880Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2026-05-05T19:27:12.880Z [DEBUG] installed_plugins.json doesn't exist, returning empty V2 object
+2026-05-05T19:27:12.880Z [DEBUG] Initialized versioned plugins system with 0 plugins
+2026-05-05T19:27:12.889Z [DEBUG] LSP server manager initialized successfully
+2026-05-05T19:27:12.889Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-05-05T19:27:12.895Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:27:12.909Z [DEBUG] [keybindings] KeybindingSetup initialized with 102 bindings, 0 warnings
+2026-05-05T19:27:12.945Z [DEBUG] [REPL:mount] REPL mounted, disabled=false
+2026-05-05T19:27:12.946Z [DEBUG] Official marketplace auto-install skipped: already_attempted
+2026-05-05T19:27:12.947Z [DEBUG] performStartupChecks called
+2026-05-05T19:27:12.948Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-05T19:27:12.948Z [DEBUG] Starting background plugin installations
+2026-05-05T19:27:12.948Z [DEBUG] performBackgroundPluginInstallations called
+2026-05-05T19:27:12.950Z [DEBUG] Loaded 2 CLAUDE.md/rules files:
+  [User] C:\Users\emarquez\.claude\CLAUDE.md (35722 chars)
+  [Project] S:\01_Repos\BeFirst_Services\CLAUDE.md (1520 chars)
+2026-05-05T19:27:12.952Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-05T19:27:12.964Z [DEBUG] Watching for changes in setting files C:\Users\emarquez\.claude\settings.json...
+2026-05-05T19:27:12.965Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-05T19:27:12.972Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-05-05T19:27:12.973Z [DEBUG] [claudeai-mcp] Gate returned: true
+2026-05-05T19:27:12.973Z [DEBUG] [claudeai-mcp] Fetching from https://api.anthropic.com/v1/mcp_servers?limit=1000
+2026-05-05T19:27:12.975Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2026-05-05T19:27:12.976Z [DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+2026-05-05T19:27:13.001Z [DEBUG] [keybindings] Watching for changes to C:\Users\emarquez\.claude\keybindings.json
+2026-05-05T19:27:13.043Z [DEBUG] Watching for changes in skill/command directories: C:\Users\emarquez\.claude\skills, C:\Users\emarquez\.claude\commands...
+2026-05-05T19:27:13.043Z [DEBUG] Git remote URL: https://github.com/SafariCircuitsLLC/BeFirst_Lacroix_Services.git
+2026-05-05T19:27:13.043Z [DEBUG] Parsed repository: SafariCircuitsLLC/BeFirst_Lacroix_Services from https://github.com/SafariCircuitsLLC/BeFirst_Lacroix_Services.git
+2026-05-05T19:27:13.043Z [DEBUG] Parsed repository: SafariCircuitsLLC/BeFirst_Lacroix_Services from URL: https://github.com/SafariCircuitsLLC/BeFirst_Lacroix_Services.git
+2026-05-05T19:27:13.043Z [DEBUG] Path S:\01_Repos\BeFirst_Services already tracked for repo safaricircuitsllc/befirst_lacroix_services
+2026-05-05T19:27:13.060Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:27:13.060Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:27:13.060Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:27:13.177Z [DEBUG] Remote settings: No settings found (404)
+2026-05-05T19:27:13.177Z [DEBUG] Programmatic settings change notification for policySettings
+2026-05-05T19:27:13.177Z [DEBUG] Plugin hooks: reloading due to policySettings change
+2026-05-05T19:27:13.182Z [DEBUG] Settings changed from policySettings, updating app state
+2026-05-05T19:27:13.184Z [DEBUG] Replacing all allow rules for destination 'userSettings' with 0 rule(s): []
+2026-05-05T19:27:13.184Z [DEBUG] Replacing all deny rules for destination 'userSettings' with 0 rule(s): []
+2026-05-05T19:27:13.184Z [DEBUG] Replacing all ask rules for destination 'userSettings' with 0 rule(s): []
+2026-05-05T19:27:13.184Z [DEBUG] Replacing all allow rules for destination 'projectSettings' with 0 rule(s): []
+2026-05-05T19:27:13.184Z [DEBUG] Replacing all deny rules for destination 'projectSettings' with 0 rule(s): []
+2026-05-05T19:27:13.184Z [DEBUG] Replacing all ask rules for destination 'projectSettings' with 0 rule(s): []
+2026-05-05T19:27:13.184Z [DEBUG] Replacing all allow rules for destination 'localSettings' with 0 rule(s): []
+2026-05-05T19:27:13.184Z [DEBUG] Replacing all deny rules for destination 'localSettings' with 0 rule(s): []
+2026-05-05T19:27:13.184Z [DEBUG] Replacing all ask rules for destination 'localSettings' with 0 rule(s): []
+2026-05-05T19:27:13.184Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2026-05-05T19:27:13.184Z [DEBUG] Registered 0 hooks from 0 plugins
+2026-05-05T19:27:13.207Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-05-05T19:27:13.239Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009233239
+2026-05-05T19:27:13.239Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:27:13.239Z [DEBUG] Temp file written successfully, size: 36486 bytes
+2026-05-05T19:27:13.240Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:27:13.240Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009233239 to C:\Users\emarquez\.claude.json
+2026-05-05T19:27:13.243Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:27:13.245Z [DEBUG] [claudeai-mcp] Fetched 1 servers
+2026-05-05T19:27:13.248Z [DEBUG] MCP server "claude.ai Microsoft 365": Initializing claude.ai proxy transport for server mcpsrv_01F7qWCv9sZFzK2mLQBm7twz
+2026-05-05T19:27:13.249Z [DEBUG] MCP server "claude.ai Microsoft 365": Using claude.ai proxy at https://mcp-proxy.anthropic.com/v1/mcp/mcpsrv_01F7qWCv9sZFzK2mLQBm7twz
+2026-05-05T19:27:13.249Z [DEBUG] MCP server "claude.ai Microsoft 365": claude.ai proxy transport created successfully
+2026-05-05T19:27:13.254Z [DEBUG] MCP server "claude.ai Microsoft 365": Starting connection with timeout of 30000ms
+2026-05-05T19:27:13.343Z [DEBUG] Org fast mode: disabled (preference)
+2026-05-05T19:27:13.482Z [DEBUG] MCP server "claude.ai Microsoft 365": claude.ai proxy connection failed after 234ms: Streamable HTTP error: Error POSTing to endpoint: {"type":"error","error":{"type":"authentication_error","message":"MCP server requires authentication but no OAuth token is configured.","details":{"error_code":"mcp_unauthorized_no_token"}},"request_id":"req_011CajyN9Zj9vucE9NfLQVvx"}
+2026-05-05T19:27:13.482Z [ERROR] MCP server "claude.ai Microsoft 365" Error: Streamable HTTP error: Error POSTing to endpoint: {"type":"error","error":{"type":"authentication_error","message":"MCP server requires authentication but no OAuth token is configured.","details":{"error_code":"mcp_unauthorized_no_token"}},"request_id":"req_011CajyN9Zj9vucE9NfLQVvx"}
+2026-05-05T19:27:13.483Z [DEBUG] MCP server "claude.ai Microsoft 365": Authentication required for claude.ai proxy server
+2026-05-05T19:27:51.181Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:27:51.181Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:27:51.182Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:27:51.182Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:27:51.394Z [DEBUG] Sending 42 skills via attachment (initial, 42 total sent)
+2026-05-05T19:27:51.398Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-05-05T19:27:51.398Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:27:51.398Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-05T19:27:51.399Z [DEBUG] FileHistory: Added snapshot for dae637eb-08e7-42c4-8f89-89cdd0639429, tracking 0 files
+2026-05-05T19:27:51.400Z [DEBUG] [useDeferredValue] Messages deferred by 2 (0→2)
+2026-05-05T19:27:51.415Z [DEBUG] Plugin autoupdate: skipped (auto-updater disabled)
+2026-05-05T19:27:51.422Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009271422
+2026-05-05T19:27:51.422Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:27:51.422Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:27:51.423Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:27:51.423Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009271422 to C:\Users\emarquez\.claude.json
+2026-05-05T19:27:51.427Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:27:51.429Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-05T19:27:51.450Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009271450
+2026-05-05T19:27:51.450Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:27:51.450Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:27:51.450Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:27:51.450Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009271450 to C:\Users\emarquez\.claude.json
+2026-05-05T19:27:51.455Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:27:51.457Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.13b; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:27:51.459Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:27:51.459Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:27:51.460Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:27:51.461Z [DEBUG] Total plugin output styles loaded: 0
+2026-05-05T19:27:51.488Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009271488
+2026-05-05T19:27:51.488Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:27:51.488Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:27:51.488Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:27:51.488Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009271488 to C:\Users\emarquez\.claude.json
+2026-05-05T19:27:51.492Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:27:51.495Z [DEBUG] autocompact: tokens=587 threshold=167000 effectiveWindow=180000
+2026-05-05T19:27:51.496Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:27:51.502Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009271502
+2026-05-05T19:27:51.502Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:27:51.502Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:27:51.502Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:27:51.502Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009271502 to C:\Users\emarquez\.claude.json
+2026-05-05T19:27:51.506Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:27:51.508Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:27:51.509Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:27:51.509Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:27:51.510Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:27:51.516Z [DEBUG] High write ratio: blit=828, write=852 (50.7% writes), screen=14x207
+2026-05-05T19:27:51.519Z [DEBUG] Stats cache is up to date
+2026-05-05T19:27:52.371Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:27:53.356Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:27:55.192Z [DEBUG] [useDeferredValue] Messages deferred by 1 (2→3)
+2026-05-05T19:27:55.673Z [DEBUG] [useDeferredValue] Messages deferred by 1 (3→4)
+2026-05-05T19:27:55.675Z [DEBUG] [useDeferredValue] Messages deferred by 1 (3→4)
+2026-05-05T19:27:55.679Z [DEBUG] [useDeferredValue] Messages deferred by 1 (3→4)
+2026-05-05T19:27:55.989Z [DEBUG] executePreToolHooks called for tool: Read
+2026-05-05T19:27:55.990Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2026-05-05T19:27:55.990Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:27:55.990Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2026-05-05T19:27:56.425Z [DEBUG] [useDeferredValue] Messages deferred by 1 (4→5)
+2026-05-05T19:27:56.433Z [DEBUG] High write ratio: blit=0, write=1083 (100.0% writes), screen=16x207
+2026-05-05T19:27:56.444Z [DEBUG] [useDeferredValue] Messages deferred by 1 (4→5)
+2026-05-05T19:27:56.452Z [DEBUG] [useDeferredValue] Messages deferred by 1 (4→5)
+2026-05-05T19:27:56.467Z [DEBUG] [useDeferredValue] Messages deferred by 1 (4→5)
+2026-05-05T19:27:56.485Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2026-05-05T19:27:56.485Z [DEBUG] Found 5 hook matchers in settings
+2026-05-05T19:27:56.485Z [DEBUG] Matched 1 unique hooks for query "Read" (1 before deduplication)
+2026-05-05T19:27:56.497Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:27:56.497Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:27:56.497Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:27:56.497Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:27:56.507Z [DEBUG] [useDeferredValue] Messages deferred by 4 (4→8)
+2026-05-05T19:27:56.539Z [DEBUG] autocompact: tokens=31921 threshold=167000 effectiveWindow=180000
+2026-05-05T19:27:56.540Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:27:56.554Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009276553
+2026-05-05T19:27:56.554Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:27:56.554Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:27:56.555Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:27:56.555Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009276553 to C:\Users\emarquez\.claude.json
+2026-05-05T19:27:56.560Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:27:56.563Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:27:56.569Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:27:56.569Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:27:56.572Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:27:57.680Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:28:04.795Z [DEBUG] [useDeferredValue] Messages deferred by 1 (8→9)
+2026-05-05T19:28:04.804Z [DEBUG] [useDeferredValue] Messages deferred by 1 (8→9)
+2026-05-05T19:28:05.259Z [DEBUG] [useDeferredValue] Messages deferred by 1 (9→10)
+2026-05-05T19:28:06.589Z [DEBUG] executePreToolHooks called for tool: Glob
+2026-05-05T19:28:06.593Z [DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+2026-05-05T19:28:06.593Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:28:06.593Z [DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+2026-05-05T19:28:06.799Z [DEBUG] [useDeferredValue] Messages deferred by 1 (10→11)
+2026-05-05T19:28:06.804Z [DEBUG] High write ratio: blit=0, write=1211 (100.0% writes), screen=20x207
+2026-05-05T19:28:06.827Z [DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+2026-05-05T19:28:06.827Z [DEBUG] Found 5 hook matchers in settings
+2026-05-05T19:28:06.827Z [DEBUG] Matched 1 unique hooks for query "Glob" (1 before deduplication)
+2026-05-05T19:28:06.830Z [DEBUG] [useDeferredValue] Messages deferred by 3 (11→14)
+2026-05-05T19:28:06.851Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:28:06.851Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:28:06.851Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:28:06.851Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:28:06.953Z [DEBUG] autocompact: tokens=32836 threshold=167000 effectiveWindow=180000
+2026-05-05T19:28:06.955Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:28:06.968Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009286968
+2026-05-05T19:28:06.969Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:28:06.970Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:28:06.970Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:28:06.970Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009286968 to C:\Users\emarquez\.claude.json
+2026-05-05T19:28:06.975Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:28:06.978Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:28:06.981Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:28:06.981Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:28:06.983Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:28:08.043Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:28:09.126Z [DEBUG] [useDeferredValue] Messages deferred by 1 (14→15)
+2026-05-05T19:28:09.133Z [DEBUG] [useDeferredValue] Messages deferred by 1 (14→15)
+2026-05-05T19:28:09.141Z [DEBUG] [useDeferredValue] Messages deferred by 1 (14→15)
+2026-05-05T19:28:09.147Z [DEBUG] [useDeferredValue] Messages deferred by 1 (14→15)
+2026-05-05T19:28:09.156Z [DEBUG] [useDeferredValue] Messages deferred by 1 (14→15)
+2026-05-05T19:28:09.918Z [DEBUG] executePreToolHooks called for tool: Grep
+2026-05-05T19:28:09.921Z [DEBUG] Getting matching hook commands for PreToolUse with query: Grep
+2026-05-05T19:28:09.921Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:28:09.921Z [DEBUG] Matched 0 unique hooks for query "Grep" (0 before deduplication)
+2026-05-05T19:28:10.089Z [DEBUG] [useDeferredValue] Messages deferred by 1 (15→16)
+2026-05-05T19:28:10.098Z [DEBUG] [useDeferredValue] Messages deferred by 1 (15→16)
+2026-05-05T19:28:10.114Z [DEBUG] [useDeferredValue] Messages deferred by 1 (15→16)
+2026-05-05T19:28:10.131Z [DEBUG] Getting matching hook commands for PostToolUse with query: Grep
+2026-05-05T19:28:10.131Z [DEBUG] Found 5 hook matchers in settings
+2026-05-05T19:28:10.131Z [DEBUG] Matched 1 unique hooks for query "Grep" (1 before deduplication)
+2026-05-05T19:28:10.134Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:28:10.134Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:28:10.135Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:28:10.135Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:28:10.136Z [DEBUG] autocompact: tokens=33010 threshold=167000 effectiveWindow=180000
+2026-05-05T19:28:10.137Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:28:10.152Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009290152
+2026-05-05T19:28:10.153Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:28:10.153Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:28:10.154Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:28:10.154Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009290152 to C:\Users\emarquez\.claude.json
+2026-05-05T19:28:10.158Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:28:10.163Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:28:10.167Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:28:10.167Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:28:10.169Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:28:10.178Z [DEBUG] [useDeferredValue] Messages deferred by 3 (16→19)
+2026-05-05T19:28:12.990Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:28:14.090Z [DEBUG] [useDeferredValue] Messages deferred by 1 (19→20)
+2026-05-05T19:28:14.267Z [DEBUG] executePreToolHooks called for tool: Read
+2026-05-05T19:28:14.271Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2026-05-05T19:28:14.271Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:28:14.271Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2026-05-05T19:28:14.366Z [DEBUG] [useDeferredValue] Messages deferred by 1 (20→21)
+2026-05-05T19:28:14.377Z [DEBUG] [useDeferredValue] Messages deferred by 1 (20→21)
+2026-05-05T19:28:14.383Z [DEBUG] [useDeferredValue] Messages deferred by 1 (20→21)
+2026-05-05T19:28:14.397Z [DEBUG] [useDeferredValue] Messages deferred by 1 (20→21)
+2026-05-05T19:28:14.407Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2026-05-05T19:28:14.407Z [DEBUG] Found 5 hook matchers in settings
+2026-05-05T19:28:14.407Z [DEBUG] Matched 1 unique hooks for query "Read" (1 before deduplication)
+2026-05-05T19:28:14.413Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:28:14.413Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:28:14.413Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:28:14.413Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:28:14.418Z [DEBUG] autocompact: tokens=36702 threshold=167000 effectiveWindow=180000
+2026-05-05T19:28:14.421Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:28:14.437Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009294437
+2026-05-05T19:28:14.437Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:28:14.439Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:28:14.439Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:28:14.439Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009294437 to C:\Users\emarquez\.claude.json
+2026-05-05T19:28:14.444Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:28:14.447Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:28:14.449Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:28:14.449Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:28:14.451Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:28:14.461Z [DEBUG] [useDeferredValue] Messages deferred by 4 (20→24)
+2026-05-05T19:28:16.460Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:28:25.021Z [DEBUG] [useDeferredValue] Messages deferred by 1 (24→25)
+2026-05-05T19:28:25.433Z [DEBUG] [useDeferredValue] Messages deferred by 1 (25→26)
+2026-05-05T19:28:27.160Z [DEBUG] executePreToolHooks called for tool: Grep
+2026-05-05T19:28:27.165Z [DEBUG] Getting matching hook commands for PreToolUse with query: Grep
+2026-05-05T19:28:27.165Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:28:27.165Z [DEBUG] Matched 0 unique hooks for query "Grep" (0 before deduplication)
+2026-05-05T19:28:27.184Z [DEBUG] [useDeferredValue] Messages deferred by 1 (26→27)
+2026-05-05T19:28:27.190Z [DEBUG] High write ratio: blit=0, write=1387 (100.0% writes), screen=24x207
+2026-05-05T19:28:27.227Z [DEBUG] Getting matching hook commands for PostToolUse with query: Grep
+2026-05-05T19:28:27.227Z [DEBUG] Found 5 hook matchers in settings
+2026-05-05T19:28:27.227Z [DEBUG] Matched 1 unique hooks for query "Grep" (1 before deduplication)
+2026-05-05T19:28:27.231Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:28:27.231Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:28:27.231Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:28:27.231Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:28:27.232Z [DEBUG] autocompact: tokens=37639 threshold=167000 effectiveWindow=180000
+2026-05-05T19:28:27.232Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:28:27.248Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009307248
+2026-05-05T19:28:27.248Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:28:27.249Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:28:27.249Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:28:27.249Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009307248 to C:\Users\emarquez\.claude.json
+2026-05-05T19:28:27.254Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:28:27.261Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:28:27.263Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:28:27.263Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:28:27.264Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:28:27.274Z [DEBUG] [useDeferredValue] Messages deferred by 3 (27→30)
+2026-05-05T19:28:28.911Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:28:32.303Z [DEBUG] [useDeferredValue] Messages deferred by 1 (30→31)
+2026-05-05T19:28:32.310Z [DEBUG] [useDeferredValue] Messages deferred by 1 (30→31)
+2026-05-05T19:28:33.715Z [DEBUG] [useDeferredValue] Messages deferred by 1 (31→32)
+2026-05-05T19:28:33.719Z [DEBUG] [useDeferredValue] Messages deferred by 1 (31→32)
+2026-05-05T19:28:47.300Z [DEBUG] executePreToolHooks called for tool: Edit
+2026-05-05T19:28:47.304Z [DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+2026-05-05T19:28:47.304Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:28:47.304Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2026-05-05T19:28:47.312Z [DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2026-05-05T19:28:47.315Z [DEBUG] executePermissionRequestHooks called for tool: Edit
+2026-05-05T19:28:47.319Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Edit
+2026-05-05T19:28:47.319Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:28:47.319Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2026-05-05T19:28:47.322Z [DEBUG] [useDeferredValue] Messages deferred by 1 (32→33)
+2026-05-05T19:28:47.393Z [DEBUG] High write ratio: blit=0, write=15067 (100.0% writes), screen=99x207
+2026-05-05T19:28:47.413Z [DEBUG] [useDeferredValue] Messages deferred by 1 (32→33)
+2026-05-05T19:28:47.417Z [DEBUG] [useDeferredValue] Messages deferred by 1 (32→33)
+2026-05-05T19:28:47.433Z [DEBUG] [useDeferredValue] Messages deferred by 1 (32→33)
+2026-05-05T19:28:47.490Z [DEBUG] High write ratio: blit=4968, write=13891 (73.7% writes), screen=101x207
+2026-05-05T19:28:52.559Z [DEBUG] Applying permission update: Setting mode to 'acceptEdits'
+2026-05-05T19:28:52.564Z [DEBUG] FileHistory: Tracked file modification for S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb
+2026-05-05T19:28:52.565Z [DEBUG] Writing to temp file: S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb.tmp.8132.1778009332565
+2026-05-05T19:28:52.565Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:28:52.566Z [DEBUG] Temp file written successfully, size: 8029 bytes
+2026-05-05T19:28:52.566Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:28:52.566Z [DEBUG] Renaming S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb.tmp.8132.1778009332565 to S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb
+2026-05-05T19:28:52.568Z [DEBUG] File S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb written atomically
+2026-05-05T19:28:52.574Z [DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+2026-05-05T19:28:52.574Z [DEBUG] Found 5 hook matchers in settings
+2026-05-05T19:28:52.574Z [DEBUG] Matched 1 unique hooks for query "Edit" (1 before deduplication)
+2026-05-05T19:28:52.578Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:28:52.578Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:28:52.578Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:28:52.578Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:28:52.580Z [DEBUG] autocompact: tokens=38924 threshold=167000 effectiveWindow=180000
+2026-05-05T19:28:52.580Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:28:52.590Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009332590
+2026-05-05T19:28:52.590Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:28:52.591Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:28:52.591Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:28:52.591Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009332590 to C:\Users\emarquez\.claude.json
+2026-05-05T19:28:52.596Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:28:52.599Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:28:52.601Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:28:52.601Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:28:52.603Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:28:52.609Z [DEBUG] [useDeferredValue] Messages deferred by 4 (33→37)
+2026-05-05T19:28:52.614Z [DEBUG] Full reset (scrollback changes): scrollbackRows=87, firstChangeY=27
+  prev: "───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+  next: "✽ Precipitating… (56s · ↑ 4.0k tokens)                                                                                                                                                                         "
+2026-05-05T19:28:52.620Z [DEBUG] [lspRecommendation] Looking for LSP plugins for .vb
+2026-05-05T19:28:52.621Z [DEBUG] [useDeferredValue] Messages deferred by 4 (33→37)
+2026-05-05T19:28:52.623Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-05T19:28:52.628Z [WARN] Cache corrupted or missing for marketplace claude-plugins-official, re-fetching from source: Invalid schema: C:\Users\emarquez\.claude\plugins\marketplaces\claude-plugins-official\.claude-plugin\marketplace.json plugins.56.source: Invalid input, plugins.63.source: Invalid input, plugins.67.source: Invalid input, plugins.71.source: Invalid input, plugins.72.source: Invalid input, plugins.73.source: Invalid input, plugins.74.source: Invalid input, plugins.75.source: Invalid input, plugins.81.source: Invalid input
+2026-05-05T19:28:52.650Z [DEBUG] [useDeferredValue] Messages deferred by 4 (33→37)
+2026-05-05T19:28:52.723Z [DEBUG] High write ratio: blit=4968, write=12877 (72.2% writes), screen=97x207
+2026-05-05T19:28:53.132Z [INFO] SSH not configured for GitHub, using HTTPS for anthropics/claude-plugins-official
+2026-05-05T19:28:54.991Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:28:55.075Z [DEBUG] Reading marketplace from C:\Users\emarquez\.claude\plugins\marketplaces\anthropics-claude-plugins-official\.claude-plugin\marketplace.json
+2026-05-05T19:28:55.143Z [DEBUG] [lspRecommendation] Failed to load marketplace claude-plugins-official: ConfigParseError: Invalid schema: C:\Users\emarquez\.claude\plugins\marketplaces\anthropics-claude-plugins-official\.claude-plugin\marketplace.json plugins.0.source: Invalid input, plugins.1.source: Invalid input, plugins.5.source: Invalid input, plugins.10.source: Invalid input, plugins.11.source: Invalid input, plugins.19.source: Invalid input, plugins.21.source: Invalid input, plugins.22.source: Invalid input, plugins.23.source: Invalid input, plugins.27.source: Invalid input, plugins.51.source: Invalid input, plugins.54.source: Invalid input, plugins.55.source: Invalid input, plugins.56.source: Invalid input, plugins.61.source: Invalid input, plugins.79.source: Invalid input, plugins.89.source: Invalid input, plugins.91.source: Invalid input, plugins.92.source: Invalid input, plugins.93.source: Invalid input, plugins.99.source: Invalid input, plugins.101.source: Invalid input, plugins.103.source: Invalid input, plugins.109.source: Invalid input, plugins.123.source: Invalid input, plugins.129.source: Invalid input, plugins.136.source: Invalid input, plugins.141.source: Invalid input, plugins.144.source: Invalid input, plugins.150.source: Invalid input, plugins.157.source: Invalid input, plugins.165.source: Invalid input, plugins.166.source: Invalid input, plugins.175.source: Invalid input
+2026-05-05T19:28:55.971Z [DEBUG] [useDeferredValue] Messages deferred by 1 (37→38)
+2026-05-05T19:28:56.444Z [DEBUG] [useDeferredValue] Messages deferred by 1 (38→39)
+2026-05-05T19:28:56.482Z [DEBUG] High write ratio: blit=0, write=14229 (100.0% writes), screen=99x207
+2026-05-05T19:29:00.177Z [DEBUG] executePreToolHooks called for tool: Edit
+2026-05-05T19:29:00.178Z [DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+2026-05-05T19:29:00.178Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:29:00.178Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2026-05-05T19:29:00.181Z [DEBUG] Writing to temp file: S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb.tmp.8132.1778009340181
+2026-05-05T19:29:00.181Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:29:00.182Z [DEBUG] Temp file written successfully, size: 8389 bytes
+2026-05-05T19:29:00.182Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:29:00.182Z [DEBUG] Renaming S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb.tmp.8132.1778009340181 to S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb
+2026-05-05T19:29:00.186Z [DEBUG] File S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb written atomically
+2026-05-05T19:29:00.189Z [DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+2026-05-05T19:29:00.189Z [DEBUG] Found 5 hook matchers in settings
+2026-05-05T19:29:00.189Z [DEBUG] Matched 1 unique hooks for query "Edit" (1 before deduplication)
+2026-05-05T19:29:00.190Z [DEBUG] [useDeferredValue] Messages deferred by 1 (39→40)
+2026-05-05T19:29:00.204Z [DEBUG] High write ratio: blit=0, write=14231 (100.0% writes), screen=99x207
+2026-05-05T19:29:00.212Z [DEBUG] [useDeferredValue] Messages deferred by 3 (40→43)
+2026-05-05T19:29:00.215Z [DEBUG] [useDeferredValue] Messages deferred by 3 (40→43)
+2026-05-05T19:29:00.225Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:29:00.225Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:29:00.225Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:29:00.225Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:29:00.225Z [DEBUG] autocompact: tokens=39492 threshold=167000 effectiveWindow=180000
+2026-05-05T19:29:00.225Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:29:00.230Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009340230
+2026-05-05T19:29:00.230Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:29:00.231Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:29:00.231Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:29:00.231Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009340230 to C:\Users\emarquez\.claude.json
+2026-05-05T19:29:00.235Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:29:00.239Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:29:00.240Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:29:00.240Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:29:00.240Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:29:00.244Z [DEBUG] [useDeferredValue] Messages deferred by 3 (40→43)
+2026-05-05T19:29:01.235Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:29:01.820Z [DEBUG] [useDeferredValue] Messages deferred by 1 (43→44)
+2026-05-05T19:29:01.823Z [DEBUG] [useDeferredValue] Messages deferred by 1 (43→44)
+2026-05-05T19:29:11.725Z [DEBUG] [useDeferredValue] Messages deferred by 1 (44→45)
+2026-05-05T19:29:11.782Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2026-05-05T19:29:11.782Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:29:11.782Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-05T19:29:11.783Z [DEBUG] autocompact: tokens=40372 threshold=167000 effectiveWindow=180000
+2026-05-05T19:29:11.785Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:29:11.794Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009351794
+2026-05-05T19:29:11.794Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:29:11.794Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:29:11.794Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:29:11.794Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009351794 to C:\Users\emarquez\.claude.json
+2026-05-05T19:29:11.799Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:29:11.802Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:29:11.803Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:29:11.803Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:29:11.804Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:29:11.808Z [DEBUG] [useDeferredValue] Messages deferred by 1 (45→46)
+2026-05-05T19:29:11.819Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009351819
+2026-05-05T19:29:11.819Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:29:11.820Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:29:11.820Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:29:11.820Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009351819 to C:\Users\emarquez\.claude.json
+2026-05-05T19:29:11.824Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:29:11.830Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009351830
+2026-05-05T19:29:11.830Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:29:11.830Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:29:11.831Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:29:11.831Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009351830 to C:\Users\emarquez\.claude.json
+2026-05-05T19:29:11.834Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:29:11.838Z [DEBUG] [useDeferredValue] Messages deferred by 1 (45→46)
+2026-05-05T19:29:24.836Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:29:51.598Z [DEBUG] Forked agent [prompt_suggestion] received message: type=assistant
+2026-05-05T19:29:51.610Z [DEBUG] Forked agent [prompt_suggestion] received message: type=assistant
+2026-05-05T19:29:51.628Z [DEBUG] Getting matching hook commands for SubagentStop with query:
+2026-05-05T19:29:51.628Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:29:51.628Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-05T19:29:51.629Z [DEBUG] Forked agent [prompt_suggestion] finished: 2 messages, types=[assistant, assistant], totalUsage: input=9 output=1036 cacheRead=39530 cacheCreate=857
+2026-05-05T19:29:51.630Z [DEBUG] [Speculation] enabled=false
+2026-05-05T19:30:11.817Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2026-05-05T19:30:11.817Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:30:11.817Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2026-05-05T19:32:13.590Z [DEBUG] Metrics opt-out API response: enabled=true, vcsLinking=undefined
+2026-05-05T19:32:13.772Z [DEBUG] BigQuery metrics exported successfully
+2026-05-05T19:32:13.772Z [DEBUG] BigQuery API Response: {
+  "accepted_count": 16,
+  "rejected_count": 0
+}
+2026-05-05T19:33:34.013Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:33:34.013Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:33:34.013Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:33:34.013Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:33:34.016Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-05-05T19:33:34.016Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:33:34.016Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-05T19:33:34.016Z [DEBUG] FileHistory: Making snapshot for message 431babfb-b517-43fc-979a-4188e33a1114
+2026-05-05T19:33:34.028Z [DEBUG] FileHistory: Added snapshot for 431babfb-b517-43fc-979a-4188e33a1114, tracking 1 files
+2026-05-05T19:33:34.029Z [DEBUG] [useDeferredValue] Messages deferred by 1 (46→47)
+2026-05-05T19:33:34.042Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-05T19:33:34.046Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009614046
+2026-05-05T19:33:34.046Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:33:34.047Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:33:34.047Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:33:34.047Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009614046 to C:\Users\emarquez\.claude.json
+2026-05-05T19:33:34.051Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:33:34.053Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.ea7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:33:34.054Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:33:34.054Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:33:34.055Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:33:34.059Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009614059
+2026-05-05T19:33:34.059Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:33:34.060Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:33:34.060Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:33:34.060Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009614059 to C:\Users\emarquez\.claude.json
+2026-05-05T19:33:34.064Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:33:34.066Z [DEBUG] autocompact: tokens=40124 threshold=167000 effectiveWindow=180000
+2026-05-05T19:33:34.071Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:33:34.077Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009614077
+2026-05-05T19:33:34.077Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:33:34.078Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:33:34.078Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:33:34.078Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009614077 to C:\Users\emarquez\.claude.json
+2026-05-05T19:33:34.082Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:33:34.085Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:33:34.086Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:33:34.086Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:33:34.086Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:33:34.091Z [DEBUG] [useDeferredValue] Messages deferred by 1 (46→47)
+2026-05-05T19:33:34.864Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:33:35.661Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:33:40.567Z [DEBUG] [useDeferredValue] Messages deferred by 1 (47→48)
+2026-05-05T19:33:41.103Z [DEBUG] [useDeferredValue] Messages deferred by 1 (48→49)
+2026-05-05T19:33:59.221Z [DEBUG] executePreToolHooks called for tool: Edit
+2026-05-05T19:33:59.226Z [DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+2026-05-05T19:33:59.226Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:33:59.226Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2026-05-05T19:33:59.239Z [DEBUG] Writing to temp file: S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb.tmp.8132.1778009639239
+2026-05-05T19:33:59.239Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:33:59.240Z [DEBUG] Temp file written successfully, size: 8170 bytes
+2026-05-05T19:33:59.240Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:33:59.240Z [DEBUG] Renaming S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb.tmp.8132.1778009639239 to S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb
+2026-05-05T19:33:59.244Z [DEBUG] File S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb written atomically
+2026-05-05T19:33:59.250Z [DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+2026-05-05T19:33:59.250Z [DEBUG] Found 5 hook matchers in settings
+2026-05-05T19:33:59.251Z [DEBUG] Matched 1 unique hooks for query "Edit" (1 before deduplication)
+2026-05-05T19:33:59.254Z [DEBUG] [useDeferredValue] Messages deferred by 1 (49→50)
+2026-05-05T19:33:59.307Z [DEBUG] High write ratio: blit=0, write=19644 (100.0% writes), screen=177x207
+2026-05-05T19:33:59.312Z [DEBUG] [useDeferredValue] Messages deferred by 4 (49→53)
+2026-05-05T19:33:59.326Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:33:59.326Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:33:59.326Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:33:59.326Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:33:59.327Z [DEBUG] autocompact: tokens=41897 threshold=167000 effectiveWindow=180000
+2026-05-05T19:33:59.328Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:33:59.340Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009639340
+2026-05-05T19:33:59.340Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:33:59.342Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:33:59.342Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:33:59.342Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009639340 to C:\Users\emarquez\.claude.json
+2026-05-05T19:33:59.347Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:33:59.353Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:33:59.355Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:33:59.355Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:33:59.356Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:33:59.364Z [DEBUG] [useDeferredValue] Messages deferred by 4 (49→53)
+2026-05-05T19:34:00.862Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:34:02.302Z [DEBUG] [useDeferredValue] Messages deferred by 1 (53→54)
+2026-05-05T19:34:03.249Z [DEBUG] [useDeferredValue] Messages deferred by 1 (54→55)
+2026-05-05T19:34:03.253Z [DEBUG] [useDeferredValue] Messages deferred by 1 (54→55)
+2026-05-05T19:34:03.257Z [DEBUG] [useDeferredValue] Messages deferred by 1 (54→55)
+2026-05-05T19:34:07.132Z [DEBUG] executePreToolHooks called for tool: Edit
+2026-05-05T19:34:07.133Z [DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+2026-05-05T19:34:07.133Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:34:07.133Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2026-05-05T19:34:07.136Z [DEBUG] Writing to temp file: S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb.tmp.8132.1778009647136
+2026-05-05T19:34:07.136Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:34:07.137Z [DEBUG] Temp file written successfully, size: 7810 bytes
+2026-05-05T19:34:07.137Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:34:07.137Z [DEBUG] Renaming S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb.tmp.8132.1778009647136 to S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb
+2026-05-05T19:34:07.139Z [DEBUG] File S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Parts.vb written atomically
+2026-05-05T19:34:07.142Z [DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+2026-05-05T19:34:07.142Z [DEBUG] Found 5 hook matchers in settings
+2026-05-05T19:34:07.142Z [DEBUG] Matched 1 unique hooks for query "Edit" (1 before deduplication)
+2026-05-05T19:34:07.143Z [DEBUG] [useDeferredValue] Messages deferred by 1 (55→56)
+2026-05-05T19:34:07.162Z [DEBUG] High write ratio: blit=0, write=34683 (100.0% writes), screen=258x207
+2026-05-05T19:34:07.169Z [DEBUG] [useDeferredValue] Messages deferred by 4 (55→59)
+2026-05-05T19:34:07.174Z [DEBUG] [useDeferredValue] Messages deferred by 4 (55→59)
+2026-05-05T19:34:07.186Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-05T19:34:07.186Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-05T19:34:07.186Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-05T19:34:07.186Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-05T19:34:07.187Z [DEBUG] autocompact: tokens=42393 threshold=167000 effectiveWindow=180000
+2026-05-05T19:34:07.187Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:34:07.193Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009647193
+2026-05-05T19:34:07.193Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:34:07.193Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:34:07.193Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:34:07.193Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009647193 to C:\Users\emarquez\.claude.json
+2026-05-05T19:34:07.197Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:34:07.200Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:34:07.200Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:34:07.200Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:34:07.201Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:34:07.204Z [DEBUG] [useDeferredValue] Messages deferred by 4 (55→59)
+2026-05-05T19:34:09.365Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:34:10.340Z [DEBUG] [useDeferredValue] Messages deferred by 1 (59→60)
+2026-05-05T19:34:19.766Z [DEBUG] [useDeferredValue] Messages deferred by 1 (60→61)
+2026-05-05T19:34:19.911Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2026-05-05T19:34:19.911Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:34:19.911Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-05T19:34:19.911Z [DEBUG] autocompact: tokens=43254 threshold=167000 effectiveWindow=180000
+2026-05-05T19:34:19.912Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-05T19:34:19.918Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778009659918
+2026-05-05T19:34:19.918Z [DEBUG] Preserving file permissions: 100666
+2026-05-05T19:34:19.918Z [DEBUG] Temp file written successfully, size: 36531 bytes
+2026-05-05T19:34:19.918Z [DEBUG] Applied original permissions to temp file
+2026-05-05T19:34:19.918Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778009659918 to C:\Users\emarquez\.claude.json
+2026-05-05T19:34:19.922Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-05T19:34:19.925Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-05T19:34:19.925Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-05T19:34:19.925Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-05T19:34:19.926Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-05T19:34:19.929Z [DEBUG] [useDeferredValue] Messages deferred by 1 (61→62)
+2026-05-05T19:34:19.937Z [DEBUG] [useDeferredValue] Messages deferred by 1 (61→62)
+2026-05-05T19:34:21.480Z [DEBUG] Stream started - received first chunk
+2026-05-05T19:34:47.700Z [DEBUG] Forked agent [prompt_suggestion] received message: type=assistant
+2026-05-05T19:34:47.710Z [DEBUG] Forked agent [prompt_suggestion] received message: type=assistant
+2026-05-05T19:34:47.760Z [DEBUG] Getting matching hook commands for SubagentStop with query:
+2026-05-05T19:34:47.760Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:34:47.760Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-05T19:34:47.760Z [DEBUG] Forked agent [prompt_suggestion] finished: 2 messages, types=[assistant, assistant], totalUsage: input=9 output=1018 cacheRead=42412 cacheCreate=857
+2026-05-05T19:34:47.762Z [DEBUG] [Speculation] enabled=false
+2026-05-05T19:35:19.938Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2026-05-05T19:35:19.938Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:35:19.938Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2026-05-05T19:37:13.457Z [DEBUG] BigQuery metrics exported successfully
+2026-05-05T19:37:13.457Z [DEBUG] BigQuery API Response: {
+  "accepted_count": 15,
+  "rejected_count": 0
+}
+2026-05-05T19:37:17.512Z [DEBUG] High write ratio: blit=111, write=27467 (99.6% writes), screen=330x131
+2026-05-05T19:37:17.577Z [DEBUG] High write ratio: blit=11962, write=18322 (60.5% writes), screen=330x131
+2026-05-05T19:38:17.550Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2026-05-05T19:38:17.550Z [DEBUG] Found 0 hook matchers in settings
+2026-05-05T19:38:17.550Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2026-05-05T20:27:13.210Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-05T20:27:13.513Z [DEBUG] Remote settings: No settings found (404)
+2026-05-05T21:27:13.233Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-05T21:27:14.731Z [DEBUG] Remote settings: No settings found (404)
+2026-05-05T21:58:57.746Z [DEBUG] npm view failed with code 1
+2026-05-05T21:58:57.746Z [DEBUG] npm stderr: (empty)
+2026-05-05T22:27:13.265Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-05T22:27:13.505Z [DEBUG] Remote settings: No settings found (404)
+2026-05-05T23:27:13.296Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-05T23:27:13.510Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T00:30:12.344Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T00:30:13.598Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T00:30:17.425Z [DEBUG] npm view failed with code 1
+2026-05-06T00:30:17.425Z [DEBUG] npm stderr: (empty)
+2026-05-06T01:30:12.371Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T01:30:12.610Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T02:30:12.393Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T02:30:12.703Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T03:38:24.813Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T03:38:27.955Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T03:38:30.022Z [DEBUG] npm view failed with code 1
+2026-05-06T03:38:30.022Z [DEBUG] npm stderr: (empty)
+2026-05-06T04:38:24.830Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T04:38:25.092Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T05:38:24.848Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T05:38:25.251Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T07:03:08.761Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T07:03:08.995Z [DEBUG] Remote settings: Retry 1/5 after 542.955740579708ms
+2026-05-06T07:03:09.967Z [DEBUG] Remote settings: Retry 2/5 after 1099.613724460628ms
+2026-05-06T07:03:11.082Z [DEBUG] Remote settings: Retry 3/5 after 2094.374716669296ms
+2026-05-06T07:03:11.652Z [DEBUG] npm view failed with code 1
+2026-05-06T07:03:11.652Z [DEBUG] npm stderr: (empty)
+2026-05-06T13:02:45.068Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T13:02:47.003Z [DEBUG] npm view failed with code 1
+2026-05-06T13:02:47.003Z [DEBUG] npm stderr: (empty)
+2026-05-06T13:02:47.228Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T13:02:47.285Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T14:02:45.029Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T14:02:45.250Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T15:02:45.055Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T15:02:45.293Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T16:02:45.080Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T16:02:45.403Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T17:02:45.134Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T17:02:45.491Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T18:02:45.146Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T18:02:45.366Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T19:02:45.170Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T19:02:45.408Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T20:02:45.194Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T20:02:45.428Z [DEBUG] Remote settings: No settings found (404)
+2026-05-06T21:02:45.212Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-06T21:02:45.746Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.8132.1778101365746
+2026-05-06T21:02:45.746Z [DEBUG] Preserving file permissions: 100666
+2026-05-06T21:02:45.748Z [DEBUG] Temp file written successfully, size: 36638 bytes
+2026-05-06T21:02:45.748Z [DEBUG] Applied original permissions to temp file
+2026-05-06T21:02:45.749Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.8132.1778101365746 to C:\Users\emarquez\.claude.json
+2026-05-06T21:02:45.755Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-06T21:02:45.943Z [DEBUG] Remote settings: No settings found (404)

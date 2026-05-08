@@ -1,0 +1,1624 @@
+﻿Imports System.CodeDom
+Imports System.Data.OleDb
+Imports System.Data.SqlClient
+Imports System.Globalization
+Imports System.IO
+Imports System.Net
+Imports System.Net.Mail
+Imports System.Security.Principal
+Imports Microsoft.VisualBasic.FileIO
+
+Public Module ExService
+
+    Private Declare Auto Function LogonUser Lib "advapi32.dll" (ByVal un As String, ByVal domain As String, ByVal pw As String, ByVal LogonType As Integer, ByVal LogonProvider As Integer, ByRef Token As IntPtr) As Boolean
+
+    Public Declare Auto Function CloseHandle Lib "kernel32.dll" (ByVal handle As IntPtr) As Boolean
+
+    '--------------------------------------------------------
+    ' Ensure BeFirst Services directory exists
+    '--------------------------------------------------------
+    Public Sub EnsureServiceDirectoryExists()
+        Dim rootDirectory As String = "C:\BeFirst\Services"
+        Dim serviceDirectory As String = rootDirectory & "\" & ExData.strServiceName
+        Try
+            ' Create root directory if it doesn't exist
+            If Not Directory.Exists(rootDirectory) Then
+                Directory.CreateDirectory(rootDirectory)
+                Console.WriteLine("Created directory: " & rootDirectory)
+            End If
+            ' Create service-specific directory if it doesn't exist
+            If Not Directory.Exists(serviceDirectory) Then
+                Directory.CreateDirectory(serviceDirectory)
+                Console.WriteLine("Created directory: " & serviceDirectory)
+            End If
+        Catch ex As Exception
+            Console.WriteLine("ERROR creating service directory: " & ex.Message)
+        End Try
+    End Sub
+
+    '--------------------------------------------------------
+    '--------------------------------------------------------
+
+    Public Function ServiceCode() As Boolean
+
+        Dim Result As Boolean = True
+
+        Dim executeCorrectly As Integer = 3
+        Dim executeMessage = ""
+
+        Try
+
+            Dim dt_defconfig As DataTable = BeConn.GetDt("SELECT [Description],[Result] FROM [SETTINGS]")
+
+            'GET aspnet
+            For Each row In dt_defconfig.Rows
+                If row.item(0) = "CompanyNo" Then
+                    ExData.CONF_Company_NO = row.item(1)
+                End If
+            Next
+
+            BePlex.updatevalues()
+
+            If ExData.CONF_Company_NO = 2 Then
+                Try
+                    Dim machine_hostname As String = Environment.MachineName
+                    Dim dt As DataTable = BeConn.GetDt("SELECT * FROM CF_tbl_extractors where tipo in (1,2,3,40) and (MachineName=@hostname)",
+                        {New SqlParameter("@hostname", machine_hostname)})
+
+                    If dt.Rows.Count > 0 Then
+                        For Each row_ex In dt.Rows
+                            Dim contador As Integer = row_ex.Item("Indice")
+                            Dim tableName As String = row_ex.Item("Tabla")
+
+                            Dim dt_contarp As DataTable = BeConn.GetDt("Select PartID,Partnumber FROM CS_idt_partnumbers where isactive=1")
+
+                            Dim dt_stati As DataTable = BeConn.GetDt("Select stationid,StationName,AreaID FROM PD_idt_stations")
+
+                            WriteToFile(tableName)
+
+                            If tableName = "ICT_DATA" Then
+
+                                Dim dt_ict As DataTable = BeConn.GetDt("Select [SN] ,[TDATE],[PARTTYPE] ,isnull([JOBNO],'') as [JOBNO] ,isnull([BADGE],'') as  [BADGE],isnull([TESTMODE], 'SINGLE') as [TESTMODE] ,[TESTERID] ,ICT.[NESTID] ,[PASS_FAIL] ,[FAILCODE] ,[FAIL_DESC] ,[FIRST_FAIL_VAL] ,[UNITS] ,[LNUM],min(ICT.id) as ID2     FROM [Test].[dbo].[ICT_DATA] ICT
+        LEFT JOIN PD_tbl_units_tracking ti 
+        ON ICT.SN=ti.SSN AND ICT.TDATE=ti.TrnDate
+        WHERE ICT.ID > @contador and ti.ID is null and ICT.TDATE > '2019-08-01 00:00' 
+        Group by [SN] ,[TDATE],[PARTTYPE] ,[JOBNO] ,[BADGE] ,[TESTMODE] ,[TESTERID] ,ICT.[NESTID] ,[PASS_FAIL] ,[FAILCODE] ,[FAIL_DESC] ,[FIRST_FAIL_VAL] ,[UNITS] ,[LNUM]
+        Order by id2 asc", {New SqlParameter("@contador", contador)})
+
+                                Dim areaid As Integer = 5
+                                Dim stationid As Integer = 31
+
+                                If dt_ict.Rows.Count > 0 Then
+                                    WriteToFile(tableName & " - Machine: dt_ict - Rows: " & dt_ict.Rows.Count)
+                                    For Each row As DataRow In dt_ict.Rows
+
+                                        Dim snn As String = row.Item("SN").ToString()
+                                        Dim trn As DateTime = row.Item("TDATE")
+
+                                        ' Check if exists
+                                        Dim dt_existe As DataTable = BeConn.GetDt("Select * FROM PD_tbl_units_tracking where ssn=@ssn and areaid=@areaid and TrnDate=@trndate",
+                            {New SqlParameter("@ssn", snn),
+                             New SqlParameter("@areaid", areaid),
+                             New SqlParameter("@trndate", trn)})
+
+                                        If dt_existe.Rows.Count > 0 Then
+                                            WriteToFile("Existe")
+                                        Else
+                                            WriteToFile("No Existe" & snn)
+
+                                            Dim pn As String = row.Item("PARTTYPE").ToString().Trim()
+                                            Dim partid As Integer = 0
+
+                                            Dim rows() = dt_contarp.Select("Partnumber like '%" & pn.Replace("'", "''") & "%'")
+
+                                            If rows.Length > 0 Then
+                                                partid = rows(0).Item(0)
+                                            Else
+                                                'Add PN
+                                                If pn.Length = 13 Then
+                                                    If pn(2) = "-" Then
+                                                        intentos = 0
+                                                        Dim npartid As Integer = 0
+                                                        npartid = GetPartID(pn)
+
+                                                        If npartid <> 0 Then
+                                                            partid = npartid
+                                                        End If
+                                                    End If
+                                                End If
+                                            End If
+
+                                            Dim currentindex As Integer = 0
+
+                                            Try
+                                                Dim dt_contar As DataTable = BeConn.GetDt("Select count(*) as qty FROM PD_tbl_units_tracking where ssn=@ssn and areaid=@areaid and partid=@partid and TrnDate<@trndate",
+                                    {New SqlParameter("@ssn", snn),
+                                     New SqlParameter("@areaid", areaid),
+                                     New SqlParameter("@partid", partid),
+                                     New SqlParameter("@trndate", trn)})
+
+                                                If dt_contar.Rows.Count > 0 Then
+                                                    currentindex = dt_contar.Rows(0).Item(0)
+                                                End If
+                                            Catch ex As Exception
+                                                WriteToFile("Error getting current index: " & ex.Message)
+                                            End Try
+
+                                            currentindex += 1
+
+                                            Dim isrework As Boolean = (currentindex > 1)
+
+                                            Dim tester As String = row.Item("TESTERID").ToString()
+
+                                            Dim rowssta() = dt_stati.Select("StationName='" & tester.Replace("'", "''") & "' and areaid='" & areaid & "'")
+
+                                            If rowssta.Length > 0 Then
+                                                stationid = rowssta(0).Item(0)
+                                            Else
+                                                dt_stati = createstation(tester, areaid)
+                                                Dim rowssta2() = dt_stati.Select("StationName='" & tester.Replace("'", "''") & "' and areaid='" & areaid & "'")
+                                                If rowssta2.Length > 0 Then
+                                                    stationid = rowssta2(0).Item(0)
+                                                End If
+                                            End If
+
+                                            Dim shift As Integer = GetShift(trn)
+
+                                            Dim status As String = "1"
+                                            Dim Failredesc As String = ""
+                                            Dim isgood As Boolean = True
+
+                                            If row.Item("PASS_FAIL") = 1 Then
+                                                status = "0"
+                                                isgood = False
+                                                If Not IsDBNull(row.Item("FAIL_DESC")) Then
+                                                    Failredesc = row.Item("FAIL_DESC").ToString()
+                                                End If
+                                            End If
+
+                                            If partid <> 0 Then
+                                                WriteToFile("pn " & partid)
+                                                Dim stageid As Integer = -99
+
+                                                Try
+                                                    Dim dt_contar4 As DataTable = BeConn.GetDt("Select Stage from PD_tbl_rutes where partid=@partid and Side='A' and areaid=@areaid",
+                                        {New SqlParameter("@partid", partid),
+                                         New SqlParameter("@areaid", areaid)})
+
+                                                    If dt_contar4.Rows.Count > 0 Then
+                                                        stageid = dt_contar4.Rows(0).Item(0)
+                                                    End If
+                                                Catch ex As Exception
+                                                    WriteToFile("Error getting stage: " & ex.Message)
+                                                End Try
+
+                                                Dim userid As Integer = 0
+                                                Dim opid As String = row.Item("BADGE").ToString()
+
+                                                Dim dt_masmt As DataTable = BeConn.GetDt("SELECT [AutoID] FROM [CS_tbl_partnumber_isbypanel] where partid=@partid and areaid=5",
+                                    {New SqlParameter("@partid", partid)})
+
+                                                Dim TESTMODE As String = "SINGLE"
+
+                                                Try
+                                                    If row.Item("TESTMODE").ToString().Length > 3 Then
+                                                        TESTMODE = row.Item("TESTMODE").ToString()
+                                                    End If
+                                                Catch ex As Exception
+                                                End Try
+
+                                                If dt_masmt.Rows.Count > 0 Or TESTMODE = "PANEL" Then
+
+                                                    Dim dt_c As DataTable = BeConn.GetDt("SELECT Child,parente FROM PD_tbl_parents_smt WHERE parente in (Select parente FROM PD_tbl_parents_smt where child=@child)",
+                                        {New SqlParameter("@child", snn)})
+
+                                                    If dt_c.Rows.Count = 0 Then
+                                                        dt_c = BeConn.GetDt("SELECT Child,parente FROM [BeFirst_New].[dbo].PD_tbl_parents_smt WHERE parente in (Select parente FROM [BeFirst_New].[dbo].PD_tbl_parents_smt where child=@child)",
+                                            {New SqlParameter("@child", snn)})
+                                                    End If
+
+                                                    WriteToFile("PANEL " & partid)
+
+                                                    For Each rowch In dt_c.Rows
+
+                                                        Dim nestidValue As String = If(row.IsNull("NESTID"), "", row.Item("NESTID").ToString())
+                                                        Dim id2Value As Object = row.Item("ID2")
+
+                                                        Dim sql_insertar As String = "INSERT INTO [dbo].[PD_tbl_units_tracking] " &
+                                            "([PartID],[IsGood],[DefectCodeID],[IsRework],[StationID],[TrnDate],[JobSide],[SSNPanel],[SSN],[ControlID],[AreaID],[SSNIndex],[Shift],[Comments],[NestID],[ContainerID]) " &
+                                            "VALUES (@partid,@status,@defectcode,@isrework,@stationid,@trndate,@jobside,@ssnpanel,@ssn,@controlid,@areaid,@ssnindex,@shift,@comments,@nestid,@containerid); " &
+                                            "UPDATE CF_tbl_extractors SET Indice=@indice,Fecha=GETDATE() WHERE TABLA=@tablename"
+
+                                                        BeConn.InsertRecords(sql_insertar,
+                                            {New SqlParameter("@partid", partid),
+                                             New SqlParameter("@status", status),
+                                             New SqlParameter("@defectcode", -1),
+                                             New SqlParameter("@isrework", isrework),
+                                             New SqlParameter("@stationid", stationid),
+                                             New SqlParameter("@trndate", trn),
+                                             New SqlParameter("@jobside", "A"),
+                                             New SqlParameter("@ssnpanel", rowch.item(1)),
+                                             New SqlParameter("@ssn", rowch.item(0)),
+                                             New SqlParameter("@controlid", userid),
+                                             New SqlParameter("@areaid", areaid),
+                                             New SqlParameter("@ssnindex", currentindex),
+                                             New SqlParameter("@shift", shift),
+                                             New SqlParameter("@comments", Failredesc),
+                                             New SqlParameter("@nestid", nestidValue),
+                                             New SqlParameter("@containerid", ""),
+                                             New SqlParameter("@indice", id2Value),
+                                             New SqlParameter("@tablename", tableName)})
+
+                                                        BeConn.UpdateRecords("UPDATE PD_idt_stations SET IsActive='True',DownTimeCodeID='80',LastPieceTime=@lastpiecetime,LastPartID=@lastpartid,LastSide='A' WHERE StationID=@stationid",
+                                            {New SqlParameter("@lastpiecetime", trn),
+                                             New SqlParameter("@lastpartid", partid),
+                                             New SqlParameter("@stationid", stationid)})
+
+                                                        BeConn.UpdateRecords("UPDATE [dbo].[PD_tbl_station_issues] SET [IssueSolve] = 1,[IssueSolution] = 'UNKNOWN - CLOSE AUTOMATIC',[IssueSolveDate] = GETDATE(),[Status_ID] = 3 where IssueSolveDate is null and StationID=@stationid",
+                                            {New SqlParameter("@stationid", stationid)})
+
+                                                        If stageid <> -99 Then
+                                                            Dim dt_contar4 As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@ssn",
+                                                {New SqlParameter("@ssn", rowch.item(0))})
+
+                                                            Dim wipStageid As Integer = stageid
+                                                            If isgood = False Then
+                                                                wipStageid = stageid * (-1)
+                                                            End If
+
+                                                            If dt_contar4.Rows.Count > 0 Then
+                                                                'UPDATE
+                                                                BeConn.UpdateRecords("UPDATE PD_tbl_units_wip SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, StatusAreaID=@areaid, JobSide='A',stageid=@stageid,IsActive=1 WHERE SSN=@ssn",
+                                                    {New SqlParameter("@isgood", isgood),
+                                                     New SqlParameter("@defectcode", -1),
+                                                     New SqlParameter("@trndate", trn),
+                                                     New SqlParameter("@isrework", isrework),
+                                                     New SqlParameter("@partid", partid),
+                                                     New SqlParameter("@controlid", userid),
+                                                     New SqlParameter("@stationid", stationid),
+                                                     New SqlParameter("@areaid", areaid),
+                                                     New SqlParameter("@stageid", wipStageid),
+                                                     New SqlParameter("@ssn", rowch.item(0))})
+                                                            Else
+                                                                'ADD
+                                                                BeConn.UpdateRecords("INSERT INTO PD_tbl_units_wip (SSN,SSNPanel,JobID,JobType,JobNumber,JobSide,PartID,IsGood,DefectCodeID,TrnDate,IsRework,ControlID,StationID,StatusAreaID,GroupMLS,StageID,IsActive) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@stageid,@isactive)",
+                                                    {New SqlParameter("@ssn", rowch.item(0)),
+                                                     New SqlParameter("@ssnpanel", rowch.item(1)),
+                                                     New SqlParameter("@jobid", -1),
+                                                     New SqlParameter("@jobtype", -1),
+                                                     New SqlParameter("@jobnumber", -1),
+                                                     New SqlParameter("@jobside", "A"),
+                                                     New SqlParameter("@partid", partid),
+                                                     New SqlParameter("@isgood", isgood),
+                                                     New SqlParameter("@defectcode", -1),
+                                                     New SqlParameter("@trndate", trn),
+                                                     New SqlParameter("@isrework", isrework),
+                                                     New SqlParameter("@controlid", userid),
+                                                     New SqlParameter("@stationid", stationid),
+                                                     New SqlParameter("@areaid", areaid),
+                                                     New SqlParameter("@groupmls", 0),
+                                                     New SqlParameter("@stageid", wipStageid),
+                                                     New SqlParameter("@isactive", 1)})
+                                                            End If
+                                                        Else
+                                                            Dim dt_contar4 As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@ssn",
+                                                {New SqlParameter("@ssn", rowch.item(0))})
+
+                                                            Dim wipStageid As Integer = stageid
+                                                            If isgood = False Then
+                                                                wipStageid = stageid * (-1)
+                                                            End If
+
+                                                            If dt_contar4.Rows.Count > 0 Then
+                                                                'UPDATE
+                                                                BeConn.UpdateRecords("UPDATE PD_tbl_units_wip SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, StatusAreaID=@areaid, JobSide='A',IsActive=1 WHERE SSN=@ssn",
+                                                    {New SqlParameter("@isgood", isgood),
+                                                     New SqlParameter("@defectcode", -1),
+                                                     New SqlParameter("@trndate", trn),
+                                                     New SqlParameter("@isrework", isrework),
+                                                     New SqlParameter("@partid", partid),
+                                                     New SqlParameter("@controlid", userid),
+                                                     New SqlParameter("@stationid", stationid),
+                                                     New SqlParameter("@areaid", areaid),
+                                                     New SqlParameter("@ssn", rowch.item(0))})
+                                                            Else
+                                                                'ADD
+                                                                BeConn.UpdateRecords("INSERT INTO PD_tbl_units_wip (SSN,SSNPanel,JobID,JobType,JobNumber,JobSide,PartID,IsGood,DefectCodeID,TrnDate,IsRework,ControlID,StationID,StatusAreaID,GroupMLS,IsActive) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@isactive)",
+                                                    {New SqlParameter("@ssn", rowch.item(0)),
+                                                     New SqlParameter("@ssnpanel", rowch.item(1)),
+                                                     New SqlParameter("@jobid", -1),
+                                                     New SqlParameter("@jobtype", -1),
+                                                     New SqlParameter("@jobnumber", -1),
+                                                     New SqlParameter("@jobside", "A"),
+                                                     New SqlParameter("@partid", partid),
+                                                     New SqlParameter("@isgood", isgood),
+                                                     New SqlParameter("@defectcode", -1),
+                                                     New SqlParameter("@trndate", trn),
+                                                     New SqlParameter("@isrework", isrework),
+                                                     New SqlParameter("@controlid", userid),
+                                                     New SqlParameter("@stationid", stationid),
+                                                     New SqlParameter("@areaid", areaid),
+                                                     New SqlParameter("@groupmls", 0),
+                                                     New SqlParameter("@isactive", 1)})
+                                                            End If
+                                                        End If
+                                                    Next
+
+                                                Else
+                                                    Dim nestidValue As String = If(row.IsNull("NESTID"), "", row.Item("NESTID").ToString())
+                                                    Dim id2Value As Object = row.Item("ID2")
+
+                                                    Dim sql_insertar As String = "INSERT INTO [dbo].[PD_tbl_units_tracking] " &
+                                        "([PartID],[IsGood],[DefectCodeID],[IsRework],[StationID],[TrnDate],[JobSide],[SSNPanel],[SSN],[ControlID],[AreaID],[SSNIndex],[Shift],[Comments],[NestID],[ContainerID]) " &
+                                        "VALUES (@partid,@status,@defectcode,@isrework,@stationid,@trndate,@jobside,@ssnpanel,@ssn,@controlid,@areaid,@ssnindex,@shift,@comments,@nestid,@containerid); " &
+                                        "UPDATE CF_tbl_extractors SET Indice=@indice,Fecha=GETDATE() WHERE TABLA=@tablename"
+
+                                                    BeConn.InsertRecords(sql_insertar,
+                                        {New SqlParameter("@partid", partid),
+                                         New SqlParameter("@status", status),
+                                         New SqlParameter("@defectcode", -1),
+                                         New SqlParameter("@isrework", isrework),
+                                         New SqlParameter("@stationid", stationid),
+                                         New SqlParameter("@trndate", trn),
+                                         New SqlParameter("@jobside", "A"),
+                                         New SqlParameter("@ssnpanel", "N/A"),
+                                         New SqlParameter("@ssn", snn),
+                                         New SqlParameter("@controlid", userid),
+                                         New SqlParameter("@areaid", areaid),
+                                         New SqlParameter("@ssnindex", currentindex),
+                                         New SqlParameter("@shift", shift),
+                                         New SqlParameter("@comments", Failredesc),
+                                         New SqlParameter("@nestid", nestidValue),
+                                         New SqlParameter("@containerid", ""),
+                                         New SqlParameter("@indice", id2Value),
+                                         New SqlParameter("@tablename", tableName)})
+
+                                                    BeConn.UpdateRecords("UPDATE PD_idt_stations SET IsActive='True',DownTimeCodeID='80',LastPieceTime=@lastpiecetime,LastPartID=@lastpartid,LastSide='A' WHERE StationID=@stationid",
+                                        {New SqlParameter("@lastpiecetime", trn),
+                                         New SqlParameter("@lastpartid", partid),
+                                         New SqlParameter("@stationid", stationid)})
+
+                                                    BeConn.UpdateRecords("UPDATE [dbo].[PD_tbl_station_issues] SET [IssueSolve] = 1,[IssueSolution] = 'UNKNOWN - CLOSE AUTOMATIC',[IssueSolveDate] = GETDATE(),[Status_ID] = 3 where IssueSolveDate is null and StationID=@stationid",
+                                        {New SqlParameter("@stationid", stationid)})
+
+                                                    Try
+                                                        Dim dt_contar4 As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@ssn",
+                                            {New SqlParameter("@ssn", snn)})
+
+                                                        Dim wipStageid As Integer = stageid
+                                                        If isgood = False Then
+                                                            wipStageid = stageid * (-1)
+                                                        End If
+
+                                                        If dt_contar4.Rows.Count > 0 Then
+                                                            'UPDATE
+                                                            BeConn.UpdateRecords("UPDATE PD_tbl_units_wip SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, StatusAreaID=@areaid, JobSide='A',stageid=@stageid,IsActive=1 WHERE SSN=@ssn",
+                                                {New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@stageid", wipStageid),
+                                                 New SqlParameter("@ssn", snn)})
+                                                        Else
+                                                            'ADD
+                                                            BeConn.InsertRecords("INSERT INTO PD_tbl_units_wip (SSN,SSNPanel,JobID,JobType,JobNumber,JobSide,PartID,IsGood,DefectCodeID,TrnDate,IsRework,ControlID,StationID,StatusAreaID,GroupMLS,StageID,IsActive) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@stageid,@isactive)",
+                                                {New SqlParameter("@ssn", snn),
+                                                 New SqlParameter("@ssnpanel", "N/A"),
+                                                 New SqlParameter("@jobid", -1),
+                                                 New SqlParameter("@jobtype", -1),
+                                                 New SqlParameter("@jobnumber", -1),
+                                                 New SqlParameter("@jobside", "A"),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@groupmls", 0),
+                                                 New SqlParameter("@stageid", wipStageid),
+                                                 New SqlParameter("@isactive", 1)})
+                                                        End If
+                                                    Catch ex As Exception
+                                                        WriteToFile("Error updating WIP: " & ex.Message)
+                                                    End Try
+
+                                                End If
+                                            Else
+                                                WriteToFile("NOPN " & pn)
+                                            End If
+                                        End If
+                                    Next
+                                End If
+
+                            ElseIf tableName = "EOLMAGNA" Or tableName = "EOLDURA" Or tableName = "EOLHVCC" Then
+
+                                ' Validate table name
+                                If Not IsValidTableName(tableName) Then
+                                    WriteToFile("Invalid table name: " & tableName)
+                                    Continue For
+                                End If
+
+                                Dim dt_ict As DataTable = BeConn.GetDt("Select [ID],[TDATE],[SERNUM],[PARTTYPE],[TESTERID],[FAILCODE],[NESTID],[BADGE],[FailureDesc] FROM [Test].[dbo].[" & tableName & "]
+        WHERE ID > @contador and TDATE > '2026-02-01 00:00'
+        Order by ID asc", {New SqlParameter("@contador", contador)})
+
+                                Dim areaid As Integer = 6
+                                Dim stationid As Integer = 41
+
+                                If dt_ict.Rows.Count > 0 Then
+                                    WriteToFile(tableName & " - Machine: dt_ict - Rows: " & dt_ict.Rows.Count)
+                                    For Each row As DataRow In dt_ict.Rows
+
+                                        Dim snn As String = row.Item("SERNUM").ToString()
+                                        Dim trn As DateTime = row.Item("TDATE")
+                                        Dim pn As String = row.Item("PARTTYPE").ToString().Trim()
+
+                                        Dim partid As Integer = 0
+
+                                        Dim tester As String = row.Item("TESTERID").ToString()
+
+                                        Dim rowssta() = dt_stati.Select("StationName='" & tester.Replace("'", "''") & "' and areaid='" & areaid & "'")
+
+                                        If rowssta.Length > 0 Then
+                                            stationid = rowssta(0).Item(0)
+                                        Else
+                                            dt_stati = createstation(tester, areaid)
+                                            Dim rowssta2() = dt_stati.Select("StationName='" & tester.Replace("'", "''") & "' and areaid='" & areaid & "'")
+                                            If rowssta2.Length > 0 Then
+                                                stationid = rowssta2(0).Item(0)
+                                            End If
+                                        End If
+
+                                        'Look for partid...
+                                        Try
+                                            Dim dt_contar As DataTable = BeConn.GetDt("Select PartID FROM CS_idt_partnumbers where RowLabel like @pn",
+                                {New SqlParameter("@pn", "%" & pn & "%")})
+
+                                            If dt_contar.Rows.Count > 0 Then
+                                                partid = dt_contar.Rows(0).Item(0)
+                                            Else
+                                                Dim dt_contar2 As DataTable = BeConn.GetDt("select partid from (Select PartID,partnumber,@pn as rl FROM CS_idt_partnumbers where IsActive=1 ) cs where rl like '%' + SUBSTRING(partnumber,4,5) + '%'",
+                                    {New SqlParameter("@pn", pn)})
+
+                                                If dt_contar2.Rows.Count > 0 Then
+                                                    partid = dt_contar2.Rows(0).Item(0)
+                                                End If
+                                            End If
+                                        Catch ex As Exception
+                                            WriteToFile("Error finding partid: " & ex.Message)
+                                        End Try
+
+                                        Dim currentindex As Integer = 0
+
+                                        Try
+                                            Dim dt_contar As DataTable = BeConn.GetDt("Select count(*) as qty FROM PD_tbl_units_tracking where ssn=@ssn and areaid=@areaid and partid=@partid and TrnDate<@trndate",
+                                {New SqlParameter("@ssn", snn),
+                                 New SqlParameter("@areaid", areaid),
+                                 New SqlParameter("@partid", partid),
+                                 New SqlParameter("@trndate", trn)})
+
+                                            If dt_contar.Rows.Count > 0 Then
+                                                currentindex = dt_contar.Rows(0).Item(0)
+                                            End If
+                                        Catch ex As Exception
+                                            WriteToFile("Error getting current index: " & ex.Message)
+                                        End Try
+
+                                        currentindex += 1
+
+                                        Dim isrework As Boolean = (currentindex > 1)
+                                        Dim shift As Integer = GetShift(trn)
+
+                                        Dim status As String = "1"
+                                        Dim Failredesc As String = ""
+                                        Dim isgood As Boolean = True
+
+                                        If row.Item("FAILCODE") > 0 Then
+                                            status = "0"
+                                            isgood = False
+                                            Try
+                                                Failredesc = row.Item("FailureDesc").ToString()
+                                            Catch ex As Exception
+                                            End Try
+                                        End If
+
+                                        Dim nestid As Integer = 1
+
+                                        If row.Item("NESTID").ToString() = "R" Then
+                                            nestid = 2
+                                        End If
+
+                                        If partid <> 0 Then
+
+                                            Dim stageid As Integer = -99
+
+                                            Try
+                                                Dim dt_contar4 As DataTable = BeConn.GetDt("Select Stage from PD_tbl_rutes where partid=@partid and Side='A' and areaid=@areaid",
+                                    {New SqlParameter("@partid", partid),
+                                     New SqlParameter("@areaid", areaid)})
+
+                                                If dt_contar4.Rows.Count > 0 Then
+                                                    stageid = dt_contar4.Rows(0).Item(0)
+                                                End If
+                                            Catch ex As Exception
+                                                WriteToFile("Error getting stage: " & ex.Message)
+                                            End Try
+
+                                            Dim userid As Integer = 0
+                                            Dim opid As String = row.Item("BADGE").ToString()
+
+                                            Dim idValue As Object = row.Item("ID")
+
+                                            Dim sql_insertar As String = "INSERT INTO [dbo].[PD_tbl_units_tracking] " &
+                                "([PartID],[IsGood],[DefectCodeID],[IsRework],[StationID],[TrnDate],[JobSide],[SSNPanel],[SSN],[ControlID],[AreaID],[SSNIndex],[Shift],[Comments],[NestID],[ContainerID]) " &
+                                "VALUES (@partid,@status,@defectcode,@isrework,@stationid,@trndate,@jobside,@ssnpanel,@ssn,@controlid,@areaid,@ssnindex,@shift,@comments,@nestid,@containerid); " &
+                                "UPDATE CF_tbl_extractors SET Indice=@indice,Fecha=GETDATE() WHERE TABLA=@tablename"
+
+                                            BeConn.UpdateRecords(sql_insertar,
+                                {New SqlParameter("@partid", partid),
+                                 New SqlParameter("@status", status),
+                                 New SqlParameter("@defectcode", -1),
+                                 New SqlParameter("@isrework", isrework),
+                                 New SqlParameter("@stationid", stationid),
+                                 New SqlParameter("@trndate", trn),
+                                 New SqlParameter("@jobside", "A"),
+                                 New SqlParameter("@ssnpanel", "N/A"),
+                                 New SqlParameter("@ssn", snn),
+                                 New SqlParameter("@controlid", userid),
+                                 New SqlParameter("@areaid", areaid),
+                                 New SqlParameter("@ssnindex", currentindex),
+                                 New SqlParameter("@shift", shift),
+                                 New SqlParameter("@comments", Failredesc),
+                                 New SqlParameter("@nestid", nestid),
+                                 New SqlParameter("@containerid", ""),
+                                 New SqlParameter("@indice", idValue),
+                                 New SqlParameter("@tablename", tableName)})
+
+                                            Try
+                                                BeConn.UpdateRecords("UPDATE PD_idt_stations SET IsActive='True',DownTimeCodeID='80',LastPieceTime=@lastpiecetime,LastPartID=@lastpartid,LastSide='A' WHERE StationID=@stationid",
+                                    {New SqlParameter("@lastpiecetime", trn),
+                                     New SqlParameter("@lastpartid", partid),
+                                     New SqlParameter("@stationid", stationid)})
+
+                                                BeConn.UpdateRecords("UPDATE [dbo].[PD_tbl_station_issues] SET [IssueSolve] = 1,[IssueSolution] = 'UNKNOWN - CLOSE AUTOMATIC',[IssueSolveDate] = GETDATE(),[Status_ID] = 3 where IssueSolveDate is null and StationID=@stationid",
+                                    {New SqlParameter("@stationid", stationid)})
+
+                                                If stageid <> -99 Then
+                                                    Try
+                                                        Dim dt_contar4 As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@ssn",
+                                            {New SqlParameter("@ssn", snn)})
+
+                                                        Dim wipStageid As Integer = stageid
+                                                        If isgood = False Then
+                                                            wipStageid = stageid * (-1)
+                                                        End If
+
+                                                        If dt_contar4.Rows.Count > 0 Then
+                                                            'UPDATE
+                                                            BeConn.UpdateRecords("UPDATE PD_tbl_units_wip SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, StatusAreaID=@areaid, JobSide='A',stageid=@stageid,IsActive=1 WHERE SSN=@ssn",
+                                                {New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@stageid", wipStageid),
+                                                 New SqlParameter("@ssn", snn)})
+                                                        Else
+                                                            'ADD
+                                                            BeConn.UpdateRecords("INSERT INTO PD_tbl_units_wip (SSN,SSNPanel,JobID,JobType,JobNumber,JobSide,PartID,IsGood,DefectCodeID,TrnDate,IsRework,ControlID,StationID,StatusAreaID,GroupMLS,StageID,IsActive) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@stageid,@isactive)",
+                                                {New SqlParameter("@ssn", snn),
+                                                 New SqlParameter("@ssnpanel", "N/A"),
+                                                 New SqlParameter("@jobid", -1),
+                                                 New SqlParameter("@jobtype", -1),
+                                                 New SqlParameter("@jobnumber", -1),
+                                                 New SqlParameter("@jobside", "A"),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@groupmls", 0),
+                                                 New SqlParameter("@stageid", wipStageid),
+                                                 New SqlParameter("@isactive", 1)})
+                                                        End If
+                                                    Catch ex As Exception
+                                                        WriteToFile("Error updating WIP: " & ex.Message)
+                                                    End Try
+                                                Else
+                                                    Try
+                                                        Dim dt_contar4 As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@ssn",
+                                            {New SqlParameter("@ssn", snn)})
+
+                                                        Dim wipStageid As Integer = stageid
+                                                        If isgood = False Then
+                                                            wipStageid = stageid * (-1)
+                                                        End If
+
+                                                        If dt_contar4.Rows.Count > 0 Then
+                                                            'UPDATE
+                                                            BeConn.UpdateRecords("UPDATE PD_tbl_units_wip SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, StatusAreaID=@areaid, JobSide='A',IsActive=1 WHERE SSN=@ssn",
+                                                {New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@ssn", snn)})
+                                                        Else
+                                                            'ADD
+                                                            BeConn.UpdateRecords("INSERT INTO PD_tbl_units_wip (SSN,SSNPanel,JobID,JobType,JobNumber,JobSide,PartID,IsGood,DefectCodeID,TrnDate,IsRework,ControlID,StationID,StatusAreaID,GroupMLS,IsActive) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@isactive)",
+                                                {New SqlParameter("@ssn", snn),
+                                                 New SqlParameter("@ssnpanel", "N/A"),
+                                                 New SqlParameter("@jobid", -1),
+                                                 New SqlParameter("@jobtype", -1),
+                                                 New SqlParameter("@jobnumber", -1),
+                                                 New SqlParameter("@jobside", "A"),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@groupmls", 0),
+                                                 New SqlParameter("@isactive", 1)})
+                                                        End If
+                                                    Catch ex As Exception
+                                                        WriteToFile("Error updating WIP: " & ex.Message)
+                                                    End Try
+                                                End If
+
+                                            Catch ex As Exception
+                                                WriteToFile("Error in main process: " & ex.Message)
+                                            End Try
+                                        End If
+                                    Next
+                                End If
+
+                            ElseIf tableName = "EOLOHC" Then
+
+                                ' Validate table name
+                                If Not IsValidTableName(tableName) Then
+                                    WriteToFile("Invalid table name: " & tableName)
+                                    Continue For
+                                End If
+
+                                Dim dt_ict As DataTable = BeConn.GetDt("Select [ID],[TDATE],[SERNUM],[PARTTYPE],[TESTERID],[RESULT],[NESTID],[BADGEID] FROM [Test].[dbo].[" & tableName & "]
+        WHERE ID > @contador and TDATE > '2026-01-01 00:00'
+        Order by ID asc", {New SqlParameter("@contador", contador)})
+
+                                Dim areaid As Integer = 6
+                                Dim stationid As Integer = 41
+
+                                If dt_ict.Rows.Count > 0 Then
+                                    WriteToFile(tableName & " - Machine: dt_ict - Rows: " & dt_ict.Rows.Count)
+                                    For Each row As DataRow In dt_ict.Rows
+
+                                        Dim snn As String = row.Item("SERNUM").ToString()
+                                        Dim trn As DateTime = row.Item("TDATE")
+                                        Dim pn As String = row.Item("PARTTYPE").ToString().Trim()
+
+                                        Dim partid As Integer = 0
+
+                                        'Look for partid...
+                                        Try
+                                            Dim dt_contar As DataTable = BeConn.GetDt("Select PartID FROM CS_idt_partnumbers where partnumber like @pn and isactive=1",
+                                {New SqlParameter("@pn", "%" & pn & "%")})
+
+                                            If dt_contar.Rows.Count > 0 Then
+                                                partid = dt_contar.Rows(0).Item(0)
+                                            Else
+                                                Dim dt_contar2 As DataTable = BeConn.GetDt("select partid from (Select PartID,partnumber,@pn as rl FROM CS_idt_partnumbers where IsActive=1) cs where rl like '%' + SUBSTRING(partnumber,4,5) + '%'",
+                                    {New SqlParameter("@pn", pn)})
+
+                                                If dt_contar2.Rows.Count > 0 Then
+                                                    partid = dt_contar2.Rows(0).Item(0)
+                                                End If
+                                            End If
+                                        Catch ex As Exception
+                                            WriteToFile("Error finding partid: " & ex.Message)
+                                        End Try
+
+                                        Dim currentindex As Integer = 0
+
+                                        Try
+                                            Dim dt_contar As DataTable = BeConn.GetDt("Select count(*) as qty FROM PD_tbl_units_tracking where ssn=@ssn and areaid=@areaid and partid=@partid and TrnDate<@trndate",
+                                {New SqlParameter("@ssn", snn),
+                                 New SqlParameter("@areaid", areaid),
+                                 New SqlParameter("@partid", partid),
+                                 New SqlParameter("@trndate", trn)})
+
+                                            If dt_contar.Rows.Count > 0 Then
+                                                currentindex = dt_contar.Rows(0).Item(0)
+                                            End If
+                                        Catch ex As Exception
+                                            WriteToFile("Error getting current index: " & ex.Message)
+                                        End Try
+
+                                        currentindex += 1
+
+                                        Dim isrework As Boolean = (currentindex > 1)
+                                        Dim shift As Integer = GetShift(trn)
+
+                                        Dim status As String = "1"
+                                        Dim Failredesc As String = ""
+                                        Dim isgood As Boolean = True
+
+                                        If row.Item("RESULT") = True Then
+                                            status = "0"
+                                            isgood = False
+                                            If Not IsDBNull(row.Item("RESULT")) Then
+                                                Failredesc = row.Item("RESULT").ToString()
+                                            End If
+                                        End If
+
+                                        Dim tester As String = row.Item("TESTERID").ToString()
+
+                                        Dim rowssta() = dt_stati.Select("StationName='" & tester.Replace("'", "''") & "' and areaid='" & areaid & "'")
+
+                                        If rowssta.Length > 0 Then
+                                            stationid = rowssta(0).Item(0)
+                                        Else
+                                            dt_stati = createstation(tester, areaid)
+                                            Dim rowssta2() = dt_stati.Select("StationName='" & tester.Replace("'", "''") & "' and areaid='" & areaid & "'")
+                                            If rowssta2.Length > 0 Then
+                                                stationid = rowssta2(0).Item(0)
+                                            End If
+                                        End If
+
+                                        If partid <> 0 Then
+
+                                            Dim stageid As Integer = -99
+
+                                            Try
+                                                Dim dt_contar4 As DataTable = BeConn.GetDt("Select Stage from PD_tbl_rutes where partid=@partid and Side='A' and areaid=@areaid",
+                                    {New SqlParameter("@partid", partid),
+                                     New SqlParameter("@areaid", areaid)})
+
+                                                If dt_contar4.Rows.Count > 0 Then
+                                                    stageid = dt_contar4.Rows(0).Item(0)
+                                                End If
+                                            Catch ex As Exception
+                                                WriteToFile("Error getting stage: " & ex.Message)
+                                            End Try
+
+                                            Dim userid As Integer = 0
+                                            Dim opid As String = row.Item("BADGEID").ToString()
+
+                                            Try
+                                                Dim dt_contar4 As DataTable = BeConn.GetDt("Select controlid FROM HR_idt_users WHERE Username = @opid or gafete = @opid or User_ID = @opid",
+                                    {New SqlParameter("@opid", opid)})
+
+                                                If dt_contar4.Rows.Count > 0 Then
+                                                    userid = dt_contar4.Rows(0).Item(0)
+                                                End If
+                                            Catch ex As Exception
+                                                WriteToFile("Error getting userid: " & ex.Message)
+                                            End Try
+
+                                            Dim nestidValue As String = If(row.IsNull("NESTID"), "", row.Item("NESTID").ToString())
+                                            Dim idValue As Object = row.Item("ID")
+
+                                            Dim sql_insertar As String = "INSERT INTO [dbo].[PD_tbl_units_tracking] " &
+                                "([PartID],[IsGood],[DefectCodeID],[IsRework],[StationID],[TrnDate],[JobSide],[SSNPanel],[SSN],[ControlID],[AreaID],[SSNIndex],[Shift],[Comments],[NestID],[ContainerID]) " &
+                                "VALUES (@partid,@status,@defectcode,@isrework,@stationid,@trndate,@jobside,@ssnpanel,@ssn,@controlid,@areaid,@ssnindex,@shift,@comments,@nestid,@containerid); " &
+                                "UPDATE CF_tbl_extractors SET Indice=@indice,Fecha=GETDATE() WHERE TABLA=@tablename"
+
+                                            BeConn.UpdateRecords(sql_insertar,
+                                {New SqlParameter("@partid", partid),
+                                 New SqlParameter("@status", status),
+                                 New SqlParameter("@defectcode", -1),
+                                 New SqlParameter("@isrework", isrework),
+                                 New SqlParameter("@stationid", stationid),
+                                 New SqlParameter("@trndate", trn),
+                                 New SqlParameter("@jobside", "A"),
+                                 New SqlParameter("@ssnpanel", "N/A"),
+                                 New SqlParameter("@ssn", snn),
+                                 New SqlParameter("@controlid", userid),
+                                 New SqlParameter("@areaid", areaid),
+                                 New SqlParameter("@ssnindex", currentindex),
+                                 New SqlParameter("@shift", shift),
+                                 New SqlParameter("@comments", Failredesc),
+                                 New SqlParameter("@nestid", nestidValue),
+                                 New SqlParameter("@containerid", ""),
+                                 New SqlParameter("@indice", idValue),
+                                 New SqlParameter("@tablename", tableName)})
+
+                                            Try
+                                                BeConn.UpdateRecords("UPDATE PD_idt_stations SET IsActive='True',DownTimeCodeID='80',LastPieceTime=@lastpiecetime,LastPartID=@lastpartid,LastSide='A' WHERE StationID=@stationid",
+                                    {New SqlParameter("@lastpiecetime", trn),
+                                     New SqlParameter("@lastpartid", partid),
+                                     New SqlParameter("@stationid", stationid)})
+
+                                                BeConn.UpdateRecords("UPDATE [dbo].[PD_tbl_station_issues] SET [IssueSolve] = 1,[IssueSolution] = 'UNKNOWN - CLOSE AUTOMATIC',[IssueSolveDate] = GETDATE(),[Status_ID] = 3 where IssueSolveDate is null and StationID=@stationid",
+                                    {New SqlParameter("@stationid", stationid)})
+
+                                                If stageid <> -99 Then
+                                                    Try
+                                                        Dim dt_contar4 As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@ssn",
+                                            {New SqlParameter("@ssn", snn)})
+
+                                                        Dim wipStageid As Integer = stageid
+                                                        If isgood = False Then
+                                                            wipStageid = stageid * (-1)
+                                                        End If
+
+                                                        If dt_contar4.Rows.Count > 0 Then
+                                                            'UPDATE
+                                                            BeConn.UpdateRecords("UPDATE PD_tbl_units_wip SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, StatusAreaID=@areaid, JobSide='A',stageid=@stageid,IsActive=1 WHERE SSN=@ssn",
+                                                {New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@stageid", wipStageid),
+                                                 New SqlParameter("@ssn", snn)})
+                                                        Else
+                                                            'ADD
+                                                            BeConn.UpdateRecords("INSERT INTO PD_tbl_units_wip (SSN,SSNPanel,JobID,JobType,JobNumber,JobSide,PartID,IsGood,DefectCodeID,TrnDate,IsRework,ControlID,StationID,StatusAreaID,GroupMLS,StageID,IsActive) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@stageid,@isactive)",
+                                                {New SqlParameter("@ssn", snn),
+                                                 New SqlParameter("@ssnpanel", "N/A"),
+                                                 New SqlParameter("@jobid", -1),
+                                                 New SqlParameter("@jobtype", -1),
+                                                 New SqlParameter("@jobnumber", -1),
+                                                 New SqlParameter("@jobside", "A"),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@groupmls", 0),
+                                                 New SqlParameter("@stageid", wipStageid),
+                                                 New SqlParameter("@isactive", 1)})
+                                                        End If
+                                                    Catch ex As Exception
+                                                        WriteToFile("Error updating WIP: " & ex.Message)
+                                                    End Try
+                                                Else
+                                                    Try
+                                                        Dim dt_contar4 As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@ssn",
+                                            {New SqlParameter("@ssn", snn)})
+
+                                                        Dim wipStageid As Integer = stageid
+                                                        If isgood = False Then
+                                                            wipStageid = stageid * (-1)
+                                                        End If
+
+                                                        If dt_contar4.Rows.Count > 0 Then
+                                                            'UPDATE
+                                                            BeConn.UpdateRecords("UPDATE PD_tbl_units_wip SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, StatusAreaID=@areaid, JobSide='A',IsActive=1 WHERE SSN=@ssn",
+                                                {New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@ssn", snn)})
+                                                        Else
+                                                            'ADD
+                                                            BeConn.UpdateRecords("INSERT INTO PD_tbl_units_wip (SSN,SSNPanel,JobID,JobType,JobNumber,JobSide,PartID,IsGood,DefectCodeID,TrnDate,IsRework,ControlID,StationID,StatusAreaID,GroupMLS,IsActive) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@isactive)",
+                                                {New SqlParameter("@ssn", snn),
+                                                 New SqlParameter("@ssnpanel", "N/A"),
+                                                 New SqlParameter("@jobid", -1),
+                                                 New SqlParameter("@jobtype", -1),
+                                                 New SqlParameter("@jobnumber", -1),
+                                                 New SqlParameter("@jobside", "A"),
+                                                 New SqlParameter("@partid", partid),
+                                                 New SqlParameter("@isgood", isgood),
+                                                 New SqlParameter("@defectcode", -1),
+                                                 New SqlParameter("@trndate", trn),
+                                                 New SqlParameter("@isrework", isrework),
+                                                 New SqlParameter("@controlid", userid),
+                                                 New SqlParameter("@stationid", stationid),
+                                                 New SqlParameter("@areaid", areaid),
+                                                 New SqlParameter("@groupmls", 0),
+                                                 New SqlParameter("@isactive", 1)})
+                                                        End If
+                                                    Catch ex As Exception
+                                                        WriteToFile("Error updating WIP: " & ex.Message)
+                                                    End Try
+                                                End If
+
+                                            Catch ex As Exception
+                                                WriteToFile("Error in main process: " & ex.Message)
+                                            End Try
+                                        End If
+                                    Next
+                                End If
+
+                            ElseIf tableName = "api_insight" Then
+
+                                ' Get configuration from extractor record
+                                Dim configStationID As Integer = If(Not IsDBNull(row_ex.Item("StationID")), Convert.ToInt32(row_ex.Item("StationID")), 0)
+                                Dim directory As String = If(Not IsDBNull(row_ex.Item("Directory")), row_ex.Item("Directory").ToString(), "")
+                                Dim username As String = If(Not IsDBNull(row_ex.Item("Username")), row_ex.Item("Username").ToString(), "")
+                                Dim password As String = If(Not IsDBNull(row_ex.Item("Password")), row_ex.Item("Password").ToString(), "")
+                                Dim hostname As String = If(Not IsDBNull(row_ex.Item("MachineName")), row_ex.Item("MachineName").ToString(), Environment.MachineName)
+
+                                If configStationID = 0 Then
+                                    WriteToFile("ERROR: StationID not configured in extractor record")
+                                    Continue For
+                                End If
+
+                                ' Get station information including areaID from API
+                                Dim configAreaID As Integer = 6 ' Default to FCT area
+                                Try
+                                    Dim stationInfo As StationInfo = Stations.GetStation(configStationID)
+                                    If stationInfo.areaID > 0 Then
+                                        configAreaID = stationInfo.areaID
+                                    Else
+                                        WriteToFile("WARN: Could not get areaID from Station API, using default: " & configAreaID)
+                                    End If
+                                Catch ex As Exception
+                                    WriteToFile("WARN: Error getting station info from API: " & ex.Message & ", using default areaID: " & configAreaID)
+                                End Try
+
+                                If String.IsNullOrEmpty(directory) Then
+                                    WriteToFile("ERROR: Directory not configured in extractor record")
+                                    Continue For
+                                End If
+
+                                ' Read files from directory (supports local paths and network paths)
+                                Dim networkConnection As NetworkConnection = Nothing
+                                Try
+                                    ' If network path and credentials provided, authenticate
+                                    If directory.StartsWith("\\") AndAlso Not String.IsNullOrEmpty(username) AndAlso Not String.IsNullOrEmpty(password) Then
+                                        networkConnection = New NetworkConnection(directory, New NetworkCredential(username, password))
+                                    End If
+
+                                    If Not IO.Directory.Exists(directory) Then
+                                        WriteToFile("ERROR: Directory does not exist or cannot be accessed: " & directory)
+                                        If networkConnection IsNot Nothing Then
+                                            networkConnection.Dispose()
+                                        End If
+                                        Continue For
+                                    End If
+
+                                    Dim files() As String = IO.Directory.GetFiles(directory, "*.txt")
+                                    WriteToFile("Found " & files.Length & " files to process")
+
+                                    For Each filePath As String In files
+                                        Try
+                                            WriteToFile("Processing file: " & filePath)
+                                            Dim lines() As String = File.ReadAllLines(filePath)
+
+                                            For Each line As String In lines
+                                                If String.IsNullOrWhiteSpace(line) Then Continue For
+
+                                                ' Parse line format: partnumber;serialnumber;result;circref1;result1;circref2;result2;...
+                                                Dim partsItems() As String = line.Split(";"c)
+
+                                                If partsItems.Length < 3 Then
+                                                    WriteToFile("WARN: Invalid line format (expected at least 3 fields): " & line)
+                                                    Continue For
+                                                End If
+
+                                                Dim partNumber As String = partsItems(0).Trim()
+                                                Dim serialNumber As String = partsItems(1).Trim()
+                                                Dim overallResult As String = partsItems(2).Trim().ToUpper()
+
+                                                ' Get PartID from part number using API
+                                                Dim partid As Integer = 0
+                                                Try
+                                                    Dim partResponse As PartResponse = Parts.GetByPartNumber(partNumber)
+
+                                                    If partResponse.partID > 0 Then
+                                                        partid = partResponse.partID
+                                                    Else
+                                                        WriteToFile("WARN: Part number not found via API: " & partNumber)
+                                                        Continue For
+                                                    End If
+                                                Catch ex As Exception
+                                                    WriteToFile("ERROR finding partid via API: " & ex.Message)
+                                                    Continue For
+                                                End Try
+
+                                                ' Step 1: Check if setup exists (optional but recommended)
+                                                Try
+                                                    Dim currentSetup As SetupResponse = Units.GetSetup(configStationID, hostname)
+                                                    If currentSetup.setupID > 0 Then   ' If part doesn't match, add new setup
+                                                        If currentSetup.partID <> partid Then
+                                                            WriteToFile("Part mismatch, adding new setup")
+                                                            currentSetup = Units.AddSetup(configStationID, partid, "A", 0, hostname)
+                                                            WriteToFile("New setup created - SetupID: " & currentSetup.setupID)
+                                                        End If
+                                                    Else
+                                                        ' No setup exists, create one
+                                                        WriteToFile("No setup found, creating new setup")
+                                                        currentSetup = Units.AddSetup(configStationID, partid, "A", 0, hostname)
+                                                        WriteToFile("Setup created - SetupID: " & currentSetup.setupID)
+                                                    End If
+                                                Catch ex As Exception
+                                                    WriteToFile("ERROR in setup: " & ex.Message)
+                                                    ' Continue anyway, CheckIn might still work
+                                                End Try
+
+                                                ' Step 2: Check in the unit
+                                                Dim checkInResult As CheckInResponse = Nothing
+                                                Try
+                                                    WriteToFile("Calling CheckIn API - SSN: " & serialNumber & ", PartID: " & partid & ", StationID: " & configStationID & ", AreaID: " & configAreaID)
+                                                    checkInResult = Units.CheckIn(serialNumber, partid, configStationID, configAreaID, "A", 0)
+
+                                                    If checkInResult Is Nothing Then
+                                                        WriteToFile("ERROR: CheckIn returned Nothing (null response)")
+                                                        Continue For
+                                                    End If
+
+                                                    If checkInResult.checkIn Then
+                                                        WriteToFile("Check-in successful for: " & serialNumber)
+                                                    Else
+                                                        WriteToFile("ERROR: Check-in failed - Message: '" & If(checkInResult.message, "(empty)") & "'")
+                                                        WriteToFile("CheckIn response - checkIn: " & checkInResult.checkIn & ", SSN: " & checkInResult.ssn & ", SSNPanel: " & checkInResult.ssnPanel)
+                                                        Continue For
+                                                    End If
+                                                Catch ex As Exception
+                                                    WriteToFile("ERROR in CheckIn: " & ex.Message)
+                                                    WriteToFile("Exception details: " & ex.ToString())
+                                                    Continue For
+                                                End Try
+
+                                                ' Step 3: Check out the unit (MANDATORY)
+                                                Dim setupID As Integer = 0
+                                                Dim stageID As Integer = 0
+                                                Try
+                                                    ' Get setup and stage info
+                                                    Dim currentSetup As SetupResponse = Units.GetSetup(configStationID, hostname)
+                                                    If currentSetup.setupID > 0 Then
+                                                        setupID = currentSetup.setupID
+                                                        stageID = currentSetup.stageID
+                                                    End If
+                                                Catch ex As Exception
+                                                    WriteToFile("WARN: Could not get setup info: " & ex.Message)
+                                                End Try
+
+                                                Try
+                                                    ' Determine result status
+                                                    Dim apiResult As String = "PASS"
+                                                    Dim failureDesc As String = ""
+                                                    If overallResult = "FAIL" Or overallResult = "FAILED" Or overallResult = "0" Then
+                                                        apiResult = "FAIL"
+                                                        failureDesc = "Test failed"
+
+                                                        If partsItems.Length > 3 Then
+                                                            Try
+                                                                ' Build test collection string
+                                                                ' Format: TestName1;Value1;MinValue1;MaxValue1;NomValue1/TestName2;Value2;MinValue2;MaxValue2;NomValue2
+                                                                Dim testCollection As String = ""
+                                                                Dim testIndex As Integer = 3
+
+                                                                While testIndex < partsItems.Length - 1
+                                                                    Dim circRef As String = partsItems(testIndex).Trim()
+                                                                    Dim testValue As String = partsItems(testIndex + 1).Trim()
+
+                                                                    If testCollection.Length > 0 Then
+                                                                        testCollection &= "/"
+                                                                    End If
+
+                                                                    ' Format: TestName;Value;MinValue;MaxValue;NomValue
+                                                                    ' We only have TestName and Value from file, so min/max/nom are empty
+                                                                    testCollection &= circRef & ";" & testValue & ";;;"
+
+                                                                    testIndex += 2
+                                                                End While
+
+                                                                If testCollection.Length > 50 Then
+                                                                    testCollection = testCollection.Substring(0, 49) ' Truncate if too long for database field)
+                                                                End If
+
+                                                                failureDesc = testCollection
+                                                            Catch ex As Exception
+                                                                WriteToFile("WARN: Could not log test parameters: " & ex.Message)
+                                                            End Try
+                                                        End If
+                                                    End If
+
+                                                    ' Main checkout (MANDATORY)
+                                                    Dim checkOutResult As CheckOutResponse = Units.CheckOut(
+                                                        SSN:=serialNumber,
+                                                        SSNPanel:=serialNumber,
+                                                        Result:=apiResult,
+                                                        PartID:=partid,
+                                                        StationID:=configStationID,
+                                                        AreaID:=configAreaID,
+                                                        Side:="A",
+                                                        BinID:=0,
+                                                        StageID:=stageID,
+                                                        SetupID:=setupID,
+                                                        FailureDescription:=failureDesc
+                                                    )
+
+                                                    If checkOutResult.checkOut Then
+                                                        WriteToFile("Check-out successful - Result: " & apiResult)
+
+                                                        ' Update extractor index to track progress
+                                                        BeConn.UpdateRecords("UPDATE CF_tbl_extractors SET Fecha=GETDATE() WHERE TABLA=@tablename",
+                                                            {New SqlParameter("@tablename", tableName)})
+                                                    Else
+                                                        WriteToFile("ERROR: Check-out failed - " & checkOutResult.message)
+                                                    End If
+
+                                                Catch ex As Exception
+                                                    WriteToFile("ERROR in CheckOut: " & ex.Message)
+                                                End Try
+
+                                            Next ' End of line processing
+
+                                            ' Move processed file to archive folder (organized by day)
+                                            Try
+                                                Dim dateFolder As String = DateTime.Now.ToString("yyyyMMdd")
+                                                Dim archiveDir As String = Path.Combine(directory, "Processed", dateFolder)
+                                                If Not IO.Directory.Exists(archiveDir) Then
+                                                    IO.Directory.CreateDirectory(archiveDir)
+                                                End If
+
+                                                Dim archivePath As String = Path.Combine(archiveDir, Path.GetFileName(filePath))
+                                                File.Move(filePath, archivePath)
+                                                WriteToFile("File archived: " & archivePath)
+                                            Catch ex As Exception
+                                                WriteToFile("WARN: Could not archive file: " & ex.Message)
+                                                ' Try to delete the file if moving fails
+                                                Try
+                                                    File.Delete(filePath)
+                                                    WriteToFile("File deleted: " & filePath)
+                                                Catch ex2 As Exception
+                                                    WriteToFile("ERROR: Could not delete file: " & ex2.Message)
+                                                End Try
+                                            End Try
+
+                                        Catch ex As Exception
+                                            WriteToFile("ERROR processing file " & filePath & ": " & ex.Message)
+                                        End Try
+                                    Next ' End of file processing
+
+                                Catch ex As Exception
+                                    WriteToFile("ERROR accessing directory: " & ex.Message)
+                                Finally
+                                    ' Disconnect from network share
+                                    If networkConnection IsNot Nothing Then
+                                        Try
+                                            networkConnection.Dispose()
+                                            WriteToFile("Disconnected from network path")
+                                        Catch ex As Exception
+                                            WriteToFile("WARN: Error disconnecting from network: " & ex.Message)
+                                        End Try
+                                    End If
+                                End Try
+
+                            End If
+
+                        Next
+                    End If
+
+                Catch ex As Exception
+                    WriteToFile(strServiceName & " Service Error on: {0} " + ex.Message + ex.StackTrace)
+                End Try
+
+            ElseIf ExData.CONF_Company_NO = 3 Then
+
+                Try
+                    Dim dt As DataTable = BeConn.GetDt("SELECT [AutoID],[BaseDatos],[Tabla],[indice],[Tipo],[Fecha],[MachineName],[MachineType],[IsEnable],[StationID],[RequestStage],[Facility_Key],[Directory],[Username],[Password],[WorkGroup] FROM COMMON_EXTRACTORS where tipo in (50)")
+
+                    If dt.Rows.Count > 0 Then
+                        For Each row_ex In dt.Rows
+                            Dim contador As Integer = row_ex.Item("Indice")
+                            Dim tableName As String = row_ex.Item("Tabla")
+
+                            Dim dt_contarp As DataTable = BeConn.GetDt("Select PartID,Partnumber FROM PART")
+                            Dim dt_stati As DataTable = BeConn.GetDt("Select stationid,StationName,AreaID FROM [PART_STATION]")
+
+                            WriteToFile(tableName)
+
+                            If tableName = "ft_header" Then
+                                ' Validate table name before using it
+                                If Not IsValidTableName(tableName) Then
+                                    WriteToFile("Invalid table name: " & tableName)
+                                    Continue For
+                                End If
+
+                                Dim query As String = "Select [ft_id],[serial_number],[part_number],[mo_number],[create_date],[test_type],[operator],[fixture_number],[overall_status],[assy_pn],[assy_rev],[mo_num],[test_spec],[ns_part_number],[ns_serial_number],[ns_rev],[te_software_name] FROM [FunctionalTest].[dbo].[" & tableName & "] WHERE ft_id > @contador and part_number in ('00210055RC',
+'00210016RC02',
+'95210061RC',
+'00256278RC',
+'00256279RC')  Order by ft_id asc"
+                                Dim dt_ict As DataTable = BeConnOtsego.GetDt(query, {New SqlParameter("@contador", contador)})
+
+                                Dim areaid As Integer = 6
+                                Dim areaside As String = "A"
+                                Dim stationid As Integer = 2
+
+                                If dt_ict.Rows.Count > 0 Then
+                                    WriteToFile(tableName & " - Rows: " & dt_ict.Rows.Count)
+                                    For Each row As DataRow In dt_ict.Rows
+
+                                        Dim snn As String = row.Item("serial_number").ToString()
+                                        Dim trn As DateTime = row.Item("create_date")
+                                        Dim pn As String = row.Item("part_number").ToString().Trim()
+
+                                        Dim partid As Integer = 0
+                                        'Look for partid with parameterized query
+                                        Try
+                                            Dim dt_contar As DataTable = BeConn.GetDt(
+                                "Select PartID FROM PART where partnumber like @pn",
+                                {New SqlParameter("@pn", "%" & pn & "%")})
+
+                                            If dt_contar.Rows.Count > 0 Then
+                                                partid = dt_contar.Rows(0).Item(0)
+                                            End If
+                                        Catch ex As Exception
+                                            WriteToFile("Error finding partid: " & ex.Message)
+                                            Continue For
+                                        End Try
+
+                                        Dim currentindex As Integer = 0
+
+                                        Try
+                                            Dim dt_contar As DataTable = BeConn.GetDt(
+                                "Select count(*) as qty FROM [Part_Units_Log] where ssn=@ssn and areaid=@areaid and partid=@partid and TrnDate<@trndate and side=@side",
+                                {New SqlParameter("@ssn", snn),
+                                 New SqlParameter("@areaid", areaid),
+                                 New SqlParameter("@partid", partid),
+                                 New SqlParameter("@trndate", trn),
+                                 New SqlParameter("@side", areaside)})
+
+                                            If dt_contar.Rows.Count > 0 Then
+                                                currentindex = dt_contar.Rows(0).Item(0)
+                                            End If
+                                        Catch ex As Exception
+                                            WriteToFile("Error getting current index: " & ex.Message)
+                                            Continue For
+                                        End Try
+
+                                        currentindex += 1
+
+                                        Dim isrework As Boolean = (currentindex > 1)
+                                        Dim shift As Integer = GetShift(trn)
+
+                                        Dim status As String = "1"
+                                        Dim Failredesc As String = ""
+                                        Dim isgood As Boolean = True
+
+                                        Try
+                                            If row.Item("overall_status") = 0 Then
+                                                status = "0"
+                                                isgood = False
+                                                If Not IsDBNull(row.Item("overall_status")) Then
+                                                    Failredesc = row.Item("overall_status").ToString()
+                                                End If
+                                            End If
+                                        Catch ex As Exception
+
+                                        End Try
+
+
+                                        Try
+                                            Dim tester As String = row.Item("fixture_number").ToString()
+
+                                            Dim rowssta() = dt_stati.Select("StationName='" & tester.Replace("'", "''") & "' and areaid='" & areaid & "'")
+
+                                            If rowssta.Length > 0 Then
+                                                stationid = rowssta(0).Item(0)
+                                            End If
+                                        Catch ex As Exception
+
+                                        End Try
+
+                                        If partid <> 0 Then
+                                            Dim stageid As Integer = -99
+
+                                            Try
+                                                Dim dt_contar4 As DataTable = BeConn.GetDt(
+                                    "Select Stage from [PD_TBL_RUTES] where partid=@partid and Side='A' and areaid=@areaid",
+                                    {New SqlParameter("@partid", partid),
+                                     New SqlParameter("@areaid", areaid)})
+
+                                                If dt_contar4.Rows.Count > 0 Then
+                                                    stageid = dt_contar4.Rows(0).Item(0)
+                                                End If
+                                            Catch ex As Exception
+                                                WriteToFile("Error getting stage: " & ex.Message)
+                                                Continue For
+                                            End Try
+
+                                            Dim userid As Integer = 0
+                                            Dim opid As String = If(row.IsNull("operator"), "", row.Item("operator").ToString())
+
+                                            ' Get values safely
+                                            Dim nestid As String = 0
+                                            Dim ftid As Object = row.Item("ft_id")
+
+                                            Try
+                                                BeConn.UpdateRecords("UPDATE [COMMON_EXTRACTORS] SET Indice=@indice,Fecha=GETDATE() WHERE TABLA=@tablename",
+                                {New SqlParameter("@indice", ftid),
+                                 New SqlParameter("@tablename", tableName)})
+
+                                                ' Update PART_STATION
+                                                BeConn.UpdateRecords(
+                                    "UPDATE [PART_STATION] SET IsActive='True',DownTimeCodeID='80',LastPieceTime=@lastpiecetime,LastPartID=@lastpartid,LastSide='A' WHERE StationID=@stationid",
+                                    {New SqlParameter("@lastpiecetime", trn),
+                                     New SqlParameter("@lastpartid", partid),
+                                     New SqlParameter("@stationid", stationid)})
+
+                                                ' Update PART_STATION_TICKETS
+                                                BeConn.UpdateRecords(
+                                    "UPDATE [dbo].[PART_STATION_TICKETS] SET [IssueSolve] = 1,[IssueSolution] = 'UNKNOWN - CLOSE AUTOMATIC',[IssueSolveDate] = GETDATE(),[Status_ID] = 3 where IssueSolveDate is null and StationID=@stationid",
+                                    {New SqlParameter("@stationid", stationid)})
+
+                                                ' Check if exists in WIP
+                                                ' WIP LEGACY
+                                                Dim dt_contar4 As DataTable = BeConn.GetDt(
+    "Select * from PD_tbl_units_wip where ssn=@ssn",
+    {New SqlParameter("@ssn", snn)})
+
+                                                Dim wipStageid As Integer = stageid
+                                                If isgood = False Then
+                                                    wipStageid = stageid * (-1)
+                                                End If
+
+                                                Dim sql_wip As String = ""
+
+                                                If dt_contar4.Rows.Count > 0 Then
+                                                    ' UPDATE WIP
+                                                    If stageid <> -99 Then
+                                                        sql_wip = "UPDATE PD_tbl_units_wip SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, StatusAreaID=@areaid, JobSide='A',stageid=@stageid,IsActive=1 WHERE SSN=@ssn"
+                                                        BeConn.UpdateRecords(sql_wip,
+            {New SqlParameter("@isgood", isgood),
+             New SqlParameter("@defectcode", -1),
+             New SqlParameter("@trndate", trn),
+             New SqlParameter("@isrework", isrework),
+             New SqlParameter("@partid", partid),
+             New SqlParameter("@controlid", userid),
+             New SqlParameter("@stationid", stationid),
+             New SqlParameter("@areaid", areaid),
+             New SqlParameter("@stageid", wipStageid),
+             New SqlParameter("@ssn", snn)})
+                                                    Else
+                                                        sql_wip = "UPDATE PD_tbl_units_wip SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, StatusAreaID=@areaid, JobSide='A',IsActive=1 WHERE SSN=@ssn"
+                                                        BeConn.UpdateRecords(sql_wip,
+            {New SqlParameter("@isgood", isgood),
+             New SqlParameter("@defectcode", -1),
+             New SqlParameter("@trndate", trn),
+             New SqlParameter("@isrework", isrework),
+             New SqlParameter("@partid", partid),
+             New SqlParameter("@controlid", userid),
+             New SqlParameter("@stationid", stationid),
+             New SqlParameter("@areaid", areaid),
+             New SqlParameter("@ssn", snn)})
+                                                    End If
+                                                Else
+                                                    ' INSERT WIP
+                                                    If stageid <> -99 Then
+                                                        sql_wip = "INSERT INTO PD_tbl_units_wip (SSN,SSNPanel,JobID,JobType,JobNumber,JobSide,PartID,IsGood,DefectCodeID,TrnDate,IsRework,ControlID,StationID,StatusAreaID,GroupMLS,StageID,IsActive) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@stageid,@isactive)"
+                                                        BeConn.UpdateRecords(sql_wip,
+            {New SqlParameter("@ssn", snn),
+             New SqlParameter("@ssnpanel", "N/A"),
+             New SqlParameter("@jobid", -1),
+             New SqlParameter("@jobtype", -1),
+             New SqlParameter("@jobnumber", -1),
+             New SqlParameter("@jobside", "A"),
+             New SqlParameter("@partid", partid),
+             New SqlParameter("@isgood", isgood),
+             New SqlParameter("@defectcode", -1),
+             New SqlParameter("@trndate", trn),
+             New SqlParameter("@isrework", isrework),
+             New SqlParameter("@controlid", userid),
+             New SqlParameter("@stationid", stationid),
+             New SqlParameter("@areaid", areaid),
+             New SqlParameter("@groupmls", 0),
+             New SqlParameter("@stageid", wipStageid),
+             New SqlParameter("@isactive", 1)})
+                                                    Else
+                                                        sql_wip = "INSERT INTO PD_tbl_units_wip (SSN,SSNPanel,JobID,JobType,JobNumber,JobSide,PartID,IsGood,DefectCodeID,TrnDate,IsRework,ControlID,StationID,StatusAreaID,GroupMLS,IsActive) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@isactive)"
+                                                        BeConn.UpdateRecords(sql_wip,
+            {New SqlParameter("@ssn", snn),
+             New SqlParameter("@ssnpanel", "N/A"),
+             New SqlParameter("@jobid", -1),
+             New SqlParameter("@jobtype", -1),
+             New SqlParameter("@jobnumber", -1),
+             New SqlParameter("@jobside", "A"),
+             New SqlParameter("@partid", partid),
+             New SqlParameter("@isgood", isgood),
+             New SqlParameter("@defectcode", -1),
+             New SqlParameter("@trndate", trn),
+             New SqlParameter("@isrework", isrework),
+             New SqlParameter("@controlid", userid),
+             New SqlParameter("@stationid", stationid),
+             New SqlParameter("@areaid", areaid),
+             New SqlParameter("@groupmls", 0),
+             New SqlParameter("@isactive", 1)})
+                                                    End If
+                                                End If
+
+                                                ' PART_UNITS Update/Insert
+                                                Dim dt_partunits As DataTable = BeConn.GetDt(
+    "Select * from PART_UNITS where ssn=@ssn",
+    {New SqlParameter("@ssn", snn)})
+
+                                                Dim partunitsStageid As Integer = stageid
+                                                If isgood = False Then
+                                                    partunitsStageid = stageid * (-1)
+                                                End If
+
+                                                Dim sql_partunits As String = ""
+
+                                                If dt_partunits.Rows.Count > 0 Then
+                                                    ' UPDATE PART_UNITS
+                                                    If stageid <> -99 Then
+                                                        sql_partunits = "UPDATE PART_UNITS SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, AreaID=@areaid, Side='A',stageid=@stageid,IsActive=1,SSNIndex=@ssnindex,Shift=@shift,Comments=@comments WHERE SSN=@ssn"
+                                                        BeConn.UpdateRecords(sql_partunits,
+            {New SqlParameter("@isgood", isgood),
+             New SqlParameter("@defectcode", -1),
+             New SqlParameter("@trndate", trn),
+             New SqlParameter("@isrework", isrework),
+             New SqlParameter("@partid", partid),
+             New SqlParameter("@controlid", userid),
+             New SqlParameter("@stationid", stationid),
+             New SqlParameter("@areaid", areaid),
+             New SqlParameter("@stageid", partunitsStageid),
+             New SqlParameter("@ssn", snn),
+            New SqlParameter("@ssnindex", currentindex),
+            New SqlParameter("@shift", shift),
+            New SqlParameter("@comments", Failredesc)})
+                                                    Else
+                                                        sql_partunits = "UPDATE PART_UNITS SET IsGood=@isgood,DefectCodeID=@defectcode,TrnDate=@trndate,IsRework=@isrework,PartID=@partid,ControlID=@controlid,StationID=@stationid, AreaID=@areaid, Side='A',IsActive=1,SSNIndex=@ssnindex,Shift=@shift,Comments=@comments WHERE SSN=@ssn"
+                                                        BeConn.UpdateRecords(sql_partunits,
+            {New SqlParameter("@isgood", isgood),
+             New SqlParameter("@defectcode", -1),
+             New SqlParameter("@trndate", trn),
+             New SqlParameter("@isrework", isrework),
+             New SqlParameter("@partid", partid),
+             New SqlParameter("@controlid", userid),
+             New SqlParameter("@stationid", stationid),
+             New SqlParameter("@areaid", areaid),
+             New SqlParameter("@ssn", snn),
+                New SqlParameter("@ssnindex", currentindex),
+                New SqlParameter("@shift", shift),
+                New SqlParameter("@comments", Failredesc)})
+                                                    End If
+                                                Else
+                                                    ' INSERT PART_UNITS
+                                                    If stageid <> -99 Then
+                                                        sql_partunits = "INSERT INTO PART_UNITS (SSN,SSNPanel,JobID,JobType,JobNumber,Side,PartID,IsGood,DefectCodeID,TrnDate,IsRework,controlid,StationID,AreaID,BinID,StageID,IsActive,SSNIndex,Shift,Comments,NestID) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@stageid,@isactive,@ssnindex,@shift,@comments,@nestid)"
+                                                        BeConn.UpdateRecords(sql_partunits,
+            {New SqlParameter("@ssn", snn),
+             New SqlParameter("@ssnpanel", "N/A"),
+             New SqlParameter("@jobid", -1),
+             New SqlParameter("@jobtype", -1),
+             New SqlParameter("@jobnumber", -1),
+             New SqlParameter("@jobside", "A"),
+             New SqlParameter("@partid", partid),
+             New SqlParameter("@isgood", isgood),
+             New SqlParameter("@defectcode", -1),
+             New SqlParameter("@trndate", trn),
+             New SqlParameter("@isrework", isrework),
+             New SqlParameter("@controlid", userid),
+             New SqlParameter("@stationid", stationid),
+             New SqlParameter("@areaid", areaid),
+             New SqlParameter("@groupmls", 0),
+             New SqlParameter("@stageid", partunitsStageid),
+             New SqlParameter("@isactive", 1),
+                                 New SqlParameter("@ssnindex", currentindex),
+                                 New SqlParameter("@shift", shift),
+                                 New SqlParameter("@comments", Failredesc),
+                                 New SqlParameter("@nestid", nestid)})
+                                                    Else
+                                                        sql_partunits = "INSERT INTO PART_UNITS (SSN,SSNPanel,JobID,JobType,JobNumber,Side,PartID,IsGood,DefectCodeID,TrnDate,IsRework,controlid,StationID,AreaID,BinID,StageID,IsActive,SSNIndex,Shift,Comments,NestID) VALUES (@ssn,@ssnpanel,@jobid,@jobtype,@jobnumber,@jobside,@partid,@isgood,@defectcode,@trndate,@isrework,@controlid,@stationid,@areaid,@groupmls,@stageid,@isactive,@ssnindex,@shift,@comments,@nestid)"
+                                                        BeConn.UpdateRecords(sql_partunits,
+            {New SqlParameter("@ssn", snn),
+             New SqlParameter("@ssnpanel", "N/A"),
+             New SqlParameter("@jobid", -1),
+             New SqlParameter("@jobtype", -1),
+             New SqlParameter("@jobnumber", -1),
+             New SqlParameter("@jobside", "A"),
+             New SqlParameter("@partid", partid),
+             New SqlParameter("@isgood", isgood),
+             New SqlParameter("@defectcode", -1),
+             New SqlParameter("@trndate", trn),
+             New SqlParameter("@isrework", isrework),
+             New SqlParameter("@controlid", userid),
+             New SqlParameter("@stationid", stationid),
+             New SqlParameter("@areaid", areaid),
+             New SqlParameter("@groupmls", 0),
+             New SqlParameter("@isactive", 1),
+                                 New SqlParameter("@ssnindex", currentindex),
+                                 New SqlParameter("@shift", shift),
+                                 New SqlParameter("@comments", Failredesc),
+                                 New SqlParameter("@nestid", nestid)})
+                                                    End If
+                                                End If
+
+                                            Catch ex As Exception
+                                                WriteToFile("Error updating WIP: " & ex.Message)
+                                            End Try
+                                        End If
+                                    Next
+                                End If
+                            End If
+                        Next
+                    End If
+
+                Catch ex As Exception
+                    WriteToFile(strServiceName & " Service Error on: {0} " + ex.Message + ex.StackTrace)
+                End Try
+
+            End If
+
+        Catch ex As Exception
+            WriteToFile(strServiceName & " Service Error on: {0} " + ex.Message + ex.StackTrace)
+        End Try
+
+        If executeCorrectly = 3 Then
+            BeAgent.Active("Execute End")
+        ElseIf executeCorrectly = 4 Then
+            BeAgent.Caution(executeMessage)
+        Else
+            BeAgent.Serious(executeMessage)
+        End If
+
+
+        Return Result
+    End Function
+
+    '########################################################
+    '--------------------------------------------------------
+    '--------------------------------------------------------
+    '########################################################
+
+    Private Function IsValidTableName(tableName As String) As Boolean
+        ' Only allow alphanumeric characters and underscores
+        Return System.Text.RegularExpressions.Regex.IsMatch(tableName, "^[a-zA-Z0-9_]+$")
+    End Function
+
+    '2020-02-08 EM: Use for try errors.
+    Dim intentos As Integer = 0
+    Dim lastpiece As DateTime
+    Dim partid As Integer
+
+    Public Function ConvertDataTableToHTML(ByVal dt As DataTable) As String
+        ConvertDataTableToHTML =
+            <table border='1' cellpadding='10' cellspacing='0'>
+                <thead>
+                    <tr>
+                        <%=
+                            From col As DataColumn In dt.Columns.Cast(Of DataColumn)()
+                            Select <th><%= col.ColumnName %></th>
+                        %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%=
+                        From row As DataRow In dt.Rows.Cast(Of DataRow)()
+                        Select
+                        <tr>
+                            <%=
+                                From col As DataColumn In dt.Columns.Cast(Of DataColumn)()
+                                Select <td><%= row(col) %></td>
+                            %>
+                        </tr>
+                    %>
+                </tbody>
+            </table>.ToString()
+    End Function
+End Module

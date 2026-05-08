@@ -1,0 +1,184 @@
+using APIs_BeFirst.Framework.Queries;
+using APIs_BeFirst.Models.Request;
+using APIs_BeFirst.Models.Response;
+using APIs_BeFirst.Models.DataMachines;
+using Microsoft.EntityFrameworkCore;
+
+namespace APIs_BeFirst.Service.AOI
+{
+    /// <summary>
+    /// Service implementation for AOI (Automated Optical Inspection) data operations
+    /// Uses Entity Framework Core for database operations
+    /// </summary>
+    public class AOIService : IAOIService
+    {
+        protected readonly ProdMachinesResultsContext _contextMachines;
+
+        public AOIService(ProdMachinesResultsContext contextMachines)
+        {
+            _contextMachines = contextMachines;
+        }
+
+        /// <summary>
+        /// Submit a single AOI inspection record
+        /// </summary>
+        public async Task<AOIDataResponse> SubmitInspectionAsync(AOIDataRequest request)
+        {
+            var response = new AOIDataResponse();
+
+            try
+            {
+                // Map request to entity
+                var aoiData = new MachinesExtractorAoiDatum
+                {
+                    Sn = request.Sn,
+                    Aoiid = request.Aoiid,
+                    StationId = request.StationId,
+                    PartId = request.PartId,
+                    Side = request.Side,
+                    Trndate = request.Trndate ?? DateTime.Now,
+                    IsGood = request.IsGood,
+                    IsRework = request.IsRework,
+                    RefCir = request.RefCir,
+                    DefectDesc = request.DefectDesc,
+                    UserPass = request.UserPass,
+                    UserDesc = request.UserDesc ?? "",
+                    Position = request.Position,
+                    Xmisfit = request.Xmisfit ?? 0,
+                    Ymisfit = request.Ymisfit ?? 0,
+                    Xpos = request.Xpos ?? 0,
+                    Ypos = request.Ypos ?? 0,
+                    FacilityKey = request.FacilityKey,
+                    AreaId = request.AreaId
+                };
+
+                // Add to DbSet and save
+                await _contextMachines.MachinesExtractorAoiData.AddAsync(aoiData);
+                await _contextMachines.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "AOI inspection data submitted successfully";
+                response.RecordsInserted = 1;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Error submitting AOI data: {ex.Message}";
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Submit multiple AOI inspection records in batch
+        /// </summary>
+        public async Task<AOIBatchResponse> SubmitInspectionBatchAsync(List<AOIDataRequest> requests)
+        {
+            var response = new AOIBatchResponse
+            {
+                TotalRecords = requests.Count,
+                SuccessfulRecords = 0,
+                FailedRecords = 0
+            };
+
+            try
+            {
+                // Map all requests to entities
+                var aoiDataList = requests.Select(request => new MachinesExtractorAoiDatum
+                {
+                    Sn = request.Sn,
+                    Aoiid = request.Aoiid,
+                    StationId = request.StationId,
+                    PartId = request.PartId,
+                    Side = request.Side,
+                    Trndate = request.Trndate ?? DateTime.Now,
+                    IsGood = request.IsGood,
+                    IsRework = request.IsRework,
+                    RefCir = request.RefCir,
+                    DefectDesc = request.DefectDesc,
+                    UserPass = request.UserPass,
+                    UserDesc = request.UserDesc ?? "",
+                    Position = request.Position,
+                    Xmisfit = request.Xmisfit ?? 0,
+                    Ymisfit = request.Ymisfit ?? 0,
+                    Xpos = request.Xpos ?? 0,
+                    Ypos = request.Ypos ?? 0,
+                    FacilityKey = request.FacilityKey,
+                    AreaId = request.AreaId
+                }).ToList();
+
+                // Batch insert
+                await _contextMachines.MachinesExtractorAoiData.AddRangeAsync(aoiDataList);
+                await _contextMachines.SaveChangesAsync();
+
+                response.SuccessfulRecords = aoiDataList.Count;
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.FailedRecords = requests.Count;
+                response.Errors?.Add($"Batch insert failed: {ex.Message}");
+                response.Success = false;
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Get AOI machine configuration
+        /// </summary>
+        public async Task<MachinesExtractorAoi?> GetMachineConfigAsync(int aoiId)
+        {
+            try
+            {
+                var config = await _contextMachines.MachinesExtractorAois
+                    .Where(x => x.Aoiid == aoiId && x.Active == true)
+                    .FirstOrDefaultAsync();
+
+                return config;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Get AOI machines by station ID
+        /// </summary>
+        public async Task<List<MachinesExtractorAoi>> GetMachinesByStationAsync(int stationId)
+        {
+            try
+            {
+                var machines = await _contextMachines.MachinesExtractorAois
+                    .Where(x => x.StationId == stationId && x.Active == true)
+                    .ToListAsync();
+
+                return machines ?? new List<MachinesExtractorAoi>();
+            }
+            catch (Exception)
+            {
+                return new List<MachinesExtractorAoi>();
+            }
+        }
+
+        /// <summary>
+        /// Get all active AOI machines
+        /// </summary>
+        public async Task<List<MachinesExtractorAoi>> GetAllActiveMachinesAsync()
+        {
+            try
+            {
+                var machines = await _contextMachines.MachinesExtractorAois
+                    .Where(x => x.Active == true)
+                    .ToListAsync();
+
+                return machines ?? new List<MachinesExtractorAoi>();
+            }
+            catch (Exception)
+            {
+                return new List<MachinesExtractorAoi>();
+            }
+        }
+    }
+}

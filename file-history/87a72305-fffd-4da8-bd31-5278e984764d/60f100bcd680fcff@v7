@@ -1,0 +1,620 @@
+@using System.Data;
+@using System.Data.SqlClient;
+@model Firstronic.Areas.Planning.Models.Reports.Building_Selector
+
+@{
+  ViewBag.Title = "Planning Timeline";
+  int Planning_Job_Schedule = 2396;
+}
+
+<style nonce="@Html.ScriptNonce()">
+  .timeline-container {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .timeline-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .timeline-controls {
+    display: flex;
+    gap: 10px;
+  }
+
+  .timeline-btn {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .timeline-btn:hover {
+    background: rgba(255,255,255,0.3);
+  }
+
+  .timeline-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 250px);
+    position: relative;
+  }
+
+  .timeline-grid {
+    position: relative;
+    padding: 20px;
+  }
+
+  .timeline-row {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: stretch;
+    min-height: 60px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+  }
+
+  .timeline-station-label {
+    width: 200px;
+    flex-shrink: 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .station-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .station-info {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  .timeline-track {
+    flex: 1;
+    position: relative;
+    background: repeating-linear-gradient(
+      90deg,
+      #f8f9fa 0px,
+      #f8f9fa 1px,
+      transparent 1px,
+      transparent 100px
+    );
+    min-height: 50px;
+    border-radius: 4px;
+  }
+
+  .timeline-job {
+    position: absolute;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    left: var(--job-left, 0);
+    width: var(--job-width, 100px);
+  }
+
+  .timeline-job:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 100;
+  }
+
+  .job-title {
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .job-details {
+    font-size: 10px;
+    opacity: 0.9;
+    margin-top: 2px;
+  }
+
+  .timeline-time-markers {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    padding: 10px 20px;
+    border-bottom: 2px solid #e0e0e0;
+    margin-left: 220px;
+  }
+
+  .time-marker-container {
+    display: flex;
+    position: relative;
+  }
+
+  .time-marker {
+    width: 100px;
+    text-align: center;
+    font-size: 11px;
+    color: #666;
+    border-left: 1px solid #ddd;
+    padding: 5px 0;
+  }
+
+  .time-marker:first-child {
+    border-left: none;
+  }
+
+  .current-time-indicator {
+    position: absolute;
+    width: 2px;
+    background: #e74c3c;
+    top: 0;
+    bottom: 0;
+    z-index: 5;
+    left: var(--current-time-left, 0);
+  }
+
+  .tooltip {
+    position: fixed;
+    background: rgba(0,0,0,0.9);
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1000;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: none;
+    left: var(--tooltip-left, 0);
+    top: var(--tooltip-top, 0);
+  }
+
+  .tooltip.visible {
+    display: block;
+  }
+
+  .timeline-grid,
+  .time-marker-container {
+    min-width: var(--grid-width, 3000px);
+  }
+
+  .tooltip-row {
+    margin: 4px 0;
+  }
+
+  .tooltip-label {
+    font-weight: 600;
+    color: #64b5f6;
+  }
+
+  .legend {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+  }
+
+  .legend-color.priority-3 { background: #BF0001; }
+  .legend-color.priority-2 { background: #FFFF00; }
+  .legend-color.priority-1 { background: #8FCD2A; }
+  .legend-color.priority-0 { background: #6FC3DB; }
+  .legend-color.priority-4 { background: #FFFFFF; border: 1px solid #ddd; }
+  .legend-color.priority-5 { background: #AAAAAA; }
+
+  .legend-color.time-indicator {
+    background: #e74c3c;
+    width: 2px;
+  }
+
+  .timeline-header h3 {
+    margin: 0;
+  }
+
+  .timeline-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .timeline-date {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 400;
+  }
+
+  /* Priority-based job colors (CP field) */
+  .timeline-job.priority-3 {
+    background: #BF0001 !important;
+    color: #FFFFFF;
+  }
+
+  .timeline-job.priority-2 {
+    background: #FFFF00 !important;
+    color: #010101;
+  }
+
+  .timeline-job.priority-1 {
+    background: #8FCD2A !important;
+    color: #010101;
+  }
+
+  .timeline-job.priority-0 {
+    background: #6FC3DB !important;
+    color: #FFFFFF;
+  }
+
+  .timeline-job.priority-4 {
+    background: #FFFFFF !important;
+    color: #010101;
+    border: 1px solid #ddd;
+  }
+
+  .timeline-job.priority-5 {
+    background: #AAAAAA !important;
+    color: #FFFFFF;
+  }
+</style>
+
+<div class="md-card timeline-container">
+  <div class="timeline-header">
+    <div class="timeline-header-info">
+      <h3>@ViewBag.Title</h3>
+      <div class="timeline-date">@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</div>
+    </div>
+    <div class="timeline-controls">
+      <button class="timeline-btn" id="btnCurrentTime">Current Time</button>
+      <button class="timeline-btn" id="btnZoomIn">Zoom In</button>
+      <button class="timeline-btn" id="btnZoomOut">Zoom Out</button>
+      <a href="@Url.Action("Index", "Status", new { AreaID = Model.AreaID })" class="timeline-btn">Table View</a>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-color priority-3"></div>
+      <span>Critical (3)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color priority-2"></div>
+      <span>High (2)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color priority-1"></div>
+      <span>Medium (1)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color priority-0"></div>
+      <span>Normal (0)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color priority-4"></div>
+      <span>Low (4)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color priority-5"></div>
+      <span>On Hold (5)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color time-indicator"></div>
+      <span>Current Time</span>
+    </div>
+  </div>
+
+  <div class="timeline-wrapper" id="timelineWrapper">
+    <div class="timeline-time-markers" id="timeMarkers">
+      <!-- Time markers will be generated by JavaScript -->
+    </div>
+
+    <div class="timeline-grid" id="timelineGrid">
+      @foreach (Firstronic.Areas.Planning.Models.tbl_PART_Station Station in Model.listStations)
+      {
+        SqlParameter[] areaParameters = new SqlParameter[]{
+          new SqlParameter("@Job_Status_Key",SqlDbType.Int) {Value = Planning_Job_Schedule},
+          new SqlParameter("@AreaID",SqlDbType.Int) {Value = Model.AreaID},
+          new SqlParameter("@StationID",SqlDbType.Int) {Value = Station.StationID},
+        };
+
+        DataTable dtPlanning = Firstronic.Framework.Queries.GetDatatableFromQuery(@"Select  TOP 100 jobs.ID as ID,jobs.JobType as Type,(CASE WHEN jobs.JobType =  2 THEN 'KB' WHEN jobs.JobType =  3 THEN 'MNTO' ElSE Cast(jobs.JobID as varchar) END) as Job,CONCAT(Cast(PN.PartNumber as varchar),' ',jobs.Side) as PN,jobs.CPriority As CP,jobs.Side as Side,jobs.Priority as Priority, (jobs.Qty - ISNULL(jb.QtyBuild,0)) as Qty, jobs.JobID as JobID,isnull(mc.MetroCarStatusID,-1) as MCI,jobs.GroupMLS,isnull(jr.autoid,0) as 'Ready',isnull(iss.autoid,0) AS Issue ,isnull(Part_Bin.Bin_Name,'NA') as Bin_Name,'' as Ser,'' as Available,isnull([Inventory_Status_ID],0) as Inventory_Status_ID,cast((cast(jobs.Qty - ISNULL(jb.QtyBuild,0) as float) / cast(isnull(effi.Efficence,100)*ISNULL(rat.Rate,10)/100 as float) ) *60 as int) as TiempoMin From (Select * From PD_tbl_jobs_normal WHERE AreaID=@AreaID AND Job_Status_Key=@Job_Status_Key) jobs INNER JOIN CS_idt_partnumbers PN ON jobs.PartID=PN.PartID LEFT JOIN PD_tbl_jobs_qty_build jb ON jobs.JobType=jb.JobType AND jobs.JobID=jb.JobID AND jb.AreaID=@AreaID AND jobs.Side=jb.JobSide AND jobs.ChildID=jb.JobChild LEFT JOIN PD_tbl_stations_rates pr ON pr.StationID=jobs.StationID AND pr.PartID=jobs.PartID AND pr.Side = jobs.Side LEFT JOIN EN_idt_metrocars mc ON mc.JobType = jobs.JobType AND mc.JobSide=jobs.Side AND mc.JobID = jobs.id LEFT JOIN PD_tbl_jobs_ready jr ON jr.JobType = jobs.JobType AND jr.JobID = jobs.id LEFT JOIN Part_Bin ON part_ID=jobs.partid and BIn_ID=jobs.GroupMLS LEFT JOIN (select * from EN_tbl_visualAids_issues where IssueSolved=0) iss ON iss.partid= jobs.PartID and iss.side=jobs.Side LEFT JOIN EN_tbl_efficency_stations effi ON effi.StationID = jobs.StationID  LEFT JOIN PD_tbl_stations_rates100 rat ON rat.StationID =jobs.StationID and rat.Side= jobs.Side and rat.PartID=jobs.PartID	 WHERE jobs.StationID=@StationID and jobs.areaid=@AreaID ORDER BY jobs.Priority asc", areaParameters);
+
+        try
+        {
+          dtPlanning.Columns.Add("Entra", typeof(DateTime));
+          DateTime tiempo = DateTime.Now;
+
+          if (dtPlanning.Rows.Count > 0)
+          {
+            dtPlanning.Rows[0]["Entra"] = tiempo;
+            int duration = 0;
+            for (int i = 1; i < dtPlanning.Rows.Count; i++)
+            {
+              duration = (int)dtPlanning.Rows[i - 1]["TiempoMin"];
+              dtPlanning.Rows[i]["Entra"] = ((DateTime)dtPlanning.Rows[i - 1]["Entra"]).AddMinutes(duration);
+            }
+          }
+        }
+        catch (Exception ex)
+        {
+        }
+
+        string stationData = Station.StationID.ToString();
+        int jobCount = dtPlanning.Rows.Count;
+
+        <div class="timeline-row" data-station="@stationData">
+          <div class="timeline-station-label">
+            <div class="station-name">@Station.StationName</div>
+            <div class="station-info">@jobCount job(s) scheduled</div>
+          </div>
+          <div class="timeline-track" data-station-id="@Station.StationID">
+            @foreach (System.Data.DataRow row in dtPlanning.Rows)
+            {
+              if (row["Entra"] != DBNull.Value && row["TiempoMin"] != DBNull.Value)
+              {
+                DateTime startTime = (DateTime)row["Entra"];
+                int durationMin = (int)row["TiempoMin"];
+                string jobName = row["Job"].ToString();
+                string partNumber = row["PN"].ToString();
+                int qty = Convert.ToInt32(row["Qty"]);
+                int priority = Convert.ToInt32(row["CP"]);
+
+                <div class="timeline-job priority-@priority"
+                     data-start="@startTime.ToString("o")"
+                     data-duration="@durationMin"
+                     data-job="@jobName"
+                     data-pn="@partNumber"
+                     data-qty="@qty"
+                     data-priority="@priority">
+                  <div class="job-title">@jobName</div>
+                  <div class="job-details">@partNumber</div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="tooltip-content"></div>
+</div>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  let pixelsPerMinute = 2; // Default zoom level
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  $(document).ready(function () {
+    initializeTimeline();
+    positionJobs();
+    generateTimeMarkers();
+    setupTooltips();
+    attachButtonEvents();
+
+    // Auto-refresh every 5 minutes
+    setInterval(function () {
+      window.location.reload(true);
+    }, 300000);
+  });
+
+  function attachButtonEvents() {
+    document.getElementById('btnCurrentTime').addEventListener('click', scrollToNow);
+    document.getElementById('btnZoomIn').addEventListener('click', zoomIn);
+    document.getElementById('btnZoomOut').addEventListener('click', zoomOut);
+  }
+
+  function initializeTimeline() {
+    // Position current time indicator
+    const now = new Date();
+    const minutesSinceStart = (now - startOfDay) / (1000 * 60);
+    const leftPosition = minutesSinceStart * pixelsPerMinute;
+
+    const indicator = document.createElement('div');
+    indicator.className = 'current-time-indicator';
+    indicator.style.setProperty('--current-time-left', leftPosition + 'px');
+    document.querySelector('.timeline-grid').appendChild(indicator);
+  }
+
+  function positionJobs() {
+    $('.timeline-job').each(function () {
+      const $job = $(this);
+      const startTime = new Date($job.data('start'));
+      const duration = $job.data('duration');
+
+      const minutesSinceStart = (startTime - startOfDay) / (1000 * 60);
+      const leftPosition = minutesSinceStart * pixelsPerMinute;
+      const width = duration * pixelsPerMinute;
+
+      // Use setProperty to set CSS custom properties
+      this.style.setProperty('--job-left', leftPosition + 'px');
+      this.style.setProperty('--job-width', Math.max(width, 80) + 'px');
+
+      // Debug log
+      console.log('Job:', $job.data('job'), 'Start:', startTime, 'Left:', leftPosition, 'Width:', width);
+    });
+
+    // Update grid width
+    const jobTimes = $('.timeline-job').map(function () {
+      const start = new Date($(this).data('start'));
+      const duration = $(this).data('duration');
+      return ((start - startOfDay) / (1000 * 60)) + duration;
+    }).get();
+
+    const maxTime = jobTimes.length > 0 ? Math.max(...jobTimes) : 1440; // Default to 24 hours if no jobs
+    const gridWidth = Math.max(maxTime * pixelsPerMinute, 3000);
+
+    $('.timeline-grid, .time-marker-container').each(function() {
+      this.style.setProperty('--grid-width', gridWidth + 'px');
+    });
+
+    console.log('Grid width:', gridWidth, 'Max time:', maxTime, 'Jobs:', jobTimes.length);
+  }
+
+  function generateTimeMarkers() {
+    const $container = $('#timeMarkers .time-marker-container');
+    if ($container.length === 0) {
+      $('#timeMarkers').html('<div class="time-marker-container"></div>');
+    }
+
+    const container = $('#timeMarkers .time-marker-container');
+    container.empty();
+
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    // Generate markers for 48 hours (current day + next day)
+    for (let i = 0; i < 48; i++) {
+      const hour = (currentHour + i) % 24;
+      const displayHour = hour === 0 ? '12 AM' : hour < 12 ? hour + ' AM' : hour === 12 ? '12 PM' : (hour - 12) + ' PM';
+
+      container.append(`<div class="time-marker">${displayHour}</div>`);
+    }
+  }
+
+  function setupTooltips() {
+    const $tooltip = $('#tooltip');
+    const tooltip = document.getElementById('tooltip');
+
+    $('.timeline-job').hover(
+      function (e) {
+        const $job = $(this);
+        const job = $job.data('job');
+        const pn = $job.data('pn');
+        const qty = $job.data('qty');
+        const start = new Date($job.data('start'));
+        const duration = $job.data('duration');
+        const end = new Date(start.getTime() + duration * 60000);
+
+        const priority = $job.data('priority');
+        const priorityLabel = getPriorityLabel(priority);
+
+        const content = `
+          <div class="tooltip-row"><span class="tooltip-label">Job:</span> ${job}</div>
+          <div class="tooltip-row"><span class="tooltip-label">Part Number:</span> ${pn}</div>
+          <div class="tooltip-row"><span class="tooltip-label">Quantity:</span> ${qty}</div>
+          <div class="tooltip-row"><span class="tooltip-label">Priority:</span> ${priorityLabel}</div>
+          <div class="tooltip-row"><span class="tooltip-label">Start:</span> ${formatTime(start)}</div>
+          <div class="tooltip-row"><span class="tooltip-label">End:</span> ${formatTime(end)}</div>
+          <div class="tooltip-row"><span class="tooltip-label">Duration:</span> ${formatDuration(duration)}</div>
+        `;
+
+        $tooltip.find('.tooltip-content').html(content);
+        $tooltip.addClass('visible');
+        updateTooltipPosition(e);
+      },
+      function () {
+        $tooltip.removeClass('visible');
+      }
+    ).mousemove(updateTooltipPosition);
+  }
+
+  function updateTooltipPosition(e) {
+    const tooltip = document.getElementById('tooltip');
+    const offset = 15;
+    tooltip.style.setProperty('--tooltip-left', (e.pageX + offset) + 'px');
+    tooltip.style.setProperty('--tooltip-top', (e.pageY + offset) + 'px');
+  }
+
+  function formatTime(date) {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+  }
+
+  function formatDuration(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours > 0) {
+      return `${hours}h ${mins}m`;
+    }
+    return `${mins}m`;
+  }
+
+  function getPriorityLabel(priority) {
+    switch(priority) {
+      case 3: return 'Critical (3)';
+      case 2: return 'High (2)';
+      case 1: return 'Medium (1)';
+      case 0: return 'Normal (0)';
+      case 4: return 'Low (4)';
+      case 5: return 'On Hold (5)';
+      default: return priority;
+    }
+  }
+
+  function scrollToNow() {
+    const now = new Date();
+    const minutesSinceStart = (now - startOfDay) / (1000 * 60);
+    const scrollPosition = Math.max((minutesSinceStart * pixelsPerMinute) - 200, 0);
+
+    console.log('Scroll to now - Minutes since start:', minutesSinceStart, 'Scroll position:', scrollPosition);
+
+    const wrapper = document.getElementById('timelineWrapper');
+    if (wrapper) {
+      wrapper.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+    } else {
+      console.error('Timeline wrapper not found');
+    }
+  }
+
+  function zoomIn() {
+    pixelsPerMinute *= 1.5;
+    positionJobs();
+    generateTimeMarkers();
+  }
+
+  function zoomOut() {
+    pixelsPerMinute = Math.max(pixelsPerMinute / 1.5, 0.5);
+    positionJobs();
+    generateTimeMarkers();
+  }
+
+  // Auto-scroll to current time on load
+  setTimeout(function() {
+    console.log('Auto-scrolling to current time...');
+    scrollToNow();
+  }, 800);
+</script>

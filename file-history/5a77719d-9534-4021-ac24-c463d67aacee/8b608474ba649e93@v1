@@ -1,0 +1,165 @@
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using Firstronic.Areas.Dashboards.Models;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using static Firstronic.Areas.Planning.Models.Reports;
+using System.Diagnostics;
+using Firstronic.Areas.Planning.Models;
+
+namespace Firstronic.Areas.Planning.Controllers
+{
+  public class StatusController : BaseSecurityController
+  {
+    // GET: Planning/Status
+    public ActionResult Index(int? AreaID = 1, int Building_Key = 0, int year = 0, int month = 0, int day = 0)
+    {
+      var model = new Building_Selector();
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      model.month = month;
+      model.year = year;
+      model.day = day;
+      model.AreaID = AreaID;
+      model.Building_Key = Building_Key;
+
+      SqlParameter[] areaParameters = new SqlParameter[]{
+        new SqlParameter("@AreaID",SqlDbType.Int) {Value = model.AreaID},
+        new SqlParameter("@Building_Key",SqlDbType.Int) {Value = model.Building_Key},
+      };
+
+      DataTable dt_workcentersoee = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT PD_idt_stations.StationID, PD_idt_stations.StationName, PD_idt_stations.AreaID, PD_idt_stations.IsActive, PD_idt_stations.DownTimeCodeID, PD_idt_stations.LastPieceTime, PD_idt_stations.LastPartID, PD_idt_stations.LastJob, PD_idt_stations.LastJobText, PD_idt_stations.LastJobType, PD_idt_stations.LastJobQty, PD_idt_stations.LastJobQtyBuild, PD_idt_stations.LastHourQty, PD_idt_stations.LastRate, PD_idt_stations.LastSide, PD_idt_stations.BeFirstActive, PD_idt_stations.LockStatus, PD_idt_stations.LastFormat, PD_idt_stations.DashVisible, PD_idt_stations.ProdVisible, PD_idt_stations.LockMachines, PD_idt_stations.Alias, PD_idt_stations.LastBinID, PD_idt_stations.PLC_Name, PD_idt_stations.Workcenter_Key, PD_idt_stations.Workcenter_Key_Kanban, PD_idt_stations.Workcenter_PLC_Name, PD_idt_stations.Workcenter_PLC_Name_Kanban, PD_idt_stations.AutoID, PD_idt_stations.Facility_Key, PD_idt_stations.Allow_Plex_Transactions, PD_idt_stations.Workcenter_Key_1, PD_idt_stations.Workcenter_Key_2, PD_idt_stations.Workcenter_Key_Kanban_1, PD_idt_stations.Workcenter_Key_Kanban_2, PD_idt_stations.Workcenter_PLC_Name_1, PD_idt_stations.Workcenter_PLC_Name_2, PD_idt_stations.Workcenter_PLC_Name_Kanban_1, PD_idt_stations.Workcenter_PLC_Name_Kanban_2, PD_idt_stations.Allow_LoadMaterial, PD_idt_stations.Custom_Labels, PD_idt_stations.Allow_Plex_Transactions_2, CS_idt_partnumbers.PartNumber, EN_idt_downtimes_codes.RazonSpecific,datediff(MINUTE,LastPieceTime,GETDATE()) as Downtime  FROM PD_idt_stations LEFT JOIN  CS_idt_partnumbers ON PD_idt_stations.LastPartID = CS_idt_partnumbers.PartID LEFT JOIN EN_idt_downtimes_codes ON PD_idt_stations.DownTimeCodeID = EN_idt_downtimes_codes.DownTimeCodeID WHERE (PD_idt_stations.AreaID = @AreaID) AND (PD_idt_stations.BeFirstActive = 1) AND (PD_idt_stations.StationID not in (SELECT [Sub_Station_ID] FROM [Part_Station_SubStation] WHERE Station_ID<>Sub_Station_ID) ) AND (@Building_Key=0 or PD_idt_stations.Building_Key=@Building_Key) Order by PD_idt_stations.Building_Key ASC,PD_idt_stations.SortNo ASC, StationName ASC", areaParameters);
+
+      List<tbl_PART_Station> listStations = new List<tbl_PART_Station>();
+
+      foreach (DataRow rowParts in dt_workcentersoee.Rows)
+      {
+        int StationID = (int)rowParts["StationID"];
+        string StationName = rowParts["StationName"].ToString();
+        DateTime LastPieceTime = (DateTime)rowParts["LastPieceTime"];
+
+        listStations.Add(new tbl_PART_Station() { StationID = StationID, StationName = StationName, LastPieceTime = LastPieceTime });
+      }
+
+      model.listStations = listStations;
+
+      return View(model);
+    }
+
+    public ActionResult Balance(int? AreaID = 1, int Building_Key = 0, int year = 0, int month = 0, int day = 0)
+    {
+      var model = new Building_Selector();
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      model.month = month;
+      model.year = year;
+      model.day = day;
+      model.AreaID = AreaID;
+      model.Building_Key = Building_Key;
+
+      SqlParameter[] areaParameters = new SqlParameter[]{
+        new SqlParameter("@AreaID",SqlDbType.Int) {Value = model.AreaID},
+        new SqlParameter("@Building_Key",SqlDbType.Int) {Value = model.Building_Key},
+      };
+
+      DataTable dt_workcentersoee = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT PD_idt_stations.StationID, PD_idt_stations.StationName, PD_idt_stations.AreaID, PD_idt_stations.IsActive, PD_idt_stations.DownTimeCodeID, PD_idt_stations.LastPieceTime, PD_idt_stations.LastPartID, PD_idt_stations.LastJob, PD_idt_stations.LastJobText, PD_idt_stations.LastJobType, PD_idt_stations.LastJobQty, PD_idt_stations.LastJobQtyBuild, PD_idt_stations.LastHourQty, PD_idt_stations.LastRate, PD_idt_stations.LastSide, PD_idt_stations.BeFirstActive, PD_idt_stations.LockStatus, PD_idt_stations.LastFormat, PD_idt_stations.DashVisible, PD_idt_stations.ProdVisible, PD_idt_stations.LockMachines, PD_idt_stations.Alias, PD_idt_stations.LastBinID, PD_idt_stations.PLC_Name, PD_idt_stations.Workcenter_Key, PD_idt_stations.Workcenter_Key_Kanban, PD_idt_stations.Workcenter_PLC_Name, PD_idt_stations.Workcenter_PLC_Name_Kanban, PD_idt_stations.AutoID, PD_idt_stations.Facility_Key, PD_idt_stations.Allow_Plex_Transactions, PD_idt_stations.Workcenter_Key_1, PD_idt_stations.Workcenter_Key_2, PD_idt_stations.Workcenter_Key_Kanban_1, PD_idt_stations.Workcenter_Key_Kanban_2, PD_idt_stations.Workcenter_PLC_Name_1, PD_idt_stations.Workcenter_PLC_Name_2, PD_idt_stations.Workcenter_PLC_Name_Kanban_1, PD_idt_stations.Workcenter_PLC_Name_Kanban_2, PD_idt_stations.Allow_LoadMaterial, PD_idt_stations.Custom_Labels, PD_idt_stations.Allow_Plex_Transactions_2, CS_idt_partnumbers.PartNumber, EN_idt_downtimes_codes.RazonSpecific,datediff(MINUTE,LastPieceTime,GETDATE()) as Downtime  FROM PD_idt_stations LEFT JOIN  CS_idt_partnumbers ON PD_idt_stations.LastPartID = CS_idt_partnumbers.PartID LEFT JOIN EN_idt_downtimes_codes ON PD_idt_stations.DownTimeCodeID = EN_idt_downtimes_codes.DownTimeCodeID WHERE (PD_idt_stations.AreaID = @AreaID) AND (PD_idt_stations.BeFirstActive = 1) AND (PD_idt_stations.StationID not in (SELECT [Sub_Station_ID] FROM [Part_Station_SubStation] WHERE Station_ID<>Sub_Station_ID) ) AND (@Building_Key=0 or PD_idt_stations.Building_Key=@Building_Key) Order by PD_idt_stations.Building_Key ASC,PD_idt_stations.SortNo ASC, StationName ASC", areaParameters);
+
+      List<tbl_PART_Station> listStations = new List<tbl_PART_Station>();
+
+      foreach (DataRow rowParts in dt_workcentersoee.Rows)
+      {
+        int StationID = (int)rowParts["StationID"];
+        string StationName = rowParts["StationName"].ToString();
+        DateTime LastPieceTime = (DateTime)rowParts["LastPieceTime"];
+
+        listStations.Add(new tbl_PART_Station() { StationID = StationID, StationName = StationName, LastPieceTime = LastPieceTime });
+      }
+
+      model.listStations = listStations;
+
+      return View(model);
+    }
+
+    public ActionResult Timeline(int? AreaID = 1, int Building_Key = 0, int year = 0, int month = 0, int day = 0)
+    {
+      var model = new Building_Selector();
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      model.month = month;
+      model.year = year;
+      model.day = day;
+      model.AreaID = AreaID;
+      model.Building_Key = Building_Key;
+
+      // Debug logging
+      System.Diagnostics.Debug.WriteLine($"Timeline: AreaID={AreaID}, HasValue={AreaID.HasValue}, Value={AreaID?.ToString() ?? "null"}");
+
+      // If AreaID = 0, show all areas
+      if (AreaID.HasValue && AreaID.Value == 0)
+      {
+        // Get all active areas
+        DataTable dtAreas = Firstronic.Framework.Functions.Queries.GetDatatableFromQuery("SELECT [AreaID] ,[Area] FROM [PD_idt_areas] where ActiveReport=1 and Area_Type_ID in (1,2) and AreaID in (select AreaID from PD_idt_stations) Order by FlowID ASC");
+
+
+        // Store areas in ViewBag for view to iterate
+        ViewBag.Areas = dtAreas;
+      }
+      else
+      {
+
+      }
+
+      SqlParameter[] areaParameters = new SqlParameter[]{
+        new SqlParameter("@AreaID",SqlDbType.Int) {Value = model.AreaID},
+        new SqlParameter("@Building_Key",SqlDbType.Int) {Value = model.Building_Key},
+      };
+
+      string whereClause = (AreaID.HasValue && AreaID.Value == 0) ? "" : "AND (PD_idt_stations.AreaID = @AreaID)";
+
+      DataTable dt_workcentersoee = Firstronic.Framework.Queries.GetDatatableFromQuery($@"SELECT PD_idt_stations.StationID, PD_idt_stations.StationName, PD_idt_stations.AreaID, PD_idt_stations.IsActive, PD_idt_stations.DownTimeCodeID, PD_idt_stations.LastPieceTime, PD_idt_stations.LastPartID, PD_idt_stations.LastJob, PD_idt_stations.LastJobText, PD_idt_stations.LastJobType, PD_idt_stations.LastJobQty, PD_idt_stations.LastJobQtyBuild, PD_idt_stations.LastHourQty, PD_idt_stations.LastRate, PD_idt_stations.LastSide, PD_idt_stations.BeFirstActive, PD_idt_stations.LockStatus, PD_idt_stations.LastFormat, PD_idt_stations.DashVisible, PD_idt_stations.ProdVisible, PD_idt_stations.LockMachines, PD_idt_stations.Alias, PD_idt_stations.LastBinID, PD_idt_stations.PLC_Name, PD_idt_stations.Workcenter_Key, PD_idt_stations.Workcenter_Key_Kanban, PD_idt_stations.Workcenter_PLC_Name, PD_idt_stations.Workcenter_PLC_Name_Kanban, PD_idt_stations.AutoID, PD_idt_stations.Facility_Key, PD_idt_stations.Allow_Plex_Transactions, PD_idt_stations.Workcenter_Key_1, PD_idt_stations.Workcenter_Key_2, PD_idt_stations.Workcenter_Key_Kanban_1, PD_idt_stations.Workcenter_Key_Kanban_2, PD_idt_stations.Workcenter_PLC_Name_1, PD_idt_stations.Workcenter_PLC_Name_2, PD_idt_stations.Workcenter_PLC_Name_Kanban_1, PD_idt_stations.Workcenter_PLC_Name_Kanban_2, PD_idt_stations.Allow_LoadMaterial, PD_idt_stations.Custom_Labels, PD_idt_stations.Allow_Plex_Transactions_2, CS_idt_partnumbers.PartNumber, EN_idt_downtimes_codes.RazonSpecific,datediff(MINUTE,LastPieceTime,GETDATE()) as Downtime FROM PD_idt_stations LEFT JOIN CS_idt_partnumbers ON PD_idt_stations.LastPartID = CS_idt_partnumbers.PartID LEFT JOIN EN_idt_downtimes_codes ON PD_idt_stations.DownTimeCodeID = EN_idt_downtimes_codes.DownTimeCodeID WHERE (PD_idt_stations.BeFirstActive = 1) {whereClause} AND (PD_idt_stations.StationID not in (SELECT [Sub_Station_ID] FROM [Part_Station_SubStation] WHERE Station_ID<>Sub_Station_ID)) AND (@Building_Key=0 or PD_idt_stations.Building_Key=@Building_Key) Order by PD_idt_stations.Building_Key ASC,PD_idt_stations.SortNo ASC, StationName ASC", areaParameters);
+
+      // Store AreaID mapping in ViewBag for multi-area view
+      Dictionary<int, int> stationAreaMap = new Dictionary<int, int>();
+      List<tbl_PART_Station> listStations = new List<tbl_PART_Station>();
+
+      foreach (DataRow rowParts in dt_workcentersoee.Rows)
+      {
+        int StationID = (int)rowParts["StationID"];
+        string StationName = rowParts["StationName"].ToString();
+        DateTime LastPieceTime = (DateTime)rowParts["LastPieceTime"];
+        int stationAreaID = (int)rowParts["AreaID"];
+
+        listStations.Add(new tbl_PART_Station() { StationID = StationID, StationName = StationName, LastPieceTime = LastPieceTime });
+        stationAreaMap[StationID] = stationAreaID;
+      }
+
+      model.listStations = listStations;
+      ViewBag.StationAreaMap = stationAreaMap;
+
+      return View(model);
+    }
+  }
+}

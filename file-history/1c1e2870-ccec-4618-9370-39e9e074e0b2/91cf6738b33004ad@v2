@@ -1,0 +1,209 @@
+# Claude Context Management Vault - HOME
+
+**Your visual dashboard for managing Claude Code context quality (Personal/Home)**
+
+---
+
+## What This Is
+
+This Obsidian vault provides a **graphical UI** to review and improve your Claude context:
+- Visual graph of context relationships
+- Auto-queries to find stale content
+- Scheduled review templates
+- Tag-based organization
+- OneDrive sync across your home devices
+
+**Backend:** Links to `C:\Users\eduar\.claude\` (where Claude reads context from)
+
+**Note:** This is your **HOME** vault, separate from your work vault.
+
+---
+
+## Folder Structure
+
+| Folder | Purpose |
+|--------|---------|
+| `00-Dashboard/` | Weekly review templates and quality dashboards |
+| `01-Personal-Context/` | Link to CLAUDE.md |
+| `02-Learnings/` | Link to ~/.claude/learning |
+| `03-Skills/` | Link to ~/.claude/skills |
+| `04-Commands/` | Link to ~/.claude/commands |
+| `05-Reference/` | Link to ~/.claude/reference |
+| `99-Archive/` | Archived/stale context |
+| `.setup/` | Setup scripts for this computer |
+
+**Links use symbolic links or junctions** - edit files here, changes save to `~/.claude/` automatically.
+
+---
+
+## First-Time Setup (Home Computer)
+
+### Step 1: Install Obsidian
+Download from: https://obsidian.md/ (free)
+
+### Step 2: Open This Vault
+1. Launch Obsidian
+2. Click "Open folder as vault"
+3. Navigate to: `D:\OneDrive\16 - Obsidian\01_Claude_Home`
+4. Click "Open"
+
+### Step 3: Run Setup Script
+```powershell
+# Run PowerShell as Administrator (for symbolic links)
+cd "D:\OneDrive\16 - Obsidian\01_Claude_Home\.setup"
+.\create-links.ps1
+```
+
+**What it does:**
+- Creates symbolic links to `C:\Users\eduar\.claude\` folders
+- Links are stored in folders 01-05 above
+- Edit files in Obsidian = changes save to ~/.claude/ automatically
+
+### Step 4: Install Required Plugins
+1. Settings (gear icon) → Community plugins
+2. Turn off "Restricted mode"
+3. Click "Browse" and install:
+   - **Dataview** (required - powers all queries)
+   - Calendar (recommended - schedule reviews)
+   - Templater (recommended - auto-fill templates)
+   - Tag Wrangler (recommended - manage tags)
+4. Enable each plugin after installing
+
+### Step 5: Start Exploring
+- Open: `00-Dashboard/Context-Quality-Dashboard.md`
+- Press `Ctrl+G` to open graph view
+- See your context visualized!
+
+---
+
+## Weekly Review Process
+
+**When:** Every Friday, 4:00 PM (30 minutes)
+
+1. **Open dashboard:**
+   - `00-Dashboard/Context-Quality-Dashboard.md`
+
+2. **Create weekly review:**
+   - New note: `00-Dashboard/Reviews/2026-W19-Review.md`
+   - Copy template from `Context-Review-Weekly-TEMPLATE.md`
+
+3. **Run auto-queries:**
+   - Dataview shows stale files (>90 days)
+   - Recent additions (this week)
+   - Untagged items
+
+4. **Triage:**
+   - Keep + Update (still relevant)
+   - Archive (move to `99-Archive/`)
+   - Promote (Learning → Skill)
+   - Consolidate (merge duplicates)
+
+5. **Update personal context:**
+   - Open `01-Personal-Context/CLAUDE.md`
+   - Update "Current Focus Areas"
+   - Add new preferences discovered this week
+
+6. **Check graph view:**
+   - Press `Ctrl+G`
+   - Look for isolated nodes (need links)
+
+7. **Done!**
+   - OneDrive syncs automatically
+
+---
+
+## Key Features
+
+### 1. Graph View (Ctrl+G)
+Visual map of all context files and relationships.
+
+**Filters:**
+```
+path:02-Learnings OR path:03-Skills
+tag:#personal
+tag:#validated
+```
+
+### 2. Dataview Queries
+Auto-run queries in dashboard files:
+- Stale content (>90 days)
+- Recent additions (this week)
+- Untagged files
+- Count by domain
+
+### 3. Tag Organization
+**Tag pane** (right sidebar) shows all tags.
+- Click to filter
+- Right-click to rename/merge
+
+**Suggested tags for home:**
+- Domain: `#personal`, `#learning`, `#hobby-projects`
+- Type: `#learning`, `#skill`, `#reference`
+- Status: `#validated`, `#in-progress`, `#archived`
+
+### 4. Templates
+- Weekly review checklist
+- Monthly deep dive
+- Context quality audit
+
+---
+
+## Work vs Home
+
+| Item | Work Vault | Home Vault |
+|------|------------|------------|
+| **Location** | `C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude` | `D:\OneDrive\16 - Obsidian\01_Claude_Home` |
+| **Links to** | `C:\Users\emarquez\.claude\` | `C:\Users\eduar\.claude\` |
+| **Context** | Work-related (BeFirst, Safari Circuits) | Personal projects, learning |
+| **Sync** | OneDrive (work account) | OneDrive (personal account) |
+
+**Completely separate systems** - no context mixing.
+
+---
+
+## Troubleshooting
+
+### Links Don't Show Content
+**Symptom:** Folders 01-05 are empty or show "link broken"
+**Solution:** Re-run setup script (must run on each computer)
+```powershell
+cd "D:\OneDrive\16 - Obsidian\01_Claude_Home\.setup"
+.\create-links.ps1
+```
+
+### Dataview Queries Show "No Results"
+**Symptom:** Dashboard tables are empty
+**Solution:**
+1. Verify Dataview plugin is installed and enabled
+2. Check that links in folders 02-04 work
+3. Wait 5 seconds (Dataview indexes on vault load)
+
+### Changes Not Saving to ~/.claude/
+**Symptom:** Edit CLAUDE.md in Obsidian, doesn't update in ~/.claude/
+**Solution:** Verify symbolic link:
+```powershell
+# Check link target
+Get-Item "D:\OneDrive\16 - Obsidian\01_Claude_Home\01-Personal-Context\CLAUDE.md" | Select-Object Target
+```
+Should show: `C:\Users\eduar\.claude\CLAUDE.md`
+
+---
+
+## Quick Reference
+
+**Location:** `D:\OneDrive\16 - Obsidian\01_Claude_Home`
+**User:** `C:\Users\eduar`
+**Claude path:** `C:\Users\eduar\.claude`
+
+**Weekly Review:** Friday 4:00 PM (30 min)
+**Monthly Review:** First Monday (60 min)
+
+**Key Shortcuts:**
+- `Ctrl+G`: Graph view
+- `Ctrl+O`: Quick switcher
+- `Ctrl+P`: Command palette
+- `Ctrl+Shift+F`: Search all files
+
+---
+
+**Next step:** Open `QUICK-START.md` for 10-minute setup guide!

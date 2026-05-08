@@ -1,0 +1,512 @@
+@using System.Data;
+@using System.Data.SqlClient;
+@model Firstronic.Areas.Dashboards.Models.customreport_area
+
+@{
+  /**/
+
+  DateTime dia_current = new DateTime(Model.year, Model.month, Model.day);
+  DateTime dia_yesterday = dia_current.AddDays(-1);
+  DateTime dia_tomorrow = dia_current.AddDays(+1);
+
+  var u_yesterday = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_yesterday.Add("year", dia_yesterday.Year);
+  u_yesterday.Add("month", dia_yesterday.Month);
+  u_yesterday.Add("day", dia_yesterday.Day);
+  u_yesterday.Add("Building_Key", Model.Building_Key.ToString());
+
+  var u_tomorrow = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_tomorrow.Add("year", dia_tomorrow.Year);
+  u_tomorrow.Add("month", dia_tomorrow.Month);
+  u_tomorrow.Add("day", dia_tomorrow.Day);
+  u_tomorrow.Add("Building_Key", Model.Building_Key.ToString());
+
+  Model.current = dia_current;
+
+
+  SqlParameter[] parameters = new SqlParameter[]{
+    new SqlParameter("@AreaID",SqlDbType.Int) {Value =Model.areaid},
+  };
+
+  var AreaName = Firstronic.Framework.Queries.GetStringFromQuery("SELECT [Area] FROM [PD_idt_areas] WHERE AreaID=@AreaID", parameters);
+
+  DataTable dt_areas = Firstronic.Framework.Functions.Queries.GetDatatableFromQuery("SELECT [AreaID],[Area] FROM [PD_idt_areas] WHere (Area_Type_ID = 1 or Area_Type_ID = 2) and ActiveReport=1 order by flowid asc");
+
+  string nextareaid = Model.areaid.ToString();
+  string nextarea = AreaName;
+
+  string prevareaid = Model.areaid.ToString();
+  string prevarea = AreaName;
+
+  int index = -1;
+  DataRow[] rows = dt_areas.Select("AreaID='" + Model.areaid + "'");
+  if (rows.Count() > 0)
+  {
+    index = dt_areas.Rows.IndexOf(rows[0]);
+  }
+
+  try
+  {
+    nextareaid = dt_areas.Rows[index + 1][0].ToString();
+    nextarea = dt_areas.Rows[index + 1][1].ToString();
+  }
+  catch
+  {
+    nextareaid = dt_areas.Rows[0][0].ToString();
+    nextarea = dt_areas.Rows[0][1].ToString();
+  }
+
+  try
+  {
+    prevareaid = dt_areas.Rows[index - 1][0].ToString();
+    prevarea = dt_areas.Rows[index - 1][1].ToString();
+  }
+  catch
+  {
+    prevareaid = dt_areas.Rows[dt_areas.Rows.Count - 1][0].ToString();
+    prevarea = dt_areas.Rows[dt_areas.Rows.Count - 1][1].ToString();
+  }
+
+}
+
+@section head{
+  <script src="~/Content/vendor/raphael/raphael.min.js"></script>
+  <script src="~/Content/vendor/morris/morris.js"></script>
+  <link href="~/Content/vendor/morris/morris.css" rel="stylesheet">
+
+}
+
+<div class="uk-card md-card mn-b-25">
+  <div class="md-card-content fw-600 fs-14">
+    <div class="uk-clearfix">
+      <div class="uk-float-left">
+        @AreaName @dia_current.ToString("yyyy-MM-dd")
+        @Html.HiddenFor(y => y.areaid, new { id = "txtAreaID" })
+      </div>
+      <div class="uk-float-right">
+        <div class="uk-grid" uk-grid>
+          <div class="uk-width-1-1 text-right fs-12">
+            <a href="~/Dashboards/Areas/Index/@prevareaid?Building_Key=@Model.Building_Key.ToString()" class="pd-r-20">
+              <span class="material-icons">arrow_left</span> @prevarea
+            </a>
+            <a href="#" class="">
+              @AreaName
+            </a>
+            <a href="~/Dashboards/Areas/Index/@nextareaid?Building_Key=@Model.Building_Key.ToString()" class="pd-l-20">
+              @nextarea  <span class="material-icons">arrow_right</span>
+            </a>
+            <a href="~/Dashboards/Portal" class="text-c-purple pd-l-20">
+              <span class="material-icons">home</span> Go Home
+            </a>
+          </div>
+          <div class="uk-width-1-1 text-right uk-margin-small-top fs-12">
+            <a href="@Url.RouteUrl(u_yesterday)"><span class="material-icons">arrow_left</span></a>
+
+            @Html.TextBoxFor(y => y.current, new { @id = "ddlDateUpdate", @Value = Model.current.ToString("MM/dd/yyyy") })
+
+            <a href="@Url.RouteUrl(u_tomorrow)"><span class="material-icons">arrow_right</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@{
+  DataTable dtAreasSelected = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [AreaID],[Area] FROM [PD_idt_areas] WHere (Area_Type_ID=1  or Area_Type_ID=2) and ActiveReport=1 and areaid = case when @AreaID = 0 then areaid else @AreaID end order by flowid asc", parameters);
+}
+
+<div class="uk-card">
+  <div class="uk-grid" uk-grid>
+    <script type="text/javascript" nonce="@Html.ScriptNonce()">
+      let totaloee = 0;
+      let totalsta = 0;
+
+      let totalavailability = 0;
+      let totalefficency = 0;
+      let totalquantity = 0;
+
+      let totalMinutesProgrammed = 0;
+      let totalMinutesOEE = 0;
+
+    </script>
+    <div class="uk-width-1-2@m">
+      <div class="md-card">
+        <div class="md-card-toolbar">
+          <h3 class="md-card-toolbar-heading-text"> Workcenters <span id="txt_Summary"></span> (<span id="txt_SummaryOEE"></span>/<span id="txt_SummaryTotal"></span>)</h3>
+        </div>
+        <div class="md-card-content">
+          <div class="uk-grid" uk-grid>
+            @foreach (Firstronic.Framework.APIs.Station.OEE stationOEE in Model.StationsOEE)
+            {
+              bool displayStation = true;
+
+              if (Model.areaid == 6)
+              {
+                if (stationOEE.total == 0)
+                {
+                  displayStation = false;
+                }
+              }
+
+              if (stationOEE.stationName == null)
+              {
+                Console.WriteLine("as");
+              }
+
+              if (1 == 1 && stationOEE.stationName != null) //if (displayStation)
+              {
+                <div class="uk-width-1-6@l uk-width-1-2@s">
+                  <div class="dashboard-widget dashboard-widget-top-blue">
+                    <div class="dashboard-widget-title">
+                      <a class="login-text" href="~/Dashboards/Station/Index/@stationOEE.stationID.ToString()?year=@Model.year&month=@Model.month&day=@Model.day">
+                        @stationOEE.stationName.ToString()
+                      </a>
+                    </div>
+                    <div class="dashboard-widget-content">
+                      <div id="bar-fg_@stationOEE.stationID.ToString()" class="h-120">
+                      </div>
+                      <div class="fs-11 text-center">
+                        <div>
+                          <a class="editdetailstv" href="~/Dashboards/TVs/Station_Efficency/@stationOEE.stationID.ToString()?year=@Model.year&month=@Model.month&day=@Model.day&all=1">
+                            Availability: <span id="txtDis_@stationOEE.stationID.ToString()"></span>%
+                          </a>
+                          (<span id="txtProgW_@stationOEE.stationID.ToString()"></span>/<span id="txtProgA_@stationOEE.stationID.ToString()"></span>)
+                        </div>
+                        <div>
+                          <a class="editdetailstv" href="~/Dashboards/TVs/Station_Efficency/@stationOEE.stationID.ToString()?year=@Model.year&month=@Model.month&day=@Model.day&all=1">
+                            Efficency: <span id="txtEfi_@stationOEE.stationID.ToString()"></span>%
+                          </a>
+                          (<span id="txtEfiT_@stationOEE.stationID.ToString()"></span>/<span id="txtEfiH_@stationOEE.stationID.ToString()"></span>)
+                        </div>
+                        <div>
+                          <a class="editdetailstv" href="~/Dashboards/TVs/Station_Efficency/@stationOEE.stationID.ToString()?year=@Model.year&month=@Model.month&day=@Model.day&all=1">
+                            Quality: <span id="txtCal_@stationOEE.stationID.ToString()"></span>%
+                          </a>
+                          (<span id="txtQuaT_@stationOEE.stationID.ToString()"></span>/<span id="txtQuaH_@stationOEE.stationID.ToString()"></span>)
+                        </div>
+                        <div>
+                          <a class="editdetailstv" href="~/Dashboards/TVs/Station_Efficency/@stationOEE.stationID.ToString()?year=@Model.year&month=@Model.month&day=@Model.day&all=1">
+                            Retest: <span id="txtEfiRetest_@stationOEE.stationID.ToString()"></span>%
+                          </a>
+                          (<span id="txtEfiRetestT_@stationOEE.stationID.ToString()"></span>/<span id="txtEfiRetestH_@stationOEE.stationID.ToString()"></span>)
+                        </div>
+                        <div class="">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                  function updatehistory_@stationOEE.stationID.ToString()_f() {
+
+                  var data_st = JSON.stringify({
+                       'year': @Model.year,
+                      'month': @Model.month,
+                      'day': @Model.day,
+                      'StationID': '@stationOEE.stationID.ToString()'
+                    });
+
+                    //GET VALUES.
+                  var disponibilidad = @stationOEE.availability;
+                  var eficiencia = @stationOEE.efficency;
+                  var eficiencia_retest = @stationOEE.efficency_Retest;
+                  var calidad = @stationOEE.quality;
+
+                  var minutesworked = @stationOEE.minutesWorked;
+                  var minutesworked_retest = @stationOEE.minutesWorked_Retest;
+                  var eficienciaH = @stationOEE.minutesAvailables;
+
+                  var minutesprogrammed = @stationOEE.minutesProgrammed;
+                  var minutesavailables = @stationOEE.minutesAvailables;
+                  var minutesOEE = @stationOEE.minutesOEE;
+
+                  var floatOEE = @stationOEE.total;
+
+                  $("#txtDis_@stationOEE.stationID.ToString()").html((disponibilidad * 100).toFixed(2));
+                  $("#txtEfi_@stationOEE.stationID.ToString()").html((eficiencia * 100).toFixed(2));
+                  $("#txtEfiRetest_@stationOEE.stationID.ToString()").html((eficiencia_retest * 100).toFixed(2));
+                  $("#txtCal_@stationOEE.stationID.ToString()").html((calidad * 100).toFixed(2));
+
+                  $("#txtProgW_@stationOEE.stationID.ToString()").html(minutesavailables.toFixed(0));     // MINUTES AVAILABLES
+                  $("#txtProgA_@stationOEE.stationID.ToString()").html(minutesprogrammed.toFixed(0)); // MINUTES PROGRAMMED
+
+                  $("#txtEfiT_@stationOEE.stationID.ToString()").html(minutesworked.toFixed(0)); // MINUTES WORKED
+                  $("#txtEfiH_@stationOEE.stationID.ToString()").html(eficienciaH.toFixed(0)); // MINUES AVAILABLES...
+
+
+                  $("#txtEfiRetestT_@stationOEE.stationID.ToString()").html(minutesworked_retest.toFixed(0)); // MINUTES WORKED
+                  $("#txtEfiRetestH_@stationOEE.stationID.ToString()").html(eficienciaH.toFixed(0)); // MINUES AVAILABLES...
+
+                  $("#txtQuaT_@stationOEE.stationID.ToString()").html(minutesOEE.toFixed(0));
+                  $("#txtQuaH_@stationOEE.stationID.ToString()").html(minutesworked.toFixed(0));
+
+                    // CALCULATE OEE
+                  var good = Math.floor(((parseFloat(disponibilidad) * parseFloat(eficiencia) * parseFloat(calidad)))*100);
+                  var bad = 100 - good;
+
+
+                  if ( floatOEE > 0) {
+                    totalMinutesProgrammed = totalMinutesProgrammed + minutesprogrammed;
+                    totalMinutesOEE = totalMinutesOEE + minutesOEE;
+
+                    totalavailability = totalavailability + parseFloat(disponibilidad);
+                    totalefficency = totalefficency + parseFloat(eficiencia);
+                    totalquantity = totalquantity + parseFloat(calidad);
+
+                    totaloee = totaloee + good;
+                    totalsta = totalsta + 1;
+                  }
+
+                  var data_fg = JSON.stringify({
+                    'good': good,
+                    'bad': bad
+                  });
+
+                  var colors_array = ['#bc3c3c', '#79bc3c'];
+
+                  if (good == 0) {
+                    colors_array[0] = "#888";
+                    colors_array[1] = "#888";
+                  }
+
+                    //GET DATA FOR BAR
+                    $.ajax({
+                      type: "POST",
+                      data: data_fg,
+                      url: "/Dashboards/Manufacturing/CurrentOEE",
+                      contentType: "application/json; charset=utf-8",
+                      success: function (chData) {
+                        var aData = $.parseJSON(chData);
+                        var morrisDonut = Morris.Donut({
+                          element: 'bar-fg_@stationOEE.stationID.ToString()',
+                          data: aData,
+                          formatter: function (x) { return x + "%" },
+                          colors: colors_array,
+                          resize: true,
+                          redraw: true
+                        });
+                        morrisDonut.select(1);
+                      },
+                      async: false
+                    });
+                  };
+
+                  $(document).ready(function () {
+                    updatehistory_@stationOEE.stationID.ToString()_f();
+                  })
+                </script>
+
+
+              }
+            }
+
+
+
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+
+              function updateaverage() {
+
+                var nostations = totalsta;
+
+
+                var average = totalMinutesOEE / totalMinutesProgrammed;
+
+                $("#txt_Summary").html(parseFloat(average * 100).toFixed(2) + "%");
+                $("#txt_SummaryOEE").html(totalMinutesOEE.toFixed(0));
+                $("#txt_SummaryTotal").html(totalMinutesProgrammed.toFixed(0));
+
+              };
+
+              $(document).ready(function () {
+                updateaverage()
+              })
+
+            </script>
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="md-card">
+        <div class="md-card-toolbar">
+          <h3 class="md-card-toolbar-heading-text"> <a href="@Url.Action("Area","DownTime", new { Area="Dashboards", id = Model.areaid,year=Model.year,month=Model.month,day=Model.day })">Down Time Reason</a> </h3>
+        </div>
+        <div class="md-card-content">
+          <div id="bar-chart"></div>
+        </div>
+
+        <script type="text/javascript" nonce="@Html.ScriptNonce()">
+        function updatehistory() {
+
+        var data_area = JSON.stringify({
+             'year': @Model.year,
+            'month': @Model.month,
+            'day': @Model.day,
+            'id': '@Model.areaid'
+          });
+
+        var colors_array = ['#bc3c3c', '#79bc3c'];
+
+          //GET DATA FOR BAR
+          $.ajax({
+            type: "POST",
+            data: data_area,
+            url: "/Dashboards/Areas/DWArea",
+            contentType: "application/json; charset=utf-8",
+            success: function (chData) {
+              var aData = $.parseJSON(chData);
+              if (aData.length > 0) {
+                var morrisDonut = Morris.Bar({
+                  element: 'bar-chart',
+                  data: aData,
+                  xkey: 'label',
+                  ykeys: ['value'],
+                  labels: ['Minutes: ']
+                });
+              }
+            },
+            async: false
+          });
+        };
+
+        $(document).ready(function () {
+          updatehistory()
+        })
+        </script>
+
+      </div>
+    </div>
+
+    <div class="uk-width-1-2@m">
+      <div class="md-card">
+        <div class="md-card-toolbar">
+          <h3 class="md-card-toolbar-heading-text"> Tickets </h3>
+        </div>
+        <div class="md-card-content">
+          <div class="mvc-grid mvc-grid-excel-mode">
+            @{
+              DateTime dialimit = dia_tomorrow;
+
+              if (DateTime.Now < dia_tomorrow)
+              {
+                dialimit = DateTime.Now;
+              }
+              else
+              {
+                dialimit = dialimit.AddHours(6);
+              }
+
+              DataTable fullTickets = new DataTable();
+
+              foreach (Firstronic.Framework.APIs.Station.OEE stationOEE in Model.StationsOEE)
+              {
+                SqlParameter[] stationParameters = new SqlParameter[]{
+                  new SqlParameter("@StationID",SqlDbType.Int) {Value = stationOEE.stationID},
+                  new SqlParameter("@DiaCurrent",SqlDbType.DateTime){Value = dia_current.Date.AddHours(6)},
+                  new SqlParameter("@DiaLimit",SqlDbType.DateTime){Value = dialimit},
+                  new SqlParameter("@DiaTomorrow",SqlDbType.DateTime){Value = dia_tomorrow.Date.AddHours(6)},
+                };
+
+                DataTable dt_tickets_yesterday = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT PD_tbl_station_issues.AutoID, PD_tbl_station_issues.StationID, cast(@DiaCurrent as datetime) as TrnDate, PD_tbl_station_issues.ControlID, PD_tbl_station_issues.IssueTypeID, PD_tbl_station_issues.IssueID, PD_tbl_station_issues.IssueComments, PD_tbl_station_issues.IssueSolve, PD_tbl_station_issues.IssueSolution, PD_tbl_station_issues.SolveBy, PD_tbl_station_issues.CategoryLevel, PD_tbl_station_issues.PartID, PD_tbl_station_issues.Side, PD_tbl_station_issues.Facility_Key, isnull(IssueSolveDate,@DiaLimit) as IssueSolveDate, PD_idt_areas.Area, PD_idt_issuestype.IssueType, PD_tbl_issue_ids.IssueDescription, CS_idt_partnumbers.PartNumber,PD_idt_stations.StationName, DATEDIFF(MINUTE,cast(@DiaCurrent as datetime),isnull(IssueSolveDate,@DiaLimit)) as Minutes FROM PD_tbl_station_issues LEFT JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID LEFT JOIN   PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID LEFT JOIN  PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID LEFT JOIN   PD_tbl_issue_ids ON PD_tbl_station_issues.IssueID = PD_tbl_issue_ids.IssueID LEFT JOIN CS_idt_partnumbers ON PD_tbl_station_issues.PartID = CS_idt_partnumbers.PartID  WHERE TrnDate< @DiaCurrent AND IssueSolveDate>@DiaCurrent AND (PD_idt_stations.stationid = @StationID OR PD_idt_stations.stationid in (SELECT Sub_Station_ID  FROM [Part_Station_SubStation] WHERE Station_ID= @StationID) ) Order by TrnDate desc", stationParameters);
+
+                DataTable dt_tickets = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT PD_tbl_station_issues.AutoID, PD_tbl_station_issues.StationID, PD_tbl_station_issues.TrnDate, PD_tbl_station_issues.ControlID, PD_tbl_station_issues.IssueTypeID, PD_tbl_station_issues.IssueID, PD_tbl_station_issues.IssueComments, PD_tbl_station_issues.IssueSolve, PD_tbl_station_issues.IssueSolution, PD_tbl_station_issues.SolveBy, PD_tbl_station_issues.CategoryLevel, PD_tbl_station_issues.PartID, PD_tbl_station_issues.Side, PD_tbl_station_issues.Facility_Key, isnull(IssueSolveDate,@DiaLimit) as IssueSolveDate, PD_idt_areas.Area, PD_idt_issuestype.IssueType, PD_tbl_issue_ids.IssueDescription, CS_idt_partnumbers.PartNumber,PD_idt_stations.StationName, DATEDIFF(MINUTE,TrnDate,isnull(IssueSolveDate,@DiaLimit)) as Minutes FROM PD_tbl_station_issues LEFT JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID LEFT JOIN   PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID LEFT JOIN  PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID LEFT JOIN   PD_tbl_issue_ids ON PD_tbl_station_issues.IssueID = PD_tbl_issue_ids.IssueID LEFT JOIN CS_idt_partnumbers ON PD_tbl_station_issues.PartID = CS_idt_partnumbers.PartID  WHERE TrnDate between @DiaCurrent and @DiaTomorrow AND (PD_idt_stations.stationid = @StationID OR PD_idt_stations.stationid in (SELECT Sub_Station_ID  FROM [Part_Station_SubStation] WHERE Station_ID= @StationID) ) Order by TrnDate desc", stationParameters);
+
+                DataTable dt_tickets_tomorrow = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT TOP 1 PD_tbl_station_issues.AutoID, PD_tbl_station_issues.StationID, PD_tbl_station_issues.TrnDate, PD_tbl_station_issues.ControlID, PD_tbl_station_issues.IssueTypeID, PD_tbl_station_issues.IssueID, PD_tbl_station_issues.IssueComments, PD_tbl_station_issues.IssueSolve, PD_tbl_station_issues.IssueSolution, PD_tbl_station_issues.SolveBy, PD_tbl_station_issues.CategoryLevel, PD_tbl_station_issues.PartID, PD_tbl_station_issues.Side, PD_tbl_station_issues.Facility_Key, cast(@DiaLimit as datetime) as IssueSolveDate, PD_idt_areas.Area, PD_idt_issuestype.IssueType, PD_tbl_issue_ids.IssueDescription, CS_idt_partnumbers.PartNumber,PD_idt_stations.StationName, DATEDIFF(MINUTE,TrnDate,cast(@DiaLimit as datetime)) as Minutes FROM PD_tbl_station_issues LEFT JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID LEFT JOIN   PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID LEFT JOIN  PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID LEFT JOIN   PD_tbl_issue_ids ON PD_tbl_station_issues.IssueID = PD_tbl_issue_ids.IssueID LEFT JOIN CS_idt_partnumbers ON PD_tbl_station_issues.PartID = CS_idt_partnumbers.PartID  WHERE TrnDate < @DiaTomorrow AND isnull(IssueSolveDate,getdate())>@DiaTomorrow AND (PD_idt_stations.stationid = @StationID OR PD_idt_stations.stationid in (SELECT Sub_Station_ID  FROM [Part_Station_SubStation] WHERE Station_ID= @StationID) ) Order by TrnDate desc", stationParameters);
+
+                dt_tickets.Merge(dt_tickets_tomorrow);
+                dt_tickets_yesterday.Merge(dt_tickets);
+
+                fullTickets.Merge(dt_tickets_yesterday);
+              }
+
+              //fullTickets.DefaultView.Sort = "TrnDate";
+              //fullTickets = fullTickets.DefaultView.ToTable();
+            }
+
+            <table>
+              <tr>
+                <th>TrnDate</th>
+                <th>Station</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Comments</th>
+                <th>Solved</th>
+                <th>Edit</th>
+              </tr>
+
+              @foreach (DataRow row in fullTickets.Rows)
+              {
+                <tr>
+                  <td>@row["TrnDate"].ToString()</td>
+                  <td>@row["StationName"].ToString()</td>
+                  <td>@row["IssueType"].ToString()</td>
+                  <td>@row["IssueDescription"].ToString()</td>
+                  <td>@row["IssueComments"].ToString()</td>
+                  <td>@row["IssueSolve"].ToString()</td>
+                  <td class="bc-gray" width="70px"><a class="editdetails" href="@Url.Action("Details", "Portal", new { Area="Tickets",id = row["AutoID"].ToString() })">Edit</a></td>
+                </tr>
+              }
+
+            </table>
+          </div>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+            $(document).on('click', 'a.editdetails', function (e) {
+              var w = 1200;
+              var h = 900;
+              var left = window.screen.availLeft + (screen.width / 2) - (w / 2);
+              var top = window.screen.availTop + (screen.height / 2) - (h / 2);
+              var url = $(this).attr('href');
+              window.open(url, "Details", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+              return false;
+            });
+          </script>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+            $(document).on('click', 'a.editdetailstv', function (e) {
+              var w = 1400;
+              var h = 900;
+              var left = window.screen.availLeft + (screen.width / 2) - (w / 2);
+              var top = window.screen.availTop + (screen.height / 2) - (h / 2);
+              var url = $(this).attr('href');
+              window.open(url, "Details", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=1, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+              return false;
+            });
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+  // ddlDate update in changes
+  ddlDateUpdate_Update = () => {
+
+    try {
+      var AreaID = $("#txtAreaID").val();
+      if (AreaID > 0) {
+
+        try {
+          var trndate = $("#ddlDateUpdate").val();
+          var res = trndate.split("/");
+
+          WaitingForm_Start()
+
+          var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname + '?year=' + res[2] + '&month=' + res[0] + '&day=' + res[1] + '&Building_Key=' + @Model.Building_Key.ToString();
+          window.location = newURL;
+
+        } catch (err) {
+          var x = 2;
+        }
+      }
+    } catch (err) {
+
+    }
+  }
+</script>

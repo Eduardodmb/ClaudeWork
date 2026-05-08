@@ -1,0 +1,173 @@
+Imports System.IO
+Imports System.Net
+Imports System.Text
+Imports Newtonsoft.Json
+
+''' <summary>
+''' Units API Module - Handles all unit/panel-related API calls
+''' </summary>
+Module Units
+
+    ''' <summary>
+    ''' Get children for a parent panel, or parent for a child unit
+    ''' Replaces: SELECT * FROM PD_tbl_parents_smt WHERE Parente=@Parente or Child=@Child
+    ''' Endpoint: /Units/Array/GetChilds
+    ''' </summary>
+    Public Function ArrayGetChilds(ByVal childOrParent As String) As List(Of ChildInParent)
+
+        Dim resultado As List(Of ChildInParent) = New List(Of ChildInParent)()
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "ChildOrParent", .Value = childOrParent})
+
+        Dim APIResponse As APIResponse = API_Call("/Units/Array/GetChilds", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of List(Of ChildInParent))(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Get locked units by serial number
+    ''' Replaces: SELECT * FROM PART_UNITS_LOCKED WHERE SN=@SN
+    ''' Endpoint: /Units/LockedUnits/Get
+    ''' </summary>
+    Public Function GetLockedUnits(ByVal sn As String) As List(Of LockedUnit)
+
+        Dim resultado As List(Of LockedUnit) = New List(Of LockedUnit)()
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "sn", .Value = sn})
+
+        Dim APIResponse As APIResponse = API_Call("/Units/LockedUnits/Get", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of List(Of LockedUnit))(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Add locked unit
+    ''' Replaces: INSERT INTO PART_UNITS_LOCKED
+    ''' Endpoint: /Units/LockedUnits/Add
+    ''' </summary>
+    Public Function AddLockedUnit(ByVal partNo As String, ByVal sn As String, ByVal controlId As Integer, ByVal comments As String) As Boolean
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "partNo", .Value = partNo})
+        ParametersTransit.Add(New URLInput With {.Name = "sn", .Value = sn})
+        ParametersTransit.Add(New URLInput With {.Name = "controlId", .Value = controlId})
+        ParametersTransit.Add(New URLInput With {.Name = "comments", .Value = comments})
+
+        Dim APIResponse As APIResponse = API_Call("/Units/LockedUnits/Add", "POST", ParametersTransit)
+
+        Return APIResponse.ResponseCode = 200
+    End Function
+
+    ''' <summary>
+    ''' Delete locked units by SN and comment pattern
+    ''' Replaces: DELETE FROM PART_UNITS_LOCKED WHERE SN=@SN AND Comments LIKE @Pattern
+    ''' Endpoint: /Units/LockedUnits/Delete
+    ''' </summary>
+    Public Function DeleteLockedUnits(ByVal sn As String, Optional ByVal commentPattern As String = "AOI BAD%") As Boolean
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "sn", .Value = sn})
+        ParametersTransit.Add(New URLInput With {.Name = "commentPattern", .Value = commentPattern})
+
+        Dim APIResponse As APIResponse = API_Call("/Units/LockedUnits/Delete", "DELETE", ParametersTransit)
+
+        Return APIResponse.ResponseCode = 200
+    End Function
+
+    ''' <summary>
+    ''' Check if array relationship exists
+    ''' Replaces: SELECT Child FROM PART_UNITS_ARRAY WHERE Child=@Child
+    ''' Endpoint: /Units/Array/CheckRelationshipExists
+    ''' </summary>
+    Public Function CheckArrayRelationshipExists(ByVal child As String) As Boolean
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "child", .Value = child})
+
+        Dim APIResponse As APIResponse = API_Call("/Units/Array/CheckRelationshipExists", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            Return JsonConvert.DeserializeObject(Of Boolean)(APIResponse.Response)
+        End If
+
+        Return False
+    End Function
+
+    ''' <summary>
+    ''' Add array relationship (parent-child)
+    ''' Replaces: INSERT INTO PART_UNITS_ARRAY
+    ''' Endpoint: /Units/Array/AddRelationship
+    ''' </summary>
+    Public Function AddArrayRelationship(ByVal parent As String, ByVal child As String, ByVal sortNo As Integer) As Boolean
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "parent", .Value = parent})
+        ParametersTransit.Add(New URLInput With {.Name = "child", .Value = child})
+        ParametersTransit.Add(New URLInput With {.Name = "sortNo", .Value = sortNo})
+
+        Dim APIResponse As APIResponse = API_Call("/Units/Array/AddRelationship", "POST", ParametersTransit)
+
+        Return APIResponse.ResponseCode = 200
+    End Function
+
+    ''' <summary>
+    ''' Delete array relationship
+    ''' Replaces: DELETE FROM PART_UNITS_ARRAY WHERE Child=@Child
+    ''' Endpoint: /Units/Array/DeleteRelationship
+    ''' </summary>
+    Public Function DeleteArrayRelationship(ByVal child As String) As Boolean
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "child", .Value = child})
+
+        Dim APIResponse As APIResponse = API_Call("/Units/Array/DeleteRelationship", "DELETE", ParametersTransit)
+
+        Return APIResponse.ResponseCode = 200
+    End Function
+
+End Module
+
+#Region "Data Classes"
+
+''' <summary>
+''' Child in Parent response (matches ChildsInParent from API)
+''' </summary>
+Public Class ChildInParent
+    Public Property Parent As String
+    Public Property Child As String
+    Public Property IsGood As Boolean
+    Public Property DefectCode As Integer
+    Public Property IsRework As Boolean
+    Public Property IsFromPanel As Boolean
+    Public Property ParentStageID As Integer
+    Public Property Comments As String
+    Public Property ArrayPosition As Integer
+End Class
+
+''' <summary>
+''' Locked Unit response (matches PartUnitsLocked entity from API)
+''' </summary>
+Public Class LockedUnit
+    Public Property AutoId As Integer
+    Public Property PartNo As String
+    Public Property Sn As String
+    Public Property TrnDate As DateTime?
+    Public Property ControlId As Integer?
+    Public Property Comments As String
+    Public Property FacilityKey As Integer?
+    Public Property Scrap As Boolean
+    Public Property ScrapReason As String
+    Public Property UserId As String
+End Class
+
+#End Region

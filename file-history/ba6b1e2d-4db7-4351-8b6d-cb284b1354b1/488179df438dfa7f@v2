@@ -1,0 +1,27 @@
+using System;
+using System.Collections.Generic;
+
+namespace APIs_BeFirst.Models.DataBase;
+
+public partial class PartOperationSerializationArrayIndexRemap
+{
+    public int AutoId { get; set; }
+
+    public int? PartId { get; set; }
+
+    public int AreaId { get; set; }
+
+    public string Side { get; set; } = null!;
+
+    public int OriginalIndex { get; set; }
+
+    public int RemappedIndex { get; set; }
+
+    public int? FacilityKey { get; set; }
+
+    public int? PartKey { get; set; }
+
+    public DateTime? CreatedDate { get; set; }
+
+    public DateTime? ModifiedDate { get; set; }
+}

@@ -1,0 +1,312 @@
+# Setup Instructions - Multiple Computers
+
+**How to use this Obsidian vault across all your computers**
+
+---
+
+## Overview
+
+This vault syncs via **OneDrive** automatically. However, **symbolic links are computer-specific** and must be recreated on each computer.
+
+**What syncs:**
+✓ Dashboard files (templates, reviews)
+✓ Obsidian settings (.obsidian folder)
+✓ Archive folder
+✓ This README and setup scripts
+
+**What doesn't sync (computer-specific):**
+✗ Symbolic links in folders 01-05 (point to local ~/.claude/)
+✗ Obsidian plugin installations (download once per computer)
+
+---
+
+## First Computer Setup (You're Here)
+
+### Step 1: Install Obsidian
+1. Download from: https://obsidian.md/
+2. Install (no account needed)
+
+### Step 2: Open Vault
+1. Launch Obsidian
+2. Click "Open folder as vault"
+3. Navigate to: `C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude`
+4. Click "Open"
+
+### Step 3: Install Plugins
+**Settings → Community plugins → Turn off "Restricted mode"**
+
+**Required:**
+- **Dataview** - Powers all dashboard queries (MUST INSTALL)
+
+**Recommended:**
+- **Calendar** - Schedule reviews
+- **Templater** - Auto-fill templates
+- **Tag Wrangler** - Manage tags easily
+- **Kanban** - Visual task board
+
+**How to install each:**
+1. Settings → Community plugins → Browse
+2. Search plugin name
+3. Click Install
+4. Click Enable
+
+### Step 4: Run Setup Script
+**This creates links to your ~/.claude/ directory**
+
+```powershell
+# Right-click PowerShell → "Run as Administrator"
+cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude\.setup"
+.\setup-links.ps1
+```
+
+**What it does:**
+- Creates symbolic links/junctions to `C:\Users\emarquez\.claude\`
+- Links appear in folders 01-Personal-Context through 05-Reference
+- Edit files in Obsidian = changes save to ~/.claude/ instantly
+
+**Expected output:**
+```
+✓ Created: 5
+→ Skipped: 0
+✗ Failed: 0
+```
+
+### Step 5: Verify Setup
+1. Open: `01-Personal-Context/CLAUDE.md`
+2. Should show your personal context section
+3. If empty, re-run setup script as Administrator
+
+### Step 6: Start Using
+- Open: `00-Dashboard/Context-Quality-Dashboard.md`
+- Press `Ctrl+G` for graph view
+- Explore your context!
+
+---
+
+## Second/Third/Nth Computer Setup
+
+**OneDrive syncs the vault automatically. Follow these steps on each new computer:**
+
+### Step 1: Wait for OneDrive Sync
+Ensure this folder exists:
+```
+C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude
+```
+
+If not, wait for OneDrive to sync (check taskbar icon).
+
+### Step 2: Verify Claude Code Installation
+Ensure Claude Code is installed and you have a `~/.claude/` directory:
+```powershell
+# Check if directory exists
+Test-Path "C:\Users\emarquez\.claude"
+```
+
+If FALSE, install Claude Code first.
+
+### Step 3: Install Obsidian
+1. Download from: https://obsidian.md/
+2. Install (same as Computer 1)
+
+### Step 4: Open Vault
+1. Launch Obsidian
+2. "Open folder as vault"
+3. Navigate to: `C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude`
+4. Click "Open"
+
+**Obsidian settings should sync via OneDrive** (if enabled).
+
+### Step 5: Install Plugins (May Be Required)
+Check if plugins are available:
+- Settings → Community plugins
+
+If missing, re-install:
+- **Dataview** (required)
+- Calendar, Templater, Tag Wrangler (recommended)
+
+**Note:** Plugin *files* might sync, but you may need to enable them on each computer.
+
+### Step 6: Run Setup Script **ON THIS COMPUTER**
+**CRITICAL:** Links must be recreated per computer!
+
+```powershell
+# Run as Administrator
+cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude\.setup"
+.\setup-links.ps1
+```
+
+**Why?** Symbolic links point to `C:\Users\emarquez\.claude\` on the **local** drive, not OneDrive.
+
+### Step 7: Verify Links Work
+1. Open: `01-Personal-Context/CLAUDE.md`
+2. Should show content (your personal context)
+3. Edit a line, save, check if `C:\Users\emarquez\.claude\CLAUDE.md` updated
+
+If doesn't work:
+- Re-run setup script as Administrator
+- Check `~/.claude/` directory exists
+
+---
+
+## What Lives Where
+
+| Content | Storage | Sync Method |
+|---------|---------|-------------|
+| **Dashboard files** | OneDrive vault | OneDrive (automatic) |
+| **Archive** | OneDrive vault | OneDrive (automatic) |
+| **Obsidian settings** | OneDrive vault (`.obsidian/`) | OneDrive (automatic) |
+| **CLAUDE.md** | `~/.claude/` (local drive) | Git (organizational-docs) |
+| **Learning files** | `~/.claude/learning/` (local) | Git (organizational-docs) |
+| **Skills** | `~/.claude/skills/` (local) | Git (organizational-docs) |
+| **Commands** | `~/.claude/commands/` (local) | Git (organizational-docs) |
+
+**Key insight:** Vault structure syncs, but content is linked from local `~/.claude/` (which syncs via Git).
+
+---
+
+## Typical Multi-Computer Scenarios
+
+### Scenario 1: Office Desktop + Home Laptop
+
+**Office desktop (primary):**
+1. Full setup (steps above)
+2. Do weekly reviews here
+3. Edit context, commit to Git
+
+**Home laptop (secondary):**
+1. Full setup (steps above)
+2. Pull latest Git changes in `~/.claude/`
+3. Obsidian vault syncs automatically via OneDrive
+4. Can do reviews, edits sync back via Git
+
+### Scenario 2: Adding a Third Computer
+
+**New computer:**
+1. Install Claude Code
+2. Clone/pull organizational-docs repo to `~/.claude/`
+3. Wait for OneDrive to sync vault
+4. Install Obsidian
+5. Open vault
+6. Run setup script
+7. Done!
+
+---
+
+## Troubleshooting Multi-Computer
+
+### Links Don't Work on New Computer
+**Symptom:** Folders 01-05 are empty
+
+**Solution:**
+```powershell
+# Re-run setup script on THIS computer
+cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude\.setup"
+.\setup-links.ps1
+```
+
+### OneDrive Sync Conflict
+**Symptom:** "OneDrive found a conflict in 00_Claude"
+
+**Solution:**
+- Keep the most recent version of dashboard files
+- Delete conflicted symbolic links (they're computer-specific anyway)
+- Re-run setup script to recreate links
+
+### CLAUDE.md Changes Not Syncing Between Computers
+**Symptom:** Edit on Computer 1, doesn't show on Computer 2
+
+**Why:** CLAUDE.md lives in `~/.claude/` (local), not OneDrive
+
+**Solution:** Use Git to sync:
+```bash
+# Computer 1 (after edits)
+cd ~/.claude
+git add CLAUDE.md
+git commit -m "Update personal context"
+git push
+
+# Computer 2 (before opening Obsidian)
+cd ~/.claude
+git pull
+```
+
+**Better:** Setup auto-sync with `/git-sync` skill (see CLAUDE.md team standards).
+
+### Plugins Missing on New Computer
+**Symptom:** Dataview queries don't work, plugins missing
+
+**Solution:**
+1. Settings → Community plugins
+2. If plugins listed but disabled: Enable them
+3. If not listed: Re-download and install
+4. Restart Obsidian
+
+---
+
+## Automation Ideas
+
+### Auto-Pull Git Before Obsidian Launch
+**PowerShell script:** `C:\Users\emarquez\.claude\.setup\pre-obsidian-sync.ps1`
+
+```powershell
+# Pull latest context from Git
+cd "C:\Users\emarquez\.claude"
+git pull
+
+# Launch Obsidian
+Start-Process "obsidian://open?vault=00_Claude"
+```
+
+Create shortcut on desktop pointing to this script.
+
+### Auto-Commit After Obsidian Close
+**Task Scheduler trigger:** On Obsidian.exe close
+
+```powershell
+cd "C:\Users\emarquez\.claude"
+git add .
+git commit -m "Auto-commit: Context updated $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+git push
+```
+
+---
+
+## Quick Reference Card
+
+**Copy this to your desk:**
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Claude Context Vault - New Computer Setup          │
+├─────────────────────────────────────────────────────┤
+│  1. Wait for OneDrive sync                          │
+│  2. Install Obsidian (obsidian.md)                  │
+│  3. Open vault:                                     │
+│     C:\Users\emarquez\OneDrive\                     │
+│       16 - Obsidian\00_Claude                       │
+│  4. Install Dataview plugin                         │
+│  5. Run as Admin:                                   │
+│     cd .setup                                       │
+│     .\setup-links.ps1                               │
+│  6. Verify: Open 01-Personal-Context/CLAUDE.md      │
+│  7. Done!                                           │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Support
+
+**Setup issues?**
+- Re-run setup script as Administrator
+- Check Claude Code is installed (`Test-Path ~/.claude`)
+- Verify OneDrive synced the vault folder
+- Check `README.md` troubleshooting section
+
+**Questions about context review?**
+- See: `C:\Users\emarquez\.claude\learning\context-review-system.md`
+- Or: Main `README.md` in vault root
+
+---
+
+**Last updated:** 2026-05-08

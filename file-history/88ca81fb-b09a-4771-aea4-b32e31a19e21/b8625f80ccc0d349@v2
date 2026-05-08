@@ -1,0 +1,68 @@
+; Clipboard Capture Tool for Scrolling Transcripts
+; Toggle: Ctrl+Shift+C to enable/disable
+; Clear: Ctrl+Shift+X to clear captured text
+; Save: Auto-saves to clipboard-capture.txt in the same folder
+
+#NoEnv
+#SingleInstance Force
+SetWorkingDir %A_ScriptDir%
+
+; Configuration
+global CaptureEnabled := false
+global CapturedLines := {}  ; Use object as set for deduplication
+global OutputFile := A_ScriptDir . "\clipboard-capture.txt"
+
+; Toggle capture on/off with Ctrl+Shift+C
+^+c::
+    CaptureEnabled := !CaptureEnabled
+    if (CaptureEnabled) {
+        ToolTip, 📋 Clipboard Capture ENABLED, 10, 10
+        OnClipboardChange("ClipboardMonitor")
+    } else {
+        ToolTip, ⏸️ Clipboard Capture DISABLED, 10, 10
+        OnClipboardChange("ClipboardMonitor", 0)  ; Unregister
+    }
+    SetTimer, RemoveToolTip, 2000
+    return
+
+; Clear captured content with Ctrl+Shift+X
+^+x::
+    CapturedLines := {}
+    FileDelete, %OutputFile%
+    ToolTip, 🗑️ Clipboard Capture CLEARED, 10, 10
+    SetTimer, RemoveToolTip, 2000
+    return
+
+; Monitor clipboard changes
+ClipboardMonitor(Type) {
+    global CapturedLines, OutputFile
+
+    if (Type = 1) {  ; Text content
+        ; Split clipboard into lines
+        Loop, Parse, Clipboard, `n, `r
+        {
+            line := Trim(A_LoopField)
+            if (line != "" && !CapturedLines.HasKey(line)) {
+                CapturedLines[line] := true
+
+                ; Append to file
+                FileAppend, %line%`n, %OutputFile%
+            }
+        }
+
+        ; Visual feedback
+        lineCount := CapturedLines.Count()
+        ToolTip, 📋 Captured: %lineCount% unique lines, 10, 10
+        SetTimer, RemoveToolTip, 1000
+    }
+}
+
+RemoveToolTip:
+    SetTimer, RemoveToolTip, Off
+    ToolTip
+    return
+
+; Show help on startup
+ToolTip, Clipboard Capture Tool`n`nCtrl+Shift+C = Toggle ON/OFF`nCtrl+Shift+X = Clear`n`nReady (DISABLED), 10, 10
+SetTimer, RemoveToolTip, 5000
+return

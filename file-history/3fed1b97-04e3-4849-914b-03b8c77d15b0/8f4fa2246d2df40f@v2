@@ -1,0 +1,202 @@
+﻿Imports Newtonsoft.Json
+
+Module Parts
+    ''' <summary>
+    ''' Get a single part by PartID or PartNumber
+    ''' Replaces: SELECT * FROM PART WHERE PartID=... OR PartNumber=...
+    ''' Endpoint: /Parts/Get
+    ''' </summary>
+    Public Function GetPart(Optional ByVal partId As Integer = 0, Optional ByVal partNumber As String = "") As PartInfo
+
+        Dim resultado As PartInfo = Nothing
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        If partId > 0 Then
+            ParametersTransit.Add(New URLInput With {.Name = "PartID", .Value = partId})
+        End If
+        If Not String.IsNullOrEmpty(partNumber) Then
+            ParametersTransit.Add(New URLInput With {.Name = "PartNumber", .Value = partNumber})
+        End If
+
+        Dim APIResponse As APIResponse = API_Call("/Parts/Get", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of PartInfo)(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Get all part numbers with ArrQty (PiecesByPanel)
+    ''' Replaces: SELECT PartNumber, PartID, PiecesByPanel FROM PART
+    ''' Now supports pagination - automatically fetches all pages
+    ''' </summary>
+    Public Function GetAllPartNumbers() As List(Of PartNumberInfo)
+
+        Dim resultado As List(Of PartNumberInfo) = New List(Of PartNumberInfo)()
+        Dim pageNumber As Integer = 1
+        Dim pageSize As Integer = 100 ' Adjust based on API performance
+        Dim hasMorePages As Boolean = True
+
+        While hasMorePages
+            Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+            ParametersTransit.Add(New URLInput With {.Name = "pageNumber", .Value = pageNumber.ToString()})
+            ParametersTransit.Add(New URLInput With {.Name = "pageSize", .Value = pageSize.ToString()})
+
+            Dim APIResponse As APIResponse = API_Call("/Parts/GetAllParts", "GET", ParametersTransit)
+
+            If APIResponse.ResponseCode = 200 Then
+                ' Check if API returns paginated response with metadata or just the data array
+                Try
+                    ' Try parsing as paginated response first
+                    Dim paginatedResponse = JsonConvert.DeserializeObject(Of PaginatedPartNumberResponse)(APIResponse.Response)
+
+                    If paginatedResponse IsNot Nothing AndAlso paginatedResponse.Data IsNot Nothing Then
+                        resultado.AddRange(paginatedResponse.Data)
+
+                        ' Check if there are more pages
+                        If paginatedResponse.Data.Count < pageSize OrElse pageNumber >= paginatedResponse.TotalPages Then
+                            hasMorePages = False
+                        Else
+                            pageNumber += 1
+                        End If
+                    Else
+                        hasMorePages = False
+                    End If
+                Catch ex As Exception
+                    ' If paginated parsing fails, try parsing as simple list (fallback for non-paginated response)
+                    Try
+                        Dim simpleList = JsonConvert.DeserializeObject(Of List(Of PartNumberInfo))(APIResponse.Response)
+                        If simpleList IsNot Nothing Then
+                            resultado.AddRange(simpleList)
+                        End If
+                    Catch
+                        ' Log error if needed
+                        WriteToFile("Error parsing GetAllParts response: " & ex.Message)
+                    End Try
+                    hasMorePages = False
+                End Try
+            Else
+                hasMorePages = False
+                WriteToFile("GetAllPartNumbers API error: " & APIResponse.ResponseCode & " - " & APIResponse.ResponseMessage)
+            End If
+        End While
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Get AOI quality change status (locked units configuration)
+    ''' Replaces: SELECT PartID, CirRef, ContainsText, DefectCodeID FROM Quality_Inspection_AOI_ChangeStatus
+    ''' </summary>
+    Public Function GetAOIQualityChangeStatus() As List(Of AOIQualityChangeStatus)
+
+        Dim resultado As List(Of AOIQualityChangeStatus) = New List(Of AOIQualityChangeStatus)()
+
+        Dim APIResponse As APIResponse = API_Call("/Parts/GetAOIQualityChangeStatus", "GET", Nothing)
+
+        If APIResponse.ResponseCode = 200 Then
+            resultado = JsonConvert.DeserializeObject(Of List(Of AOIQualityChangeStatus))(APIResponse.Response)
+        End If
+
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Get merge counter for a part
+    ''' Replaces: SELECT counter FROM PART_OPERATION_SERIALIZATION_MERGE_COUNTER WHERE partid=...
+    ''' </summary>
+    Public Function GetMergeCounter(ByVal partId As Integer) As Integer
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "partId", .Value = partId})
+
+        Dim APIResponse As APIResponse = API_Call("/Parts/GetMergeCounter", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            Return JsonConvert.DeserializeObject(Of Integer)(APIResponse.Response)
+        End If
+
+        Return 0
+    End Function
+
+    ''' <summary>
+    ''' Increment merge counter for a part (auto-creates if doesn't exist)
+    ''' Replaces: UPDATE/INSERT PART_OPERATION_SERIALIZATION_MERGE_COUNTER
+    ''' </summary>
+    Public Function IncrementMergeCounter(ByVal partId As Integer) As Integer
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "partId", .Value = partId})
+
+        Dim APIResponse As APIResponse = API_Call("/Parts/IncrementMergeCounter", "POST", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            Return JsonConvert.DeserializeObject(Of Integer)(APIResponse.Response)
+        End If
+
+        Return 0
+    End Function
+
+    ''' <summary>
+    ''' Check if part should merge at AOI for given side and area
+    ''' Replaces: SELECT * FROM PART_OPERATION_SERIALIZATION_MERGE_AUTO_AT_AOI WHERE PARTID=... AND Side=... AND AreaID=...
+    ''' Endpoint: /Parts/ShouldMergeAtAOI
+    ''' </summary>
+    Public Function ShouldMergeAtAOI(ByVal partId As Integer, ByVal side As String, ByVal areaId As Integer) As Boolean
+
+        Dim ParametersTransit As List(Of URLInput) = New List(Of URLInput)()
+        ParametersTransit.Add(New URLInput With {.Name = "partId", .Value = partId})
+        ParametersTransit.Add(New URLInput With {.Name = "side", .Value = side})
+        ParametersTransit.Add(New URLInput With {.Name = "areaId", .Value = areaId})
+
+        Dim APIResponse As APIResponse = API_Call("/Parts/ShouldMergeAtAOI", "GET", ParametersTransit)
+
+        If APIResponse.ResponseCode = 200 Then
+            Return JsonConvert.DeserializeObject(Of Boolean)(APIResponse.Response)
+        End If
+
+        Return False
+    End Function
+End Module
+
+''' <summary>
+''' Part Number Response (for GetAllPartNumbers)
+''' </summary>
+Public Class PartNumberInfo
+    Public Property PartNumber As String
+    Public Property PartID As Integer
+    Public Property ArrQty As Integer
+End Class
+
+''' <summary>
+''' Part Info Response (for Get)
+''' </summary>
+Public Class PartInfo
+    Public Property PartNumber As String
+    Public Property PartID As Integer
+    Public Property Part_Key As Integer
+    Public Property CustomerID As Integer
+End Class
+
+''' <summary>
+''' AOI Quality Change Status Response
+''' </summary>
+Public Class AOIQualityChangeStatus
+    Public Property PartID As Integer
+    Public Property CirRef As String
+    Public Property ContainsText As String
+    Public Property DefectCodeID As Integer
+End Class
+
+''' <summary>
+''' Paginated response for GetAllParts endpoint
+''' </summary>
+Public Class PaginatedPartNumberResponse
+    Public Property Data As List(Of PartNumberInfo)
+    Public Property PageNumber As Integer
+    Public Property PageSize As Integer
+    Public Property TotalRecords As Integer
+    Public Property TotalPages As Integer
+End Class

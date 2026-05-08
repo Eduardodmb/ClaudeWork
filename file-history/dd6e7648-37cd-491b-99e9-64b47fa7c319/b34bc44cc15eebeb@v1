@@ -1,0 +1,74 @@
+﻿/*
+Post-Deployment Script Template
+--------------------------------------------------------------------------------------
+ This file contains SQL statements that will be appended to the build script.
+ Use SQLCMD syntax to include a file in the post-deployment script.
+ Example:      :r .\myfile.sql
+ Use SQLCMD syntax to reference a variable in the post-deployment script.
+ Example:      :setvar TableName MyTable
+               SELECT * FROM [$(TableName)]
+
+ SQLCMD Variables (must be set in publish profile):
+   - SiteCode: Site identifier ("GRP1" or "OST1") - determines which SETTINGS file to load
+--------------------------------------------------------------------------------------
+*/
+
+---- Include the correct SETTINGS file based on SiteCode variable
+--:r .\Seed_SETTINGS_GRP1.sql
+
+---- IMPORTANT: Seed facilities FIRST (referenced by foreign keys in other tables)
+--:r .\Seed_COMMON_FACILITIES.sql
+
+---- Seed ASPNETROLES table with role definitions
+--:r .\Seed_ASPNETROLES.sql
+
+---- Seed ASPNETPOSITION table with position definitions
+--:r .\Seed_ASPNETPOSITION.sql
+
+---- Seed ASPNETUSERS table with system user accounts
+--:r .\Seed_ASPNETUSERS.sql
+
+---- Seed COMMON_EXTRACTORS_TYPE table with extractor type definitions
+--:r .\Seed_COMMON_EXTRACTORS_TYPE.sql
+
+---- Seed PART_OPERATION_AREAS_TYPE table with area type definitions
+--:r .\Seed_PART_OPERATION_AREAS_TYPE.sql
+
+---- Seed PART_OPERATION_AREAS table with manufacturing area definitions
+--:r .\Seed_PART_OPERATION_AREAS.sql
+
+---- Seed QUALITY_CAPAS_AREAS_TYPE table with CAPA area type definitions
+--:r .\Seed_QUALITY_CAPAS_AREAS_TYPE.sql
+
+---- Seed QUALITY_CAPAS_AUDIT_QUESTIONS_TYPE table with audit question type definitions
+--:r .\Seed_QUALITY_CAPAS_AUDIT_QUESTIONS_TYPE.sql
+
+---- Seed PLANNINGTOOL_AREAS table with planning tool area definitions
+--:r .\Seed_PLANNINGTOOL_AREAS.sql
+
+---- Seed PERSONEL_BONUS_TYPE table with personnel bonus type definitions
+--:r .\Seed_PERSONEL_BONUS_TYPE.sql
+
+---- Seed PART_OPERATION_REVIEW_VALIDATIONS table with operation review validation definitions
+--:r .\Seed_PART_OPERATION_REVIEW_VALIDATIONS.sql
+
+---- Seed PART_OPERATION_PACKOUT_TYPE table with packout type definitions
+--:r .\Seed_PART_OPERATION_PACKOUT_TYPE.sql
+
+---- Seed PART_CELLS_TYPE table with production cell type definitions
+--:r .\Seed_PART_CELLS_TYPE.sql
+
+---- Seed PORTAL_MENUS table with BeFirst Portal menu definitions
+--:r .\Seed_PORTAL_MENUS.sql
+
+---- Seed MANUFACTURING_TICKETS_TYPE table with manufacturing ticket type definitions
+--:r .\Seed_MANUFACTURING_TICKETS_TYPE.sql
+
+---- Seed MANUFACTURING_TICKETS_STATUS table with ticket status definitions
+--:r .\Seed_MANUFACTURING_TICKETS_STATUS.sql
+
+---- Seed ENGINEERING_TOOLS_TYPE table with engineering tool type definitions
+--:r .\Seed_ENGINEERING_TOOLS_TYPE.sql
+
+---- Seed ENGINEERING_TOOLS_STATUS table with tool status definitions
+--:r .\Seed_ENGINEERING_TOOLS_STATUS.sql

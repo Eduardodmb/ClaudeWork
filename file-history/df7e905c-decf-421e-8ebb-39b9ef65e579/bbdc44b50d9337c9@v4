@@ -1,0 +1,1049 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Report action + header button: views/bom_summary_report.xml (loads earlier) -->
+
+        <record id="project_view_form_bom_adjustments" model="ir.ui.view">
+            <field name="name">project.project.form.bom.adjustments</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project_bom.project_view_form_secondary_notebook_structure"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook[@name='secondary_notebook']" position="inside">
+                    <page string="Balance" name="project_bom_balance" sequence="55">
+                        <field name="company_currency" invisible="1"/>
+                        <field name="company_currency_id" invisible="1"/>
+                        <group>
+                            <group string="Cost Adjustment (Estimated Budget)">
+                                <field name="x_bom_summary_items_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_labor_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_equipment_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_travel_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_subcontractor_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_freight_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_bond_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_miscellaneous_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_reserve_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_total_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"
+                                       style="font-weight: bold;"/>
+                            </group>
+                            <group string="Cost Adjustment (Buyout)">
+                                <field name="x_bom_summary_items_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_labor_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_equipment_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_travel_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_subcontractor_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_freight_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_bond_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_miscellaneous_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_reserve_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_total_buyout"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"
+                                       style="font-weight: bold;"/>
+                            </group>
+                            <group string="Cost Adjustment (Current Expense)">
+                                <field name="x_bom_summary_items_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_labor_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_equipment_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_travel_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_subcontractor_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="x_bom_summary_freight_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_bond_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_miscellaneous_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_reserve_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="x_bom_summary_total_current_expense"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"
+                                       style="font-weight: bold;"/>
+                            </group>
+                            <group string="Balance (Buyout − Current Expense)">
+                                <field name="x_bom_summary_items_balance"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_labor_balance"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_equipment_balance"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_travel_balance"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_subcontractor_balance"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_freight_balance"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_bond_balance"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_miscellaneous_balance"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_reserve_balance"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_balance_grand"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"
+                                       style="font-weight: bold;"/>
+                                <field name="x_bom_summary_profit_percentage"
+                                       widget="percentage"
+                                       readonly="1"
+                                       decoration-danger="x_bom_summary_profit_percentage &lt; 25"
+                                       decoration-warning="x_bom_summary_profit_percentage &gt;= 25 and x_bom_summary_profit_percentage &lt; 40"
+                                       decoration-success="x_bom_summary_profit_percentage &gt;= 40"
+                                       style="font-weight: bold;"/>
+                            </group>
+                            <group string="Calculated Totals (Before Adjustment)">
+                                <field name="x_bom_summary_total_items"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_total_labor"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_total_travel"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_total_subcontractor"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_calculated_total"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"
+                                       style="font-weight: bold;"/>
+                                <field name="x_bom_summary_total_adjustment"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       readonly="1"/>
+                                <field name="x_bom_summary_modified_total"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"
+                                       style="font-weight: bold;"
+                                       readonly="1"/>
+                                <div class="alert alert-info" role="alert">
+                                    <p><strong>Three-Stage Workflow:</strong></p>
+                                    <ul>
+                                        <li><strong>Estimated Budget:</strong> Initial values from CRM estimating (copied as-is)</li>
+                                        <li><strong>Buyout:</strong> Pre-project adjustments made before project release/start</li>
+                                        <li><strong>Current Expense:</strong> Actual expenses during project execution</li>
+                                        <li><strong>Balance:</strong> Calculated as Buyout − Current Expense</li>
+                                    </ul>
+                                    <p class="mt-2"><strong>How to use adjustments:</strong></p>
+                                    <ul>
+                                        <li>Enter positive numbers to increase totals (e.g., 1000.00)</li>
+                                        <li>Enter negative numbers to decrease totals (e.g., -500.00)</li>
+                                        <li>These adjustments will be reflected in the BOM Summary Report</li>
+                                        <li>The "Final Modified Price" column will show: Calculated Total + Adjustment</li>
+                                    </ul>
+                                </div>
+                            </group>
+                        </group>
+                        <separator string="Current expense history (this project)"/>
+                        <field name="x_bom_balance_audit_ids" nolabel="1" readonly="1">
+                            <list create="0" edit="0" delete="0">
+                                <field name="create_date"/>
+                                <field name="create_uid" widget="many2one_avatar_user"/>
+                                <field name="changed_field_keys"/>
+                                <field name="expense_items" optional="hide"/>
+                                <field name="expense_labor" optional="hide"/>
+                                <field name="expense_equipment" optional="hide"/>
+                                <field name="expense_travel" optional="hide"/>
+                                <field name="expense_subcontractor" optional="hide"/>
+                                <field name="expense_freight" optional="hide"/>
+                                <field name="expense_bond" optional="hide"/>
+                                <field name="expense_miscellaneous" optional="hide"/>
+                                <field name="expense_reserve" optional="hide"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_project_list_financial" model="ir.ui.view">
+            <field name="name">project.project.list.financial</field>
+            <field name="model">project.project</field>
+            <field name="arch" type="xml">
+                <list string="Projects - Financial View"
+                      default_order="stage_id,user_id">
+                    <field name="company_currency" column_invisible="1"/>
+                    <field name="company_currency_id" column_invisible="1"/>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="stage_id"/>
+                    <field name="user_id" widget="many2one_avatar_user"/>
+                    <field name="date_start" optional="show"/>
+
+                    <!-- Estimated Budget Details (Hidden by default) -->
+                    <field name="x_bom_summary_items_adjustment"
+                           string="Est. Budget - Materials"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_labor_adjustment"
+                           string="Est. Budget - Labor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_equipment_adjustment"
+                           string="Est. Budget - Equipment"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_travel_adjustment"
+                           string="Est. Budget - Travel"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_subcontractor_adjustment"
+                           string="Est. Budget - Subcontractor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_freight_adjustment"
+                           string="Est. Budget - Freight"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_bond_adjustment"
+                           string="Est. Budget - Bond"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_miscellaneous_adjustment"
+                           string="Est. Budget - Misc."
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_reserve_adjustment"
+                           string="Est. Budget - Reserve"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_total_adjustment"
+                           string="Total Est. Budget"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="show"
+                           sum="Total"/>
+
+                    <!-- Buyout Details (Hidden by default) -->
+                    <field name="x_bom_summary_items_buyout"
+                           string="Buyout - Materials"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_labor_buyout"
+                           string="Buyout - Labor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_equipment_buyout"
+                           string="Buyout - Equipment"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_travel_buyout"
+                           string="Buyout - Travel"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_subcontractor_buyout"
+                           string="Buyout - Subcontractor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_freight_buyout"
+                           string="Buyout - Freight"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_bond_buyout"
+                           string="Buyout - Bond"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_miscellaneous_buyout"
+                           string="Buyout - Misc."
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_reserve_buyout"
+                           string="Buyout - Reserve"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_total_buyout"
+                           string="Total Buyout"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="show"
+                           sum="Total"/>
+
+                    <!-- Current Expense Details (Hidden by default) -->
+                    <field name="x_bom_summary_items_current_expense"
+                           string="Current - Materials"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_labor_current_expense"
+                           string="Current - Labor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_equipment_current_expense"
+                           string="Current - Equipment"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_travel_current_expense"
+                           string="Current - Travel"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_subcontractor_current_expense"
+                           string="Current - Subcontractor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_freight_current_expense"
+                           string="Current - Freight"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_bond_current_expense"
+                           string="Current - Bond"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_miscellaneous_current_expense"
+                           string="Current - Misc."
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_reserve_current_expense"
+                           string="Current - Reserve"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_total_current_expense"
+                           string="Total Current Expense"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="show"
+                           sum="Total"/>
+
+                    <!-- Balance Details (Hidden by default) -->
+                    <field name="x_bom_summary_items_balance"
+                           string="Balance - Materials"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_labor_balance"
+                           string="Balance - Labor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_equipment_balance"
+                           string="Balance - Equipment"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_travel_balance"
+                           string="Balance - Travel"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_subcontractor_balance"
+                           string="Balance - Subcontractor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_freight_balance"
+                           string="Balance - Freight"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_bond_balance"
+                           string="Balance - Bond"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_miscellaneous_balance"
+                           string="Balance - Misc."
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_reserve_balance"
+                           string="Balance - Reserve"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_balance_grand"
+                           string="Total Balance"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="show"
+                           sum="Total"/>
+                    <field name="x_bom_summary_profit_percentage"
+                           string="Profit %"
+                           widget="percentage"
+                           optional="show"
+                           decoration-danger="x_bom_summary_profit_percentage &lt; 25"
+                           decoration-warning="x_bom_summary_profit_percentage &gt;= 25 and x_bom_summary_profit_percentage &lt; 40"
+                           decoration-success="x_bom_summary_profit_percentage &gt;= 40"/>
+
+                    <!-- Calculated Totals (Reference - Hidden by default) -->
+                    <field name="x_bom_summary_total_items"
+                           string="Calc - Total Materials"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_total_labor"
+                           string="Calc - Total Labor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_total_travel"
+                           string="Calc - Total Travel"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_total_subcontractor"
+                           string="Calc - Total Subcontractor"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_calculated_total"
+                           string="Calc - Grand Total"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                    <field name="x_bom_summary_modified_total"
+                           string="Final Modified Total"
+                           widget="monetary"
+                           options="{'currency_field': 'company_currency'}"
+                           optional="hide"
+                           sum="Total"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_project_financial" model="ir.actions.act_window">
+            <field name="name">Projects - Financial</field>
+            <field name="res_model">project.project</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_project_list_financial"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Financial view of Projects showing BOM adjustments, expenses, and balances
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_project_financial"
+                  name="Financial View"
+                  parent="project.menu_main_pm"
+                  action="action_project_financial"
+                  sequence="15"/>
+
+        <template id="project_bom_summary_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="project">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <t t-set="bom_report_currency" t-value="project.bom_summary_currency_for_report()"/>
+
+                            <div class="text-center mt-4 mb-4">
+                                <h2>BOM Summary</h2>
+                                <h4><span t-field="project.name"/></h4>
+                                <p><strong>Customer: </strong> <span t-field="project.partner_id"/></p>
+                            </div>
+
+                            <!-- Cost Summary Section -->
+                            <t t-set="totals" t-value="project.get_bom_summary_totals()"/>
+                            
+                            <div class="mb-4">
+                                <table class="table table-bordered" style="width:100%; max-width: 1300px; margin: 0 auto;">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th colspan="7" class="text-center" style="font-size: 1.1em;">Cost Summary - All Divisions</th>
+                                        </tr>
+                                        <tr class="thead-light">
+                                            <th style="width:18%;">Category</th>
+                                            <th class="text-right" style="width:13%;">Calculated Total</th>
+                                            <th class="text-right" style="width:13%;">Est. Budget</th>
+                                            <th class="text-right" style="width:13%;">Buyout</th>
+                                            <th class="text-right" style="width:13%;">Current Expense</th>
+                                            <th class="text-right" style="width:12%;">Balance</th>
+                                            <th class="text-right" style="width:13%;">Final Modified Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-if="totals['total_items'] > 0 or totals['items_adjustment'] != 0 or totals['items_buyout'] != 0 or totals['items_current_expense'] != 0">
+                                            <td><strong>Total Materials:</strong></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['total_items'])"/></td>
+                                            <td class="text-right">
+                                                <t t-if="totals['items_adjustment'] >= 0">
+                                                    <span style="color: green;">+<span t-out="project.bom_summary_format_amount(totals['items_adjustment'])"/></span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color: red;"><span t-out="project.bom_summary_format_amount(totals['items_adjustment'])"/></span>
+                                                </t>
+                                            </td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['items_buyout'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['items_current_expense'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['items_balance'])"/></td>
+                                            <td class="text-right font-weight-bold"><span t-out="project.bom_summary_format_amount(totals['modified_items'])"/></td>
+                                        </tr>
+                                        <tr t-if="totals['total_labor'] > 0 or totals['labor_adjustment'] != 0 or totals['labor_buyout'] != 0 or totals['labor_current_expense'] != 0">
+                                            <td><strong>Total Labor:</strong></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['total_labor'])"/></td>
+                                            <td class="text-right">
+                                                <t t-if="totals['labor_adjustment'] >= 0">
+                                                    <span style="color: green;">+<span t-out="project.bom_summary_format_amount(totals['labor_adjustment'])"/></span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color: red;"><span t-out="project.bom_summary_format_amount(totals['labor_adjustment'])"/></span>
+                                                </t>
+                                            </td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['labor_buyout'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['labor_current_expense'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['labor_balance'])"/></td>
+                                            <td class="text-right font-weight-bold"><span t-out="project.bom_summary_format_amount(totals['modified_labor'])"/></td>
+                                        </tr>
+                                        <tr t-if="totals['total_travel'] > 0 or totals['travel_adjustment'] != 0 or totals['travel_buyout'] != 0 or totals['travel_current_expense'] != 0">
+                                            <td><strong>Total Travel Expenses:</strong></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['total_travel'])"/></td>
+                                            <td class="text-right">
+                                                <t t-if="totals['travel_adjustment'] >= 0">
+                                                    <span style="color: green;">+<span t-out="project.bom_summary_format_amount(totals['travel_adjustment'])"/></span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color: red;"><span t-out="project.bom_summary_format_amount(totals['travel_adjustment'])"/></span>
+                                                </t>
+                                            </td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['travel_buyout'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['travel_current_expense'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['travel_balance'])"/></td>
+                                            <td class="text-right font-weight-bold"><span t-out="project.bom_summary_format_amount(totals['modified_travel'])"/></td>
+                                        </tr>
+                                        <tr t-if="totals['subcontractor_adjustment'] != 0 or totals['subcontractor_buyout'] != 0 or totals['subcontractor_current_expense'] != 0">
+                                            <td><strong>Total Subcontractor:</strong></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['total_subcontractor'])"/></td>
+                                            <td class="text-right">
+                                                <t t-if="totals['subcontractor_adjustment'] >= 0">
+                                                    <span style="color: green;">+<span t-out="project.bom_summary_format_amount(totals['subcontractor_adjustment'])"/></span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color: red;"><span t-out="project.bom_summary_format_amount(totals['subcontractor_adjustment'])"/></span>
+                                                </t>
+                                            </td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['subcontractor_buyout'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['subcontractor_current_expense'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['subcontractor_balance'])"/></td>
+                                            <td class="text-right font-weight-bold"><span t-out="project.bom_summary_format_amount(totals['modified_subcontractor'])"/></td>
+                                        </tr>
+                                        <tr t-if="totals['equipment_adjustment'] != 0 or totals['equipment_buyout'] != 0 or totals['equipment_current_expense'] != 0">
+                                            <td><strong>Equipment:</strong></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(0.0)"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['equipment_adjustment'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['equipment_buyout'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['equipment_current_expense'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['equipment_balance'])"/></td>
+                                            <td class="text-right font-weight-bold"><span t-out="project.bom_summary_format_amount(totals['modified_equipment'])"/></td>
+                                        </tr>
+                                        <tr t-if="totals['freight_adjustment'] != 0 or totals['freight_buyout'] != 0 or totals['freight_current_expense'] != 0">
+                                            <td><strong>Freight:</strong></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(0.0)"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['freight_adjustment'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['freight_buyout'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['freight_current_expense'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['freight_balance'])"/></td>
+                                            <td class="text-right font-weight-bold"><span t-out="project.bom_summary_format_amount(totals['modified_freight'])"/></td>
+                                        </tr>
+                                        <tr t-if="totals['bond_adjustment'] != 0 or totals['bond_buyout'] != 0 or totals['bond_current_expense'] != 0">
+                                            <td><strong>Bond:</strong></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(0.0)"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['bond_adjustment'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['bond_buyout'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['bond_current_expense'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['bond_balance'])"/></td>
+                                            <td class="text-right font-weight-bold"><span t-out="project.bom_summary_format_amount(totals['modified_bond'])"/></td>
+                                        </tr>
+                                        <tr t-if="totals['miscellaneous_adjustment'] != 0 or totals['miscellaneous_buyout'] != 0 or totals['miscellaneous_current_expense'] != 0">
+                                            <td><strong>Miscellaneous:</strong></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(0.0)"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['miscellaneous_adjustment'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['miscellaneous_buyout'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['miscellaneous_current_expense'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['miscellaneous_balance'])"/></td>
+                                            <td class="text-right font-weight-bold"><span t-out="project.bom_summary_format_amount(totals['modified_miscellaneous'])"/></td>
+                                        </tr>
+                                        <tr t-if="totals['reserve_adjustment'] != 0 or totals['reserve_buyout'] != 0 or totals['reserve_current_expense'] != 0">
+                                            <td><strong>Contingency Reserve:</strong></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(0.0)"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['reserve_adjustment'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['reserve_buyout'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['reserve_current_expense'])"/></td>
+                                            <td class="text-right"><span t-out="project.bom_summary_format_amount(totals['reserve_balance'])"/></td>
+                                            <td class="text-right font-weight-bold"><span t-out="project.bom_summary_format_amount(totals['modified_reserve'])"/></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="bg-light">
+                                        <tr style="font-size: 1.1em;">
+                                            <td><strong>GRAND TOTAL:</strong></td>
+                                            <td class="text-right"><strong><span t-out="project.bom_summary_format_amount(totals['grand_total'])"/></strong></td>
+                                            <td class="text-right">
+                                                <t t-if="totals['total_estimated_budget_adjustment'] >= 0">
+                                                    <strong style="color: green;">+<span t-out="project.bom_summary_format_amount(totals['total_estimated_budget_adjustment'])"/></strong>
+                                                </t>
+                                                <t t-else="">
+                                                    <strong style="color: red;"><span t-out="project.bom_summary_format_amount(totals['total_estimated_budget_adjustment'])"/></strong>
+                                                </t>
+                                            </td>
+                                            <td class="text-right"><strong><span t-out="project.bom_summary_format_amount(totals['total_buyout_sum'])"/></strong></td>
+                                            <td class="text-right"><strong><span t-out="project.bom_summary_format_amount(totals['total_current_expense_sum'])"/></strong></td>
+                                            <td class="text-right"><strong><span t-out="project.bom_summary_format_amount(totals['balance_grand_total'])"/></strong></td>
+                                            <td class="text-right"><strong style="font-size: 1.15em;"><span t-out="project.bom_summary_format_amount(totals['modified_grand_total'])"/></strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            
+                            <hr/>
+                            <t t-foreach="project.get_bom_summary_data()" t-as="d">
+                                
+                                <div class="mt-5 p-2" style="background-color: #f0f0f0; border-left: 5px solid #7c7bad;">
+                                    <h3 class="m-0">
+                                        Installation: <span t-esc="d['division'].installation_id.name"/> 
+                                        <small class="text-muted">(<span t-esc="d['division'].installation_number"/>)</small>
+                                    </h3>
+                                </div>
+
+                                <div class="mt-3">
+                                    <h5>Items Bill of Materials</h5>
+                                    <table class="table table-sm table-striped table-bordered">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>QTY</th>
+                                                <th>Category</th>
+                                                <th>Vendor</th>
+                                                <th>Avg Cost</th>
+                                                <th>Final Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr t-foreach="d['items']" t-as="item">
+                                                <td><span t-field="item.product_id"/></td>
+                                                <td><span t-field="item.quantity"/></td>
+                                                <td><span t-field="item.category_id"/></td>
+                                                <td><span t-field="item.vendor_id"/></td>
+                                                <td><span t-field="item.avg_cost_per_qty" t-options='{"widget": "monetary", "display_currency": bom_report_currency}'/></td>
+                                                <td><span t-field="item.final_estimated_price" t-options='{"widget": "monetary", "display_currency": bom_report_currency}'/></td>
+                                            </tr>
+                                            <tr t-if="not d['items']">
+                                                <td colspan="6" class="text-center text-muted">No Items found for this division.</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="font-weight-bold">
+                                                <td colspan="5" class="text-right">Total Items:</td>
+                                                <td>
+                                                    <span t-out="project.bom_summary_format_amount(sum(d['items'].mapped('final_estimated_price')))"/>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h5>Labor Titles</h5>
+                                    <table class="table table-sm table-striped table-bordered">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Description</th>
+                                                <th>QTY</th>
+                                                <th>Qty/Day</th>
+                                                <th>Techs</th>
+                                                <th>Man-Hours</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr t-foreach="d['labor_titles']" t-as="title">
+                                                <td><span t-field="title.labor_title_id"/></td>
+                                                <td><span t-field="title.description"/></td>
+                                                <td><span t-field="title.quantity"/></td>
+                                                <td><span t-field="title.qty_per_day"/></td>
+                                                <td><span t-field="title.techs"/></td>
+                                                <td><span t-field="title.man_hours"/></td>
+                                            </tr>
+                                            <tr t-if="not d['labor_titles']">
+                                                <td colspan="6" class="text-center text-muted">No Labor Titles found.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h5>Labor BOM Summary</h5>
+                                    <t t-set="lb" t-value="d.get('labor_bom')"/>
+                                    <t t-if="lb">
+                                        <table class="table table-sm table-bordered" style="width:100%;">
+                                            <thead class="thead-light">
+                                                <tr class="font-weight-bold">
+                                                    <th style="width:30%;">LABOR ITEM</th>
+                                                    <th class="text-center" style="width:15%;">QTY (BASE)</th>
+                                                    <th class="text-center" style="width:15%;">QTY MOD</th>
+                                                    <th class="text-right" style="width:20%;">ACCESS RATES</th>
+                                                    <th class="text-right" style="width:20%;">TOTAL</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td colspan="5" class="font-weight-bold text-uppercase text-muted pt-2">Standard Hours</td></tr>
+                                                <tr>
+                                                    <td>TECHNICIANS</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.tech_standard_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.tech_standard_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.tech_standard_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.tech_standard_total_price)"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>SUPERVISOR</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.sup_standard_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.sup_standard_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.sup_standard_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.sup_standard_total_price)"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LOADING &amp; UNLOADING</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.loading_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.loading_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.loading_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.loading_total_price)"/></td>
+                                                </tr>
+
+                                                <tr><td colspan="5" class="font-weight-bold text-uppercase text-muted pt-2 border-top">Office</td></tr>
+                                                <tr>
+                                                    <td>DESIGN</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.design_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.design_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.design_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.design_total_price)"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>PREP TIME</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.prep_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.prep_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.prep_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.prep_total_price)"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>SCHEDULING</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.scheduling_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.scheduling_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.scheduling_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.scheduling_total_price)"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ADMIN HRS</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.admin_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.admin_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.admin_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.admin_total_price)"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LOGISTICS</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.logistics_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.logistics_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.logistics_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.logistics_total_price)"/></td>
+                                                </tr>
+
+                                                <tr><td colspan="5" class="font-weight-bold text-uppercase text-muted pt-2 border-top">Overtime</td></tr>
+                                                <tr>
+                                                    <td>TRAINING</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.training_ot_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.training_ot_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.training_ot_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.training_ot_total_price)"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>SUPERVISOR OT</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.sup_ot_qty"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.sup_ot_qty_mod"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.sup_ot_access_rates)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.sup_ot_total_price)"/></td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="border-top mt-3 pt-2 font-weight-bold bg-light">
+                                                    <td class="text-right">Grand Totals:</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.total_labor_qty_sum"/></td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % lb.total_labor_mod_sum"/></td>
+                                                    <td class="text-right"><t t-esc="'%.2f' % lb.total_labor_final_qty_sum"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(lb.total_labor_price_sum)"/></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </t>
+                                    <t t-if="not lb">
+                                        <div class="alert alert-warning">No Labor BOM Data calculated for this division.</div>
+                                    </t>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h5>Crew / Labor Type</h5>
+                                    <t t-set="lt" t-value="d.get('labor_type')"/>
+                                    <t t-if="lt">
+                                        <table class="table table-sm table-bordered" style="width:100%;">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:50%;">
+                                                        <h6 class="text-muted mb-3">Inputs</h6>
+                                                        <table class="table table-sm" style="width:100%;">
+                                                            <tr>
+                                                                <td style="width:70%;">Total Techs:</td>
+                                                                <td class="font-weight-bold text-right"><t t-esc="'%.2f' % lt.total_techs_qty"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total Supervisors:</td>
+                                                                <td class="font-weight-bold text-right"><t t-esc="'%.2f' % lt.total_supervisors_qty"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Travel Time Round Trip:</td>
+                                                                <td class="font-weight-bold text-right"><t t-esc="'%.2f hrs' % lt.travel_time_round_trip"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td style="width:50%;">
+                                                        <h6 class="text-muted mb-3">Calculated Metrics</h6>
+                                                        <table class="table table-sm" style="width:100%;">
+                                                            <tr>
+                                                                <td style="width:70%;">Total Man Hours (BOM):</td>
+                                                                <td class="font-weight-bold text-right"><t t-esc="'%.2f' % lt.total_man_hours_bom"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total Hours Sum:</td>
+                                                                <td class="font-weight-bold text-right"><t t-esc="'%.2f hrs' % lt.total_hours_sum"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total Days:</td>
+                                                                <td class="font-weight-bold text-right"><t t-esc="'%.2f' % lt.total_days_calc"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </t>
+                                    <t t-if="not lt">
+                                        <div class="alert alert-warning">No Crew/Labor Type Data defined.</div>
+                                    </t>
+                                </div>
+
+                                <div class="mt-4 mb-5">
+                                    <h5>Travel Expenses (Including IRS)</h5>
+                                    <t t-set="te" t-value="d.get('travel')"/>
+                                    <t t-if="te">
+                                        <table class="table table-sm table-bordered" style="width:100%;">
+                                            <thead class="thead-light">
+                                                <tr class="font-weight-bold">
+                                                    <th style="width:30%;">EXPENSE ITEM</th>
+                                                    <th class="text-center" style="width:25%;">QTY</th>
+                                                    <th class="text-center" style="width:25%;">RATE</th>
+                                                    <th class="text-right" style="width:20%;">COST</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-bottom">
+                                                    <td>MEALS</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % te.expense_meals_qty"/></td>
+                                                    <td class="text-center"><span t-out="project.bom_summary_format_amount(te.expense_meals_rate)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(te.expense_meals_cost)"/></td>
+                                                </tr>
+                                                <tr class="border-bottom">
+                                                    <td>HOTEL (ROOMS/NIGHTS)</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % te.expense_hotel_qty"/></td>
+                                                    <td class="text-center"><span t-out="project.bom_summary_format_amount(te.expense_hotel_rate)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(te.expense_hotel_cost)"/></td>
+                                                </tr>
+                                                <tr class="border-bottom">
+                                                    <td>TRAVEL TIME (HRS)</td>
+                                                    <td class="text-center"><t t-esc="'%.2f hrs' % te.expense_travel_time_qty"/></td>
+                                                    <td class="text-center"><span t-out="project.bom_summary_format_amount(te.expense_travel_time_rate)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(te.expense_travel_time_cost)"/></td>
+                                                </tr>
+                                                <tr class="border-bottom">
+                                                    <td>FUEL LUMP SUM</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % te.expense_fuel_lump_sum_qty"/></td>
+                                                    <td class="text-center"><span t-out="project.bom_summary_format_amount(te.expense_fuel_lump_sum_rate)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(te.expense_fuel_lump_sum_cost)"/></td>
+                                                </tr>
+                                                <tr class="border-bottom bg-light">
+                                                    <td class="font-weight-bold">IRS MILE COST (Miles/Cents)</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % te.expense_irs_mile_qty"/> <small class="text-muted">miles</small></td>
+                                                    <td class="text-center"><span t-out="project.bom_summary_format_amount(te.expense_irs_mile_rate)"/> <small class="text-muted">/mile</small></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(te.expense_irs_mile_cost)"/></td>
+                                                </tr>
+                                                <tr class="border-bottom">
+                                                    <td>DISPATCH</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % te.expense_dispatch_qty"/></td>
+                                                    <td class="text-center"><span t-out="project.bom_summary_format_amount(te.expense_dispatch_rate)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(te.expense_dispatch_cost)"/></td>
+                                                </tr>
+                                                <tr class="border-bottom">
+                                                    <td>OTHER</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % te.expense_other_qty"/></td>
+                                                    <td class="text-center"><span t-out="project.bom_summary_format_amount(te.expense_other_rate)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(te.expense_other_cost)"/></td>
+                                                </tr>
+                                                <tr class="border-bottom">
+                                                    <td>CAR RENTAL</td>
+                                                    <td class="text-center"><t t-esc="'%.2f' % te.expense_car_rental_qty"/></td>
+                                                    <td class="text-center"><span t-out="project.bom_summary_format_amount(te.expense_car_rental_rate)"/></td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(te.expense_car_rental_cost)"/></td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="py-3 font-weight-bold" style="font-size: 1.1em;">
+                                                    <td colspan="3" class="text-right">TOTAL TRAVEL EXPENSE COST:</td>
+                                                    <td class="text-right"><span t-out="project.bom_summary_format_amount(te.total_travel_expense_cost)"/></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </t>
+                                    <t t-if="not te">
+                                        <div class="alert alert-warning">No Travel Expenses recorded for this division.</div>
+                                    </t>
+                                </div>
+                                
+                                <div style="page-break-after: always;"></div>
+                            </t> 
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

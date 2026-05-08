@@ -1,0 +1,148 @@
+﻿Imports System.IO
+Imports System.Threading
+Imports System.Configuration
+Imports System.Data.SqlClient
+Imports System.Net.Mail
+Imports System.Globalization
+Public Class Service1
+    Public Sub StartForDebug(ByVal args() As String)
+        OnStart(args)
+    End Sub
+    Protected Overrides Sub OnStart(ByVal args() As String)
+
+        'Set ServiceName
+        ExData.strServiceName = "AutoExtractOldTesterRecords"
+
+        'Direccion del servicio (organized by day)
+        Dim serviceLogDir As String = "C:\BeFirst\Services\" & ExData.strServiceName
+        ExData.ServiceLog = System.IO.Path.Combine(serviceLogDir, DateTime.Now.ToString("yyyyMMdd") & ".txt")
+
+        'Ensure service directory exists
+        ExService.EnsureServiceDirectoryExists()
+
+        'Server Data
+        BeConfig.CreateConfigurationDirectory()
+
+        'Save File
+        BeConfig.SaveConfigurationFile()
+
+        '2023-01-10 EM: Set Bearer for api.
+        ExData.BEARER = New Bearer
+        ExData.BEARER = GeneraOAuth2_ClientCredentials("/Account/getTokenAsync", BeApi.Username, BeApi.Password)
+
+        '2024-01-13 EM: Update Settings
+        Call Settings.UpdateGlobalSettings()
+
+        '2020-08-11 EM: Update BeConn
+        ExData.ConnectionString = Settings.ConnectionString.setting_Value
+
+        BeConn.ConnectionString = Settings.ConnectionString.setting_Value
+        BeConn.Connection = New System.Data.SqlClient.SqlConnection(BeConn.ConnectionString)
+
+        BeConnM.ConnectionString = Settings.ConnectionStringMachines.setting_Value
+        BeConnM.Connection = New System.Data.SqlClient.SqlConnection(BeConnM.ConnectionString)
+
+        BeAgent.UpdateAgentID()
+
+        BeAgent.Active("Service started")
+
+        '◘ Read File (Configuration)
+        Me.ScheduleService()
+
+    End Sub
+
+    Protected Overrides Sub OnStop()
+        ExFunctions.WriteToFile(ExData.strServiceName & " Service stopped at " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss tt"))
+        Me.Schedular.Dispose()
+    End Sub
+
+    Private Schedular As Timer
+    Public Sub ScheduleService()
+        If Environment.UserInteractive Then ' TO DEBUG
+            Dim result As Boolean = ExService.ServiceCode()
+        Else
+            Try
+                Schedular = New Timer(New TimerCallback(AddressOf SchedularCallback))
+                Dim mode As String = ConfigurationManager.AppSettings("Mode").ToUpper()
+                ' Me.WriteToFile((Convert.ToString( ExData.strServiceName & " Service Mode: ") & mode) + " {0}")
+
+                'Set the Default Time.
+                Dim scheduledTime As DateTime = DateTime.MinValue
+
+                If mode = "DAILY" Then
+                    'Get the Scheduled Time from AppSettings.
+                    scheduledTime = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings("ScheduledTime"))
+                    If DateTime.Now > scheduledTime Then
+                        'If Scheduled Time is passed set Schedule for the next day.
+                        scheduledTime = scheduledTime.AddDays(1)
+                    End If
+                End If
+
+                If mode.ToUpper() = "DAILYTWICE" Then
+                    'Get the Scheduled Time from AppSettings.
+                    scheduledTime = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings("ScheduledTime"))
+
+                    If DateTime.Now >= scheduledTime Then
+                        'If Scheduled Time is passed set Schedule for the next day.
+                        scheduledTime = scheduledTime.AddHours(+12)
+                    End If
+
+                    If DateTime.Now >= scheduledTime Then
+                        'If Scheduled Time is passed set Schedule for the next day.
+                        scheduledTime = scheduledTime.AddHours(+12)
+                    End If
+                End If
+
+
+                If mode.ToUpper() = "INTERVAL" Then
+                    'Get the Interval in Minutes from AppSettings.
+                    Dim intervalMinutes As Integer = Convert.ToInt32(ConfigurationManager.AppSettings("IntervalMinutes"))
+
+                    'Set the Scheduled Time by adding the Interval to Current Time.
+                    scheduledTime = DateTime.Now.AddMinutes(intervalMinutes)
+                    If DateTime.Now > scheduledTime Then
+                        'If Scheduled Time is passed set Schedule for the next Interval.
+                        scheduledTime = scheduledTime.AddMinutes(intervalMinutes)
+                    End If
+                End If
+                If mode.ToUpper() = "INTERVALSECONDS" Then
+                    'Get the Interval in Minutes from AppSettings.
+                    Dim intervalSeconds As Integer = Convert.ToInt32(ConfigurationManager.AppSettings("IntervalSeconds"))
+
+                    'Set the Scheduled Time by adding the Interval to Current Time.
+                    scheduledTime = DateTime.Now.AddSeconds(intervalSeconds)
+                    If DateTime.Now > scheduledTime Then
+                        'If Scheduled Time is passed set Schedule for the next Interval.
+                        scheduledTime = scheduledTime.AddSeconds(intervalSeconds)
+                    End If
+                End If
+
+                Dim timeSpan As TimeSpan = scheduledTime.Subtract(DateTime.Now)
+                Dim schedule As String = String.Format("{0} day(s) {1} hour(s) {2} minute(s) {3} seconds(s)", timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds)
+
+                ExFunctions.WriteToFile((Convert.ToString(ExData.strServiceName & " Service scheduled to run after: ") & schedule) + " {0}")
+
+                'Get the difference in Minutes between the Scheduled and Current Time.
+                Dim dueTime As Integer = Convert.ToInt32(timeSpan.TotalMilliseconds)
+
+                'Change the Timer's Due Time.
+                Schedular.Change(dueTime, Timeout.Infinite)
+            Catch ex As Exception
+                WriteToFile(ExData.strServiceName & " Service Error on: {0} " + ex.Message + ex.StackTrace)
+
+                'Stop the Windows Service.
+                'Using serviceController As New System.ServiceProcess.ServiceController(ExData.strServiceName)
+                '    serviceController.[Stop]()
+                'End Using
+            End Try
+        End If
+    End Sub
+
+    Private Sub SchedularCallback(e As Object)
+        Dim result As Boolean = ExService.ServiceCode()
+
+        Me.ScheduleService()
+
+    End Sub
+
+End Class

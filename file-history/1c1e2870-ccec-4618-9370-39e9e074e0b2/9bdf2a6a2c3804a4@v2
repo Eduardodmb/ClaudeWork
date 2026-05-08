@@ -1,0 +1,260 @@
+# Context Quality Dashboard
+
+**Visual overview of Claude context health**
+
+---
+
+## Quick Stats
+
+```dataview
+TABLE length(rows) as "File Count"
+FROM "02-Learnings" OR "03-Skills" OR "04-Commands"
+GROUP BY file.folder
+```
+
+---
+
+## Graph View
+
+**Open graph view:** Press `Ctrl+G`
+
+**Recommended filters:**
+- `path:02-Learnings OR path:03-Skills`
+- `tag:#befirst`
+- `tag:#validated`
+
+**Look for:**
+- **Isolated nodes** (no links) = Need integration with related concepts
+- **Highly connected nodes** (many links) = Core concepts, good!
+- **Clusters** = Related domains (befirst, infrastructure, team)
+
+---
+
+## Freshness Analysis
+
+### Recently Updated (Active Context)
+
+```dataview
+TABLE file.mtime as "Last Modified", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills"
+WHERE file.mtime > date(today) - dur(30 days)
+SORT file.mtime DESC
+LIMIT 20
+```
+
+### Stale Content (Needs Review)
+
+```dataview
+TABLE file.mtime as "Last Modified", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills"
+WHERE file.mtime < date(today) - dur(90 days)
+SORT file.mtime ASC
+LIMIT 20
+```
+
+**Action:** Review stale items weekly. Archive or update.
+
+### Ancient Content (Consider Archiving)
+
+```dataview
+TABLE file.mtime as "Last Modified", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills"
+WHERE file.mtime < date(today) - dur(180 days)
+SORT file.mtime ASC
+```
+
+**Action:** Move to `99-Archive/` unless still highly relevant.
+
+---
+
+## Tag Coverage
+
+### All Tags (Sorted by Count)
+
+```dataview
+TABLE length(rows) as "Count"
+FROM "02-Learnings" OR "03-Skills" OR "04-Commands"
+WHERE file.tags
+GROUP BY file.tags
+SORT length(rows) DESC
+```
+
+### Untagged Files (Needs Classification)
+
+```dataview
+LIST
+FROM "02-Learnings"
+WHERE !file.tags OR length(file.tags) = 0
+```
+
+**Action:** Add domain tags (befirst, infrastructure, team, etc.)
+
+---
+
+## Skills Inventory
+
+```dataview
+TABLE file.ctime as "Created", file.mtime as "Updated", file.tags as "Tags"
+FROM "03-Skills"
+SORT file.mtime DESC
+```
+
+**Metrics:**
+- Total skills: (count above)
+- Recently updated (<30 days): Active skills
+- Dormant (>90 days): Consider archiving unused skills
+
+---
+
+## Learning Pipeline
+
+### Ideas (Backlog)
+
+```dataview
+TABLE file.ctime as "Created", file.tags as "Tags"
+FROM "02-Learnings/_claude-learning/ideas"
+WHERE !contains(file.tags, "archived")
+SORT file.ctime DESC
+```
+
+### Best Practices (Validated)
+
+```dataview
+TABLE file.mtime as "Updated", file.tags as "Tags"
+FROM "02-Learnings/_claude-learning/best-practices"
+WHERE contains(file.tags, "validated")
+SORT file.mtime DESC
+```
+
+### Promotion Candidates (Learning → Skill)
+
+```dataview
+TABLE file.mtime as "Last Updated", file.tags as "Tags"
+FROM "02-Learnings/_claude-learning/best-practices"
+WHERE contains(file.tags, "validated")
+  AND file.mtime < date(today) - dur(60 days)
+SORT file.mtime ASC
+```
+
+**Action:** Validated learnings older than 60 days should become skills.
+
+---
+
+## Context Relationships
+
+### Most Linked Files (Core Concepts)
+
+```dataview
+TABLE length(file.outlinks) as "Links Out", length(file.inlinks) as "Links In"
+FROM "02-Learnings" OR "03-Skills"
+SORT length(file.inlinks) + length(file.outlinks) DESC
+LIMIT 20
+```
+
+### Isolated Files (Need Integration)
+
+```dataview
+TABLE file.mtime as "Last Modified"
+FROM "02-Learnings" OR "03-Skills"
+WHERE length(file.outlinks) = 0 AND length(file.inlinks) = 0
+SORT file.mtime DESC
+```
+
+**Action:** Add links to related concepts using `[[WikiLinks]]`.
+
+---
+
+## Domain Breakdown
+
+### BeFirst Context
+
+```dataview
+TABLE file.mtime as "Updated"
+FROM "02-Learnings" OR "03-Skills"
+WHERE contains(file.tags, "befirst")
+SORT file.mtime DESC
+```
+
+### Infrastructure Context
+
+```dataview
+TABLE file.mtime as "Updated"
+FROM "02-Learnings" OR "03-Skills"
+WHERE contains(file.tags, "infrastructure")
+SORT file.mtime DESC
+```
+
+### Team/Process Context
+
+```dataview
+TABLE file.mtime as "Updated"
+FROM "02-Learnings" OR "03-Skills"
+WHERE contains(file.tags, "team") OR contains(file.tags, "process")
+SORT file.mtime DESC
+```
+
+---
+
+## This Week's Activity
+
+### Files Created This Week
+
+```dataview
+TABLE file.ctime as "Created", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills"
+WHERE file.ctime > date(today) - dur(7 days)
+SORT file.ctime DESC
+```
+
+### Files Modified This Week
+
+```dataview
+TABLE file.mtime as "Modified", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills"
+WHERE file.mtime > date(today) - dur(7 days)
+  AND file.ctime < date(today) - dur(7 days)
+SORT file.mtime DESC
+```
+
+---
+
+## Quality Metrics
+
+| Metric | Target | How to Check |
+|--------|--------|--------------|
+| **Total learnings** | Growing over time | See Quick Stats table |
+| **Active skills** | 10+ | Skills updated <30 days |
+| **Stale items** | <5 | Files >90 days old |
+| **Untagged items** | 0 | Untagged Files query |
+| **Isolated files** | <10% | Files with no links |
+| **CLAUDE.md age** | <30 days | Check modification date |
+
+---
+
+## Next Steps
+
+**Weekly (Friday 4:00 PM):**
+- [ ] Review stale content (archive or update)
+- [ ] Tag untagged files
+- [ ] Update CLAUDE.md personal section
+- [ ] Check for promotion candidates
+
+**Monthly (First Monday):**
+- [ ] Archive ancient content (>180 days)
+- [ ] Promote validated learnings to skills
+- [ ] Review context quality metrics
+- [ ] Plan next month's focus areas
+
+---
+
+## Tips for Using This Dashboard
+
+1. **Bookmark this page** - Start here every Friday
+2. **Use graph view** - Visual patterns emerge quickly
+3. **Follow the numbers** - Stale >5? Time for cleanup
+4. **Tag everything** - Makes context discoverable by Claude
+5. **Link liberally** - `[[WikiLinks]]` connect related concepts
+
+---
+
+**Last viewed:** {{date:YYYY-MM-DD}}

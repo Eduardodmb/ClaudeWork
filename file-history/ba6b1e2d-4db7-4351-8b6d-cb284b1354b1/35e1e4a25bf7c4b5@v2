@@ -1,0 +1,631 @@
+﻿using APIs_BeFirst.Framework.APIs;
+using APIs_BeFirst.Framework.Functions;
+using APIs_BeFirst.Models.DataBase;
+using APIs_BeFirst.Models.Response;
+using APIs_BeFirst.Service.Container;
+using APIs_BeFirst.Service.Units.cs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.Intrinsics.X86;
+using System.Security.Policy;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using static APIs_BeFirst.Framework.APIs.Account;
+using static APIs_BeFirst.Models.Response.QualityResponse;
+
+namespace APIs_BeFirst.Controllers
+{
+
+    //===============================================================
+    // Units: APIs to get Units informations 
+    //===============================================================
+
+
+    [ApiController]
+    [Route("[controller]")]
+    public class UnitsController : ControllerBase
+    {
+        #region Fields
+        private readonly IUnitsService _UnitsService;
+
+        #endregion
+
+        #region Ctor
+        public UnitsController(IUnitsService unitsService)
+        {
+            _UnitsService = unitsService;
+        }
+
+        #endregion
+
+
+        ///*=====================================
+        // Check IN/Out: Save units records
+        // =====================================*/
+
+        #region "Check In/Out"
+
+        [Authorize]
+        [HttpPost("CheckIn")]
+        public async Task<ActionResult<UnitsCheckInResult>> CheckIn(string SSN, int PartID, int StationID, int AreaID, string Side, int BinID, string Mode = "SINGLE", string UserId = "", DateTime? CheckIn = null)
+        {
+
+            if (Mode != "SINGLE" && Mode != "PANEL")
+            {
+                return BadRequest("Please set a valid MODE: SINGLE OR PANEL.");
+            }
+
+            try
+            {
+                var UnitsCheckInResult = await _UnitsService.CheckInAsync(SSN, PartID, StationID, AreaID, Side, BinID, Mode, UserId, CheckIn);
+
+                return Ok(UnitsCheckInResult); // Retorna el objeto creado
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Devuelve un mensaje de error
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}"); // Error general
+            }
+        }
+
+        /// <summary>
+        /// This method add records for a unit.
+        /// </summary>
+        [Authorize]
+        [HttpPost("CheckOutParametrized")]
+        public async Task<ActionResult<bool>> CheckOutParametrized(string SSN, string Result, int PartID, int StationID, int AreaID, string Side, DateTime TrnDate, string NestID, string Unit_Alternate, string TestStep, string Value, string Min_Value, string Max_Value, string Nom_Value, int UnitIndex = 0)
+        {
+            try
+            {
+                var box = await _UnitsService.CheckOutParametrizedAsync(SSN, Result, PartID, StationID, AreaID, Side, TrnDate, NestID, Unit_Alternate, TestStep, Value, Min_Value, Max_Value, Nom_Value, UnitIndex);
+                return Ok(box); // Retorna el objeto creado
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Devuelve un mensaje de error
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        //   /// <summary>
+        //   /// This method add several records for a unit.
+        //   /// </summary>
+        [Authorize]
+        [HttpPost("CheckOutParametrizedCollection")]
+        public async Task<ActionResult<Boolean>> CheckOutParametrizedCollection(string SSN, string Result, int PartID, int StationID, int AreaID, string Side, DateTime TrnDate, string NestID, string Unit_Alternate, string testCollection, int UnitIndex = 0)
+        {
+            try
+            {
+                var box = await _UnitsService.CheckOutParametrizedCollectionAsync(SSN, Result, PartID, StationID, AreaID, Side, TrnDate, NestID, Unit_Alternate, testCollection, UnitIndex);
+                return Ok(box); // Retorna el objeto creado
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Devuelve un mensaje de error
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}"); // Error general
+            }
+        }
+
+        
+        /// <summary>
+        /// This method add several records for a unit.
+        /// </summary>
+        [Authorize]
+        [HttpPost("Linkage/Add")]
+        public async Task<ActionResult<bool>> LinkageAdd(int PartID, string GroupName, string SSN, string ChildCollection)
+        {
+            try
+            {
+                var result = await _UnitsService.LinkageAddAsync(PartID, GroupName, SSN, ChildCollection);
+
+                return Ok(result);
+            }
+            catch (ArgumentException argEx)
+            {
+                // Errores de validación
+                return BadRequest(argEx.Message);
+            }
+            catch (InvalidOperationException argEx)
+            {
+                // Errores de validación
+                return BadRequest(argEx.Message);
+            }
+
+            catch (Exception ex)
+            {
+                // Errores inesperados
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+        }
+
+        //   /*=====================================
+        //    MAC: MACs Functions
+        //    =====================================*/
+
+        //[Authorize]
+        //[HttpPost("CheckOutMAC")]
+        //public async Task<ActionResult<bool>> CheckOutMAC(string SSN, string Result, int PartID, int StationID, int AreaID, string Side, DateTime TrnDate, string CUSTOMER_PART_NO = "", string MAC = "", string UUID = "", string LICENSE = "", string POWERON = "")
+        //{
+        //    try
+        //    {
+        //        var box = await _UnitsService.CheckOutMACAsync(SSN, Result, PartID, StationID, AreaID, Side, TrnDate, CUSTOMER_PART_NO, MAC, UUID, LICENSE, POWERON);
+        //        return Ok(box); // Retorna el objeto creado
+        //    }
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        return BadRequest(ex.Message); // Devuelve un mensaje de error
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal server error: {ex.Message}"); // Error general
+        //    }
+        //}
+
+        //[Authorize]
+        //[HttpGet("MAC/Get")]
+        //public async Task<ActionResult<UnitsMACs>> MACGet(int AreaID, string Side, string SSN = "", string MAC = "")
+        //{
+        //    try
+        //    {
+        //        var box = await _UnitsService.MACGetAsync(AreaID, Side, SSN, MAC);
+        //        return Ok(box); // Retorna el objeto creado
+        //    }
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        return BadRequest(ex.Message); // Devuelve un mensaje de error
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal server error: {ex.Message}"); // Error general
+        //    }
+
+        //}
+
+
+        
+
+        /// <returns>List of objects returned</returns>
+        [Authorize]
+        [HttpPost("CheckOut")]
+        public async Task<ActionResult<UnitsCheckOutResult>> CheckOut(string SSN, string SSNPanel, string Result, int PartID, int StationID, int AreaID, string Side, int BinID, int StageID, int SetupId = 0, int SSNQty = 1,
+            int JobTypeID = -1, int JobID = -1, int JobNumber = -1, int NestID = 1, int ToolID_1 = 0, int ToolID_2 = 0, string FailureDescription = "", string Unit_Alternate = "", string Mode = "SINGLE", string UserId = "",
+            DateTime? TrnDate = null)
+        {
+
+            try
+            {
+                var result = await _UnitsService.CheckOutAsync(
+                SSN, SSNPanel, Result, PartID, StationID, AreaID, Side, BinID, StageID, SetupId, SSNQty, JobTypeID,
+                    JobID, JobNumber, NestID, ToolID_1, ToolID_2, FailureDescription, Unit_Alternate, Mode, UserId, TrnDate);
+
+                return Ok(result);
+            }
+            catch (ArgumentException argEx)
+            {
+                // Errores de validación
+                return BadRequest(argEx.Message);
+            }
+            catch (Exception ex)
+            {
+                // Errores inesperados
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+        }
+
+        #endregion
+
+        /*=====================================
+         Packout Options
+         =====================================*/
+
+
+
+        /*=====================================
+         Failed Units: Rework etc...
+         =====================================*/
+
+
+        /// <summary>
+        /// This method add records for a unit.
+        /// </summary>
+        /// <param name="Result">Please set 'PASS' or 'FAIL'</param>
+        /// <returns>List of objects returned</returns>
+        [Authorize]
+        [HttpPost("Update")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<ActionResult<bool>> Update(int PartID, bool IsGood, int DefectCodeID, bool IsRework, int StationID,
+            int JobID, int JobType, int JobNumber, string Side, string SSNPanel, string SSN, int ControlID, int AreaID, int BinID,
+            int StageID, int SSNQty, string SSN_Alternate, bool IsActive, int SSNIndex, string ContainerID = "",
+            string Comments = "", int NestID = 1, int ToolID_1 = 0, int ToolID_2 = 0, int SetupId = 0, string UserId = "",
+            DateTime? TrnDate = null)
+        {
+            try
+            {
+
+                bool result = await _UnitsService.UpdateAsync(PartID, IsGood, DefectCodeID, IsRework, StationID,
+            JobID, JobType, JobNumber, Side, SSNPanel, SSN, ControlID, AreaID, BinID, StageID, SSNQty, SSN_Alternate,
+            IsActive, SSNIndex, ContainerID, Comments, NestID, ToolID_1, ToolID_2, SetupId, UserId, TrnDate);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+
+        }
+
+        /*=====================================
+         Records: Get some custom results
+         =====================================*/
+
+        [Authorize]
+        [HttpGet("GetUnitResult")]
+        public async Task<ActionResult<ResponseUnits>> GetUnitResult(string SSN, int AreaID, string Side = "A", int PartID = 0)
+        {
+            try
+            {
+                var GetUnResult = await _UnitsService.GetUnitResult(SSN, AreaID, Side, PartID);
+
+                return Ok(GetUnResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        [Authorize]
+        [HttpGet("GetUnitResultHistory")]
+        public async Task<ActionResult<List<UnitsHistory>>> GetUnitResultHistory(string SSN, string Area = "", string Side = "", string PartNumber = "", string BinCode = "")
+        {
+            try
+            {
+                var HistoryUnitGet = await _UnitsService.GetUnitResultHistory(SSN, Area, Side, PartNumber, BinCode);
+
+                return Ok(HistoryUnitGet);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Devuelve un mensaje de error
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        [Authorize]
+        [HttpGet("GetUnitResultHistorySite")]
+        public async Task<ActionResult<List<UnitsHistory>>> GetUnitResultHistorySite(string Site, string SSN, string Area = "", string Side = "", string PartNumber = "", string BinCode = "")
+        {
+            //SITES AVAILABLES
+            //JUA1
+            //JUA2
+            //GRA1
+
+            try
+            {
+                var result = await _UnitsService.GetUnitResultHistorySiteAsync(Site, SSN, Area, Side, PartNumber, BinCode);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [Authorize]
+        [HttpGet("GetPanelResultHistory")]
+        public async Task<ActionResult<List<UnitsHistory>>> GetPanelResultHistory(string SSNPanel, string Area = "", string Side = "", string PartNumber = "", string BinCode = "")
+        {
+            try
+            {
+                var HistoryUnitGet = await _UnitsService.GetPanelResultHistory(SSNPanel, Area, Side , PartNumber , BinCode);
+
+                return Ok(HistoryUnitGet);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Devuelve un mensaje de error
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+
+        //   /*=====================================
+        //   Records: Get Counter for IC Programming --00000312FB
+        //   =====================================*/
+
+        [Authorize]
+        [HttpGet("GetNextICCounter")]
+        public async Task<ActionResult<ICCOunter>> GetNextICCounter(string Part_No)
+        {
+            try
+            {
+                var GetNextIC = await _UnitsService.GetNextICCounterAsync(Part_No);
+
+                return Ok(GetNextIC);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Devuelve un mensaje de error
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        //   /*=====================================
+        //    Array units.
+        //    =====================================*/
+
+        [Authorize]
+        [HttpGet("Array/GetChilds")]
+        public async Task<ActionResult<List<ChildsInParent>>> ArrayGetChilds(string ChildOrParent, int? AreaID = null, string? Side = null)
+        {
+            try
+            {
+                var ChildsInArray = await _UnitsService.ArrayGetChildsAsync(ChildOrParent, AreaID, Side);
+
+                return Ok(ChildsInArray);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Devuelve un mensaje de error
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        [Authorize]
+        [HttpGet("Array/GetChildsSite")]
+        public async Task<ActionResult<List<ChildsInParent>>> ArrayGetChildsSite(string Site, string ChildOrParent)
+        {
+            //SITES AVAILABLES
+            //JUA1
+            //JUA2
+            //GRA1
+
+            try
+            {
+                var result = await _UnitsService.ArrayGetChildsSiteAsync(Site, ChildOrParent);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //   /*=====================================
+        //    LOCKED UNITS: Get, Add, Delete locked units
+        //    =====================================*/
+
+        [Authorize]
+        [HttpGet("LockedUnits/Get")]
+        public async Task<ActionResult<List<PartUnitsLocked>>> GetLockedUnits(string sn)
+        {
+            try
+            {
+                var lockedUnits = await _UnitsService.GetLockedUnitsAsync(sn);
+                return Ok(lockedUnits);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [Authorize]
+        [HttpPost("LockedUnits/Add")]
+        public async Task<ActionResult<bool>> AddLockedUnit(string partNo, string sn, int controlId, string comments)
+        {
+            try
+            {
+                var result = await _UnitsService.AddLockedUnitAsync(partNo, sn, controlId, comments);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("LockedUnits/Delete")]
+        public async Task<ActionResult<bool>> DeleteLockedUnits(string sn, string commentPattern = "AOI BAD%")
+        {
+            try
+            {
+                var result = await _UnitsService.DeleteLockedUnitsAsync(sn, commentPattern);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        //   /*=====================================
+        //    ARRAY RELATIONSHIPS: Add, Delete, Check parent-child relationships
+        //    =====================================*/
+
+        [Authorize]
+        [HttpPost("Array/AddRelationship")]
+        public async Task<ActionResult<bool>> AddArrayRelationship(string parent, string child, int sortNo)
+        {
+            try
+            {
+                var result = await _UnitsService.AddArrayRelationshipAsync(parent, child, sortNo);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("Array/DeleteRelationship")]
+        public async Task<ActionResult<bool>> DeleteArrayRelationship(string child)
+        {
+            try
+            {
+                var result = await _UnitsService.DeleteArrayRelationshipAsync(child);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("Array/CheckRelationshipExists")]
+        public async Task<ActionResult<bool>> CheckArrayRelationshipExists(string child)
+        {
+            try
+            {
+                var result = await _UnitsService.CheckArrayRelationshipExistsAsync(child);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        //   /*=====================================
+        //    AOI: AOI Functions
+        //    =====================================*/
+
+        [Authorize]
+        [HttpGet("AOI/Get")]
+        public async Task<ActionResult<ResponseUnits>> AOIGet(string SSN, int AreaID, string Side)
+        {
+            try
+            {
+                var AOIGet = await _UnitsService.AOIGetAsync(SSN, AreaID, Side);
+                return Ok(AOIGet); // Retorna el objeto creado
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+
+
+        [Authorize]
+        [HttpGet("AOI/Panel/Get")]
+        public async Task<ActionResult<UnitsCheckInResult>> AOIPanelGet(string SSN, int AreaID, string Side)
+        {
+            try
+            {
+
+                var GetBoxGet = await _UnitsService.AOIPanelGettAsync(SSN, AreaID, Side);
+                if (GetBoxGet == null)
+                {
+                    return BadRequest("Invalid Box");
+                }
+                return Ok(GetBoxGet);
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+
+        }
+
+
+        #region "Legacy"
+
+        [Authorize]
+        [HttpGet("GetAOIResult")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<ActionResult<ResponseUnits>> GetAOIResult(string SSN, int AreaID, string Side)
+        {
+            try
+            {
+                var GetAOI = await _UnitsService.GetAOIResultAsync(SSN, AreaID, Side);
+                return Ok(GetAOI); // Retorna el objeto creado
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+        #endregion
+
+        [Authorize]
+        [HttpGet("CheckRabbit")]
+        public async Task<ActionResult<List<Rabbits>>> CheckRabbit(string SSN)
+        {
+            try
+            {
+                var CheckIfIsRabbit = await _UnitsService.CheckRabbitListAsync(SSN);
+
+                return Ok(CheckIfIsRabbit);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Devuelve un mensaje de error
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+        
+        [Authorize]
+        [HttpGet("CheckArray")]
+        public async Task<ActionResult<bool>> CheckArray(string Child, int Sort_No)
+        {
+            try
+            {
+                var CheckIfIsRabbit = await _UnitsService.CheckCorrectArray(Child, Sort_No);
+
+                return Ok(CheckIfIsRabbit);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Devuelve un mensaje de error
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+    }
+}

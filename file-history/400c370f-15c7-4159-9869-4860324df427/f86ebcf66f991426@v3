@@ -1,0 +1,411 @@
+# Refactoring Templates - Quick Reference
+
+Use these templates to quickly refactor the remaining SQL INSERT statements to use APIs.
+
+---
+
+## Template 1: Single Insert (Simple PASS/FAIL)
+
+### Find This Pattern:
+```vb
+Dim InsertParameter() As SqlParameter = New SqlParameter() {
+    New SqlParameter("@SN", SqlDbType.VarChar) With {.Value = rowSSN},
+    New SqlParameter("@AOIID", SqlDbType.Int) With {.Value = AOIID},
+    New SqlParameter("@StationID", SqlDbType.Int) With {.Value = StationID},
+    New SqlParameter("@PartID", SqlDbType.Int) With {.Value = partid},
+    New SqlParameter("@Side", SqlDbType.VarChar) With {.Value = sideid},
+    New SqlParameter("@Trndate", SqlDbType.DateTime) With {.Value = Fecha},
+    New SqlParameter("@IsGood", SqlDbType.Bit) With {.Value = isGood},
+    New SqlParameter("@Position", SqlDbType.Int) With {.Value = position}
+}
+Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data ..."
+BeConnM.InsertRecords(sql_insert, InsertParameter)
+```
+
+### Replace With:
+```vb
+' Create API request
+Dim request As New AOIInspectionRequest With {
+    .Sn = rowSSN,
+    .Aoiid = AOIID,
+    .StationId = StationID,
+    .PartId = partid,
+    .Side = sideid,
+    .Trndate = Fecha,
+    .IsGood = isGood,
+    .IsRework = False,
+    .Position = position,
+    .RefCir = "",
+    .DefectDesc = "",
+    .UserPass = Nothing,
+    .FacilityKey = Nothing,
+    .AreaId = AreaID
+}
+
+' Submit via API
+Try
+    Dim response As AOIDataResponse = AOI.SubmitInspection(request)
+    If Not response.Success Then
+        WriteToFile($"API Error: {response.Message}")
+    End If
+Catch ex As Exception
+    WriteToFile($"API Exception: {ex.ToString()}")
+End Try
+```
+
+---
+
+## Template 2: Insert with Defects
+
+### Find This Pattern:
+```vb
+Dim InsertParameter() As SqlParameter = New SqlParameter() {
+    ' ... standard parameters ...
+    New SqlParameter("@RefCir", SqlDbType.VarChar) With {.Value = refCir},
+    New SqlParameter("@DefectDesc", SqlDbType.NVarChar) With {.Value = defectDesc},
+    New SqlParameter("@UserPass", SqlDbType.Bit) With {.Value = userPass}
+}
+BeConnM.InsertRecords(sql_insert, InsertParameter)
+```
+
+### Replace With:
+```vb
+' Create API request with defect information
+Dim request As New AOIInspectionRequest With {
+    .Sn = serialNumber,
+    .Aoiid = AOIID,
+    .StationId = StationID,
+    .PartId = partid,
+    .Side = sideid,
+    .Trndate = Fecha,
+    .IsGood = False, ' Has defects
+    .IsRework = False,
+    .Position = position,
+    .RefCir = refCir,
+    .DefectDesc = defectDesc,
+    .UserPass = userPass,
+    .Xmisfit = If(xMisfit = "", 0, CSng(xMisfit)),
+    .Ymisfit = If(yMisfit = "", 0, CSng(yMisfit)),
+    .Xpos = If(xPos = "", 0, CSng(xPos)),
+    .Ypos = If(yPos = "", 0, CSng(yPos)),
+    .FacilityKey = Nothing,
+    .AreaId = AreaID
+}
+
+' Submit via API
+Try
+    Dim response As AOIDataResponse = AOI.SubmitInspection(request)
+    If Not response.Success Then
+        WriteToFile($"API Error: {response.Message}")
+    End If
+Catch ex As Exception
+    WriteToFile($"API Exception: {ex.ToString()}")
+End Try
+```
+
+---
+
+## Template 3: Batch Insert (Loop Optimization)
+
+### Find This Pattern:
+```vb
+For Each row As DataRow In dtBoardBarcodes.Rows
+    ' ... build parameters ...
+    Dim sql_insert As String = "INSERT INTO Machines_Extractor_AOI_Data ..."
+    BeConnM.InsertRecords(sql_insert, InsertParameter)
+Next
+```
+
+### Replace With:
+```vb
+' Step 1: Build list of all requests
+Dim aoiInspectionRequests As New List(Of AOIInspectionRequest)
+
+For Each row As DataRow In dtBoardBarcodes.Rows
+    Dim rowPosition As Integer = row.Item("Position")
+    Dim rowResult As String = row.Item("Result")
+    Dim rowSSN As String = row.Item("Barcode")
+
+    ' Add to batch list
+    Dim request As New AOIInspectionRequest With {
+        .Sn = rowSSN,
+        .Aoiid = AOIID,
+        .StationId = StationID,
+        .PartId = partid,
+        .Side = sideid,
+        .Trndate = Fecha,
+        .IsGood = (rowResult = "PASS"),
+        .IsRework = False,
+        .Position = rowPosition,
+        .RefCir = "",
+        .DefectDesc = "",
+        .UserPass = Nothing,
+        .FacilityKey = Nothing,
+        .AreaId = AreaID
+    }
+    aoiInspectionRequests.Add(request)
+Next
+
+' Step 2: Submit all at once (MUCH faster!)
+If aoiInspectionRequests.Count > 0 Then
+    Try
+        Dim batchResponse As AOIBatchResponse = AOI.SubmitInspectionBatch(aoiInspectionRequests)
+        WriteToFile($"API Batch: Submitted {batchResponse.SuccessfulRecords}/{batchResponse.TotalRecords} records")
+
+        If batchResponse.FailedRecords > 0 Then
+            For Each errorMsg In batchResponse.Errors
+                WriteToFile($"Batch Error: {errorMsg}")
+            Next
+        End If
+    Catch ex As Exception
+        WriteToFile($"Batch Exception: {ex.ToString()}")
+    End Try
+End If
+```
+
+---
+
+## Template 4: Mixed Loop (PASS + FAIL with Defects)
+
+### Find This Pattern:
+```vb
+For Each row As DataRow In dtBoardBarcodes.Rows
+    If rowResult = "PASS" Then
+        ' INSERT simple pass record
+    Else
+        ' Process defects
+        For Each defect In defects
+            ' INSERT defect record
+        Next
+    End If
+Next
+```
+
+### Replace With:
+```vb
+' Build batch list
+Dim aoiInspectionRequests As New List(Of AOIInspectionRequest)
+
+For Each row As DataRow In dtBoardBarcodes.Rows
+    Dim rowPosition As Integer = row.Item("Position")
+    Dim rowResult As String = row.Item("Result")
+    Dim rowSSN As String = row.Item("Barcode")
+
+    If rowResult = "PASS" Then
+        ' Add PASS record to batch
+        aoiInspectionRequests.Add(New AOIInspectionRequest With {
+            .Sn = rowSSN,
+            .Aoiid = AOIID,
+            .StationId = StationID,
+            .PartId = partid,
+            .Side = sideid,
+            .Trndate = Fecha,
+            .IsGood = True,
+            .Position = rowPosition,
+            .FacilityKey = Nothing,
+            .AreaId = AreaID
+        })
+    Else
+        ' Process defects and add to batch
+        Dim defects = dtBoardBarcodesDetails.Select($"Position='{rowPosition}'")
+        If defects.Length > 0 Then
+            For Each defect In defects
+                aoiInspectionRequests.Add(New AOIInspectionRequest With {
+                    .Sn = rowSSN,
+                    .Aoiid = AOIID,
+                    .StationId = StationID,
+                    .PartId = partid,
+                    .Side = sideid,
+                    .Trndate = Fecha,
+                    .IsGood = False,
+                    .Position = rowPosition,
+                    .RefCir = defect("Location"),
+                    .DefectDesc = defect("DefectCode"),
+                    .UserPass = (defect("UserResult") = "PASS"),
+                    .Xpos = If(defect("X") = "", 0, CSng(defect("X"))),
+                    .Ypos = If(defect("Y") = "", 0, CSng(defect("Y"))),
+                    .FacilityKey = Nothing,
+                    .AreaId = AreaID
+                })
+            Next
+        End If
+    End If
+Next
+
+' Submit batch
+If aoiInspectionRequests.Count > 0 Then
+    Try
+        Dim batchResponse As AOIBatchResponse = AOI.SubmitInspectionBatch(aoiInspectionRequests)
+        WriteToFile($"Mixed Batch: {batchResponse.SuccessfulRecords}/{batchResponse.TotalRecords} successful")
+    Catch ex As Exception
+        WriteToFile($"Batch Error: {ex.ToString()}")
+    End Try
+End If
+```
+
+---
+
+## Quick Field Mapping Reference
+
+### SQL Parameter → API Request Property
+
+| SQL Parameter | API Property | Notes |
+|---------------|--------------|-------|
+| `@SN` | `.Sn` | Serial number (string) |
+| `@AOIID` | `.Aoiid` | AOI machine ID (int) |
+| `@StationID` | `.StationId` | Station ID (int) |
+| `@PartID` | `.PartId` | Part ID (int) |
+| `@Side` | `.Side` | "T" or "B" (string, 1 char) |
+| `@Trndate` | `.Trndate` | Transaction date (DateTime) |
+| `@IsGood` | `.IsGood` | Pass/Fail (boolean) |
+| `@IsRework` | `.IsRework` | Is rework (boolean) |
+| `@RefCir` | `.RefCir` | Component reference (string) |
+| `@DefectDesc` | `.DefectDesc` | Defect description (string) |
+| `@UserPass` | `.UserPass` | Manual review result (boolean?) |
+| `@Position` | `.Position` | Board position (int) |
+| `Facility_Key` | `.FacilityKey` | Facility key (int?) |
+| `AreaID` | `.AreaId` | Area ID (int?) |
+
+### Position Coordinates (Optional)
+
+| Field | Property | Type |
+|-------|----------|------|
+| X Misalignment | `.Xmisfit` | Single? (float) |
+| Y Misalignment | `.Ymisfit` | Single? (float) |
+| X Position | `.Xpos` | Single? (float) |
+| Y Position | `.Ypos` | Single? (float) |
+
+---
+
+## Common Patterns to Handle
+
+### Pattern: Empty String to 0 Conversion
+```vb
+' OLD
+If posX = "" Then posX = 0
+
+' NEW (inline)
+.Xpos = If(posX = "", 0, CSng(posX))
+```
+
+### Pattern: String to Boolean
+```vb
+' OLD
+Dim userResultBit As Boolean = (userResult = "PASS")
+
+' NEW (inline)
+.UserPass = (userResult = "PASS")
+```
+
+### Pattern: DBNull.Value
+```vb
+' OLD
+New SqlParameter("@UserPass", SqlDbType.Bit) With {.Value = DBNull.Value}
+
+' NEW
+.UserPass = Nothing
+```
+
+---
+
+## Refactoring Workflow
+
+### Step-by-Step Process:
+
+1. **Search**: Find `INSERT INTO Machines_Extractor_AOI_Data`
+2. **Identify**: Is it single insert or loop?
+3. **Choose Template**:
+   - Single → Template 1 or 2
+   - Loop → Template 3 or 4
+4. **Copy Template**: Copy appropriate template
+5. **Map Fields**: Match SQL parameters to API properties
+6. **Test**: Build and run service
+7. **Verify**: Check database for correct data
+
+### Testing Each Refactoring:
+
+```vb
+' Add logging to verify API calls
+WriteToFile($"API: Submitting inspection SN={request.Sn}, IsGood={request.IsGood}")
+Dim response As AOIDataResponse = AOI.SubmitInspection(request)
+WriteToFile($"API Response: Success={response.Success}, Message={response.Message}")
+```
+
+---
+
+## Performance Tips
+
+### When to Use Batch vs Single
+
+| Scenario | Recommendation | Reason |
+|----------|----------------|--------|
+| 1-5 records | Single | Simple, low overhead |
+| 10+ records | Batch | 10-100x faster |
+| Mixed PASS/FAIL | Batch | Collect all, submit once |
+| Real-time updates | Single | Immediate feedback |
+
+### Batch Size Recommendations
+
+| Records | Method | Performance |
+|---------|--------|-------------|
+| 1-5 | Single | Good |
+| 10-100 | Batch | Excellent |
+| 100-1000 | Batch | Best |
+| 1000+ | Batch with chunking | Best |
+
+### Chunking for Very Large Batches
+```vb
+' For 1000+ records, split into chunks of 500
+Dim chunkSize As Integer = 500
+For i As Integer = 0 To aoiInspectionRequests.Count - 1 Step chunkSize
+    Dim chunk = aoiInspectionRequests.Skip(i).Take(chunkSize).ToList()
+    Dim response = AOI.SubmitInspectionBatch(chunk)
+    ' Process response...
+Next
+```
+
+---
+
+## Troubleshooting
+
+### Compilation Errors
+
+**Error**: `'Sn' is not a member of 'SqlParameter'`
+- **Cause**: Using old SQL code
+- **Fix**: Replace entire block with API template
+
+**Error**: `'AOIInspectionRequest' is not defined`
+- **Cause**: AOI.vb not added to project
+- **Fix**: Add `Framework\API\AOI.vb` to project
+
+**Error**: String interpolation not supported
+- **Cause**: Old VB.NET syntax
+- **Fix**: Replace `$"..."` with `String.Format("...", args)`
+
+### Runtime Errors
+
+**Error**: API returns 401 Unauthorized
+- **Cause**: Authentication token expired or invalid
+- **Fix**: Check `BeApi.Username` and `BeApi.Password`
+
+**Error**: API returns 400 Bad Request
+- **Cause**: Required field missing or invalid
+- **Fix**: Ensure `.Sn`, `.Aoiid`, `.StationId`, `.PartId`, `.Side`, `.Position` are set
+
+**Error**: Database not updated
+- **Cause**: API success but data not saved
+- **Fix**: Check API logs, verify DbContext is saving changes
+
+---
+
+## Summary
+
+✅ **Use Template 1** for simple single inserts
+✅ **Use Template 2** for inserts with defect information
+✅ **Use Template 3** for loop optimization (HUGE performance gain)
+✅ **Use Template 4** for complex mixed scenarios
+
+**Remember**:
+- Always test after each refactoring
+- Use batch operations whenever possible (10-100x faster!)
+- Keep existing business logic, only replace SQL operations

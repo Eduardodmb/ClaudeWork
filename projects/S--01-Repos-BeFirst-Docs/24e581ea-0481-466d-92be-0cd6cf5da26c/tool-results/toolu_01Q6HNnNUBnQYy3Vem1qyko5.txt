@@ -1,0 +1,858 @@
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-383-               ↓
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-384-┌──────────────────────────────────────┐
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-385-│  Presentation Layer                  │
+S:\01_Repos\BeFirst_Docs\CLAUDE.md:386:│  - BeFirst_Portal (18 areas)         │
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-387-│  - BeFirst_Production (WinForms)     │
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-388-│  - BeFirst_Planning_Tool (WinForms)  │
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-389-└──────────────────────────────────────┘
+--
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-413-| **docs/03_REPOS.md** | Repository ecosystem map: all 14 repos with technologies, dependencies, integration patterns |
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-414-| **docs/04_DATABASE.md** | Database schemas: PROD_DWH (49 tables), MES (824 tables), MACHINES_RESULTS (22), TESTERS_RESULTS (4) |
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-415-| **docs/05_API.md** | REST API documentation: 15 controllers, endpoints, JWT auth, Swagger, data models |
+S:\01_Repos\BeFirst_Docs\CLAUDE.md:416:| **docs/06_WORKFLOWS.md** | Application workflows: Portal (18 areas), Services (40+), Desktop apps, ETL, SSRS |
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-417-| **docs/07_DEPENDENCIES.md** | External dependencies: Azure AD, databases, SMTP, third-party integrations, tech stacks |
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-418-| **docs/08_SETUP.md** | Development environment setup for each repository type |
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-419-| **docs/09_TROUBLESHOOTING.md** | Common issues and solutions by component |
+--
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-664-- **Shared databases**: Databases serve as integration points
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-665-- **API-based communication**: Portal consumes APIs for business logic
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-666-
+S:\01_Repos\BeFirst_Docs\CLAUDE.md:667:### Portal Functional Areas (18)
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-668-
+S:\01_Repos\BeFirst_Docs\CLAUDE.md:669:The BeFirst_Portal web application has 18 functional areas:
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-670-1. **Accounting**: AR invoices, GL balances, budgets
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-671-2. **Assemblies**: Assembly structures and components
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-672-3. **BOM**: Bill of materials management and where-used
+--
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1107-- **docs/03_REPOS.md**: Complete repository map with all BeFirst repositories
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1108-- **docs/04_DATABASE.md**: Database schemas and relationships (PROD_DWH, MES, MACHINES_RESULTS, TESTERS_RESULTS)
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1109-- **docs/05_API.md**: REST API endpoint documentation (15 controllers)
+S:\01_Repos\BeFirst_Docs\CLAUDE.md:1110:- **docs/06_WORKFLOWS.md**: Application workflows (Portal areas, Services, ETL, SSRS)
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1111-- **docs/07_DEPENDENCIES.md**: External dependencies (Azure AD, databases, SMTP)
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1112-- **docs/08_SETUP.md**: Development environment setup instructions
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1113-- **docs/09_TROUBLESHOOTING.md**: Common issues and solutions
+--
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1167-### Portal Architecture Reference
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1168-
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1169-The Portal CLAUDE.md (`S:\01_Repos\BeFirst_Portal\CLAUDE.md`) contains the definitive architecture details:
+S:\01_Repos\BeFirst_Docs\CLAUDE.md:1170:- **18 MVC Areas** with domain descriptions
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1171-- **Framework layer** structure (BaseController, BePlex, Data contexts)
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1172-- **Authentication** (Cookie-based, OWIN, ASP.NET Identity 2.0)
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1173-- **Frontend stack** (Bootstrap 5.3, jQuery 3.7, Chart.js, Three.js, etc.)
+--
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1187-
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1188-Recent Portal changes (as of 2026-02-24):
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1189-- `STYLE: Rebranding home pages for befirst` — Logo, footer, layout changes (Lacroix → Safari Circuits)
+S:\01_Repos\BeFirst_Docs\CLAUDE.md:1190:- `DELETE: Remove customs modules` — Removed Continual Improvements, Customs, Finances, Instructions, Managements areas
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1191-- Pending: BackTrackController and ContinualImprovementController deleted
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1192-
+S:\01_Repos\BeFirst_Docs\CLAUDE.md-1193-**These need:**
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-519-</ul>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-520-<h3 id="key-capabilities">Key Capabilities</h3>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-521-<ul>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:522:<li><strong>Web Portal</strong>: 18 functional areas for operations management (Accounting, BOM, Customers, Engineering, HR, Inventory, Machines, Manufacturing, OEE, Params, Planning, Purchasing, Quality, Shipping, Suppliers, etc.)</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-523-<li><strong>REST APIs</strong>: 15 controllers exposing data via JWT-authenticated endpoints</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-524-<li><strong>Background Services</strong>: 40+ Windows Services for real-time data synchronization and event processing</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-525-<li><strong>Production Monitoring</strong>: Shop floor applications for work order tracking, machine status, and production reporting</li>
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-532-<p><strong>Portal Access:</strong><br />
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-533-1. Navigate to BeFirst Portal URL (internal network or VPN)<br />
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-534-2. Authenticate with Azure AD (lacroix-group.com credentials)<br />
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:535:3. Access functional areas based on your role</p>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-536-<p><strong>Report Access:</strong><br />
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-537-1. Navigate to SSRS Report Server<br />
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-538-2. Authenticate with Windows credentials<br />
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-587-</tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-588-<tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-589-<td><strong><a href="WORKFLOWS.md">WORKFLOWS.md</a></strong></td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:590:<td><strong>Application workflows</strong>: Portal (18 areas), Services (40+), Desktop apps, ETL, SSRS workflows</td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-591-</tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-592-<tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-593-<td><strong><a href="DEPENDENCIES.md">DEPENDENCIES.md</a></strong></td>
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-652-    SSRS["BeFirst_SSRS<br/>(54+ Reports)"]
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-653-
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-654-    %% Presentation Layer
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:655:    PORTAL["BeFirst_Portal<br/>(ASP.NET MVC 5)<br/>18 Functional Areas"]
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-656-    PROD["BeFirst_Production<br/>(WinForms)"]
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-657-    PLANNING["BeFirst_Planning_Tool<br/>(WinForms)"]
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-658-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-708-<tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-709-<td><strong><a href="https://github.com/SafariCircuitsLLC/BeFirst_Portal">BeFirst_Portal</a></strong></td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-710-<td>ASP.NET MVC 5, C#</td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:711:<td>Primary web UI (18 functional areas)</td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-712-</tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-713-<tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-714-<td><strong><a href="https://github.com/SafariCircuitsLLC/BeFirst_APIs">BeFirst_APIs</a></strong></td>
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-953-    SSRS["BeFirst_SSRS<br/>(54+ Dashboards)<br/>SQL Reports"]
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-954-
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-955-    %% Presentation Layer
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:956:    PORTAL["BeFirst_Portal<br/>(ASP.NET MVC 5)<br/>18 Functional Areas"]
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-957-    PROD["BeFirst_Production<br/>(WinForms)<br/>Floor Monitoring"]
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-958-    PLANNING["BeFirst_Planning_Tool<br/>(WinForms)<br/>Production Planning"]
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-959-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1020-<td><strong>BeFirst_Portal</strong></td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1021-<td>ASP.NET MVC 5, C#</td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1022-<td>Primary web UI for manufacturing operations</td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:1023:<td>18 functional areas, Azure AD auth, responsive design</td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1024-</tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1025-<tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1026-<td><strong>BeFirst_APIs</strong></td>
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1612-</tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1613-<tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1614-<td><strong>Key Features</strong></td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:1615:<td>18 functional areas, Azure AD authentication, responsive design</td>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1616-</tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1617-<tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1618-<td><strong>Authentication</strong></td>
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1628-</tr>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1629-</tbody>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1630-</table>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:1631:<p><strong>Functional Areas:</strong><br />
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1632-- Accounting, Assemblies, BOM, Customers, DataImport, Engineering<br />
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1633-- HR, Inventory, Machines, Manufacturing, Nomenclatures, OEE<br />
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-1634-- Params, Planning, Purchasing, Quality, Shipping, Suppliers</p>
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-4504-User accesses Portal features based on Azure AD group membership
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-4505-</code></pre></div>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-4506-
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:4507:<h3 id="portal-functional-areas-18">Portal Functional Areas (18)</h3>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-4508-<h4 id="1-accounting-workflows">1. Accounting Workflows</h4>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-4509-<p><strong>Accounts Receivable:</strong><br />
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-4510-- View AR invoices by customer, date range<br />
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6693-<li><strong>REPOS.md</strong>: Updated with accurate repository map including all 5 application repos, 4 database repos, ETL, reporting, and documentation</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6694-<li><strong>DATABASE.md</strong>: Expanded to document all 4 databases (PROD_DWH, MES, MACHINES_RESULTS, TESTERS_RESULTS) instead of just PROD_DWH</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6695-<li><strong>API.md</strong>: Completely rewritten to document BeFirst_APIs (ASP.NET Core 7.0, 15 controllers, JWT auth, Swagger)</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:6696:<li><strong>WORKFLOWS.md</strong>: Expanded from ETL-only to cover Portal (18 areas), Services (40+), Desktop apps, ETL, and SSRS workflows</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6697-<li><strong>DEPENDENCIES.md</strong>: Updated to cover system-wide dependencies across all tech stacks (Azure AD, databases, third-party integrations)</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6698-<li><strong>SETUP.md</strong>: Rewritten with multi-repo development setup for Portal, APIs, Services, Desktop apps, ETL, databases, and SSRS</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6699-<li><strong>TROUBLESHOOTING.md</strong>: Expanded with component-specific issues for Portal, APIs, Services, Desktop apps, ETL, and databases</li>
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6702-<h4 id="claudemd-root">CLAUDE.md (Root)</h4>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6703-<ul>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6704-<li>Rewritten to document entire BeFirst platform instead of just ETL</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:6705:<li>Added Portal functional areas (18), API controllers (15), Service categories (40+)</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6706-<li>Updated architecture overview with all 13 repos</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6707-<li>Added multi-facility support documentation</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6708-<li>Updated technology stack reference</li>
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6723-<h3 id="added">Added</h3>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6724-<h4 id="platform-components-documented">Platform Components Documented</h4>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6725-<ul>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:6726:<li><strong>BeFirst_Portal</strong> (ASP.NET MVC 5, 18 functional areas)</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6727-<li><strong>BeFirst_APIs</strong> (ASP.NET Core 7.0, 15 controllers)</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6728-<li><strong>BeFirst_Services</strong> (VB.NET, 40+ Windows Services)</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6729-<li><strong>BeFirst_Production</strong> (WinForms, production monitoring)</li>
+--
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6741-<li>ClickOnce deployment for desktop apps</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6742-<li>Windows Services architecture</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6743-<li>REST API endpoint documentation</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html:6744:<li>Portal functional areas detailed workflows</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6745-<li>Service workflow patterns (sync, monitoring, event processing, scheduled tasks)</li>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6746-</ul>
+S:\01_Repos\BeFirst_Docs\deliverables\html\BeFirst.html-6747-<h2 id="110-2026-02-11-pre-overhaul">[1.1.0] - 2026-02-11 (Pre-Overhaul)</h2>
+--
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-397-    end
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-398-
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-399-    subgraph Present["Presentation Layer"]
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md:400:        PORTAL[BeFirst_Portal<br/>18 areas]
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-401-        PROD[Production App]
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-402-        PLAN[Planning Tool]
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-403-    end
+--
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-729-    style MES fill:#FFF3E0,stroke:#F57C00
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-730-```
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-731-
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md:732:### Example 2: Portal Functional Areas
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-733-
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-734-```mermaid
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-735-graph TB
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-736-    PORTAL[BeFirst Portal<br/>ASP.NET MVC 5]
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-737-
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md:738:    subgraph Core["Core Areas (18)"]
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-739-        ACCT[Accounting]
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-740-        ASSM[Assemblies]
+S:\01_Repos\BeFirst_Docs\.claude\templates\diagram_style_guide.md-741-        BOM[BOM]
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-014-packout-operations.md-445-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-014-packout-operations.md-446-### Interface Overview
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-014-packout-operations.md-447-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-014-packout-operations.md:448:The Packout screen has 7 key areas providing real-time information:
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-014-packout-operations.md-449-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-014-packout-operations.md-450-![Packout Main Screen - Complete Interface](../../images/packout/packout-screenshot-41.png)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-014-packout-operations.md-451-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\README.md-30-
+S:\01_Repos\BeFirst_Docs\deliverables\README.md-31-| File | Description | Target Audience | Last Updated |
+S:\01_Repos\BeFirst_Docs\deliverables\README.md-32-|------|-------------|-----------------|--------------|
+S:\01_Repos\BeFirst_Docs\deliverables\README.md:33:| `manuals/befirst-portal-user-guide.docx` | BeFirst Portal user manual (18 functional areas) | Manufacturing, Operations | TBD |
+S:\01_Repos\BeFirst_Docs\deliverables\README.md-34-| `manuals/production-monitoring-sop.docx` | Production monitoring standard operating procedure | Operations | TBD |
+S:\01_Repos\BeFirst_Docs\deliverables\README.md-35-| `manuals/etl-operations-manual.pdf` | ETL job monitoring and troubleshooting | Data Services | TBD |
+S:\01_Repos\BeFirst_Docs\deliverables\README.md-36-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-39-3. [Serialization](#3-serialization)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-40-4. [Tools Validation](#4-tools-validation)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-41-5. [Packout Options](#5-packout-options)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:42:6. [Areas by Panel](#6-areas-by-panel)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:43:7. [Areas with Gages](#7-areas-with-gages)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:44:8. [Areas Formats](#8-areas-formats)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:45:9. [Areas with Pallets](#9-areas-with-pallets)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:46:10. [Areas Locks](#10-areas-locks)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-47-11. [MergeAt](#11-mergeat) ⚠️ *NEW - Needs Documentation*
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-48-12. [2 Min Defects](#12-2-min-defects)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-49-13. [Custom Defects](#13-custom-defects)
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-73-37. [Packout TCP/IP](#37-packout-tcpip) ⚠️ *NEW - Needs Documentation*
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-74-38. [Merge in AOI](#38-merge-in-aoi) ⚠️ *NEW - Needs Documentation*
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-75-39. [Interplant](#39-interplant) ⚠️ *NEW - Needs Documentation*
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:76:40. [Areas TCP](#40-areas-tcp) ⚠️ *NEW - Needs Documentation*
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-77-41. [Laser Skip](#41-laser-skip) ⚠️ *NEW - Needs Documentation*
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-78-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-79----
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-183-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-184-### Serial Modify - Substring Option
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-185-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:186:This feature allows BeFirst to read a portion of the serial number for specific areas.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-187-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-188-**Example:**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-189-- Full serial in production: `C310820101381`
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-249-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-250----
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-251-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:252:## 6. Areas by Panel
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-253-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:254:Configure which production areas will scan by panel (multiple pieces at once).
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-255-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-256-### Instructions
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-257-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-259-2. Click **ADD**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-260-3. To remove an area, select it and click **Delete**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-261-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:262:**Use case:** SMT areas typically scan by panel rather than individual units.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-263-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:264:![Areas by Panel](../../images/part-number/partnumber-tab-11.png)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-265-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-266----
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-267-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:268:## 7. Areas with Gages
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-269-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:270:Assign measurement gages to specific production areas.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-271-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-272-### Instructions
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-273-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-276-3. Click **ADD**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-277-4. To remove, click **Delete**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-278-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:279:![Areas with Gages](../../images/part-number/partnumber-tab-12.png)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-280-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-281----
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-282-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:283:## 8. Areas Formats
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-284-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:285:Configure different serial number formats for specific areas when the format changes between stations.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-286-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-287-### Instructions
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-288-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-293-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-294-**Use case:** When a unit's serial format changes during assembly or test operations.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-295-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:296:![Areas Formats](../../images/part-number/partnumber-tab-13.png)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-297-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-298----
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-299-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:300:## 9. Areas with Pallets
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-301-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:302:Define pallet formats for specific production areas.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-303-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-304-### Instructions
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-305-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-308-3. Click **ADD**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-309-4. To remove, click **Delete**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-310-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:311:![Areas with Pallets](../../images/part-number/partnumber-tab-14.png)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-312-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-313----
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-314-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:315:## 10. Areas Locks
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-316-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-317-**⚠️ Administrator-Only Feature**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-318-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:319:This feature allows BeFirst administrators to lock specific areas for troubleshooting or maintenance.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-320-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:321:![Areas Locks](../../images/part-number/partnumber-tab-15.png)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-322-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-323----
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-324-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-367-2. Click **ADD**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-368-3. To remove, click **Delete**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-369-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:370:**Use case:** Critical quality control areas where defect clustering indicates a process issue.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-371-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-372-![2 Min Defects](../../images/part-number/partnumber-tab-16.png)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-373-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-534-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-535-## 22. Parameter Stations
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-536-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:537:Assign parameter sheets to specific areas, stations, and sides.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-538-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-539-### Instructions
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-540-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-945-- AutoID
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-946-- PartID
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-947-- AreaID
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:948:- Area (joined from PD_idt_areas)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-949-- MaxScans (limit value)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-950-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-951-### Purpose
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1088-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1089----
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1090-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1091:## 40. Areas TCP
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1092-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1093-**⚠️ NEW FEATURE - Documentation Needed**
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1094-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1110-- CLIENT_OR_SERVER - Communication mode
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1111-- TCP_TYPE - Device type (e.g., "InSight Vision Cognex")
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1112-- SLAVE - Slave device number
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1113:- Area (joined from PD_idt_areas)
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1114-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1115-### Purpose
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1116-Area-specific TCP/IP configuration for equipment integration (vision systems, test equipment, scales).
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1130-7. Examples of equipment requiring TCP configuration
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1131-8. Network troubleshooting tips
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1132-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1133:![Areas TCP Tab - Screenshot Needed]
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1134-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1135----
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1136-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1176-| 3 | partnumber-tab-03.png | Serialization |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1177-| 4 | partnumber-tab-04.png | Tools Validation |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1178-| 5-10 | partnumber-tab-05-10.png | Packout Options (various sub-sections) |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1179:| 11 | partnumber-tab-11.png | Areas by Panel |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1180:| 12 | partnumber-tab-12.png | Areas with Gages |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1181:| 13 | partnumber-tab-13.png | Areas Formats |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1182:| 14 | partnumber-tab-14.png | Areas with Pallets |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1183:| 15 | partnumber-tab-15.png | Areas Locks |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1184-| 16 | partnumber-tab-16.png | 2 Min Defects |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1185-| 17 | partnumber-tab-17.png | Custom Defects |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1186-| 18 | partnumber-tab-18.png | Row Label Test |
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1202-| 34 | partnumber-tab-34.png | SearchAOI |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1203-| 35-36 | partnumber-tab-35-36.png | Additional features |
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1204-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1205:**Note:** Screenshots for new features (MergeAt, SearchSPI, Configuration Keyence, Serialization Order, Max Scans, Packout Print Plex, Packout TCP/IP, Merge in AOI, Interplant, Areas TCP, Laser Skip, Labels Packout Validation) need to be captured and added.
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1206-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1207----
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1208-
+--
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1251-- [ ] Packout TCP/IP - Device communication setup
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1252-- [ ] Merge in AOI - Auto-merge configuration and scenarios
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1253-- [ ] Interplant - Inter-facility transfer workflow
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md:1254:- [ ] Areas TCP - Equipment integration patterns
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1255-- [ ] Laser Skip - Skip logic and audit requirements
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1256-
+S:\01_Repos\BeFirst_Docs\deliverables\manuals\IT-013-part-number-configuration.md-1257-### Missing Screenshots
+--
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-161-Adding new feature "Laser Skip"
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-162-
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-163-BeFirst_Portal/
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md:164:├── Areas/Engineering/Controllers/PartNumberController.cs ✅
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md:165:├── Areas/Engineering/Views/PartNumber/_LaserSkip.cshtml ✅
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-166-├── LASER_SKIP_SUMMARY.md ❌ NO!
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-167-└── docs/laser-skip-guide.md ❌ NO!
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-168-```
+--
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-172-Adding new feature "Laser Skip"
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-173-
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-174-BeFirst_Portal/
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md:175:├── Areas/Engineering/Controllers/PartNumberController.cs ✅
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md:176:└── Areas/Engineering/Views/PartNumber/_LaserSkip.cshtml ✅
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-177-
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-178-BeFirst_Docs/
+S:\01_Repos\BeFirst_Docs\config\QUICK-REFERENCE-DOCUMENTATION-POLICY.md-179-├── deliverables/manuals/IT-013-part-number-configuration.md ✅
+--
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-14-
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-15-### Key Capabilities
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-16-
+S:\01_Repos\BeFirst_Docs\docs\01_README.md:17:- **Web Portal**: 18 functional areas for operations management (Accounting, BOM, Customers, Engineering, HR, Inventory, Machines, Manufacturing, OEE, Params, Planning, Purchasing, Quality, Shipping, Suppliers, etc.)
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-18-- **REST APIs**: 15 controllers exposing data via JWT-authenticated endpoints
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-19-- **Background Services**: 40+ Windows Services for real-time data synchronization and event processing
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-20-- **Production Monitoring**: Shop floor applications for work order tracking, machine status, and production reporting
+--
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-59-| **[03_REPOS.md](03_REPOS.md)** | **Repository ecosystem map**: Complete list of 14 repos with purposes, technologies, and dependencies |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-60-| **[04_DATABASE.md](04_DATABASE.md)** | **Database schemas**: All 4 databases (PROD_DWH, MES, MACHINES_RESULTS, TESTERS_RESULTS) with table definitions |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-61-| **[05_API.md](05_API.md)** | **REST API documentation**: 15 controllers, endpoints, authentication, data models, Swagger docs |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md:62:| **[06_WORKFLOWS.md](06_WORKFLOWS.md)** | **Application workflows**: Portal (18 areas), Services (40+), Desktop apps, ETL, SSRS workflows |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-63-| **[07_DEPENDENCIES.md](07_DEPENDENCIES.md)** | **External dependencies**: Azure AD, databases, third-party integrations, technology stacks |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-64-| **[08_SETUP.md](08_SETUP.md)** | **Development setup**: Environment configuration for each repository type |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-65-| **[09_TROUBLESHOOTING.md](09_TROUBLESHOOTING.md)** | **Common issues**: Solutions by component (Portal, APIs, Services, ETL, databases) |
+--
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-98-    SSRS["BeFirst_SSRS<br/>(54+ Reports)"]
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-99-
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-100-    %% Presentation Layer
+S:\01_Repos\BeFirst_Docs\docs\01_README.md:101:    PORTAL["BeFirst_Portal<br/>(ASP.NET MVC 5)<br/>18 Functional Areas"]
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-102-    PROD["BeFirst_Production<br/>(WinForms)"]
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-103-    PLANNING["BeFirst_Planning_Tool<br/>(WinForms)"]
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-104-
+--
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-147-
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-148-| Repository | Technology | Purpose |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-149-|-----------|-----------|---------|
+S:\01_Repos\BeFirst_Docs\docs\01_README.md:150:| **[BeFirst_Portal](https://github.com/SafariCircuitsLLC/BeFirst_Portal)** | ASP.NET MVC 5, C# | Primary web UI (18 functional areas) |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-151-| **[BeFirst_APIs](https://github.com/SafariCircuitsLLC/BeFirst_APIs)** | ASP.NET Core 7.0, C# | REST API gateway (15 controllers) |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-152-| **[BeFirst_Services](https://github.com/SafariCircuitsLLC/BeFirst_Services)** | VB.NET, .NET Framework 4.8 | 40+ Windows Services |
+S:\01_Repos\BeFirst_Docs\docs\01_README.md-153-| **[BeFirst_Production](https://github.com/SafariCircuitsLLC/BeFirst_Production)** | WinForms, C# | Production floor monitoring |
+--
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-25-    SSRS["BeFirst_SSRS<br/>(54+ Dashboards)<br/>SQL Reports"]
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-26-
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-27-    %% Presentation Layer
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:28:    PORTAL["BeFirst_Portal<br/>(ASP.NET MVC 5)<br/>18 Functional Areas"]
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-29-    PROD["BeFirst_Production<br/>(WinForms)<br/>Floor Monitoring"]
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-30-    PLANNING["BeFirst_Planning_Tool<br/>(WinForms)<br/>Production Planning"]
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-31-
+--
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-84-
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-85-| Repository | Technology | Purpose | Key Features |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-86-|-----------|-----------|---------|-------------|
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:87:| **BeFirst_Portal** | ASP.NET MVC 5, C# | Primary web UI for manufacturing operations | 18 functional areas, Azure AD auth, responsive design |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-88-| **BeFirst_APIs** | ASP.NET Core 7.0, C# | REST API gateway | 15 controllers, JWT auth, Swagger docs |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-89-| **BeFirst_Services** | VB.NET, .NET Framework 4.8 | Background processing services | 40+ Windows Services, scheduled tasks |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-90-| **BeFirst_Production** | WinForms, C# | Production floor monitoring | Real-time equipment status, job tracking |
+--
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-240-        subgraph CONNECTORS["Connectors"]
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-241-            ERP_CONN["ERP Connector<br/>BeFirst_ETL · Talend · JS7 Orchestration<br/>BeFirst_Services · VB.NET · Sync Jobs"]
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-242-            REPORTING["Reporting<br/>BeFirst_SSRS · 54+ Dashboards<br/>Subscription Reports · PROD_DWH"]
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:243:            RT_DISPLAY["Real-time Display<br/>BeFirst_Portal · ASP.NET MVC 5 · 18 Areas<br/>BeFirst_Production · WinForms · Floor"]
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-244-        end
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-245-
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-246-        subgraph MES_ENGINE_SG["MES Engine"]
+--
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-337-|---|---|
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-338-| ERP Connector | BeFirst_ETL + BeFirst_Services (PLEX sync) |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-339-| MES Engine | BeFirst_APIs + MES Database + PROD_DWH |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:340:| Modules | BeFirst_Portal (18 areas) + BeFirst_Planning_Tool |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-341-| Reporting | BeFirst_SSRS (54+ dashboards) |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-342-| Real-time Display | BeFirst_Portal + BeFirst_Production |
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-343-| Data Acquisition | BeFirst_Services (equipment) + BeFirst_APIs (machine write) |
+--
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-485-
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-486-**Portal Roles and Permissions:**
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-487-
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:488:The BeFirst Portal uses ASP.NET Identity 2.0 with 100+ defined roles for granular access control across all functional areas. Roles follow the naming convention `BF [Area] [Function]` (e.g., `BF Quality Defects Edit`, `BF Production Supervisor`).
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-489-
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-490-For a complete list of roles and the role management process, see: [`knowledge-base/it-systems/befirst-portal-roles-permissions.md`](../knowledge-base/it-systems/befirst-portal-roles-permissions.md)
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-491-
+--
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-46-| --- | --- |
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-47-| Technology | ASP.NET MVC 5, C#, .NET Framework 4.8 |
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-48-| Purpose | Main web interface for BeFirst platform |
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:49:| Key Features | 18 functional areas, Azure AD authentication, responsive design |
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-50-| Authentication | Azure AD (OAuth2/OpenID Connect) |
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-51-| Database Access | PROD_DWH, MES via Entity Framework |
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-52-| Deployment | IIS on Windows Server |
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-53-
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-54-
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-55-
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:56:**Functional Areas:**
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-57-
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-58-
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-59-- Accounting, Assemblies, BOM, Customers, DataImport, Engineering
+--
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-581-        subgraph CONNECTORS["Connectors"]
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-582-            ERP_CONN["ERP Connector<br/>BeFirst_ETL · Talend · JS7 Orchestration<br/>BeFirst_Services · VB.NET · Sync Jobs"]
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-583-            REPORTING["Reporting<br/>BeFirst_SSRS · 54+ Dashboards<br/>Subscription Reports · PROD_DWH"]
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md:584:            RT_DISPLAY["Real-time Display<br/>BeFirst_Portal · ASP.NET MVC 5 · 18 Areas<br/>BeFirst_Production · WinForms · Floor"]
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-585-        end
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-586-
+S:\01_Repos\BeFirst_Docs\docs\03_REPOS.md-587-        subgraph MES_ENGINE_SG["MES Engine"]
+--
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-265-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-266-<!-- Updated: 2026-02-24 -->
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-267-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:268:**PART_OPERATION_AREAS_TCP** — Configures TCP client/server connections for production stations per Part + Area + Side. Loaded by `ExFunctions` during casilla selection and stored in `ExData.Selected_Area.Selected_Casilla.AreasToTCP`. Managed via Engineering area Part Number management screen in Portal.
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-269-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-270-| Column | Type | Description |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-271-|---|---|---|
+--
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-285-Composite primary key: `(PartID, AreaID, Side, Part_Key)`
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-286-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-287-**Configuration via Portal:**
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:288:- Engineering area → Part Number management → "Areas TCP" tab
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-289-- Add/delete configurations per area and side
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-290-- Supports automated data capture from vision systems, testers, and other equipment
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-291-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:292:#### Areas Relation Management
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-293-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-294-<!-- Updated: 2026-02-25 -->
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-295-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:296:**PART_OPERATION_AREAS_RELATION** — Junction table mapping BeFirst internal areas (from PART_OPERATION_AREAS) to PLEX ERP operations (from PART_OPERATION table). Managed via Manage area → Stations → Areas Relation menu in Portal.
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-297-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-298-| Column | Type | Description |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-299-|---|---|---|
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-300-| AutoID | INT IDENTITY | Auto-incrementing identifier (Primary Key) |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-301-| Plex_Operation_Code | VARCHAR(50) | PLEX operation code |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:302:| AreaID | INT NOT NULL DEFAULT 0 | BeFirst area ID (foreign key to PD_idt_areas) |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-303-| Side | VARCHAR(3) | Board side (A or B) |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-304-| Flag | BIT DEFAULT 0 | Active/inactive flag |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-305-| PCN | INT DEFAULT 278344 | Part Control Number (default facility) |
+--
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-310-Primary key: `(AutoID)`
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-311-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-312-**Configuration via Portal:**
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:313:- Manage area → Stations → Areas Relation menu
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-314-- Full CRUD operations (Create, Read, Update, Delete)
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:315:- Maps BeFirst areas to PLEX manufacturing operations for synchronization
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-316-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-317-#### Laser Serialization Skip
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-318-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-319-<!-- Updated: 2026-02-24 -->
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-320-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:321:**PART_OPERATION_SERIALIZATION_LASER_SKIP** — Flags part numbers that should skip the laser serialization merge step in `frm_HGTech`. When a part's ID is present in this table, the `SkipLaserSerialization` flag is set to `True` during casilla load and all three merge trigger paths in `frm_HGTech` bypass `publicar()`. Managed via Engineering area Part Number management screen → Serialization tab.
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-322-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-323-| Column | Type | Description |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-324-|---|---|---|
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-22-User accesses Portal features based on Azure AD group membership
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-23-```
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-24-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:25:### Portal Functional Areas (18)
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-26-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-27-#### 1. Accounting Workflows
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-28-
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-83-- Track ECO implementation
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-84-- View engineering drawings and documents
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-85-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:86:**Part Number Management — Areas TCP Configuration:**
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-87-<!-- Updated: 2026-02-24 -->
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-88-- Configure TCP/IP connections per Area and Side (A/B) for each part number
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-89-- Setup client/server connections for equipment integration (InSight Vision Cognex, test equipment, etc.)
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-166-- Manage lookup tables
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-167-- Configure business rules
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-168-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:169:**Areas Relation Management:**
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-170-<!-- Updated: 2026-02-25 -->
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:171:- Map BeFirst internal areas to PLEX ERP operations
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-172-- Configure area-to-operation relationships with full CRUD support
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-173-- Fields: Area (dropdown from PART_OPERATION_AREAS), Side (A/B), PLEX Operation (dropdown from PART_OPERATION table), Operation Code, Operation Key, Description, Flag, PCN (default 278344), Facility
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:174:- Accessible via Manage > Stations > Areas Relation menu
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-175-- Stored in PART_OPERATION_AREAS_RELATION junction table (MES database)
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:176:- Enables synchronization between BeFirst areas and PLEX manufacturing operations
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-177-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-178-#### 14. Planning Workflows
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-179-
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-416-| Assembly | Manual assembly, press-fit, mechanical assembly |
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-417-| Test | Functional test, burn-in, calibration |
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-418-| Rework | AOI rework, repair stations |
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:419:| Quality hold | Lock/release operations between production areas |
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-420-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-421-**Scope — dedicated forms used instead of frm_WAVE:**
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-422-
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-432-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-433-**Key behaviors common to all frm_WAVE stations:**
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-434-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:435:- Operator selects part number (casilla) at start of shift — up to 6 simultaneous casillas
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-436-- Serial numbers scanned or received via extractor (TCP, serial port, barcode scanner)
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-437-- Each scan calls `enviarssn` → writes transaction to MES, optionally syncs to Plex ERP
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-438-- Station-specific features activate based on DB configuration (locks, AOI review, pallet tracking, nozzle cleanliness, TCP server, etc.)
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-456-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-457-| Field | Example | Description |
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-458-|---|---|---|
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:459:| PartNumber | `90-00000-0000` | Must match the part loaded in the active casilla |
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-460-| SSN | `ABC123456` | Unit serial number — passed to `enviarssn` |
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-461-| Result | `True` / `False` | Overall pass/fail |
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-462-| RefN;StatusN | `A2;False` | Circuit reference + individual result (repeating pairs) |
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-476-   ↓
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-477-Part number validation:
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-478-   ├─ Match → continue
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:479:   └─ Mismatch → update casilla with new part, then continue
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-480-   ↓
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-481-If Result = Fail → collect failed circuit refs → build Comments string
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-482-   ↓
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-493-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-494-`frm_HGTech` is the form for merging individual circuit boards into a panel master serial number (array/panel serialization via laser). Boards scanned here are linked under a parent SSN.
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-495-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:496:**Laser Skip feature:** When a part number is configured in `PART_OPERATION_SERIALIZATION_LASER_SKIP`, the `SkipLaserSerialization` flag is loaded as `True` during casilla selection. In `frm_HGTech`, all three TypeID merge paths (TypeID 1, 2, 3) include a skip guard before calling `publicar()`:
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-497-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-498-```
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-499-Unit scanned → duplicate/format checks → serialescazados/serialessinformato checks
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-507-**Configuration:**
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-508-- Engineering Portal → Part Number Management → Serialization tab → Laser Serialization Skip section
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-509-- Add the part number ID to `PART_OPERATION_SERIALIZATION_LASER_SKIP`
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:510:- Takes effect at next casilla load (no restart required)
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-511-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-512-**When to use:** Applicable when laser serialization is not required for a specific part number variant but the part still passes through the frm_HGTech station for other operations.
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-513-
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-25-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-26-**Code Changes:**
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-27-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:28:- **Location**: `BeFirst_Portal/Areas/Quality/Controllers/DefectsController.cs`
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-29-- **Authorization**: Added role-based authorization requiring `BF Quality Defects Edit` or `BF Administrator` role
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-30-- **Create Method**: Modified to auto-generate `PrefijoScan` after record insertion using `SCOPE_IDENTITY()`
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-31-- **Model**: Removed `Required` attribute from `PrefijoScan` field to allow auto-generation
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-148-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-149-**BeFirst_Production — frm_HGTech**
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-150-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:151:- New `SkipLaserSerialization` flag on the `Casilla` object in `ExData.vb`
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:152:- Flag loaded during casilla selection in `ExFunctions.vb` by querying `PART_OPERATION_SERIALIZATION_LASER_SKIP`
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-153-- Skip guard added before all three `publicar()` merge trigger points in `frm_HGTech.vb` (TypeID 1, 2, 3 paths)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-154-- When `SkipLaserSerialization = True`, `pub` is forced to `False` and the merge is bypassed
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-155-
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-165-- Backed by `GetLaserSkip` / `AddLaserSkip` / `DeleteLaserSkip` actions in `PartNumberController`
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-166-- New partial view `_LaserSkip.cshtml` with MvcGrid
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-167-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:168:## [2026-02-24] — Engineering Areas TCP Configuration
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-169-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-170-### Added
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-171-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-172-**BeFirst_Portal — Engineering Area**
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-173-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:174:- New "Areas TCP" tab in Part Number management screen
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-175-- Allows configuration of TCP/IP connections per Area and Side (A/B) for each part number
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-176-- Fields: Area (dropdown), Side (A or B), IP, Port, Timer, CLIENT_OR_SERVER (Client/Server/Arduino), TCP_TYPE (InSight Vision Cognex), SLAVE
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-177-- CRUD operations: Add and Delete TCP area configurations
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-179-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-180-**BeFirst_Portal — Manage Area**
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-181-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:182:- New "Areas Relation" management page for mapping BeFirst areas to PLEX ERP operations
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-183-- Provides full CRUD (Create, Read, Update, Delete) for area-to-operation mapping
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-184-- Fields: Area (dropdown), Side (A/B), PLEX Operation (dropdown from PART_OPERATION table), Plex Operation Code, Operation Key, Description, Flag, PCN (default 278344), Facility
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:185:- Accessible via Manage > Stations > Areas Relation menu
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-186-- Stored in PART_OPERATION_AREAS_RELATION table in MES database
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-187-- Enables configuration of area-to-operation mapping with full CRUD support
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-188-
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-192-- Composite primary key: (PartID, AreaID, Side, Part_Key)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-193-- Supports flexible topology with CLIENT_OR_SERVER, TCP_TYPE, and SLAVE fields
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-194-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:195:- New table `PART_OPERATION_AREAS_RELATION` for mapping BeFirst areas to PLEX operations
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-196-- Columns: AutoID (INT, IDENTITY), Plex_Operation_Code (VARCHAR(50)), AreaID (INT, NOT NULL, DEFAULT 0), Side (VARCHAR(3)), Flag (BIT, DEFAULT 0), PCN (INT, DEFAULT 278344), Operation_Key (INT, DEFAULT 0), Facility_Key (INT), Descripcion (NVARCHAR(150))
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:197:- Purpose: Maps BeFirst areas (PD_idt_areas) to PLEX operations (PART_OPERATION)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-198-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-199-## [2026-02-24] — frm_WAVE TCP Server Integration
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-200-
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-205-- New feature in `frm_WAVE.vb`: stations can now act as TCP servers to receive serial/result data from external equipment (vision systems, testers, etc.)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-206-- Activation is per-station and per-part via the new `PART_OPERATION_AREAS_TCP` table in MES
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-207-- Incoming message format: `PartNumber;SSN;Result;Ref1;Status1;Ref2;Status2;...`
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:208:- Part number validation against loaded casilla on receipt; duplicate serial guard via `tcp_PreviousSerial_Scanned`
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-209-- Failed circuit references automatically collected and passed as `Comments` to `enviarssn`
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-210-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-211-**MES Database**
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-215-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-216-**ExFunctions.vb**
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-217-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:218:- `AreasToTCP` DataTable now populated during casilla load alongside `AreasAOIToReview`, `AreasToReview`, etc.
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-219-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-220-## [2.0.0] - 2026-02-11
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-221-
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-228-- **03_REPOS.md**: Updated with accurate repository map including all 5 application repos, 4 database repos, ETL, reporting, and documentation
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-229-- **04_DATABASE.md**: Expanded to document all 4 databases (PROD_DWH, MES, MACHINES_RESULTS, TESTERS_RESULTS) instead of just PROD_DWH
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-230-- **05_API.md**: Completely rewritten to document BeFirst_APIs (ASP.NET Core 7.0, 15 controllers, JWT auth, Swagger)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:231:- **06_WORKFLOWS.md**: Expanded from ETL-only to cover Portal (18 areas), Services (40+), Desktop apps, ETL, and SSRS workflows
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-232-- **07_DEPENDENCIES.md**: Updated to cover system-wide dependencies across all tech stacks (Azure AD, databases, third-party integrations)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-233-- **08_SETUP.md**: Rewritten with multi-repo development setup for Portal, APIs, Services, Desktop apps, ETL, databases, and SSRS
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-234-- **09_TROUBLESHOOTING.md**: Expanded with component-specific issues for Portal, APIs, Services, Desktop apps, ETL, and databases
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-236-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-237-#### CLAUDE.md (Root)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-238-- Rewritten to document entire BeFirst platform instead of just ETL
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:239:- Added Portal functional areas (18), API controllers (15), Service categories (40+)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-240-- Updated architecture overview with all 13 repos
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-241-- Added multi-facility support documentation
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-242-- Updated technology stack reference
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-255-### Added
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-256-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-257-#### Platform Components Documented
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:258:- **BeFirst_Portal** (ASP.NET MVC 5, 18 functional areas)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-259-- **BeFirst_APIs** (ASP.NET Core 7.0, 15 controllers)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-260-- **BeFirst_Services** (VB.NET, 40+ Windows Services)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-261-- **BeFirst_Production** (WinForms, production monitoring)
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-272-- ClickOnce deployment for desktop apps
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-273-- Windows Services architecture
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-274-- REST API endpoint documentation
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:275:- Portal functional areas detailed workflows
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-276-- Service workflow patterns (sync, monitoring, event processing, scheduled tasks)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-277-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-278-## [1.1.0] - 2026-02-11 (Pre-Overhaul)
+--
+S:\01_Repos\BeFirst_Docs\docs\14_API_MIGRATION.md-57-|-----------|-------|--------|
+S:\01_Repos\BeFirst_Docs\docs\14_API_MIGRATION.md-58-| AccountController | `/Account` | Authentication, token issuance |
+S:\01_Repos\BeFirst_Docs\docs\14_API_MIGRATION.md-59-| AgentController | `/Agent` | Operators/agents |
+S:\01_Repos\BeFirst_Docs\docs\14_API_MIGRATION.md:60:| AreaController | `/Area` | Production areas |
+S:\01_Repos\BeFirst_Docs\docs\14_API_MIGRATION.md-61-| BinController | `/Bin` | Storage bins |
+S:\01_Repos\BeFirst_Docs\docs\14_API_MIGRATION.md-62-| ContainerController | `/Container` | Component containers |
+S:\01_Repos\BeFirst_Docs\docs\14_API_MIGRATION.md-63-| JobController | `/Job` | Production jobs/orders |
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-22-    SERVICES["BeFirst_Services<br/>(40+ Services)"]
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-23-
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-24-    %% Presentation Layer
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:25:    PORTAL["BeFirst_Portal<br/>(Web UI)<br/>18 Areas"]
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-26-    PROD["Production App"]
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-27-    PLANNING["Planning Tool"]
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-28-
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-131-
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-132-**Data Access:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-133-- Primary: Via BeFirst_APIs (REST/JSON)
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:134:- Direct: Entity Framework to MES (some areas)
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-135-
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:136:**Functional Areas (18):**
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-137-1. Accounting (AR invoices, balances, budgets)
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-138-2. Assemblies (assembly structures)
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-139-3. BOM (bill of materials, where-used)
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\.$befirst-systems-communications.drawio.bkp-46-    </mxCell>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\.$befirst-systems-communications.drawio.bkp-47-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\.$befirst-systems-communications.drawio.bkp-48-    <!-- ─── BeFirst Portal & Dashboards (center-bottom, orange) ─────── -->
+S:\01_Repos\BeFirst_Docs\docs\diagrams\.$befirst-systems-communications.drawio.bkp:49:[Omitted long matching line]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\.$befirst-systems-communications.drawio.bkp-50-      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4731E;fontColor=#ffffff;strokeColor=none;arcSize=5;align=center;verticalAlign=middle;"
+S:\01_Repos\BeFirst_Docs\docs\diagrams\.$befirst-systems-communications.drawio.bkp-51-      vertex="1" parent="1">
+S:\01_Repos\BeFirst_Docs\docs\diagrams\.$befirst-systems-communications.drawio.bkp-52-      <mxGeometry x="165" y="375" width="875" height="185" as="geometry" />
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-10-        <mxCell id="50" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4731E;fontColor=#ffffff;strokeColor=none;arcSize=5;align=center;verticalAlign=middle;" value="&lt;b style=&quot;font-size:22px;&quot;&gt;BeFirst Engine&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;opacity:0.75;&quot;&gt;Databases: PROD_MES  •  MACHINES_RESULTS  •  TESTERS_RESULTS&lt;/span&gt;" vertex="1">
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-11-          <mxGeometry height="162" width="910" x="270" y="-560" as="geometry" />
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-12-        </mxCell>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio:13:        <mxCell id="60" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4731E;fontColor=#ffffff;strokeColor=none;arcSize=5;align=center;verticalAlign=middle;" value="&lt;b style=&quot;font-size:22px;&quot;&gt;BeFirst Portal&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:13px;&quot;&gt;Portal (10 Areas)&lt;/span&gt;" vertex="1">
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-14-          <mxGeometry height="185" width="220" x="760" y="-360" as="geometry" />
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-15-        </mxCell>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-16-        <mxCell id="91" parent="1" style="rounded=1;fillColor=#1A7685;strokeColor=none;" value="" vertex="1">
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-199-            <mxPoint x="1560" y="-399" as="targetPoint" />
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-200-          </mxGeometry>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-201-        </mxCell>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio:202:        <mxCell id="aCMWKLT9MVyAkjW9QEmp-152" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4731E;fontColor=#ffffff;strokeColor=none;arcSize=5;align=center;verticalAlign=middle;" value="&lt;b style=&quot;font-size:22px;&quot;&gt;BeFirst Dashs&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:13px;&quot;&gt;Portal (10 Areas)&lt;/span&gt;" vertex="1">
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-203-          <mxGeometry height="185" width="180" x="1000" y="-360" as="geometry" />
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-204-        </mxCell>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-205-        <mxCell id="aCMWKLT9MVyAkjW9QEmp-154" edge="1" parent="1" source="aCMWKLT9MVyAkjW9QEmp-159" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.607;entryY=0.988;entryDx=0;entryDy=0;fontColor=#3D655E;strokeColor=#3B625B;entryPerimeter=0;dashed=1;dashPattern=8 8;" value="">
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.html-392-      <div class="conn-box">
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.html-393-        <span class="arrow-up">↑</span>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.html-394-        Real-time Display
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.html:395:        <div class="sub">BeFirst_Portal &nbsp;·&nbsp; ASP.NET MVC 5 &nbsp;·&nbsp; 18 Areas<br/>BeFirst_Production &nbsp;·&nbsp; WinForms &nbsp;·&nbsp; Floor</div>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.html-396-        <span class="lock">🔒</span>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.html-397-      </div>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.html-398-      <div class="conn-box">
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-24-    end
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-25-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-26-    subgraph Apps ["Presentation Layer"]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md:27:        PORTAL[BeFirst_Portal<br/>ASP.NET MVC 5<br/>18 functional areas]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-28-        PROD[BeFirst_Production<br/>WinForms]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-29-        PLAN[BeFirst_Planning_Tool<br/>WinForms]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-30-    end
+--
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-2-
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-3-## Overview
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-4-
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md:5:The BeFirst Portal uses **ASP.NET Identity 2.0** with role-based access control (RBAC) to manage user permissions across the 18 functional areas. Roles are stored in the `AspNetRoles` table and assigned to users via the `AspNetUserRoles` junction table.
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-6-
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-7-## Role Management
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-8-
+--
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-144-
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-145-| Role | Area | Description |
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-146-|------|------|-------------|
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md:147:| **BF Unlock Area** | General | Can unlock restricted areas |
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-148-| **BF Unlock Users** | Users | Can unlock user accounts |
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-149-| **BF Unlock 5 Defects Level 1** | Quality | Can unlock up to 5 level 1 defects |
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-150-| **BF Unlock 5 Defects Level 2** | Quality | Can unlock up to 5 level 2 defects |
+--
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-163-| Role | Area | Description |
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-164-|------|------|-------------|
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-165-| **BF Defects Codes Edit** | Engineering → Defects | Can edit defect code definitions |
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md:166:| **BF Capas Areas Edit** | Quality → CAPAS | Can edit CAPAS audit areas |
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-167-| **BF Capas Questions Edit** | Quality → CAPAS | Can edit CAPAS audit questions |
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-168-| **BF Process Auditors Edit** | Quality → Audits | Can edit process auditor assignments |
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-169-| **BF ProcessAudits Edit** | Quality → Audits | Can edit process audit records |
+--
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-231-
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-232-**Implementation:**
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-233-
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md:234:**Controller:** `Areas/Quality/Controllers/DefectsController.cs`
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-235-
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-236-```csharp
+S:\01_Repos\BeFirst_Docs\knowledge-base\it-systems\befirst-portal-roles-permissions.md-237-[Authorize(Roles = "BF Quality Defects Edit,BF Administrator")]
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-15-| Reporting | BeFirst_SSRS (54+ dashboards reading PROD_DWH) |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-16-| Real-time Display | BeFirst_Portal (ASP.NET MVC 5) + BeFirst_Production (WinForms floor app) |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-17-| MES Engine | BeFirst_APIs (ASP.NET Core, 15 controllers) + MES Database (824 tables) + PROD_DWH (49 tables) |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md:18:| Modules | 10 functional areas of BeFirst_Portal (QA, Planning, Manufacturing, OEE, etc.) |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-19-| Automatic Data Acquisition | BeFirst_Services (equipment monitoring services) + BeFirst_APIs (machine write path) |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-20-| Manual Data Entry | BeFirst_Portal form submissions + BeFirst_Production operator app |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-21-| On-Prem Buffer | MACHINES_RESULTS (22 tables) + TESTERS_RESULTS (4 tables) |
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-43-        subgraph CONNECTORS["Connectors"]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-44-            ERP_CONN["ERP Connector<br/>BeFirst_ETL · Talend · JS7 Orchestration<br/>BeFirst_Services · VB.NET · Sync Jobs"]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-45-            REPORTING["Reporting<br/>BeFirst_SSRS · 54+ Dashboards<br/>Subscription Reports · PROD_DWH"]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md:46:            RT_DISPLAY["Real-time Display<br/>BeFirst_Portal · ASP.NET MVC 5 · 18 Areas<br/>BeFirst_Production · WinForms · Floor"]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-47-        end
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-48-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-49-        subgraph MES_ENGINE_SG["MES Engine"]
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-138-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-139----
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-140-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md:141:## Portal Module Mapping (18 Functional Areas)
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-142-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md:143:The 10 MES modules above map to the following BeFirst_Portal areas:
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-144-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-145-| MES Module | BeFirst_Portal Area | Additional Coverage |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-146-|---|---|---|
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-155-| SPC | Quality (statistical analysis) | — |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-156-| HR | HR (personnel, accidents, safety) | — |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-157-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md:158:**Remaining Portal areas** (Accounting, Customers, DataImport, Engineering, Nomenclatures, Params, Purchasing, Suppliers) are business management functions outside the core MES module categories above.
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-159-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-160----
+S:\01_Repos\BeFirst_Docs\docs\diagrams\mes-platform.md-161-
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\README.md-10-| [mes-platform.md](mes-platform.md) | BeFirst mapped to generic MES reference architecture: connectors, engine, modules, data acquisition, machines (Mermaid) |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\README.md-11-| [mes-platform.html](mes-platform.html) | Same as above — styled visual diagram matching MES reference layout, open in browser |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\README.md-12-| [data-flow.md](data-flow.md) | Complete platform data flow: PLEX → ETL/Services → 4 Databases → APIs/SSRS → Portal/Apps |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\README.md:13:| [module-structure.md](module-structure.md) | Component structures: Portal areas, API controllers, Services, ETL modules |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\README.md-14-| [job-execution.md](job-execution.md) | ETL job execution sequence (ETL-specific) |
+S:\01_Repos\BeFirst_Docs\docs\diagrams\README.md-15-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\README.md-16-## Diagram Format
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg-1-<?xml version="1.0" encoding="UTF-8"?>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg-2-<!-- Do not edit this file with editors other than draw.io -->
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg-3-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg:4:[Omitted long matching line]

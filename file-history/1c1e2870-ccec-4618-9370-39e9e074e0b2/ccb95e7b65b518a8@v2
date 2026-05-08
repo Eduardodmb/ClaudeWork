@@ -1,0 +1,169 @@
+# Context Review - Week 19 2026 (SAMPLE)
+
+**Review date:** 2026-05-08 (Thursday - setup day)
+**Reviewer:** Eduardo Marquez
+**Duration:** 15 minutes (first time, getting familiar)
+
+---
+
+## 1. Stale Content Analysis (>90 days)
+
+```dataview
+TABLE file.mtime as "Last Modified", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills" OR "04-Commands"
+WHERE file.mtime < date(today) - dur(90 days)
+SORT file.mtime ASC
+LIMIT 20
+```
+
+### Triage Actions
+
+**First review - baseline established:**
+- Items shown above are starting point
+- Will review each during regular Friday sessions
+- [ ] Schedule review for Friday 4:00 PM
+
+---
+
+## 2. Recent Additions (This Week)
+
+```dataview
+TABLE file.ctime as "Created", file.tags as "Tags"
+FROM "02-Learnings" OR "03-Skills"
+WHERE file.ctime > date(today) - dur(7 days)
+SORT file.ctime DESC
+```
+
+### Quality Check
+
+**Setup week additions:**
+- [x] Context review system documentation created
+- [x] Obsidian integration guide added
+- [x] Personal section added to CLAUDE.md
+- [ ] Will tag files during next review
+
+---
+
+## 3. Personal Context Updates
+
+### What changed this week?
+
+**New preferences discovered:**
+- I want a visual UI for context management (Obsidian)
+- Need scheduled review process (weekly + monthly)
+- OneDrive sync for multi-computer access
+
+**Decision patterns noticed:**
+- Prefer graphical tools over CLI when reviewing/organizing
+- Value scheduled processes over ad-hoc maintenance
+
+### CLAUDE.md Updates Needed
+
+- [x] Personal section added (completed 2026-05-08)
+- [x] Work style documented
+- [x] BeFirst preferences captured
+- [ ] Will refine based on next few sessions
+
+**Quick link:** [[01-Personal-Context/CLAUDE.md]]
+
+---
+
+## 4. Graph View Insights
+
+**Open graph view:** Press `Ctrl+G`
+
+**First impressions:**
+- Context structure visualized for first time
+- Will explore connections during regular reviews
+- [ ] Learn graph view filters and features
+
+---
+
+## 5. Context Quality Metrics
+
+| Metric | This Week | Target | Status |
+|--------|-----------|--------|--------|
+| Total learnings | [TBD] | Growing | 🟡 Baseline |
+| Total skills | [TBD] | 10+ | 🟡 Baseline |
+| Stale items (>90d) | [TBD] | <5 | 🟡 Baseline |
+| Untagged items | [TBD] | 0 | 🟡 Baseline |
+| CLAUDE.md age (days) | 0 (just updated!) | <30 | 🟢 Fresh |
+
+**Status:** 🟡 Establishing baseline
+
+---
+
+## 6. This Week's Wins
+
+**Context improvements made:**
+- ✓ Obsidian vault created and configured
+- ✓ Setup scripts ready for multi-computer use
+- ✓ Dashboard templates created
+- ✓ Personal CLAUDE.md section documented
+
+**New insights captured:**
+- Visual context management is valuable
+- Need systematic review process
+- OneDrive enables multi-computer workflow
+
+---
+
+## 7. Action Items for Next Week
+
+- [ ] Do first **real** weekly review (Friday 4:00 PM)
+- [ ] Explore graph view features
+- [ ] Tag any untagged files
+- [ ] Archive at least 1 stale item
+- [ ] Update "Current Focus Areas" in CLAUDE.md if needed
+
+---
+
+## 8. Claude Feedback
+
+**What worked well this week?**
+- Claude created comprehensive context review system
+- Setup instructions clear and actionable
+- Templates provide structure
+
+**What needs improvement?**
+- Will learn through using the system
+
+**New patterns to capture?**
+- Context management itself is now a documented pattern!
+
+---
+
+## Review Summary
+
+**Time spent:** 15 minutes (initial setup familiarization)
+**Stale items addressed:** 0 (baseline established)
+**Files archived:** 0 (first review)
+**Promotions:** 0 (first review)
+**New tags added:** 0 (next review)
+**CLAUDE.md updated:** Yes (personal section added)
+
+**Overall context health:** 🟡 Baseline established, regular reviews starting
+
+**Next review:** 2026-05-09 (Friday, 4:00 PM) - First real weekly review!
+
+---
+
+## Notes
+
+**This is a SAMPLE review** to show how to use the template.
+
+**For next Friday's review:**
+1. Copy `Context-Review-Weekly-TEMPLATE.md`
+2. Rename to: `2026-W19-Review.md` (or current week number)
+3. Fill in each section
+4. Takes ~30 minutes once familiar with process
+
+**Remember:**
+- Graph view: `Ctrl+G`
+- Quick switcher: `Ctrl+O`
+- Search: `Ctrl+Shift+F`
+
+---
+
+**Template version:** 1.0 (Sample)
+**Created:** 2026-05-08

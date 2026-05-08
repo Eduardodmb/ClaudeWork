@@ -1,0 +1,137 @@
+# BeFirst_Docs Project Memory
+
+## Documentation Policy
+
+**IMPORTANT**: Unless explicitly requested, **DO NOT create documentation files**.
+
+This applies to:
+- ❌ No summary documents (e.g., `IMPLEMENTATION_SUMMARY.md`, `UPDATE_SUMMARY.md`)
+- ❌ No how-to guides or README files
+- ❌ No reference documentation
+- ❌ No changelog files
+- ❌ No testing documentation
+
+**Only create documentation when user specifically asks for it.**
+
+**Exceptions:**
+- ✅ Code comments (inline documentation is fine)
+- ✅ XML documentation comments in code
+- ✅ Updating existing documentation if asked to modify it
+
+---
+
+## BeFirst Portal Grid View Pattern
+
+**CRITICAL**: When creating grid partial views in BeFirst Portal, ALWAYS use the MvcGrid pattern, NOT manual HTML tables.
+
+### Correct Pattern (NonFactors.Mvc.Grid)
+
+**Partial View** (`_GetXxxxList.cshtml`):
+```cshtml
+@using NonFactors.Mvc.Grid;
+
+@model Firstronic.Core.Entities.App.Engineering.tbl_XXXX_FULL_partial
+
+@(Html
+      .Grid(Model.Items)        // or Model.Modelo
+      .Build(columns =>
+      {
+        columns.Add(model => model.PropertyName).Titled("Column Header");
+        columns.Add(model => Html.ActionLink("Delete", "DeleteXxxx", new { id = model.AutoID }, new { @class = "delRow" }));
+      })
+      .UsingSourceUrl(Url.Action("GetXxxxList", "ControllerName", new { id = Model.id }))
+      .Empty("No data found")
+      .Id("mvcXxxxList")
+  )
+```
+
+**Controller Method**:
+```csharp
+[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+[Authorize(Roles = "BF Administrator,BF Part Edit")]
+public PartialViewResult GetXxxxList(int id)
+{
+  var model = new tbl_XXXX_FULL_partial();
+  model.id = id;
+
+  SqlParameter[] idParameters = new SqlParameter[]{
+    new SqlParameter("@Id", SqlDbType.Int){ Value = id }
+  };
+
+  string query = @"SELECT ... FROM ... WHERE PartID = @Id";
+
+  model.Items = db.Database.SqlQuery<Firstronic.Core.Entities.App.Engineering.tbl_XXXX_FULL>(query, idParameters)
+                  .ToArray()
+                  .ToList()
+                  .AsQueryable();
+
+  return PartialView("_GetXxxxList", model);
+}
+
+// Wrapper model with id + Items/Modelo
+public class tbl_XXXX_FULL_partial
+{
+  public int id { get; set; }
+  public IQueryable<Firstronic.Core.Entities.App.Engineering.tbl_XXXX_FULL> Items { get; set; }
+}
+```
+
+**Entity Model** (in Firstronic.Core.Entities.App.Engineering namespace):
+```csharp
+namespace Firstronic.Core.Entities.App.Engineering
+{
+  public class tbl_XXXX_FULL
+  {
+    public int AutoID { get; set; }
+    // ... other properties matching SQL query columns
+  }
+}
+```
+
+**Key Points**:
+- ✅ Use `@using NonFactors.Mvc.Grid;`
+- ✅ Model is `tbl_XXXX_FULL_partial` with `id` + `Items`/`Modelo` properties
+- ✅ Use `Html.Grid(Model.Items).Build(columns => {...})`
+- ✅ Use `.UsingSourceUrl()` for AJAX reload
+- ✅ Use `.Empty()` for no-data message
+- ✅ Use `.Id()` for grid HTML ID
+- ✅ Use `Html.ActionLink()` with CSS class for delete actions
+- ✅ Query returns `IQueryable<tbl_XXXX_FULL>` via `.ToArray().ToList().AsQueryable()`
+- ❌ NEVER create manual `<table>` HTML
+- ❌ NEVER use `IEnumerable<dynamic>` as model
+- ❌ NEVER use `@model` other than the `_FULL_partial` wrapper
+
+**Reference Files**:
+- `S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\PartNumber\_GetSubActivateScannerArrayList.cshtml`
+- `S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs` (GetSubActivateScannerList method)
+
+## Manual Output Locations
+
+When generating deliverable manuals (PDF, DOCX, HTML exports):
+
+**PLEX-related manuals:**
+```
+S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\07_Systems_and_applications\01_PLEX
+```
+
+**BeFirst-related manuals:**
+```
+S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\07_Systems_and_applications\02_BeFirst
+```
+
+**Usage Guidelines:**
+- ✅ Deliverables (`.docx`, `.pdf`, `.html` exports) → OneDrive paths above
+- ✅ Source documentation (`.md` files) → Git repositories (`S:\01_Repos\BeFirst_Docs\docs\`)
+- ❌ Never write source markdown directly to OneDrive
+
+## Repository Locations
+
+- **BeFirst_Docs**: `S:\01_Repos\BeFirst_Docs` (current repository)
+- **Other BeFirst repos**: Likely in `S:\01_Repos\` (BeFirst_Portal, BeFirst_APIs, etc.)
+- **Organizational docs**: `C:\Users\dkmcintyre\organizational-docs` (per global standards)
+
+## Key Platform Context
+
+- **BeFirst Platform**: 13-repository ecosystem for Lacroix Electronics manufacturing intelligence
+- **Primary facilities**: GRA1 (Granby, QC), JUA1/JUA2 (Ciudad Juárez, Mexico)
+- **User**: Working on documentation for PLEX ERP integration and BeFirst platform

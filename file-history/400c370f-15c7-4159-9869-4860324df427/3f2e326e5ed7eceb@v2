@@ -1,0 +1,9 @@
+namespace APIs_BeFirst.Models.Response
+{
+    public class StationNPIIssueResponse
+    {
+        public string IssueType { get; set; } = string.Empty;
+        public int IssueID { get; set; }
+        public string IssueDescription { get; set; } = string.Empty;
+    }
+}

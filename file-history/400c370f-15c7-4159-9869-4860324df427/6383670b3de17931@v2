@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace APIs_BeFirst.Models.DataBase;
+
+public partial class PartOperationSerializationMergeAutoAtAoi
+{
+    [Key]
+    public int AutoId { get; set; }
+
+    public int PartId { get; set; }
+
+    public string? Side { get; set; }
+
+    public int? AreaId { get; set; }
+}

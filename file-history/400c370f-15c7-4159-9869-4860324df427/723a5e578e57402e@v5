@@ -1,0 +1,200 @@
+﻿using APIs_BeFirst.Models;
+using APIs_BeFirst.Models.DataBase;
+using APIs_BeFirst.Models.Response;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+
+namespace APIs_BeFirst.Service.Parts
+{
+    public class PartsService : ModelBase, IPartsService
+    {
+
+        protected readonly ProdMesDbContext _context;
+        public PartsService(ProdMesDbContext context) : base(context)
+        {
+            _context = context;
+        }
+
+
+
+
+
+        public async Task<PartsResponse> GetAsync(int PartID ,string PartNumber)
+        {
+
+            try
+            {
+                var newmodel = new PartsResponse();
+              
+                    var dtExist = await _context.Parts
+                         .Where(a => a.PartId == PartID || a.PartNumber == PartNumber)
+                         .FirstOrDefaultAsync();
+
+                    if (dtExist != null)
+                    {
+                    newmodel.PartID = dtExist.PartId ?? 0;
+                    newmodel.PartNumber = dtExist.PartNumber ?? string.Empty;
+                    newmodel.Part_Key = dtExist.PartKey ?? 0;
+                    newmodel.CustomerID = dtExist.CustomerId ?? 0;
+
+                    return newmodel;
+
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+              
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<Boolean?> IsControlled(string PartKey)
+        {
+
+            try
+            {
+                var newmodel = new IsControlled();
+
+                var dtExist = await _context.PlexIdtPartVParts
+                     .Where(a => a.PartKey == Convert.ToInt32(PartKey) && a.IsIgnored == Convert.ToBoolean(0) && (a.IsControled == Convert.ToBoolean(1) || a.MslId>3))
+                     .FirstOrDefaultAsync();
+
+                if (dtExist != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<PartNumberResponse>> GetAllPartsAsync()
+        {
+            try
+            {
+                var parts = await _context.CsIdtPartnumbers
+                    .Select(p => new PartNumberResponse
+                    {
+                        PartNumber = p.PartNumber,
+                        PartID = p.PartId,
+                        ArrQty = p.PiecesByPanel
+                    })
+                    .ToListAsync();
+
+                return parts;
+            }
+            catch (Exception)
+            {
+                return new List<PartNumberResponse>();
+            }
+        }
+
+        public async Task<List<AOIQualityChangeStatusResponse>> GetAOIQualityChangeStatusAsync()
+        {
+            try
+            {
+                var results = await _context.QualityInspectionAoiChangeStatuses
+                    .Select(q => new AOIQualityChangeStatusResponse
+                    {
+                        PartID = q.PartId,
+                        CirRef = q.CirRef,
+                        ContainsText = q.ContainsText,
+                        DefectCodeID = q.DefectCodeId ?? 0
+                    })
+                    .ToListAsync();
+
+                return results;
+            }
+            catch (Exception)
+            {
+                return new List<AOIQualityChangeStatusResponse>();
+            }
+        }
+
+        public async Task<int> GetMergeCounterAsync(int partId)
+        {
+            try
+            {
+                var mergeCounter = await _context.PartOperationSerializationMergeCounters
+                    .Where(m => m.PartId == partId)
+                    .FirstOrDefaultAsync();
+
+                return mergeCounter?.Counter ?? 0;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
+        public async Task<int> IncrementMergeCounterAsync(int partId)
+        {
+            try
+            {
+                // Check if counter exists
+                var existingCounter = await _context.PartOperationSerializationMergeCounters
+                    .Where(m => m.PartId == partId)
+                    .FirstOrDefaultAsync();
+
+                if (existingCounter != null)
+                {
+                    // Update existing counter
+                    existingCounter.Counter++;
+                    await _context.SaveChangesAsync();
+                    return existingCounter.Counter;
+                }
+                else
+                {
+                    // Insert new counter starting at 1
+                    var newCounter = new PartOperationSerializationMergeCounter
+                    {
+                        PartId = partId,
+                        Counter = 1
+                    };
+                    await _context.PartOperationSerializationMergeCounters.AddAsync(newCounter);
+                    await _context.SaveChangesAsync();
+                    return 1;
+                }
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
+        public async Task<bool> ShouldMergeAtAOIAsync(int partId, string side, int areaId)
+        {
+            try
+            {
+                var config = await _context.PartOperationSerializationMergeAutoAtAois
+                    .Where(m => m.PartId == partId && m.Side == side && m.AreaId == areaId)
+                    .FirstOrDefaultAsync();
+
+                return config != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+
+
+
+    }
+}

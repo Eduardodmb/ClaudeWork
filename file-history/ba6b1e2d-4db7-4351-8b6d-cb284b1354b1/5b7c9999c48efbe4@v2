@@ -1,0 +1,913 @@
+﻿Imports System.Data.SqlClient
+Imports System.Media
+Imports System.Text.RegularExpressions
+Imports System.Threading
+Imports Keyence.AutoID.SDK
+Public Class frm_MergeLabels_MergeKeyence_Positions
+
+    Dim dt_array As DataTable = New DataTable
+    Dim shiftall As Integer
+
+    Dim KeyenceReader As ReaderAccessor = New ReaderAccessor()
+    Dim KeyenceReader101 As ReaderAccessor = New ReaderAccessor()
+
+    Private Function getAllFilesInSrFolder(ByVal reader As ReaderAccessor, ByVal srcFolder As String) As List(Of String)
+        Dim fileList As List(Of String) = reader.GetFileList(srcFolder)
+        Return fileList
+    End Function
+
+    Private Sub frm_merge_mergefull_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        loadEmptyTable()
+
+        shiftall = GetShift(DateTime.Now())
+
+
+        If My.Computer.Network.Ping("192.168.100.100", 100) Then
+
+
+
+            Dim path_master As String = "\\" & ExData.SERVERFILESIP & "\BeFirstData\scanconfig\" & ExData.Selected_Area.Selected_Casilla.PartNumber.Substring(3, 5) & "\MASTER\CONFIG8.PTC"
+
+            Dim path_slave As String = "\\" & ExData.SERVERFILESIP & "\BeFirstData\scanconfig\" & ExData.Selected_Area.Selected_Casilla.PartNumber.Substring(3, 5) & "\SLAVE\CONFIG8.PTC"
+
+            If My.Computer.Network.Ping("192.168.100.100", 100) Then
+                KeyenceReader = New ReaderAccessor("192.168.100.100")
+                'KeyenceReader.IpAddress = "192.168.100.100"
+
+                Try
+                    'Dim reader As ReaderAccessor = New ReaderAccessor("192.168.100.100")
+                    KeyenceReader.OpenFtp()
+
+                    If IO.File.Exists(path_master) Then
+                        KeyenceReader.ExecCommand("BLOAD")
+                        Thread.Sleep(1000)
+
+                        Dim fileList As List(Of String) = getAllFilesInSrFolder(KeyenceReader, "CONFIG")
+                        MsgBox("Loading..." & path_master & vbNewLine & String.Join(",", fileList))
+
+                        KeyenceReader.PutFile(path_master, "CONFIG\CONFIG8.PTC")
+                        Thread.Sleep(1000)
+                        KeyenceReader.ExecCommand("BLOAD,8")
+                    Else
+                        MsgBox(My.Resources.Messages.Keyence_SetupNotExist)
+                    End If
+
+                    KeyenceReader.CloseFtp()
+                Catch ex As Exception
+                    MsgBox(ex.ToString())
+                End Try
+
+                KeyenceReader.Connect(AddressOf ReceivedDataAction)
+            Else
+                MsgBox("No PING")
+            End If
+
+            If My.Computer.Network.Ping("192.168.100.101", 100) Then
+                KeyenceReader101 = New ReaderAccessor("192.168.100.101")
+                'KeyenceReader101.IpAddress = "192.168.100.101"
+                Try
+                    KeyenceReader101.OpenFtp()
+
+                    If IO.File.Exists(path_slave) Then
+                        KeyenceReader101.ExecCommand("BLOAD")
+                        Thread.Sleep(1000)
+
+                        Dim fileList As List(Of String) = getAllFilesInSrFolder(KeyenceReader101, "CONFIG")
+                        MsgBox("Loading..." & path_master & vbNewLine & String.Join(",", fileList))
+
+                        KeyenceReader101.PutFile(path_slave, "CONFIG\CONFIG8.PTC")
+                        Thread.Sleep(1000)
+                        KeyenceReader101.ExecCommand("BLOAD,8")
+                    Else
+                        MsgBox(My.Resources.Messages.Keyence_SetupNotExist)
+                    End If
+                    KeyenceReader101.CloseFtp()
+                Catch ex As Exception
+                    MsgBox(ex.ToString())
+                End Try
+            Else
+                MsgBox("No PING")
+            End If
+
+            Try
+                Try
+                    liveviewForm1.EndReceive()
+                    'Set ip address of liveview.
+                    liveviewForm1.IpAddress = "192.168.100.100"
+
+                    'Start liveview.
+                    liveviewForm1.BeginReceive()
+                Catch ex2 As Exception
+
+                End Try
+
+            Catch ex As Exception
+
+            End Try
+        Else
+
+        End If
+
+    End Sub
+
+    Private Sub ReceivedDataAction(data As Byte())
+
+    End Sub
+
+    Dim serialescazados As Integer = 0
+
+    Private Sub TgrBtn_Click(sender As Object, e As EventArgs) Handles TgrBtn.Click
+        loadEmptyTable()
+
+        ReceivedDataWrite(KeyenceReader.ExecCommand("LON", 2000))
+
+        dgvlist.DataSource = dt_array
+
+        'Check if all serial numbers are ready. 
+        Dim selected = dt_array.Select("SSN=''")
+
+        If selected.Length > 0 Then
+            'Marcar errror
+
+            MsgBox("Escaneo incompleto, realizar manual.")
+
+            btnManual.PerformClick()
+
+        Else
+            'Enviar a Merge.... 
+            '
+
+            Dim contador As Integer = ExFunctions.getMergeCounter(ExData.Selected_Area.Selected_Casilla.PartID)
+            Dim dt = DateTime.Now
+            Dim jDate = String.Format("{0}{1}", dt.ToString("yy"), dt.DayOfYear.ToString("000"))
+            ExData.parenssn = ExData.Selected_Area.Selected_Casilla.PartNumber.Substring(3, 5) & "-" & jDate & contador.ToString("00000")
+
+            If txtParent.Text.Length > 0 Then
+                Dim childParentVarcharParameter() As SqlParameter = New SqlParameter() _
+                        {
+                            New SqlParameter("@Parente", SqlDbType.VarChar) With {.Value = txtParent.Text.Replace("'", "")}
+                        }
+
+                Dim dtparent As DataTable = BeConn.GetDt("SELECT [Parente]  FROM [PD_tbl_parents_smt] where parente =@Parente", childParentVarcharParameter)
+                If dtparent.Rows.Count > 0 Then
+                    MsgBox("Parent duplicated")
+                    KeyenceReader.ExecCommand("LOFF", 2000)
+                    txtParent.Text = ""
+                    txtParent.Select()
+                    Exit Sub
+                Else
+                    ExData.parenssn = txtParent.Text
+                End If
+            End If
+
+            serialescazados = 0
+
+            'Revisar duplicados
+            For Each item As DataRow In dt_array.Rows
+                Dim ssn As String = item.Item("SSN")
+
+                Dim regex1 As Regex
+                regex1 = New Regex(ExData.Selected_Area.Selected_Casilla.PartIdFormat)
+                Dim match As Match = regex1.Match(ssn)
+                If match.Success Then
+                    ExData.ChildsSerials.Rows.Add(ssn)
+
+                    serialescazados += ExFunctions.getMergeQty(ssn, ExData.Selected_Area.Selected_Casilla.PartIdFormat)
+                End If
+            Next
+
+            CheckPaintTable()
+
+            If ExData.ChildsSerials.Rows.Count = ExData.Selected_Area.Selected_Casilla.pzspanel Then
+                If serialescazados > 0 And chMoveParent.Checked = False Then
+                    ShowMSG(My.Resources.Messages.prod_serial_merge_ready3 & serialescazados & My.Resources.Messages.prod_serial_merge_ready4, My.Resources.Messages.prod_serial_merge_ready)
+                ElseIf serialescazados = ExData.Selected_Area.Selected_Casilla.pzspanel And chMoveParent.Checked = True Then
+                    publicar()
+                Else
+                    publicar()
+                End If
+            End If
+        End If
+
+        KeyenceReader.ExecCommand("LOFF", 2000)
+
+    End Sub
+
+    Dim processing As Boolean = False
+    Dim lastparent As String = ""
+
+    Private Sub publicar()
+
+        If ExData.ChildsSerials.Rows.Count < PanelQty Then
+            'Cancelar si la cantidad de piezas es menor....
+            ShowMSG(My.Resources.Messages.merge_panel_incomplete, My.Resources.Messages.merge_panel_incomplete_title)
+        ElseIf ExData.ChildsSerials.Rows.Count > PanelQty Then
+            'Cancelar si la cantidad de piezas es menor....
+            ShowMSG(My.Resources.Messages.merge_panel_incomplete, My.Resources.Messages.merge_panel_incomplete_title)
+        Else
+            If processing = False And lastparent <> ExData.parenssn Then
+                lastparent = ExData.parenssn
+                processing = True
+
+
+                Dim JobDePieza As Integer = ExData.Selected_Area.Selected_Casilla.JobID
+                Dim JobTypeDePieza As Integer = ExData.Selected_Area.Selected_Casilla.JobType
+                Dim JobNumberDePieza As Integer = ExData.Selected_Area.Selected_Casilla.JobNumber
+                Dim PartIDDePieza As Integer = frm_MergeLabels.ddlPartNumbers.SelectedValue
+                Dim JobSideDePieza As String = "A"
+                'Agregar Grupos MLS si es necesario. 
+                Dim GrupoMLSDePieza As Integer = ExData.Selected_Area.Selected_Casilla.BinID
+                Dim IsGood, IsRework, ContinueW As Boolean
+                ContinueW = True
+                IsGood = True
+                'If frm_Merge_index.Rb_pass.Checked = True Then
+                '    IsGood = True
+                'Else
+                '    IsGood = False
+                'End If
+                IsRework = False
+                '[Horarios] Selecciono Fecha y turno
+                Dim Dia As DateTime = DateTime.Now()
+                ExData.Selected_Area.LastPiece = Dia
+                Dim shift = shiftall
+
+                Dim toindex As Integer = 1
+
+                For Each row In ExData.ChildsSerials.Rows
+                    Dim ssn As String = row.item(0)
+                    Dim ssnindex As Integer = 1
+                    Dim DefectCode As Integer = -1
+
+
+                    Dim childParentVarcharParameter() As SqlParameter = New SqlParameter() _
+                               {
+                                    New SqlParameter("@Parente", SqlDbType.VarChar) With {.Value = ExData.parenssn},
+                                    New SqlParameter("@Child", SqlDbType.VarChar) With {.Value = ssn}
+                               }
+
+                    If chMoveParent.Checked = False Then
+                        BeConn.InsertRecords("INSERT INTO PD_tbl_parents_smt ([Parente],[Child],[TrnDate],Sort_No) VALUES (@Parente,@Child,GETDATE(),'" & toindex & "')", childParentVarcharParameter)
+                    End If
+
+                    toindex = toindex + 1
+
+                    Dim ssnVarcharParameter() As SqlParameter = New SqlParameter() _
+                               {
+                                    New SqlParameter("@SSN", SqlDbType.VarChar) With {.Value = ssn}
+                               }
+
+                    Dim insertParameter() As SqlParameter = New SqlParameter() _
+                                {
+                                    New SqlParameter("@PartID", SqlDbType.Int) With {.Value = PartIDDePieza},
+                                    New SqlParameter("@IsGood", SqlDbType.Bit) With {.Value = IsGood},
+                                    New SqlParameter("@DefectCodeID", SqlDbType.Int) With {.Value = DefectCode},
+                                    New SqlParameter("@IsRework", SqlDbType.Bit) With {.Value = IsRework},
+                                    New SqlParameter("@StationID", SqlDbType.Int) With {.Value = ExData.Selected_Area.Selected_Casilla.StationID},
+                                    New SqlParameter("@TrnDate", SqlDbType.DateTime) With {.Value = Dia.ToString("MM/dd/yyyy HH:mm:ss")},
+                                    New SqlParameter("@JobID", SqlDbType.Int) With {.Value = JobDePieza},
+                                    New SqlParameter("@JobType", SqlDbType.Int) With {.Value = JobTypeDePieza},
+                                    New SqlParameter("@JobNumber", SqlDbType.Int) With {.Value = JobNumberDePieza},
+                                    New SqlParameter("@JobSide", SqlDbType.VarChar) With {.Value = JobSideDePieza},
+                                    New SqlParameter("@SSNPanel", SqlDbType.VarChar) With {.Value = ExData.parenssn},
+                                    New SqlParameter("@SSN", SqlDbType.VarChar) With {.Value = ssn},
+                                    New SqlParameter("@ControlID", SqlDbType.Int) With {.Value = ExData.Selected_User.BeFirst_ControlID},
+                                    New SqlParameter("@AreaID", SqlDbType.Int) With {.Value = ExData.Selected_Area.AreaID},
+                                    New SqlParameter("@SSNIndex", SqlDbType.Int) With {.Value = ssnindex},
+                                    New SqlParameter("@Shift", SqlDbType.Int) With {.Value = shift},
+                                    New SqlParameter("@GroupMLS", SqlDbType.Int) With {.Value = GrupoMLSDePieza},
+                                    New SqlParameter("@SSNQty", SqlDbType.Int) With {.Value = 1}
+                                }
+
+
+                    BeConn.InsertRecords("INSERT INTO [dbo].[PD_tbl_units_tracking] (PartID,IsGood,DefectCodeID,IsRework,StationID,TrnDate,JobID,JobType,JobNumber,JobSide,SSNPanel,SSN,ControlID,AreaID,SSNIndex,Shift,GroupMLS,SSNQty) VALUES (@PartID,@IsGood,@DefectCodeID,@IsRework,@StationID,@TrnDate,@JobID,@JobType,@JobNumber,@JobSide,@SSNPanel,@SSN,@ControlID,@AreaID,@SSNIndex,@Shift,@GroupMLS,@SSNQty)", insertParameter)
+
+
+                    Dim dt_wip As DataTable = BeConn.GetDt("Select * from PD_tbl_units_wip where ssn=@SSN", ssnVarcharParameter)
+
+                    If dt_wip.Rows.Count = 0 Then
+                        Dim insertwipParameter() As SqlParameter = New SqlParameter() _
+                                       {
+                                            New SqlParameter("@PartID", SqlDbType.Int) With {.Value = PartIDDePieza},
+                                            New SqlParameter("@IsGood", SqlDbType.Bit) With {.Value = IsGood},
+                                            New SqlParameter("@DefectCodeID", SqlDbType.Int) With {.Value = DefectCode},
+                                            New SqlParameter("@IsRework", SqlDbType.Bit) With {.Value = IsRework},
+                                            New SqlParameter("@StationID", SqlDbType.Int) With {.Value = ExData.Selected_Area.Selected_Casilla.StationID},
+                                            New SqlParameter("@TrnDate", SqlDbType.DateTime) With {.Value = Dia.ToString("MM/dd/yyyy HH:mm:ss")},
+                                            New SqlParameter("@JobID", SqlDbType.Int) With {.Value = JobDePieza},
+                                            New SqlParameter("@JobType", SqlDbType.Int) With {.Value = JobTypeDePieza},
+                                            New SqlParameter("@JobNumber", SqlDbType.Int) With {.Value = JobNumberDePieza},
+                                            New SqlParameter("@JobSide", SqlDbType.VarChar) With {.Value = JobSideDePieza},
+                                            New SqlParameter("@SSNPanel", SqlDbType.VarChar) With {.Value = ExData.parenssn},
+                                            New SqlParameter("@SSN", SqlDbType.VarChar) With {.Value = ssn},
+                                            New SqlParameter("@ControlID", SqlDbType.Int) With {.Value = ExData.Selected_User.BeFirst_ControlID},
+                                            New SqlParameter("@StatusAreaID", SqlDbType.Int) With {.Value = ExData.Selected_Area.AreaID},
+                                            New SqlParameter("@GroupMLS", SqlDbType.Int) With {.Value = GrupoMLSDePieza},
+                                            New SqlParameter("@SSNQty", SqlDbType.Int) With {.Value = 1}
+                                       }
+
+                        BeConn.InsertRecords("INSERT INTO [dbo].[PD_tbl_units_wip] (PartID,IsGood,DefectCodeID,IsRework,StationID,TrnDate,JobID,JobType,JobNumber,JobSide,SSNPanel,SSN,ControlID,StatusAreaID,GroupMLS,SSNQty) VALUES (@PartID,@IsGood,@DefectCodeID,@IsRework,@StationID,@TrnDate,@JobID,@JobType,@JobNumber,@JobSide,@SSNPanel,@SSN,@ControlID,@StatusAreaID,@GroupMLS,@SSNQty)", insertwipParameter)
+
+                    End If
+                Next
+
+
+                ExData.Selected_Area.Selected_Casilla.JobQtyBuild = ExData.Selected_Area.Selected_Casilla.JobQtyBuild + PanelQty
+
+                If (ExData.Selected_Area.Selected_Casilla.JobQtyBuild > ExData.Selected_Area.Selected_Casilla.JobQtyTotal) Then
+                    MsgBox(My.Resources.Messages.Job_Quantity_Reached)
+                End If
+
+                frm_MergeLabels.lbl_total.Text = ExData.Selected_Area.Selected_Casilla.JobQtyBuild
+                frm_MergeLabels.lblDiference.Text = ExData.Selected_Area.Selected_Casilla.JobQtyPLEXBuild - ExData.Selected_Area.Selected_Casilla.JobQtyBuild
+
+                BeConn.UpdateRecords("UPDATE PD_tbl_jobs_qty_build SET QtyBuild=QtyBuild + " & PanelQty & " WHERE ID='" & ExData.Selected_Area.Selected_Casilla.BuildID & "'")
+
+                '[Historial] Agregar al historial
+                Dim R As DataRow = ExData.Selected_Area.LastSerials.NewRow
+                R("Serial") = ExData.parenssn : R("Hora") = Dia : R("IsGood") = IsGood
+                ExData.Selected_Area.LastSerials.Rows.InsertAt(R, 0)
+
+                frm_MergeLabels.Data_lastserials.DataSource = ExData.Selected_Area.LastSerials
+                frm_MergeLabels.ColorearSeriales()
+                If frm_MergeLabels.Data_lastserials.RowCount > 0 Then
+                    frm_MergeLabels.Data_lastserials.FirstDisplayedScrollingRowIndex = 0
+                End If
+
+                txtParent.Text = ""
+
+                lbl_msg.Text = My.Resources.Messages.prod_success : lbl_msg.BackColor = Color.FromArgb(0, 191, 1) : lbl_msg.ForeColor = Color.White
+
+                '2020-03-05: to avoid duplciate values.
+                processing = False
+
+                'Restaurar valores por default
+                frm_MergeLabels.DefectCode = -1 : ExData.Selected_Area.DTCodeID = 80 : ExData.Selected_Area.IsActive = True : frm_MergeLabels.Rb_pass.Checked = True : ExData.Rework_pictureurl = ""
+
+            End If
+        End If
+    End Sub
+
+    Private Sub ReceivedDataWrite(receivedData As String)
+
+        'tmrKeyence.Stop()
+
+        If receivedData.Length > 10 Then
+
+            Dim items = receivedData.Trim.Split(",")
+
+            For Each item In items
+
+                Dim parts = item.Split(":")
+
+                If parts.Length = 3 Then
+
+                    Dim ssn As String = parts(0)
+
+                    Dim positionID As String = parts(1)
+
+                    Dim MasterID As String = parts(2)
+
+                    Dim selected = dt_array.Select("MasterID='" & MasterID & "' AND PositionID='" & positionID & "'")
+
+                    If selected.Length > 0 Then
+
+                        selected(0)("SSN") = ssn
+
+                    End If
+
+                    dt_array.AcceptChanges()
+
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Squares As List(Of SquareItem) = Nothing
+
+    Private Class SquareItem
+        Property Bounds As Rectangle
+        Property Clicked As Boolean
+        Property ClickedColor As Color
+    End Class
+
+    Public Sub loadEmptyTable()
+        ExData.ChildsSerials.Clear()
+
+        ' Query with optional remapping based on AreaID and Side
+        Dim query As String = "
+            SELECT
+                IDX.[AutoID],
+                IDX.[PartID],
+                IDX.[MasterID],
+                IDX.[PositionID],
+                ISNULL(REMAP.RemappedIndex, IDX.ToIndex) AS ToIndex,
+                '' AS SSN,
+                IDX.[Col],
+                IDX.[Row]
+            FROM [PART_OPERATION_SERIALIZATION_ARRAY_INDEX] IDX
+            LEFT JOIN [PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP] REMAP
+                ON IDX.PartID = REMAP.PartID
+                AND REMAP.AreaID = " & ExData.Selected_Area.AreaID & "
+                AND REMAP.Side = '" & ExData.Side & "'
+                AND IDX.ToIndex = REMAP.OriginalIndex
+            WHERE IDX.PartID = " & ExData.Selected_Area.Selected_Casilla.PartID & "
+            ORDER BY ISNULL(REMAP.RemappedIndex, IDX.ToIndex) ASC"
+
+        dt_array = BeConn.GetDt(query)
+
+        dgvlist.DataSource = dt_array
+
+        dgvlist.Columns("AutoID").Visible = False
+        dgvlist.Columns("PartID").Visible = False
+        dgvlist.Columns("MasterID").Visible = False
+        dgvlist.Columns("PositionID").Visible = False
+        dgvlist.Columns("Col").Visible = False
+        dgvlist.Columns("Row").Visible = False
+
+        Dim cols As Integer = BeConn.GetInteger("SELECT MAX(Col) FROM [PART_OPERATION_SERIALIZATION_ARRAY_INDEX] WHERE PartID='" & ExData.Selected_Area.Selected_Casilla.PartID & "'")
+
+        Dim Rows As Integer = BeConn.GetInteger("SELECT MAX(Row) FROM [PART_OPERATION_SERIALIZATION_ARRAY_INDEX] WHERE PartID='" & ExData.Selected_Area.Selected_Casilla.PartID & "'")
+
+        pnlLayer.Controls.Clear()
+
+        Try
+            Squares = New List(Of SquareItem)
+
+            Dim SquareSpacing As Integer = 2
+
+            Dim SquaresPerRow As Integer = cols
+
+            Dim TotalRows = Rows
+
+            Dim SquareEdgeLength As Integer = Math.Ceiling((pnlLayer.Width - (SquareSpacing * SquaresPerRow)) \ SquaresPerRow)
+
+            Dim SquareEdgeLengthH As Integer = Math.Ceiling((pnlLayer.Height - (SquareSpacing * TotalRows)) \ TotalRows)
+
+            If SquareEdgeLength > 0 And SquareEdgeLengthH > 0 Then
+
+                Dim SquareSize As New Size(SquareEdgeLength, SquareEdgeLength)
+
+                Dim RowPoint As Integer = 1
+
+                Dim ColPoint As Integer = 1
+
+                Dim itemno As Integer = 1
+
+                For i As Integer = 1 To TotalRows
+
+                    ColPoint = 1
+
+                    For j As Integer = 1 To SquaresPerRow
+                        Dim smlpanel As Panel = New Panel()
+
+                        smlpanel.Width = SquareEdgeLength
+
+                        smlpanel.Height = SquareEdgeLengthH
+
+                        smlpanel.Location = New Point(ColPoint, RowPoint)
+
+                        ColPoint = ColPoint + (SquareEdgeLength + SquareSpacing)
+
+                        smlpanel.BackColor = Color.Gray
+
+                        smlpanel.Margin = New Padding(0, 0, 0, 0)
+
+                        smlpanel.Name = "arrayUnit_" & i & "_" & j
+
+                        Dim toIndex As String = ""
+
+                        Dim selected = dt_array.Select("Row='" & i & "' AND Col='" & j & "'")
+
+                        If selected.Length > 0 Then
+                            toIndex = selected(0)("ToIndex").ToString()
+
+                            If toIndex = 1 Then
+                                smlpanel.BackColor = Color.Yellow
+                            End If
+                        End If
+
+                        'Agregar texto de orden
+
+                        Dim smltexto As Label = New Label
+
+                        smltexto.Dock = DockStyle.None
+                        smltexto.Anchor = AnchorStyles.None
+
+                        smltexto.ForeColor = Color.White
+
+                        smltexto.Font = New Font("Segoe UI", smlpanel.Height - 4, FontStyle.Regular)
+
+                        smltexto.Text = toIndex
+
+                        smlpanel.Controls.Add(smltexto)
+
+                        pnlLayer.Controls.Add(smlpanel)
+
+                        itemno += 1
+                    Next
+
+                    RowPoint += (SquareEdgeLengthH + SquareSpacing)
+                Next
+            End If
+        Catch ex As Exception
+
+        End Try
+
+
+    End Sub
+
+    Public Sub CheckPaintTable()
+
+
+        Dim cols As Integer = BeConn.GetInteger("SELECT MAX(Col) FROM [Part_Operation_Serialization_Array_Index] WHERE PartID='" & ExData.Selected_Area.Selected_Casilla.PartID & "'")
+
+        Dim Rows As Integer = BeConn.GetInteger("SELECT MAX(Row) FROM [Part_Operation_Serialization_Array_Index] WHERE PartID='" & ExData.Selected_Area.Selected_Casilla.PartID & "'")
+
+        pnlLayer.Controls.Clear()
+
+        Try
+            Squares = New List(Of SquareItem)
+
+            Dim SquareSpacing As Integer = 2
+
+            Dim SquaresPerRow As Integer = cols
+
+            Dim TotalRows = Rows
+
+            Dim SquareEdgeLength As Integer = Math.Ceiling((pnlLayer.Width - (SquareSpacing * SquaresPerRow)) \ SquaresPerRow)
+
+            Dim SquareEdgeLengthH As Integer = Math.Ceiling((pnlLayer.Height - (SquareSpacing * TotalRows)) \ TotalRows)
+
+            If SquareEdgeLength > 0 And SquareEdgeLengthH > 0 Then
+
+                Dim SquareSize As New Size(SquareEdgeLength, SquareEdgeLength)
+
+                Dim RowPoint As Integer = 1
+
+                Dim ColPoint As Integer = 1
+
+                Dim itemno As Integer = 1
+
+                For i As Integer = 1 To TotalRows
+
+                    ColPoint = 1
+
+                    For j As Integer = 1 To SquaresPerRow
+
+
+                        Dim smlpanel As Panel = New Panel()
+
+                        smlpanel.Width = SquareEdgeLength
+
+                        smlpanel.Height = SquareEdgeLengthH
+
+                        smlpanel.Location = New Point(ColPoint, RowPoint)
+
+                        ColPoint = ColPoint + (SquareEdgeLength + SquareSpacing)
+
+                        smlpanel.Margin = New Padding(0, 0, 0, 0)
+
+
+                        Dim smlpanel_inner As Panel = New Panel()
+
+                        smlpanel_inner.Width = SquareEdgeLength - 6
+
+                        smlpanel_inner.Height = SquareEdgeLengthH - 6
+
+                        smlpanel_inner.Location = New Point(3, 3)
+
+                        'COLOR 
+
+                        Dim toIndex As String = ""
+
+                        Dim selected = dt_array.Select("Row='" & i & "' AND Col='" & j & "'")
+
+                        If selected.Length > 0 Then
+                            toIndex = selected(0)("ToIndex").ToString()
+
+                            If selected(0)("SSN") = "" Then
+                                smlpanel.BackColor = Color.Gray
+                                smlpanel_inner.BackColor = Color.Gray
+                            Else
+                                smlpanel.BackColor = Color.Green
+                                smlpanel_inner.BackColor = Color.Green
+                            End If
+                        End If
+
+
+                        If toIndex = CurrentIndex.ToString() Then
+                            smlpanel.Padding = New Padding(3, 3, 3, 3)
+
+                            smlpanel.BackColor = Color.Yellow
+                        End If
+
+                        Dim smltexto As Label = New Label
+
+                        smltexto.Dock = DockStyle.None
+                        smltexto.Anchor = AnchorStyles.None
+
+                        smltexto.ForeColor = Color.White
+
+                        smltexto.Font = New Font("Segoe UI", 16, FontStyle.Regular)
+
+                        smltexto.Text = toIndex
+
+
+                        smlpanel_inner.Controls.Add(smltexto)
+
+                        smlpanel.Controls.Add(smlpanel_inner)
+
+                        pnlLayer.Controls.Add(smlpanel)
+
+                        itemno += 1
+                    Next
+
+                    RowPoint += (SquareEdgeLengthH + SquareSpacing)
+                Next
+            End If
+        Catch ex As Exception
+
+        End Try
+
+
+    End Sub
+    Public Sub painttable()
+
+        Dim dtCoord As DataTable = BeConn.GetDt("SELECT [Row],[Col] FROM [Part_Operation_Serialization_Array_Index] WHERE PartID='" & ExData.Selected_Area.Selected_Casilla.PartID & "' and ToIndex='" & CurrentIndex & "'")
+
+        If dtCoord.Rows.Count > 0 Then
+            pnlLayer.Controls("arrayUnit_" & dtCoord.Rows(0).Item(0) & "_" & dtCoord.Rows(0).Item(1)).BackColor = Color.Green
+        End If
+
+
+        Dim dtCoordNext As DataTable = BeConn.GetDt("SELECT [Row],[Col] FROM [Part_Operation_Serialization_Array_Index] WHERE PartID='" & ExData.Selected_Area.Selected_Casilla.PartID & "' and ToIndex='" & CurrentIndex + 1 & "'")
+
+        If dtCoordNext.Rows.Count > 0 Then
+            pnlLayer.Controls("arrayUnit_" & dtCoordNext.Rows(0).Item(0) & "_" & dtCoord.Rows(0).Item(1)).BackColor = Color.Yellow
+        End If
+
+
+        'Dim cols As Integer = BeConn.GetInteger("SELECT MAX(Col) FROM [Part_Operation_Serialization_Array_Index] WHERE PartID='" & ExData.Selected_Area.Selected_Casilla.PartID & "'")
+
+        'Dim Rows As Integer = BeConn.GetInteger("SELECT MAX(Row) FROM [Part_Operation_Serialization_Array_Index] WHERE PartID='" & ExData.Selected_Area.Selected_Casilla.PartID & "'")
+
+        'pnlLayer.Controls.Clear()
+
+        'Try
+        '    Squares = New List(Of SquareItem)
+
+        '    Dim SquareSpacing As Integer = 2
+
+        '    Dim SquaresPerRow As Integer = cols
+
+        '    Dim TotalRows = Rows
+
+        '    Dim SquareEdgeLength As Integer = Math.Ceiling((pnlLayer.Width - (SquareSpacing * SquaresPerRow)) \ SquaresPerRow)
+
+        '    Dim SquareEdgeLengthH As Integer = Math.Ceiling((pnlLayer.Height - (SquareSpacing * TotalRows)) \ TotalRows)
+
+        '    If SquareEdgeLength > 0 And SquareEdgeLengthH > 0 Then
+
+        '        Dim SquareSize As New Size(SquareEdgeLength, SquareEdgeLength)
+
+        '        Dim RowPoint As Integer = 1
+
+        '        Dim ColPoint As Integer = 1
+
+        '        Dim itemno As Integer = 1
+
+        '        For i As Integer = 1 To TotalRows
+
+        '            ColPoint = 1
+
+        '            For j As Integer = 1 To SquaresPerRow
+
+
+
+
+        '                Dim smlpanel As Panel = New Panel()
+
+        '                smlpanel.Width = SquareEdgeLength
+
+        '                smlpanel.Height = SquareEdgeLengthH
+
+        '                smlpanel.Location = New Point(ColPoint, RowPoint)
+
+        '                ColPoint = ColPoint + (SquareEdgeLength + SquareSpacing)
+
+        '                smlpanel.Margin = New Padding(0, 0, 0, 0)
+
+
+        '                Dim smlpanel_inner As Panel = New Panel()
+
+        '                smlpanel_inner.Width = SquareEdgeLength - 6
+
+        '                smlpanel_inner.Height = SquareEdgeLengthH - 6
+
+        '                smlpanel_inner.Location = New Point(3, 3)
+
+        '                'COLOR 
+
+        '                Dim toIndex As String = ""
+
+        '                Dim selected = dt_array.Select("Row='" & i & "' AND Col='" & j & "'")
+
+        '                If selected.Length > 0 Then
+        '                    toIndex = selected(0)("ToIndex").ToString()
+
+        '                    If selected(0)("SSN") = "" Then
+        '                        smlpanel.BackColor = Color.Gray
+        '                        smlpanel_inner.BackColor = Color.Gray
+        '                    Else
+        '                        smlpanel.BackColor = Color.Green
+        '                        smlpanel_inner.BackColor = Color.Green
+        '                    End If
+        '                End If
+
+
+        '                If toIndex = CurrentIndex.ToString() Then
+        '                    smlpanel.Padding = New Padding(3, 3, 3, 3)
+
+        '                    smlpanel.BackColor = Color.Yellow
+        '                End If
+
+        '                Dim smltexto As Label = New Label
+
+        '                smltexto.Dock = DockStyle.None
+        '                smltexto.Anchor = AnchorStyles.None
+
+        '                smltexto.ForeColor = Color.White
+
+        '                smltexto.Font = New Font("Segoe UI", 16, FontStyle.Regular)
+
+        '                smltexto.Text = toIndex
+
+
+        '                smlpanel_inner.Controls.Add(smltexto)
+
+        '                smlpanel.Controls.Add(smlpanel_inner)
+
+        '                pnlLayer.Controls.Add(smlpanel)
+
+        '                itemno += 1
+        '            Next
+
+        '            RowPoint += (SquareEdgeLengthH + SquareSpacing)
+        '        Next
+        '    End If
+        'Catch ex As Exception
+
+        'End Try
+
+
+    End Sub
+
+    Private Sub frm_merge_mergefull_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        Try
+            liveviewForm1.EndReceive()
+            liveviewForm1.Dispose()
+        Catch ex As Exception
+
+        End Try
+        Try
+            KeyenceReader.Disconnect()
+            KeyenceReader.ExecCommand("LOFF")
+            KeyenceReader.Dispose()
+        Catch ex As Exception
+
+        End Try
+        Try
+            KeyenceReader101.Disconnect()
+            KeyenceReader101.ExecCommand("LOFF")
+            KeyenceReader101.Dispose()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Dim CurrentIndex As Integer = 0
+
+    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
+        lblNo.Text = "-"
+        loadEmptyTable()
+        tblManual.Enabled = False
+        CurrentIndex = 0
+    End Sub
+
+    Private Sub btnManual_Click(sender As Object, e As EventArgs) Handles btnManual.Click
+        loadEmptyTable()
+        CurrentIndex = 0
+
+        Dim contador As Integer = ExFunctions.getMergeCounter(ExData.Selected_Area.Selected_Casilla.PartID)
+        Dim dt = DateTime.Now
+        Dim jDate = String.Format("{0}{1}", dt.ToString("yy"), dt.DayOfYear.ToString("000"))
+        ExData.parenssn = ExData.Selected_Area.Selected_Casilla.PartNumber.Substring(3, 5) & "-" & jDate & contador.ToString("00000")
+
+        If txtParent.Text.Length > 0 Then
+            Dim childParentVarcharParameter() As SqlParameter = New SqlParameter() _
+                        {
+                            New SqlParameter("@Parente", SqlDbType.VarChar) With {.Value = txtParent.Text.Replace("'", "")}
+                        }
+
+            Dim dtparent As DataTable = BeConn.GetDt("SELECT [Parente]  FROM [PD_tbl_parents_smt] where parente =@Parente", childParentVarcharParameter)
+            If dtparent.Rows.Count > 0 Then
+                MsgBox("Parent duplicated")
+                KeyenceReader.ExecCommand("LOFF", 2000)
+                txtParent.Text = ""
+                txtParent.Select()
+                Exit Sub
+            Else
+                ExData.parenssn = txtParent.Text
+            End If
+        End If
+
+        tblManual.Enabled = True
+
+        CurrentIndex = 1
+        lblNo.Text = CurrentIndex
+
+        'painttable()
+
+        txt_serial.Text = ""
+        txt_serial.Select()
+
+    End Sub
+
+
+    Private Sub txt_serial_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txt_serial.KeyPress
+        If e.KeyChar = Convert.ToChar(13) Then
+            btnaddm.PerformClick()
+        End If
+    End Sub
+
+    Private Sub btnaddm_Click(sender As Object, e As EventArgs) Handles btnaddm.Click
+        Dim ssn As String = txt_serial.Text.Replace("'", "").ToUpper
+
+        serialescazados = 0
+
+        If chMoveParent.Checked Then
+            Dim ssnVarcharParameter() As SqlParameter = New SqlParameter() _
+                {
+                    New SqlParameter("@SSN", SqlDbType.VarChar) With {.Value = ssn}
+                }
+
+            Dim dtParent As DataTable = BeConn.GetDt("SELECT [Parente] ,[Child] ,[Sort_No] FROM [PD_tbl_parents_smt] WHERE Child=@SSN", ssnVarcharParameter)
+
+            If dtParent.Rows.Count > 0 Then
+                ExData.parenssn = dtParent.Rows(0).Item("Parente")
+                For Each rowChil As DataRow In dtParent.Rows
+                    ExData.ChildsSerials.Rows.Add(rowChil.Item("Child"))
+                    serialescazados = serialescazados + ExFunctions.getMergeQty(rowChil.Item("Child"), ExData.Selected_Area.Selected_Casilla.PartIdFormat)
+                Next
+            Else
+                MsgBox("Panel no cazado")
+            End If
+        Else
+            'Agregar a lista hasta acompletar cantidad de seriales
+            Dim rows() = ExData.ChildsSerials.Select("`Child`='" & ssn & "'")
+            If rows.Length = 0 Then
+                Dim regex1 As Regex
+                regex1 = New Regex(ExData.Selected_Area.Selected_Casilla.PartIdFormat)
+                Dim match As Match = regex1.Match(ssn)
+                If match.Success Then
+                    If ExFunctions.getMergeQty(ssn, ExData.Selected_Area.Selected_Casilla.PartIdFormat) = 0 Then
+                        ExData.ChildsSerials.Rows.Add(ssn)
+
+                        Dim selected = dt_array.Select("ToIndex='" & CurrentIndex & "'")
+
+                        If selected.Length > 0 Then
+                            selected(0)("SSN") = ssn
+                        End If
+
+                        dt_array.AcceptChanges()
+
+                        painttable()
+                        CurrentIndex += 1
+                    End If
+                End If
+            End If
+        End If
+
+        txt_serial.Text = ""
+        txt_serial.Select()
+
+        If ExData.ChildsSerials.Rows.Count = ExData.Selected_Area.Selected_Casilla.pzspanel Then
+            tblManual.Enabled = False
+            If serialescazados > 0 And chMoveParent.Checked = False Then
+                ShowMSG(My.Resources.Messages.prod_serial_merge_ready3 & serialescazados & My.Resources.Messages.prod_serial_merge_ready4, My.Resources.Messages.prod_serial_merge_ready)
+            ElseIf serialescazados = ExData.Selected_Area.Selected_Casilla.pzspanel And chMoveParent.Checked = True Then
+                publicar()
+
+            Else
+                publicar()
+
+            End If
+        End If
+    End Sub
+
+    Private Sub txtParent_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtParent.KeyPress
+        If e.KeyChar = Convert.ToChar(13) Then
+            TgrBtn.PerformClick()
+        End If
+    End Sub
+End Class

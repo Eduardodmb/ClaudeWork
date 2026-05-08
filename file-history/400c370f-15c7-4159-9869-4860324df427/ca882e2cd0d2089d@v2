@@ -1,0 +1,89 @@
+using APIs_BeFirst.Models.Request;
+using APIs_BeFirst.Models.Response;
+using APIs_BeFirst.Service.Quality;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace APIs_BeFirst.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class QualityController : ControllerBase
+    {
+        private readonly IQualityService _qualityService;
+        private readonly ILogger<QualityController> _logger;
+
+        public QualityController(IQualityService qualityService, ILogger<QualityController> logger)
+        {
+            _qualityService = qualityService;
+            _logger = logger;
+        }
+
+        /// <summary>
+        /// Get locked units by serial number
+        /// </summary>
+        [Authorize]
+        [HttpGet("LockedUnits/Get")]
+        [ProducesResponseType(typeof(List<LockedUnitResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<LockedUnitResponse>>> GetLockedUnits(string sn)
+        {
+            try
+            {
+                var lockedUnits = await _qualityService.GetLockedUnitsAsync(sn);
+                return Ok(lockedUnits);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting locked units");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Add locked unit
+        /// </summary>
+        [Authorize]
+        [HttpPost("LockedUnits/Add")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> AddLockedUnit([FromBody] LockedUnitRequest request)
+        {
+            try
+            {
+                var result = await _qualityService.AddLockedUnitAsync(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding locked unit");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Delete locked units by SN and comment pattern
+        /// </summary>
+        [Authorize]
+        [HttpDelete("LockedUnits/Delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> DeleteLockedUnits(string sn, string commentPattern = "AOI BAD%")
+        {
+            try
+            {
+                var result = await _qualityService.DeleteLockedUnitsAsync(sn, commentPattern);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting locked units");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+    }
+}

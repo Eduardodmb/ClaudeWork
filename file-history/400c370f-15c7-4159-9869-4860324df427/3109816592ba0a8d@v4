@@ -1,0 +1,52 @@
+using APIs_BeFirst.Models.Request;
+using APIs_BeFirst.Models.Response;
+using APIs_BeFirst.Models.DataMachines;
+
+namespace APIs_BeFirst.Service.AOI
+{
+    /// <summary>
+    /// Service interface for AOI (Automated Optical Inspection) data operations
+    /// </summary>
+    public interface IAOIService
+    {
+        /// <summary>
+        /// Submit a single AOI inspection record
+        /// </summary>
+        Task<AOIDataResponse> SubmitInspectionAsync(AOIDataRequest request);
+
+        /// <summary>
+        /// Submit multiple AOI inspection records in batch
+        /// </summary>
+        Task<AOIBatchResponse> SubmitInspectionBatchAsync(List<AOIDataRequest> requests);
+
+        /// <summary>
+        /// Get AOI machine configuration by AOIID
+        /// </summary>
+        Task<MachinesExtractorAoi?> GetMachineConfigAsync(int aoiId);
+
+        /// <summary>
+        /// Get AOI machines by station ID
+        /// </summary>
+        Task<List<MachinesExtractorAoi>> GetMachinesByStationAsync(int stationId);
+
+        /// <summary>
+        /// Get all active AOI machines
+        /// </summary>
+        Task<List<MachinesExtractorAoi>> GetAllActiveMachinesAsync();
+
+        /// <summary>
+        /// Get AOI program counter
+        /// </summary>
+        Task<MachinesExtractorAoiProgram?> GetProgramCounterAsync(int aoiId, int partId, string side);
+
+        /// <summary>
+        /// Update AOI program counter
+        /// </summary>
+        Task<bool> UpdateProgramCounterAsync(int aoiId, int partId, string side, int counter);
+
+        /// <summary>
+        /// Create or update AOI program (upsert)
+        /// </summary>
+        Task<bool> CreateOrUpdateProgramAsync(int aoiId, int partId, string side, int arrQty, int counter);
+    }
+}

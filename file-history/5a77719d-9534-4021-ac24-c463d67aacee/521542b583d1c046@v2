@@ -1,0 +1,864 @@
+using Firstronic.Core.Entities.App.First;
+using Firstronic.Core.Entities.App.Quality;
+using Firstronic.Framework.Data;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data;
+using Firstronic.Core.Entities.App.Engineering;
+using System.Text;
+using System.Net.Mail;
+using System.Net;
+
+namespace Firstronic.Framework.Functions
+{
+
+
+  public class Dropdowns
+  {
+
+    //===============================================================
+    // Job Hint Options
+    //===============================================================
+    public static List<SelectListItem> GetJobHintOptionList(int? SelectedItem)
+    {
+
+      var options = new List<SelectListItem>();
+
+      var o = new SelectListItem
+      {
+        Value = "1",
+        Text = "TEMPLATE",
+        Selected = 1 == SelectedItem ? true : false
+      };
+      options.Add(o);
+
+      var o2 = new SelectListItem
+      {
+        Value = "2",
+        Text = "BOM",
+        Selected = 2 == SelectedItem ? true : false
+      };
+      options.Add(o2);
+
+      return options;
+    }
+
+    //===============================================================
+    // Custom Values
+    //===============================================================
+    public static List<SelectListItem> GetBooleanList(Boolean? SelectedItem)
+    {
+
+      var options = new List<SelectListItem>();
+
+      var o = new SelectListItem
+      {
+        Value = "true",
+        Text = "True",
+        Selected = true == SelectedItem ? true : false
+      };
+      options.Add(o);
+
+      var o2 = new SelectListItem
+      {
+        Value = "false",
+        Text = "False",
+        Selected = false == SelectedItem ? true : false
+      };
+      options.Add(o2);
+
+      return options;
+    }
+
+
+
+    public static List<SelectListItem> GetSideList(string SelectedItem, bool includeNa = false)
+    {
+
+      var options = new List<SelectListItem>();
+
+      var o = new SelectListItem
+      {
+        Value = "A",
+        Text = "A",
+        Selected = "A" == SelectedItem ? true : false
+      };
+      options.Add(o);
+
+      var o2 = new SelectListItem
+      {
+        Value = "B",
+        Text = "B",
+        Selected = "B" == SelectedItem ? true : false
+      };
+      options.Add(o2);
+
+      if (includeNa == true)
+      {
+        var o3 = new SelectListItem
+        {
+          Value = "0",
+          Text = "NA",
+          Selected = true
+        };
+        options.Insert(0, o3);
+      }
+
+      return options;
+    }
+    public static List<SelectListItem> GetapproveList(string SelectedItem, bool includeNa = false)
+    {
+
+      var options = new List<SelectListItem>();
+
+      var o = new SelectListItem
+      {
+        Value = "Approved",
+        Text = "Approved",
+        Selected = "Approved" == SelectedItem ? true : false
+      };
+      options.Add(o);
+
+      var o2 = new SelectListItem
+      {
+        Value = "Rejected",
+        Text = "Rejected",
+        Selected = "Rejected" == SelectedItem ? true : false
+      };
+      options.Add(o2);
+
+
+
+      return options;
+    }
+    //===============================================================
+    // Facilities Values
+    //===============================================================
+    public static List<SelectListItem> GetFirstronicFacilitiesList(int? SelectedItem)
+    {
+
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_Common_Facilities> publisherList = new List<tbl_Common_Facilities>();
+
+        var query = db.Database.SqlQuery<tbl_Firstronic_Departments_Division>($@"SELECT [Facility_Key],[Facility_Name] FROM [Common_Facilities]").ToArray();
+
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.Facility_Key.ToString(),
+            Text = rowData.Facility_Name.ToString(),
+            Selected = rowData.Facility_Key == SelectedItem ? true : false
+          };
+          options.Add(o);
+
+        }
+
+      }
+
+      return options;
+    }
+
+
+    //===============================================================
+    // Part numbers actives
+    //===============================================================
+    public static List<SelectListItem> GetPNActiveList(string PartNumber = "")
+    {
+
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_CS_IDT_PARTNUMBERS_FULL> publisherList = new List<tbl_CS_IDT_PARTNUMBERS_FULL>();
+
+        var query = db.Database.SqlQuery<tbl_CS_IDT_PARTNUMBERS>($@"SELECT [PARTID], [PartNumber] FROM [CS_IDT_PARTNUMBERS] WHERE IsActive = 1").ToList();
+
+
+        var rows = query;
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.PartNumber.ToString(),
+            Text = rowData.PartNumber.ToString(),
+            Selected = rowData.PartNumber == PartNumber 
+          };
+          options.Add(o);
+
+        }
+
+      }
+
+      return options;
+    }
+
+
+    //===============================================================
+    // Locations actives
+    //===============================================================
+    public static List<SelectListItem> GetLocataionsList(string Location = "")
+    {
+
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_CS_IDT_PARTNUMBERS_FULL> publisherList = new List<tbl_CS_IDT_PARTNUMBERS_FULL>();
+
+        var query = db.Database.SqlQuery<tbl_CS_IDT_PARTNUMBERS>($@"SELECT [Location] FROM [COMMON_LOCATIONS] WHERE Active = 1 ORDER BY LOCATION ASC").ToList();
+
+
+        var rows = query;
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.Location.ToString(),
+            Text = rowData.Location.ToString(),
+            Selected = rowData.Location == Location
+          };
+          options.Add(o);
+
+        }
+
+      }
+
+      return options;
+    }
+
+    public static List<SelectListItem> GetLocataionsList_Filter(string Location = "")
+    {
+
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_CS_IDT_PARTNUMBERS_FULL> publisherList = new List<tbl_CS_IDT_PARTNUMBERS_FULL>();
+
+        var query = db.Database.SqlQuery<tbl_CS_IDT_PARTNUMBERS>($@"SELECT [Location] FROM [COMMON_LOCATIONS] WHERE Active = 1 ORDER BY LOCATION ASC").ToList();
+
+
+        var rows = query;
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.Location.ToString(),
+            Text = rowData.Location.ToString(),
+            Selected = rowData.Location == Location
+          };
+          options.Add(o);
+
+        }
+
+      }
+
+      return options;
+    }
+
+
+
+
+    //===============================================================
+    // Facilities Values
+    //===============================================================
+    public static List<SelectListItem> GetBuildingList(int? SelectedItem)
+    {
+
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_Common_Building> publisherList = new List<tbl_Common_Building>();
+
+        var query = db.Database.SqlQuery<tbl_Common_Building>($@"SELECT [Building_Key] ,[Building_Code] ,[Name] FROM [Common_Building]").ToArray();
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.Building_Key.ToString(),
+            Text = rowData.Building_Code.ToString(),
+            Selected = rowData.Building_Key == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+
+      return options;
+    }
+
+
+    public static List<SelectListItem> GetFirstronicDepartmentList(int? SelectedItem)
+    {
+
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_Firstronic_Departaments> publisherList = new List<tbl_Firstronic_Departaments>();
+
+        var query = db.Database.SqlQuery<tbl_Firstronic_Departments_Division>($@"SELECT d.[Department_Key],d.[Department_Name]  " +
+        "FROM [Firstronic_Departments] d").ToArray();
+
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.Department_Key.ToString(),
+            Text = rowData.Department_Name.ToString(),
+            Selected = rowData.Department_Key == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+
+    //===============================================================
+    // AREAS
+    //===============================================================
+    public static List<SelectListItem> GetAreasList(int? SelectedItem, string Filter = "",bool IncludeAll = false)
+    {
+
+      var options = new List<SelectListItem>();
+
+      if (SelectedItem == null)
+      {
+        SelectedItem = -1;
+      }
+
+      if (IncludeAll)
+      {
+        var o = new SelectListItem
+        {
+          Value = "0",
+          Text = "ALL",
+          Selected = false
+        };
+        options.Add(o);
+      }
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_PD_idt_areas> publisherList = new List<tbl_PD_idt_areas>();
+
+        // Add IsVisible filter intelligently
+        string finalFilter = "";
+        if (string.IsNullOrWhiteSpace(Filter))
+        {
+          // No existing filter - add WHERE clause
+          finalFilter = "WHERE IsVisible = 1 ";
+        }
+        else if (Filter.ToUpper().Contains("WHERE"))
+        {
+          // Existing filter with WHERE - add AND condition
+          finalFilter = Filter.TrimEnd() + " AND IsVisible = 1 ";
+        }
+        else
+        {
+          // Existing filter without WHERE - add WHERE clause before it
+          finalFilter = "WHERE IsVisible = 1 AND " + Filter;
+        }
+
+        var query = db.Database.SqlQuery<tbl_PD_idt_areas>($@"SELECT AREAID, AREA  " +
+        "FROM PD_idt_areas " + finalFilter + "ORDER by Area ASC").ToArray();
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.AreaID.ToString(),
+            Text = rowData.Area.ToString(),
+            Selected = rowData.AreaID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+
+    public static List<SelectListItem> GetAreasTypeList(int? SelectedItem, string Filter = "")
+    {
+
+      var options = new List<SelectListItem>();
+
+      if (SelectedItem == null)
+      {
+        SelectedItem = -1;
+      }
+
+     
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_part_operation_areas_type> publisherList = new List<tbl_part_operation_areas_type>();
+
+        var query = db.Database.SqlQuery<tbl_part_operation_areas_type>($@"SELECT TypeID, AreaTypeName  " +
+        "FROM PART_OPERATION_AREAS_TYPE " + Filter + "ORDER by TypeID ASC").ToArray();
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.TypeID.ToString(),
+            Text = rowData.AreaTypeName.ToString(),
+            Selected = rowData.TypeID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+
+
+    //===============================================================
+    // Customer
+    //===============================================================
+    public static List<SelectListItem> GetCustomerList(int? SelectedItem, bool includeAll = false)
+    {
+
+      var options = new List<SelectListItem>();
+
+      if (SelectedItem == null)
+      {
+        SelectedItem = -1;
+      }
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_CS_idt_external_customers> publisherList = new List<tbl_CS_idt_external_customers>();
+
+        var query = db.Database.SqlQuery<tbl_CS_idt_external_customers>($@"SELECT [CustomerID],[CustomerName] FROM [CS_idt_external_customers] Order by CustomerName ASC").ToArray();
+
+        var rows = query.ToList();
+
+
+        if (includeAll)
+        {
+          var o = new SelectListItem
+          {
+            Value = "0",
+            Text = "ALL",
+            Selected = true
+          };
+          options.Add(o);
+        }
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.CustomerID.ToString(),
+            Text = rowData.CustomerName.ToString(),
+            Selected = rowData.CustomerID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+    /*public static List<SelectListItem> GetAssyCustomerList(int? SelectedItem, bool includeAll = false)
+    {
+
+      var options = new List<SelectListItem>();
+
+      if (SelectedItem == null)
+      {
+        SelectedItem = -1;
+      }
+
+      using (DataContext db = new DataContext())
+      {
+        var query = Firstronic.Framework.Functions.Queries.GetSelectedFromQueryLocalJZ(@"SELECT DISTINCT Assy_Customer, Assy_Customer FROM vwComp_Cost_Increase_List WHERE Assy_Customer <> ''");
+
+        var rows = query.ToList();
+
+
+        if (includeAll)
+        {
+          var o = new SelectListItem
+          {
+            Value = "0",
+            Text = "ALL",
+            Selected = true
+          };
+          options.Add(o);
+        }
+
+        foreach (var rowData in rows)
+        {
+          var o = new SelectListItem
+          {
+            Value = rowData.Assy_Customer.ToString(),
+            Text = rowData.Assy_Customer.ToString(),
+            Selected = rowData.Assy_Customer == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }*/
+    //===============================================================
+    // AREASselect AutoID, Material from Continous_Moonshine_Specification
+    //===============================================================
+    public static List<SelectListItem> GetMoonshine_MaterialList(int? SelectedItem, string Filter = "")
+    {
+
+      var options = new List<SelectListItem>();
+
+      if (SelectedItem == null)
+      {
+        SelectedItem = -1;
+      }
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_Continous_Moonshine_Material> publisherList = new List<tbl_Continous_Moonshine_Material>();
+
+        var query = db.Database.SqlQuery<tbl_Continous_Moonshine_Material>($@"SELECT *  " +
+        "FROM [Continous_Moonshine_Specification] " + Filter).ToArray();
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.Job_specifying.ToString(),
+            Text = rowData.Job_specifying.ToString(),
+            Selected = rowData.AutoID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+    //===============================================================
+    // AREASselect AutoID, Material from [Continous_Moonshine_Material]
+    //===============================================================
+    public static List<SelectListItem> GetMoonshine_MaterialList_Continous_Moonshine_Material(int? SelectedItem, string Filter = "")
+    {
+
+      var options = new List<SelectListItem>();
+
+      if (SelectedItem == null)
+      {
+        SelectedItem = -1;
+      }
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_Continous_Moonshine_Material> publisherList = new List<tbl_Continous_Moonshine_Material>();
+
+        var query = db.Database.SqlQuery<tbl_Continous_Moonshine_Material>($@"SELECT *  " +
+        "FROM [Continous_Moonshine_Material] " + Filter).ToArray();
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+          var o = new SelectListItem
+          {
+            Value = rowData.Material.ToString(),
+            Text = rowData.Material.ToString(),
+            Selected = rowData.AutoID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+    //===============================================================
+    // AREASselect AutoID, Material from Continous_Moonshine_Measures
+    //===============================================================
+    public static List<SelectListItem> GetMoonshine_MaterialList_Continous_Moonshine_ids(int? SelectedItem, string Filter = "")
+    {
+
+      var options = new List<SelectListItem>();
+
+      if (SelectedItem == null)
+      {
+        SelectedItem = -1;
+      }
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_Continous_Moonshine_Material> publisherList = new List<tbl_Continous_Moonshine_Material>();
+
+        var query = db.Database.SqlQuery<tbl_Continous_Moonshine_Material>($@"SELECT *  " +
+        "FROM [Continous_Moonshine_Ids] " + Filter).ToArray();
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.Identification_specifications.ToString(),
+            Text = rowData.Identification_specifications.ToString(),
+            Selected = rowData.AutoID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+    //===============================================================
+    // STATIONS
+    //===============================================================
+    public static List<SelectListItem> GetStationsList(int? SelectedItem, string Filter = "", bool IncludeAll = false)
+    {
+
+      var options = new List<SelectListItem>();
+
+      if (IncludeAll)
+      {
+        var o = new SelectListItem
+        {
+          Value = "0",
+          Text = "ALL",
+          Selected = false
+        };
+        options.Add(o);
+      }
+
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_PD_idt_stations> publisherList = new List<tbl_PD_idt_stations>();
+
+        var query = db.Database.SqlQuery<tbl_PD_idt_stations>($@"SELECT * " +
+        "FROM PD_idt_stations " + Filter).ToArray();
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.StationID.ToString(),
+            Text = rowData.StationName.ToString(),
+            Selected = rowData.StationID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+
+
+
+    //===============================================================
+    // STATIONS
+    //===============================================================
+    public static List<SelectListItem> GetMachinesList(int? SelectedItem, string Filter = "")
+    {
+
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        db.Configuration.UseDatabaseNullSemantics = true;
+
+        IList<tbl_PD_idt_stations> publisherList = new List<tbl_PD_idt_stations>();
+
+        var query = db.Database.SqlQuery<tbl_EN_SMT_idt_Machines>($@"SELECT * " +
+        "FROM EN_SMT_idt_Machines " + Filter).ToArray();
+
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.MachineID.ToString(),
+            Text = rowData.MachineName.ToString(),
+            Selected = rowData.MachineID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+
+    //===============================================================
+    // PARTNUMBERS
+    //===============================================================
+    public static List<SelectListItem> GetPartNumbersList(int? SelectedItem, string Filter = "", bool includeNa = false, bool onlyManufacturingSource = true)
+    {
+
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        db.Configuration.UseDatabaseNullSemantics = true;
+
+        IList<tbl_CS_idt_partnumbers> publisherList = new List<tbl_CS_idt_partnumbers>();
+
+        tbl_CS_idt_partnumbers[] query;
+
+        if (onlyManufacturingSource == true)
+        {
+          query = db.Database.SqlQuery<tbl_CS_idt_partnumbers>($@"SELECT [PartID],[PartNumber] FROM PART P
+LEFT JOIN PART_SOURCE PS
+ON P.Part_Source_Key = PS.Part_Source_Key
+WHERE P.IsActive=1 
+AND Ps.Manufactured_Part = 1 
+Order By Partnumber asc").ToArray();
+        }
+        else
+        {
+          query = db.Database.SqlQuery<tbl_CS_idt_partnumbers>($@"SELECT [PartID],[PartNumber] FROM PART P
+LEFT JOIN PART_SOURCE PS
+ON P.Part_Source_Key = PS.Part_Source_Key
+WHERE P.IsActive=1 
+Order By Partnumber asc").ToArray();
+        }
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.PartID.ToString(),
+            Text = rowData.PartNumber.ToString(),
+            Selected = rowData.PartID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+
+      if (includeNa == true)
+      {
+        var o = new SelectListItem
+        {
+          Value = "0",
+          Text = "NA",
+          Selected = true
+        };
+        options.Insert(0, o);
+      }
+
+      return options;
+    }
+
+    //===============================================================
+    // Particle Counter
+    //===============================================================
+
+    public static List<SelectListItem> GetParticlesZonesList(int? SelectedItem, string Filter = "")
+    {
+
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_Quality_Contamination_Particle_Zones> publisherList = new List<tbl_Quality_Contamination_Particle_Zones>();
+
+        var query = db.Database.SqlQuery<tbl_Quality_Contamination_Particle_Zones>($@"SELECT * " +
+       "FROM Quality_Contamination_Particle_Zones " + Filter).ToArray();
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.Zone_Key.ToString(),
+            Text = rowData.Zone_Name.ToString(),
+            Selected = rowData.Zone_Key == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+      }
+      return options;
+    }
+
+
+    public static List<SelectListItem> GetBinsList(int? SelectedItem, string Filter = "", bool includeNa = false)
+    {
+      var options = new List<SelectListItem>();
+
+      using (DataContext db = new DataContext())
+      {
+        IList<tbl_Part_Bin_FULL> publisherList = new List<tbl_Part_Bin_FULL>();
+
+        var query = db.Database.SqlQuery<tbl_Part_Bin_FULL>($@"SELECT * " +
+        "FROM Part_Bin " + Filter).ToArray();
+
+        var rows = query.ToList();
+
+        foreach (var rowData in rows)
+        {
+
+          var o = new SelectListItem
+          {
+            Value = rowData.Bin_ID.ToString(),
+            Text = rowData.Bin_Name.ToString(),
+            Selected = rowData.Bin_ID == SelectedItem ? true : false
+          };
+          options.Add(o);
+        }
+
+        if (options.Count == 0 || includeNa == true)
+        {
+          var o = new SelectListItem
+          {
+            Value = "0",
+            Text = "NA",
+            Selected = true
+          };
+          options.Insert(0, o);
+        }
+
+      }
+      return options;
+    }
+
+
+  }
+
+
+
+}

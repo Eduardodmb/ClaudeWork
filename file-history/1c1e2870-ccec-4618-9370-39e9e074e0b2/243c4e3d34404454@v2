@@ -1,0 +1,18 @@
+{
+  "showLineNumber": true,
+  "showFrontmatter": true,
+  "foldHeading": true,
+  "foldIndent": true,
+  "showIndentGuide": true,
+  "alwaysUpdateLinks": true,
+  "useMarkdownLinks": false,
+  "promptDelete": true,
+  "showUnsupportedFiles": false,
+  "attachmentFolderPath": "99-Archive/attachments",
+  "newFileLocation": "current",
+  "newLinkFormat": "shortest",
+  "defaultViewMode": "source",
+  "readableLineLength": false,
+  "spellcheck": true,
+  "spellcheckLanguages": null
+}

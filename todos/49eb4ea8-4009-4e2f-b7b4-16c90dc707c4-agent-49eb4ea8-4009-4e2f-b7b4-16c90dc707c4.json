@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Create branding.css with variables and component styles",
+    "status": "completed",
+    "activeForm": "Creating branding.css"
+  },
+  {
+    "content": "Create branding.json with brand configuration",
+    "status": "completed",
+    "activeForm": "Creating branding.json"
+  },
+  {
+    "content": "Create placeholder SVG logos and favicon in assets/",
+    "status": "completed",
+    "activeForm": "Creating logo placeholders"
+  },
+  {
+    "content": "Update presentation_template.html to use branding system",
+    "status": "completed",
+    "activeForm": "Updating presentation template"
+  },
+  {
+    "content": "Update documentation_template.html to use branding system",
+    "status": "completed",
+    "activeForm": "Updating documentation template"
+  },
+  {
+    "content": "Update report_template.html to use branding system",
+    "status": "completed",
+    "activeForm": "Updating report template"
+  },
+  {
+    "content": "Update templates_guide.md with branding instructions",
+    "status": "in_progress",
+    "activeForm": "Updating templates guide"
+  }
+]

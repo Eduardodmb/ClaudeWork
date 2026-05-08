@@ -1,0 +1,1226 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with this repository.
+
+## Repository Purpose
+
+**BeFirst_Docs** is the **single source of truth** for all BeFirst Manufacturing Intelligence Platform documentation. This repository is designed to be shared across teams (IT, Manufacturing, Operations, Management) and contains all documentation, deliverables, templates, and reference materials.
+
+**Key Principles:**
+- **✅ Everything in this repository** - All documentation assets live here and are version controlled
+- **✅ Share via Git** - Teams clone/pull this repository for latest documentation
+- **✅ Deliverables included** - Generated HTML, PDF, DOCX files are committed to `deliverables/`
+- **✅ Self-contained** - No dependencies on external file shares or OneDrive for documentation
+- **❌ No external documentation** - Don't maintain parallel documentation in other locations
+
+This repository documents a comprehensive multi-repository ecosystem spanning 14 repositories including web applications, REST APIs, Windows Services, desktop applications, databases, ETL processes, and reporting systems serving Safari Circuits.
+
+## First Time Setup
+
+**Follow these steps when you first clone this repository:**
+
+### 1. Install Prerequisites
+
+**Python 3.7+ (Required for documentation builder):**
+- Download from [python.org](https://www.python.org/downloads/)
+- Recommended: Python 3.10 or newer
+- Verify installation: `python --version`
+
+**Node.js 18+ (Optional - only if using Claude Code CLI):**
+- Download from [nodejs.org](https://nodejs.org/)
+- Verify installation: `node --version`
+
+**VS Code (Recommended IDE):**
+- Download from [code.visualstudio.com](https://code.visualstudio.com/)
+- Install recommended extensions when prompted
+
+**Git (Required for version control):**
+- Download from [git-scm.com](https://git-scm.com/)
+- Verify installation: `git --version`
+
+### 2. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd BeFirst_Docs
+```
+
+### 3. Create Python Virtual Environment
+
+**Best practice:** Use a virtual environment to isolate project dependencies.
+
+From the repository root directory:
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Windows (PowerShell) or VSCode Terminal
+venv\Scripts\Activate.ps1
+
+# macOS/Linux
+source venv/bin/activate
+
+# Your prompt should now show (venv) prefix
+```
+
+**Important:** Always activate the virtual environment before working with this repository.
+
+### 4. Install Python Dependencies
+
+With the virtual environment activated:
+
+```bash
+pip install -r requirements.txt
+```
+
+This installs:
+- `markdown` - Markdown to HTML conversion
+- `PyYAML` - YAML configuration parsing
+- `Jinja2` - Template rendering
+- `Pygments` - Syntax highlighting
+- `pymdown-extensions` - Enhanced markdown features
+- `python-docx` - Word document generation (for SOPs)
+- `python-pptx` - PowerPoint generation
+
+### 5. Verify Installation
+
+Test the documentation builder (with virtual environment activated):
+
+```bash
+# List available documentation builds
+python scripts/build_docs.py --list-configs
+
+# Build complete documentation (test run)
+python scripts/build_docs.py --config complete-docs
+
+# Open generated file
+start deliverables\befirst-complete-documentation.html  # Windows
+open deliverables/befirst-complete-documentation.html   # macOS
+xdg-open deliverables/befirst-complete-documentation.html  # Linux
+```
+
+**Deactivating the virtual environment** when done:
+
+```bash
+deactivate
+```
+
+### 6. Install Claude Code (Optional)
+
+**Claude Code CLI** provides AI-assisted development capabilities:
+
+```bash
+# Install Claude Code globally (outside virtual environment)
+npm install -g @anthropic-ai/claude-code
+
+# Verify installation
+claude --version
+
+# Initialize in repository (if not already configured)
+claude init
+```
+
+**VS Code Extension:**
+- Open VS Code
+- Install "Claude Code" extension from marketplace
+- Sign in with Anthropic account
+
+### 7. Explore the Documentation
+
+Start with these key files:
+- **README.md** - Repository overview and quick start
+- **CLAUDE.md** - This file (Claude Code guidance)
+- **docs/01_README.md** - Platform documentation index
+- **docs/11_BUILD_DOCS_GUIDE.md** - Complete documentation builder guide
+
+### Troubleshooting Initial Setup
+
+**"python: command not found"**
+- Ensure Python is in your PATH
+- Windows: Check "Add Python to PATH" during installation
+- macOS/Linux: May need to use `python3` instead of `python`
+
+**"pip: command not found"**
+- Python installation issue
+- Try: `python -m pip install -r requirements.txt`
+
+**"No module named 'markdown'"**
+- Virtual environment not activated or dependencies not installed
+- Activate venv: `venv\Scripts\activate` (Windows) or `source venv/bin/activate` (macOS/Linux)
+- Install dependencies: `pip install -r requirements.txt`
+
+**PowerShell execution policy error (Windows)**
+- Error: "cannot be loaded because running scripts is disabled"
+- Solution: Run PowerShell as Administrator and execute:
+  ```powershell
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+  ```
+- Then try activating again: `venv\Scripts\Activate.ps1`
+
+**Virtual environment not activating**
+- Ensure you're in the repository root directory
+- Verify `venv` folder exists: `dir venv` (Windows) or `ls venv` (macOS/Linux)
+- If missing, recreate: `python -m venv venv`
+
+**Commands not found after activation**
+- Virtual environment may not be activated
+- Check for `(venv)` prefix in your command prompt
+- If missing, activate: `venv\Scripts\activate` (Windows) or `source venv/bin/activate` (macOS/Linux)
+
+**Claude Code authentication issues**
+- Sign in at [claude.ai](https://claude.ai)
+- Run: `claude auth login`
+- Follow the authentication prompts
+
+## Team Sharing and Access
+
+**This repository is designed for cross-team collaboration.** All BeFirst documentation is centralized here and shared via Git.
+
+### Who Uses This Repository
+
+| Team | Access Method | Primary Use |
+|------|---------------|-------------|
+| **IT/Software Engineering** | Git clone + full access | Update docs, generate deliverables, maintain templates |
+| **Manufacturing Operations** | Read-only Git or deliverables folder | Access user manuals, SOPs, workflow guides |
+| **Data Services** | Git clone + full access | Update database schemas, ETL documentation |
+| **Management/Executives** | Deliverables folder or email | Review high-level architecture, reports, presentations |
+| **External Consultants** | Specific deliverables via email/OneDrive | Limited access to relevant documentation only |
+
+### Getting Access
+
+**For IT team members:**
+1. Clone repository: `git clone <repository-url>`
+2. Install prerequisites: Python 3.7+, Node.js 18+ (optional)
+3. Set up virtual environment: See "First Time Setup" section
+4. Read CLAUDE.md (this file) for contribution guidelines
+
+**For non-IT teams:**
+- **Option 1 (Recommended)**: Install Git and clone repository → Always have latest docs via `git pull`
+- **Option 2**: Access `S:\01_Repos\BeFirst_Docs\deliverables\` folder directly (read-only)
+- **Option 3**: Request specific deliverables via email from IT team
+
+**For external stakeholders:**
+- IT team provides specific HTML/PDF/DOCX files from `deliverables/` as needed
+- No direct repository access for security reasons
+
+### Repository Location
+
+**Primary Location:**
+```
+S:\01_Repos\BeFirst_Docs
+```
+
+All teams should reference this single location. Do NOT maintain separate copies in personal drives, OneDrive, or network shares.
+
+## Knowledge Base - Building Process Understanding
+
+**The `knowledge-base/` folder is Claude's growing brain** for BeFirst business processes. As you define processes, departments, and workflows, Claude builds better context for future documentation.
+
+### What Goes in the Knowledge Base
+
+| Folder | Content | Purpose |
+|--------|---------|---------|
+| `departments/` | Department definitions (Purchasing, Manufacturing, Quality, etc.) | Understand who does what and how departments interact |
+| `processes/` | Business process documentation (step-by-step workflows) | Document how work gets done across the organization |
+| `workflows/` | Cross-departmental workflows | Map how processes span multiple departments |
+
+### Defining a New Process
+
+**When you want to document a new process:**
+
+1. **Tell Claude about the process** - Describe it conversationally:
+   ```
+   "I want a manual for uploading documents to ShareFile for suppliers.
+   This is part of the bond reporting process where suppliers upload
+   proximity and bond reports with specific fields..."
+   ```
+
+2. **Claude creates files in department folder**:
+   ```
+   knowledge-base/purchasing/
+   └── PUR-PR-001-supplier-bond-reporting.md    # Process definition with document ID
+
+   deliverables/manuals/
+   └── PUR-MN-001-supplier-bond-report-upload.md  # User manual (edit in Typora)
+
+   knowledge-base/purchasing/
+   └── PUR-DS-001-bond-reports-data-spec.md     # Data specification (if needed)
+   ```
+
+   **No subfolders** - all files directly in department folder with document IDs
+
+3. **Refine over time** - As you add details, Claude updates the files:
+   - Add department responsibilities
+   - Clarify data fields
+   - Document system integrations
+   - Add troubleshooting steps
+
+4. **Link to technical docs** - Process files reference `docs/` when needed:
+   - ETL job names from `docs/10_ORCHESTRATION.md`
+   - Database tables from `docs/04_DATABASE.md`
+   - API endpoints from `docs/05_API.md`
+
+### Example: Supplier Bond Reporting Process
+
+**Current state**: Active documentation in purchasing department
+
+**Files created**:
+- **PUR-PR-001**: Process definition (`knowledge-base/purchasing/PUR-PR-001-supplier-bond-reporting.md`)
+  - Complete workflow: ShareFile.com → FTPS download → ETL → PROD_DWH → BeFirst Portal
+  - Departments involved, success criteria, system integration details
+- **PUR-MN-001**: Supplier upload manual (`deliverables/manuals/PUR-MN-001-supplier-bond-report-upload.md`)
+  - Step-by-step instructions for suppliers to upload to ShareFile
+  - File format requirements, troubleshooting, quick reference
+  - Ready for screenshot additions and Typora editing
+- **PUR-DS-001**: Data specification (reserved - to be created when needed)
+
+**Open questions** (to be refined with you):
+- What is "Pbo" field? (Purchase Blanket Order?)
+- Upload schedule (weekly? specific day/time?)
+- ShareFile URL (https://[company].sharefile.com?)
+- Support contact emails
+- Validation rules per supplier
+- Are there different rules for each supplier (Arrow, Avnet, Future, TTI)?
+
+**As you answer these questions**, Claude updates the files → Knowledge grows → Future manuals are more accurate.
+
+### Why This Matters
+
+**Traditional approach**: Start from scratch every time
+- "What fields are in a proximity report?"
+- "Who uses this process?"
+- "Where does the data go?"
+
+**Knowledge base approach**: Claude already knows
+- Reads `process-definition.md` for context
+- References `data-specifications.md` for field formats
+- Understands department roles and system integrations
+- Generates accurate manuals faster with less back-and-forth
+
+### Contributing to the Knowledge Base
+
+**You don't need to write files manually.** Just tell Claude:
+- "Add a purchasing department definition"
+- "Document the quality inspection workflow"
+- "Update the bond reporting process with the upload schedule"
+
+Claude will:
+1. Create/update the appropriate files
+2. Link related processes and departments
+3. Maintain consistency across documentation
+4. Ask clarifying questions when needed
+
+**The knowledge base grows organically** as you work on different processes. Each addition makes Claude smarter about your business.
+
+## Business Context
+
+**Company Type**: **EMS (Electronic Manufacturing Services)**
+- **Primary Business**: Build PCBs (Printed Circuit Boards) and electronic assemblies for customers
+- **Business Model**: Contract manufacturing - customers provide designs, we manufacture to their specifications
+- **Facilities**: 3 manufacturing plants
+  - **GRA1**: Granby, Quebec, Canada
+  - **JUA1**: Ciudad Juárez, Chihuahua, Mexico (Plant 1)
+  - **JUA2**: Ciudad Juárez, Chihuahua, Mexico (Plant 2)
+
+**Core Departments**:
+1. **Purchasing** - Procure components and materials from suppliers
+2. **Manufacturing** - Assemble PCBs and products on production lines
+3. **Quality** - Inspect, test, and ensure product quality
+4. **Engineering** - Manage BOMs (Bill of Materials), ECOs (Engineering Change Orders), product designs
+5. **Planning** - Production scheduling and material planning (MRP)
+6. **Suppliers** - External vendors providing components (Arrow, Avnet, Future Electronics, TTI)
+7. **Customers** - Companies we manufacture products for (contract manufacturing clients)
+8. **Shipping/Receiving** - Inbound materials, outbound shipments
+9. **Accounting** - AR (Accounts Receivable), AP (Accounts Payable), GL (General Ledger)
+
+**Key Business Processes**:
+- **Supplier Management** - Component procurement, bond inventory tracking, supplier performance
+- **Production Execution** - Work orders, line operations, OEE (Overall Equipment Effectiveness)
+- **Quality Control** - Inspections, NCRs (Non-Conformance Reports), test results
+- **Inventory Management** - Raw materials, WIP (Work In Progress), finished goods
+- **Engineering Change Management** - ECOs, BOMs, product revisions
+
+## Platform Overview
+
+The BeFirst platform is a comprehensive manufacturing intelligence ecosystem serving Safari Circuits. **This repository (BeFirst_Docs) documents the entire platform.**
+
+**Platform Components:**
+- **6 Application Repositories**: Portal (ASP.NET MVC 5), APIs (ASP.NET Core 7.0), Services (VB.NET, 40+ services), Production app (WinForms), Planning tool (WinForms), ICT Inline (Python)
+- **4 Database Repositories**: PROD_DWH (49 tables), MES (824 tables), MACHINES_RESULTS (22 tables), TESTERS_RESULTS (4 tables)
+- **1 ETL Repository**: Talend Open Studio (40+ modules extracting from PLEX ERP to PROD_DWH)
+- **1 Reporting Repository**: SQL Server Reporting Services (54+ dashboards)
+- **1 Documentation Repository**: **BeFirst_Docs (this repository)** - Single source of truth for all documentation
+
+**Note:** The `organizational-docs` repository contains company-wide IT standards and is separate from BeFirst-specific documentation.
+
+## Architecture Overview
+
+### System Data Flow
+
+```
+PLEX ERP (Source System, Port 1438)
+   ↓
+┌──────────────────────────────────────┐
+│  Integration Layer                   │
+│  - BeFirst_ETL (Talend, 40+ modules) │
+│  - BeFirst_Services (VB.NET, 40+)    │
+└──────────────┬───────────────────────┘
+               ↓
+┌──────────────────────────────────────┐
+│  Data Layer (4 SQL Server DBs)       │
+│  - PROD_DWH (Analytics, Port 1439)   │
+│  - MES (Manufacturing Execution)     │
+│  - MACHINES_RESULTS (Equipment OEE)  │
+│  - TESTERS_RESULTS (Test Data)       │
+└──────────────┬───────────────────────┘
+               ↓
+┌──────────────────────────────────────┐
+│  Application Layer                   │
+│  - BeFirst_APIs (ASP.NET Core 7.0)   │
+│  - BeFirst_SSRS (54+ Reports)        │
+└──────────────┬───────────────────────┘
+               ↓
+┌──────────────────────────────────────┐
+│  Presentation Layer                  │
+│  - BeFirst_Portal (18 areas)         │
+│  - BeFirst_Production (WinForms)     │
+│  - BeFirst_Planning_Tool (WinForms)  │
+└──────────────────────────────────────┘
+```
+
+### Authentication Architecture
+
+- **Web Applications** (Portal, APIs): Azure AD (OAuth2/OpenID Connect), tenant `lacroix-group.com`, JWT tokens
+- **Desktop Applications**: Windows Authentication or local credentials
+- **Services & ETL**: SQL Server authentication with encrypted credentials
+
+### Key Technologies
+
+- **Web**: ASP.NET MVC 5, ASP.NET Core 7.0, C#
+- **Services**: VB.NET, .NET Framework 4.8, Windows Services
+- **Desktop**: WinForms, C#, ClickOnce deployment
+- **ETL**: Talend Open Studio 8.0.1, Java 8+, JS7 JobScheduler
+- **Databases**: SQL Server 2016+
+- **Reporting**: SQL Server Reporting Services
+
+## Documentation Structure
+
+| Document | Purpose |
+|----------|---------|
+| **docs/01_README.md** | Platform overview, quick start, component reference, documentation index |
+| **docs/02_ARCHITECTURE.md** | Complete system architecture: all 14 repos, data flows, technology stacks, auth, multi-facility |
+| **docs/03_REPOS.md** | Repository ecosystem map: all 14 repos with technologies, dependencies, integration patterns |
+| **docs/04_DATABASE.md** | Database schemas: PROD_DWH (49 tables), MES (824 tables), MACHINES_RESULTS (22), TESTERS_RESULTS (4) |
+| **docs/05_API.md** | REST API documentation: 15 controllers, endpoints, JWT auth, Swagger, data models |
+| **docs/06_WORKFLOWS.md** | Application workflows: Portal (18 areas), Services (40+), Desktop apps, ETL, SSRS |
+| **docs/07_DEPENDENCIES.md** | External dependencies: Azure AD, databases, SMTP, third-party integrations, tech stacks |
+| **docs/08_SETUP.md** | Development environment setup for each repository type |
+| **docs/09_TROUBLESHOOTING.md** | Common issues and solutions by component |
+| **docs/12_CHANGELOG.md** | Version history and platform updates |
+| **docs/10_ORCHESTRATION.md** | (ETL-specific) JS7 JobScheduler configuration |
+| **docs/diagrams/** | Architecture diagrams, data flows, module structures |
+| **docs/examples/** | Usage examples and sample configurations |
+| **docs/integrations/** | Cross-repository integration patterns |
+
+## Common Tasks
+
+### Generating Documentation Deliverables
+
+Deliverables are self-contained files (HTML, DOCX, PDF, PPTX) created from markdown documentation. **Always save deliverables to the repository and commit them to Git.**
+
+**Using the Custom Skill (Recommended):**
+```
+/generate-deliverable [output-name] [docs-to-include]
+```
+
+**Examples:**
+- `/generate-deliverable complete-docs` - All documentation files → Save to `deliverables/html/`
+- `/generate-deliverable architecture-guide docs/02_ARCHITECTURE.md docs/03_REPOS.md` → Save to `deliverables/html/`
+- `/generate-deliverable api-reference docs/05_API.md` → Save to `deliverables/html/`
+- `/generate-deliverable developer-guide docs/08_SETUP.md docs/09_TROUBLESHOOTING.md` → Save to `deliverables/html/`
+
+**Output Locations by Type:**
+- **HTML documentation**: `deliverables/html/[name].html`
+- **User manuals (DOCX/PDF)**: `deliverables/manuals/[name].docx` or `.pdf`
+- **Presentations (PPTX)**: `deliverables/presentations/[name].pptx`
+- **Reports (PDF)**: `deliverables/reports/[name].pdf`
+
+**After Generating:**
+1. **Test the output** - Open in browser/application to verify formatting
+2. **Commit to Git** - `git add deliverables/ && git commit -m "DELIVERABLE: Generate [name]"`
+3. **Push to repository** - `git push origin [branch]`
+4. **Teams access via Git** - Other teams run `git pull` to get latest deliverables
+
+**Deliverables can be:**
+- Opened directly in any browser (HTML)
+- Shared with stakeholders via email (but repository is primary source)
+- Converted to PDF via browser print dialog (HTML)
+- Opened in Word/PowerPoint/PDF reader
+
+**Template Locations:**
+- `.claude/templates/documentation_template.html` - Documentation deliverable template
+- `.claude/templates/presentation_template.html` - Presentation template (keyboard navigation)
+- `.claude/templates/report_template.html` - Report template
+- `.claude/templates/generate_sop_document.py` - SOP/manual generator (DOCX)
+- `.claude/templates/generate_slide_deck.py` - PowerPoint generator
+
+### Building Documentation
+
+Use the Python documentation builder to generate HTML deliverables from markdown files with configurable ordering and dynamic navigation:
+
+**Quick Start:**
+```bash
+# Activate virtual environment (if not already active)
+venv\Scripts\activate      # Windows
+source venv/bin/activate   # macOS/Linux
+
+# Install dependencies (first time only)
+pip install -r requirements.txt
+
+# Build complete documentation
+python scripts/build_docs.py --config complete-docs
+
+# Build API reference
+python scripts/build_docs.py --config api-reference
+
+# Build developer guide
+python scripts/build_docs.py --config developer-guide
+
+# Build architecture guide
+python scripts/build_docs.py --config architecture-guide
+
+# List all available configurations
+python scripts/build_docs.py --list-configs
+```
+
+**Advanced Usage:**
+```bash
+# Custom output path
+python scripts/build_docs.py --config complete-docs --output custom-name.html
+
+# Multi-page output
+python scripts/build_docs.py --config complete-docs --mode multi-page
+
+# Verbose mode for debugging
+python scripts/build_docs.py --config complete-docs --verbose
+```
+
+**Pre-defined Configurations:**
+- `complete-docs` - All documentation (11 documents)
+- `api-reference` - API documentation
+- `developer-guide` - Developer onboarding
+- `architecture-guide` - System architecture
+- `operations-guide` - ETL and operations
+- `database-guide` - Database schemas
+
+**Features:**
+- Configurable document ordering via YAML configuration
+- Dynamic sidebar navigation with section grouping
+- Dynamic table of contents
+- Code syntax highlighting
+- Mermaid diagram support
+- Copy buttons on code blocks
+- Single-page (default) and multi-page output modes
+- Self-contained HTML (no external dependencies except Mermaid CDN)
+
+**See:** `docs/11_BUILD_DOCS_GUIDE.md` for complete instructions and troubleshooting.
+
+### Generating User Manuals and SOPs
+
+**Workflow**: Create Markdown first → Edit in Typora → Export to DOCX
+
+**Step 1: Create Markdown Manual**
+
+When you say **"create a manual"**, Claude will generate a `.md` file in `deliverables/manuals/`:
+
+```
+Example: "Create a manual for uploading documents to ShareFile"
+
+Output: deliverables/manuals/sharefile-upload-manual.md
+```
+
+**Manual template includes**:
+- Table of contents
+- Introduction and purpose
+- Prerequisites
+- Step-by-step procedures
+- Screenshots placeholders
+- Troubleshooting section
+- Support contacts
+- Document control (version, approvers, review dates)
+
+**Step 2: Edit in Typora**
+
+1. Open the `.md` file in Typora
+2. Refine content, add details, fix formatting
+3. Insert actual screenshots (replace placeholders)
+4. Add tables, diagrams, callouts as needed
+5. Save changes to the `.md` file
+
+**Step 3: Export to DOCX**
+
+1. In Typora: **File → Export → Word (.docx)**
+2. Save to same location: `deliverables/manuals/[name].docx`
+3. (Optional) Open in Word to add final branding touches
+
+**Step 4: Commit Both Files**
+
+```bash
+git add deliverables/manuals/sharefile-upload-manual.md
+git add deliverables/manuals/sharefile-upload-manual.docx
+git commit -m "DELIVERABLE: Create ShareFile upload manual for suppliers"
+```
+
+**Why Markdown First?**
+- ✅ Version control friendly (Git diffs work on text)
+- ✅ Easy to edit and maintain
+- ✅ Platform-independent (edit in any text editor)
+- ✅ Single source of truth (generate DOCX, PDF, HTML from same source)
+- ✅ Typora provides WYSIWYG editing while keeping clean markdown
+
+**Alternative: Python Script (Legacy)**
+
+For fully automated DOCX generation (if you don't want to use Typora):
+```bash
+python .claude/templates/generate_sop_document.py \
+    --title "Production Monitoring Workflow" \
+    --doc-id "SOP-PROD-001" \
+    --department "Manufacturing Operations"
+```
+
+Output: Formatted Word document (`.docx`) with BeFirst branding, headers/footers, table of contents, revision history.
+
+### Generating PowerPoint Templates
+
+```bash
+python .claude/templates/generate_slide_deck.py --output path/to/deck.pptx
+```
+
+**Prerequisites:** `pip install python-pptx`
+
+### Viewing Documentation
+
+- **HTML deliverables**: Open any `.html` file in `deliverables/` with a browser
+- **Markdown docs**: Read files in `docs/` directory
+- **Template guide**: `.claude/templates/templates_guide.md`
+
+### Output Locations and Sharing
+
+**All documentation lives in this repository.** Generated deliverables are committed to `deliverables/` and shared via Git.
+
+**Primary Location (ALWAYS use this):**
+```
+S:\01_Repos\BeFirst_Docs\deliverables\
+```
+
+**Deliverable Organization:**
+```
+deliverables/
+├── html/                    # HTML documentation builds
+│   ├── complete-docs.html
+│   ├── api-reference.html
+│   ├── developer-guide.html
+│   └── architecture-guide.html
+├── manuals/                 # User manuals and SOPs
+│   ├── befirst-portal-user-guide.docx
+│   ├── production-monitoring-sop.docx
+│   └── etl-operations-manual.pdf
+├── presentations/           # PowerPoint presentations
+│   └── befirst-architecture-overview.pptx
+└── reports/                 # Generated reports
+    └── quarterly-platform-metrics.pdf
+```
+
+**Guidelines:**
+- ✅ **All outputs** (`.html`, `.docx`, `.pdf`, `.pptx`) → Save to `deliverables/` subdirectories
+- ✅ **Commit deliverables** to Git → Teams get latest via `git pull`
+- ✅ **Source documentation** (`.md` files) → `docs/` folder
+- ✅ **Templates** → `.claude/templates/` folder
+- ❌ **Never maintain separate copies** in OneDrive, network shares, or email attachments
+
+**Optional Secondary Distribution (for external stakeholders without Git access):**
+
+If you need to provide deliverables to stakeholders who cannot access Git, you MAY copy final outputs to:
+
+- **PLEX-related**: `S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\07_Systems_and_applications\01_PLEX`
+- **BeFirst-related**: `S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\07_Systems_and_applications\02_BeFirst`
+
+**Important:** These are **distribution copies only**, not source locations. The repository remains the single source of truth.
+
+**Sharing with Teams:**
+1. **Internal IT team**: Clone repository → `git clone <repository-url>`
+2. **Manufacturing/Operations**: Share `deliverables/` folder contents directly or provide Git access
+3. **Management/Executives**: Share specific HTML/PDF files from `deliverables/`
+4. **External stakeholders**: Copy to OneDrive as needed (secondary distribution only)
+
+## Key Platform Concepts
+
+### Multi-Repository Architecture
+
+14 specialized repositories organized by function:
+- **Separation of concerns**: Each repo has single responsibility
+- **Independent deployment**: Repos can be deployed independently
+- **Shared databases**: Databases serve as integration points
+- **API-based communication**: Portal consumes APIs for business logic
+
+### Portal Functional Areas (18)
+
+The BeFirst_Portal web application has 18 functional areas:
+1. **Accounting**: AR invoices, GL balances, budgets
+2. **Assemblies**: Assembly structures and components
+3. **BOM**: Bill of materials management and where-used
+4. **Customers**: Customer master, orders, forecasts
+5. **DataImport**: File import operations
+6. **Engineering**: ECOs, drawings, documentation
+7. **HR**: Employee data, accidents, safety metrics
+8. **Inventory**: Levels, transactions, history
+9. **Machines**: Machine status, OEE, downtime
+10. **Manufacturing**: Work orders, production tracking
+11. **Nomenclatures**: Material master data
+12. **OEE**: Equipment effectiveness dashboards
+13. **Params**: System configuration
+14. **Planning**: Production scheduling
+15. **Purchasing**: POs, receipts, suppliers
+16. **Quality**: Inspections, NCRs, test results
+17. **Shipping**: Shipments, deliveries
+18. **Suppliers**: Supplier performance, bond data
+
+### API Controllers (15)
+
+BeFirst_APIs exposes 15 REST controllers:
+- AccountingController, AssemblyController, BomController
+- CustomerController, DataImportController, EngineeringController
+- HumanResourceController, InventoryController, MachineController
+- ManufacturingController, NomenclatureController, PlanningController
+- PurchasingController, QualityController, ShippingController
+
+All secured with JWT Bearer authentication via Azure AD.
+
+### Services Categories (40+)
+
+Background Windows Services organized by function:
+- **Data Synchronization**: PLEX → MES sync services
+- **Equipment Monitoring**: Machine data capture, test data capture
+- **Event Processing**: Production events, quality events
+- **Scheduled Tasks**: Nightly aggregations, cleanup, reports
+- **Third-Party Integrations**: Freshservice, TeamViewer, Hanwha
+
+### ETL Modules (40+)
+
+Talend jobs organized by domain:
+- **Dimensions** (DIM_COMMON_*, DIM_MATERIAL_*): Reference data
+- **Operational Data Store** (ODS_*): Sales, purchasing, materials, production, accounting, HR
+- **Supplier Bond** (ODS_BOND_*): Arrow, Avnet, Future, TTI data
+
+Scheduled nightly (04:00-06:12 AM) via JS7 JobScheduler.
+
+### Multi-Facility Support
+
+The platform supports three facilities:
+- **GRA1**: Granby, QC, Canada
+- **JUA1**: Ciudad Juárez, Chihuahua, Mexico (Plant 1)
+- **JUA2**: Ciudad Juárez, Chihuahua, Mexico (Plant 2)
+
+Facility filtering throughout Portal, APIs, reports, and databases.
+
+## Template System
+
+### HTML Templates
+
+All HTML templates use `{{PLACEHOLDER}}` syntax:
+- `{{DOC_TITLE}}`, `{{PRESENTATION_TITLE}}`, `{{REPORT_TITLE}}` - Titles
+- `{{COMPANY_NAME}}` - "Safari Circuits"
+- `{{PROJECT_NAME}}` - "BeFirst Platform" or specific component
+- `{{DATE}}` - Current date
+- `{{AUTHOR_NAME}}` - Author/presenter name
+- `{{DOC_CONTENT}}` - Main content (converted from markdown)
+
+**Template Features:**
+- Self-contained (no external dependencies)
+- Responsive layouts
+- Code blocks with syntax highlighting and copy buttons
+- Sidebar navigation (documentation template)
+- Keyboard controls (presentation template: Arrow keys, F for fullscreen)
+- Print/PDF-friendly styling
+
+### Python Generators
+
+**generate_sop_document.py:**
+- Creates Word documents (`.docx`)
+- BeFirst branding (headers, footers, colors)
+- Table of contents, revision history
+- Standard SOP sections
+
+**generate_slide_deck.py:**
+- Creates PowerPoint presentations (`.pptx`)
+- Multiple slide layouts
+- BeFirst color scheme (Primary: #1A73E8)
+
+## File Organization
+
+**This repository is fully self-contained.** All documentation, deliverables, templates, tools, and business knowledge are included.
+
+```
+S:\01_Repos\BeFirst_Docs\
+├── .claude/                           # Claude Code configuration
+│   ├── skills/                        # Custom skills (/generate-deliverable, /generate-sop)
+│   ├── prompts/                       # Prompt templates for AI generation
+│   ├── templates/                     # HTML templates, Python generators
+│   │   ├── documentation_template.html
+│   │   ├── presentation_template.html
+│   │   ├── report_template.html
+│   │   ├── generate_sop_document.py
+│   │   ├── generate_slide_deck.py
+│   │   └── templates_guide.md
+│   └── settings.local.json            # Local Claude Code settings
+├── docs/                              # TECHNICAL DOCUMENTATION (Platform/System)
+│   ├── 01_README.md                   # Platform overview
+│   ├── 02_ARCHITECTURE.md             # System architecture
+│   ├── 03_REPOS.md                    # Repository ecosystem
+│   ├── 04_DATABASE.md                 # Database schemas
+│   ├── 05_API.md                      # REST API documentation
+│   ├── 06_WORKFLOWS.md                # Application workflows
+│   ├── 07_DEPENDENCIES.md             # External dependencies
+│   ├── 08_SETUP.md                    # Development setup
+│   ├── 09_TROUBLESHOOTING.md          # Common issues
+│   ├── 10_ORCHESTRATION.md            # ETL orchestration
+│   ├── 11_BUILD_DOCS_GUIDE.md         # Documentation builder guide
+│   ├── 12_CHANGELOG.md                # Version history
+│   ├── diagrams/                      # Architecture diagrams, flowcharts
+│   ├── examples/                      # Usage examples, code samples
+│   └── integrations/                  # Cross-repository integration patterns
+├── knowledge-base/                    # BUSINESS KNOWLEDGE (Processes/Departments)
+│   ├── accounting/                    # ACC-* files (no subfolders)
+│   ├── engineering/                   # ENG-* files (no subfolders)
+│   ├── human-resources/               # HR-* files (no subfolders)
+│   ├── manufacturing/                 # MFG-* files (no subfolders)
+│   ├── planning/                      # PLN-* files (no subfolders)
+│   ├── purchasing/                    # PUR-* files (no subfolders)
+│   │   └── PUR-PR-001-supplier-bond-reporting.md
+│   ├── quality/                       # QUA-* files (no subfolders)
+│   ├── sales/                         # SAL-* files (no subfolders)
+│   ├── shipping-receiving/            # SHP-* files (no subfolders)
+│   ├── warehouse/                     # WHS-* files (no subfolders)
+│   ├── maintenance/                   # MNT-* files (no subfolders)
+│   ├── it-systems/                    # IT-* files (no subfolders)
+│   ├── DOCUMENT-ID-CONTROL.md         # Document ID standards
+│   ├── DOCUMENT-ID-REGISTRY.md        # Master registry
+│   └── README.md                      # Knowledge base index and guidelines
+├── deliverables/                      # GENERATED OUTPUTS (committed to Git)
+│   ├── html/                          # HTML documentation builds
+│   │   ├── complete-docs.html
+│   │   ├── api-reference.html
+│   │   ├── developer-guide.html
+│   │   └── architecture-guide.html
+│   ├── manuals/                       # User manuals, SOPs (Markdown source + DOCX exports)
+│   │   ├── sharefile-upload-manual.md       # Edit in Typora
+│   │   ├── sharefile-upload-manual.docx     # Export from Typora
+│   │   ├── befirst-portal-user-guide.md
+│   │   └── befirst-portal-user-guide.docx
+│   ├── presentations/                 # PowerPoint presentations
+│   │   └── befirst-architecture-overview.pptx
+│   ├── reports/                       # Generated reports
+│   │   └── quarterly-platform-metrics.pdf
+│   └── README.md                      # Deliverables index
+├── scripts/                           # Build scripts and automation
+│   └── build_docs.py                  # Python documentation builder
+├── config/                            # Configuration files
+│   └── docs_builder.yaml              # Documentation build configurations
+├── helpers/                           # Reference data and utilities
+│   └── js7_configs/                   # JS7 JobScheduler reference configs
+├── data/                              # Data files for documentation
+├── logs/                              # Build logs (not committed)
+├── tests/                             # Documentation tests (future)
+├── venv/                              # Python virtual environment (not committed)
+├── requirements.txt                   # Python dependencies
+├── .gitignore                         # Git ignore rules
+├── CLAUDE.md                          # Project instructions (this file)
+└── README.md                          # Repository overview (to be created)
+```
+
+**Key Locations:**
+- **Technical docs**: `docs/*.md` - Platform/system documentation (IT audience)
+- **Business knowledge**: `knowledge-base/` - Processes, departments, workflows (all teams)
+- **Generated deliverables**: `deliverables/` - Share these with teams
+- **Manual sources**: `deliverables/manuals/*.md` - Edit in Typora, export to DOCX
+- **Templates**: `.claude/templates/` - Modify templates for branding/format changes
+- **Build configs**: `config/docs_builder.yaml` - Configure documentation builds
+- **Build script**: `scripts/build_docs.py` - Generate HTML from markdown
+
+**docs/ vs knowledge-base/ - When to Use Each**:
+
+| Location | Content Type | Scope | Audience | Examples |
+|----------|-------------|-------|----------|----------|
+| **docs/** | BeFirst platform technical documentation | **BeFirst-specific** | IT/Developers | BeFirst database schemas, BeFirst API endpoints, ETL jobs, BeFirst architecture, development setup |
+| **knowledge-base/** | Company-wide business processes | **Safari Circuits (company-wide)** | All teams | Supplier processes, production workflows, department definitions, user manuals, SOPs, policies |
+
+**Rule of thumb**:
+- **BeFirst platform technical details** → `docs/` (How BeFirst works technically)
+- **Company business processes and user documentation** → `knowledge-base/` (How Safari Circuits operates, how users work)
+
+**Examples to clarify**:
+- "How does BeFirst's ETL job work?" → `docs/10_ORCHESTRATION.md` (BeFirst-specific technical)
+- "How do suppliers submit bond reports?" → `knowledge-base/purchasing/processes/` (Company process)
+- "What tables are in the BeFirst databases?" → `docs/04_DATABASE.md` (BeFirst-specific technical)
+- "How does the Purchasing department operate?" → `knowledge-base/purchasing/README.md` (Company-wide business)
+- "What are the BeFirst API endpoints?" → `docs/05_API.md` (BeFirst-specific technical)
+- "How do I use the BeFirst Portal?" → `knowledge-base/[dept]/manuals/` with document ID (Company user manual)
+
+**User Manuals**:
+- Markdown sources: `deliverables/manuals/[ID]-[title].md` (edit in Typora)
+- Exported DOCX: `deliverables/manuals/[ID]-[title].docx` (generated from Typora)
+- Process context: `knowledge-base/[department]/processes/` (referenced by manuals)
+
+## Version Control and Collaboration
+
+**This repository is shared across teams.** Follow these practices to collaborate effectively:
+
+### Git Workflow
+
+**Branch Strategy:**
+- `main` - Production-ready documentation (stable)
+- `develop` - Integration branch for upcoming changes
+- `feature/*` - Individual documentation updates (e.g., `feature/api-v2-docs`)
+- `hotfix/*` - Urgent documentation corrections
+
+**Daily Workflow:**
+1. **Pull latest changes**: `git pull origin main`
+2. **Create feature branch**: `git checkout -b feature/update-architecture-docs`
+3. **Make changes**: Edit markdown, generate deliverables
+4. **Commit changes**: `git add . && git commit -m "Update architecture docs with new API endpoints"`
+5. **Push changes**: `git push origin feature/update-architecture-docs`
+6. **Create pull request**: Request review before merging to `main`
+
+**Commit Message Standards:**
+- **DOCS**: Documentation content updates (e.g., `DOCS: Add database schema for MES tables`)
+- **BUILD**: Build script or configuration changes (e.g., `BUILD: Add new documentation build config`)
+- **TEMPLATE**: Template modifications (e.g., `TEMPLATE: Update HTML template branding`)
+- **DELIVERABLE**: New deliverable generated (e.g., `DELIVERABLE: Generate Q1 2026 platform overview`)
+- **FIX**: Documentation corrections (e.g., `FIX: Correct API endpoint URLs`)
+
+### Multi-User Scenarios
+
+**Scenario 1: IT team member updates API documentation**
+1. Clone repository (first time): `git clone <repository-url>`
+2. Create branch: `git checkout -b feature/api-updates`
+3. Edit `docs/05_API.md` with new endpoints
+4. Generate deliverable: `python scripts/build_docs.py --config api-reference`
+5. Commit both source and deliverable: `git add docs/05_API.md deliverables/html/api-reference.html`
+6. Push and create PR: Teams review before merging
+
+**Scenario 2: Manufacturing manager needs latest documentation**
+1. Navigate to repository: `cd S:\01_Repos\BeFirst_Docs`
+2. Pull latest: `git pull origin main`
+3. Open deliverables: Browse `deliverables/html/complete-docs.html` in browser
+4. (Optional) Copy PDF to share: Copy specific file from `deliverables/manuals/` to email
+
+**Scenario 3: Operations team needs custom report**
+1. Request via issue/email: "Need SOP for new production workflow"
+2. IT creates branch: `git checkout -b feature/production-workflow-sop`
+3. Generate SOP: `/generate-sop Production Workflow`
+4. Save to `deliverables/manuals/production-workflow-sop.docx`
+5. Commit and merge: Operations team gets it via `git pull`
+
+### Keeping Teams in Sync
+
+**For teams with Git access:**
+- Run `git pull origin main` daily to get latest documentation
+- Subscribe to repository notifications for updates
+- Use pull requests for feedback on documentation changes
+
+**For teams without Git access:**
+- IT team exports deliverables to shared network location after major updates
+- Email specific HTML/PDF files as needed
+- Provide read-only access to `S:\01_Repos\BeFirst_Docs\deliverables\` folder
+
+## Working with This Repository
+
+### When Updating Documentation
+
+1. **Pull latest changes** - Always `git pull` before starting work
+2. **Create feature branch** - Use `feature/*` naming convention
+3. **Edit markdown files** in `docs/` - These are the source of truth
+4. **Maintain consistency** - Follow existing structure, formatting, and tone
+5. **Update cross-references** - Ensure links between documents remain valid
+6. **Update diagrams** if architecture changes
+7. **Regenerate deliverables** - Always generate new HTML/PDF after source changes
+8. **Commit both source and deliverables** - Use `git add docs/ deliverables/`
+9. **Create pull request** - Request review before merging to `main`
+
+**Formatting Standards:**
+- Use GitHub-flavored Markdown
+- Tables for structured data
+- Code blocks with language hints (```sql, ```bash, ```json, etc.)
+- ASCII art or Mermaid diagrams for architecture visuals
+- **No icons or emojis** in generated documentation (manuals, SOPs, process docs, deliverables) — use plain text alternatives instead (e.g., "Note:", "Required:", "Warning:" rather than icons)
+- Relative links for cross-document references (e.g., `[API Docs](05_API.md)`)
+
+### When Creating Deliverables
+
+1. **Use skills** (`/generate-deliverable`, `/generate-sop`) for consistency
+2. **Verify placeholders** are properly replaced in output
+3. **Test HTML output** by opening in a browser
+4. **Check formatting** - Tables, code blocks, navigation, responsive layout
+5. **Save to correct deliverables/ subdirectory** - `html/`, `manuals/`, `presentations/`, or `reports/`
+6. **Commit deliverable to Git** - `git add deliverables/...`
+7. **Update deliverables README** - Document what was generated and when
+
+### When Adding Templates
+
+1. **Follow existing patterns** - Use `{{PLACEHOLDER}}` syntax
+2. **Keep self-contained** - Embed CSS, minimize external CDN dependencies
+3. **Document in templates_guide.md** with usage examples
+4. **Use BeFirst branding** - Primary color #1A73E8, company name "Safari Circuits"
+5. **Test with sample content** before committing
+6. **Add to skills** if template should be easily accessible via Claude Code command
+
+## Important Platform Notes
+
+### Security
+
+- **No plaintext passwords**: All credentials encrypted (Talend) or in Azure Key Vault
+- **Azure AD for web**: Portal and APIs use OAuth2/OIDC with JWT tokens
+- **Read-only source access**: ETL and Services have read-only access to PLEX
+- **SQL injection prevention**: All database access uses parameterized queries
+- **TLS encryption**: All web traffic over HTTPS, database connections over TLS
+
+### Database Connectivity
+
+- **PLEX** (source): 10.122.40.10:1438, read-only
+- **PROD_DWH** (data warehouse): 10.122.40.10:1439, read/write
+- **MES** (manufacturing execution): Internal network, read/write
+- **MACHINES_RESULTS**: Internal network, read/write (services), read-only (Portal/APIs)
+- **TESTERS_RESULTS**: Internal network, read/write (services), read-only (Portal/APIs)
+
+### Orchestration
+
+- **JS7 JobScheduler**: Manages ETL execution (40+ jobs daily)
+- **Schedule**: 04:00-06:12 AM (MST/MDT timezone)
+- **Execution order**: Dimensions → ODS → Bond data
+- **Monitoring**: JS7 dashboard, email notifications
+
+### Development Standards
+
+- **Code repositories**: Individual repo README files for setup
+- **Organizational standards**: See organizational-docs repository
+- **Branch strategy**: main (production), develop (integration), feature/* (development)
+- **Pull requests**: Required for main branch merges
+- **Documentation updates**: Required for architecture/API changes
+
+## Multi-Repository Context
+
+This repository documents the entire BeFirst ecosystem. For individual repository details:
+
+- **Application repos**: See README files in BeFirst_Portal, BeFirst_APIs, BeFirst_Services, BeFirst_Production, BeFirst_Planning_Tool
+- **Database repos**: See schema scripts in BeFirst_DWH_Database, BeFirst_Database_MES_Database, etc.
+- **ETL repo**: See BeFirst_ETL repository for Talend project files
+- **Reporting repo**: See BeFirst_SSRS for report definitions
+
+**Cross-repository integration patterns** documented in `docs/integrations/`:
+- `etl-to-dwh.md` - ETL data pipelines
+- `shared-configuration.md` - Azure AD, database connections
+- `downstream-consumers.md` - Portal, SSRS, third-party consumers
+
+## Technology Reference
+
+### Web Stack
+- **Portal**: ASP.NET MVC 5, .NET Framework 4.8, Entity Framework 6, Bootstrap, jQuery
+- **APIs**: ASP.NET Core 7.0, Entity Framework Core 7.0, Swagger (Swashbuckle)
+- **Authentication**: Microsoft.AspNetCore.Authentication.JwtBearer, Azure AD
+
+### Desktop Stack
+- **Framework**: Windows Forms, .NET Framework 4.8, C# 8.0
+- **Deployment**: ClickOnce (network share or IIS)
+- **Database Access**: System.Data.SqlClient (ADO.NET)
+
+### Service Stack
+- **Language**: VB.NET, .NET Framework 4.8
+- **Platform**: Windows Services (System.ServiceProcess)
+- **Database Access**: ADO.NET, connection pooling
+
+### ETL Stack
+- **Platform**: Talend Open Studio for Data Integration 8.0.1
+- **Runtime**: Java 8+, jTDS JDBC driver 1.3.1
+- **Orchestration**: JS7 JobScheduler 7 (version 1.6.2)
+- **Logging**: Log4j 2.13.2
+
+### Database Stack
+- **RDBMS**: Microsoft SQL Server 2016+
+- **Tools**: SSDT (Visual Studio), SQL Server Management Studio
+- **Deployment**: DACPAC (schema deployments), SQLCMD scripts
+
+## Documentation Deliverables Strategy
+
+**This repository follows a "commit deliverables" strategy** to enable team-wide sharing.
+
+### Why Commit Deliverables?
+
+Traditional approaches keep deliverables in `.gitignore` because they're "generated files." However, for a shared documentation repository:
+
+**✅ Benefits of Committing Deliverables:**
+- **Teams without build tools** can access formatted documentation immediately
+- **Version history** shows what documentation was available at any point in time
+- **Single source of truth** eliminates "which version is current?" confusion
+- **Git distribution** is more reliable than network shares or email
+- **Offline access** - Teams can work with documentation without rebuilding
+
+**❌ Why NOT to Commit Deliverables (doesn't apply here):**
+- "Bloats repository" - Not a concern for documentation (files are small)
+- "Can be regenerated" - True, but requires Python environment setup
+- "Merge conflicts" - Rarely occur with documentation files
+
+### Deliverables Workflow
+
+**When source documentation changes:**
+1. Edit markdown in `docs/`
+2. Regenerate affected deliverables → `python scripts/build_docs.py --config [name]`
+3. Commit BOTH source and deliverable → `git add docs/ deliverables/`
+4. Push to repository → Other teams pull latest
+
+**Deliverables that should be committed:**
+- ✅ HTML documentation builds (`deliverables/html/*.html`)
+- ✅ User manuals (`deliverables/manuals/*.docx`, `*.pdf`)
+- ✅ Presentations (`deliverables/presentations/*.pptx`)
+- ✅ Reports (`deliverables/reports/*.pdf`)
+
+**Files that should NOT be committed:**
+- ❌ Build logs (`logs/*.log`) - Already in `.gitignore`
+- ❌ Virtual environment (`venv/`) - Already in `.gitignore`
+- ❌ Temporary files (`*.tmp`, `*.bak`) - Already in `.gitignore`
+
+### Deliverables Index
+
+The `deliverables/README.md` file maintains an index of all available deliverables:
+- What documentation builds exist
+- When they were last generated
+- Which source files they include
+- Who should use each deliverable
+
+**Update this index** whenever you add new deliverables.
+
+## Additional Resources
+
+**Key Documentation Files:**
+- **docs/01_README.md**: Platform overview and quick start guide
+- **docs/02_ARCHITECTURE.md**: Detailed architecture documentation (14 repos, data flows, technologies)
+- **docs/03_REPOS.md**: Complete repository map with all BeFirst repositories
+- **docs/04_DATABASE.md**: Database schemas and relationships (PROD_DWH, MES, MACHINES_RESULTS, TESTERS_RESULTS)
+- **docs/05_API.md**: REST API endpoint documentation (15 controllers)
+- **docs/06_WORKFLOWS.md**: Application workflows (Portal areas, Services, ETL, SSRS)
+- **docs/07_DEPENDENCIES.md**: External dependencies (Azure AD, databases, SMTP)
+- **docs/08_SETUP.md**: Development environment setup instructions
+- **docs/09_TROUBLESHOOTING.md**: Common issues and solutions
+- **docs/10_ORCHESTRATION.md**: ETL orchestration with JS7 JobScheduler
+- **docs/11_BUILD_DOCS_GUIDE.md**: Complete documentation builder guide
+- **docs/12_CHANGELOG.md**: Version history and platform updates
+
+**Integration Patterns:**
+- **docs/integrations/**: Cross-repository integration patterns
+- **docs/diagrams/**: Architecture diagrams and flowcharts
+- **docs/examples/**: Usage examples and code samples
+
+**Templates and Tools:**
+- **.claude/templates/templates_guide.md**: Template system usage guide
+- **.claude/templates/documentation_template.html**: HTML documentation template
+- **.claude/templates/generate_sop_document.py**: SOP/manual generator
+- **.claude/templates/generate_slide_deck.py**: PowerPoint generator
+- **scripts/build_docs.py**: Python documentation builder
+- **config/docs_builder.yaml**: Build configurations
+
+**Generated Deliverables:**
+- **deliverables/README.md**: Index of all available deliverables
+- **deliverables/html/**: HTML documentation builds
+- **deliverables/manuals/**: User manuals and SOPs
+- **deliverables/presentations/**: PowerPoint presentations
+- **deliverables/reports/**: Generated reports
+
+## Source Repository Sync — BeFirst_Portal
+
+The BeFirst_Portal repository (`S:\01_Repos\BeFirst_Portal`) is the primary source of code changes that need documentation updates. **When working in this Docs repo, Claude should proactively check Portal changes and update documentation accordingly.**
+
+### Sync Workflow
+
+```
+1. Check Portal changes:  git -C "S:\01_Repos\BeFirst_Portal" log --oneline -20
+2. Identify doc-worthy changes (FEAT:, DELETE:, STYLE:, architecture changes)
+3. Map each change to the correct Docs location (see table below)
+4. Update markdown sources in docs/ or knowledge-base/
+5. Rebuild affected deliverables if needed
+```
+
+### Change-to-Documentation Mapping
+
+| Portal Change Type | Docs Location | Action |
+|--------------------|---------------|--------|
+| **New Area/Module** (FEAT:) | `docs/06_WORKFLOWS.md` + `docs/02_ARCHITECTURE.md` | Add area description, update area count, add workflow |
+| **Deleted Area/Module** (DELETE:) | `docs/06_WORKFLOWS.md` + `docs/02_ARCHITECTURE.md` | Remove area, update counts, add changelog entry |
+| **New Controller/Endpoint** | `docs/05_API.md` or `docs/06_WORKFLOWS.md` | Document new endpoint or workflow |
+| **Database Schema Change** | `docs/04_DATABASE.md` | Update table definitions |
+| **Rebranding/UI** (STYLE:) | `docs/02_ARCHITECTURE.md` (auth section) + `knowledge-base/it-systems/` | Update branding references |
+| **Menu/Navigation Change** | `docs/06_WORKFLOWS.md` | Update navigation structure |
+| **Dependency Change** | `docs/07_DEPENDENCIES.md` | Update dependency list |
+| **Config/Environment Change** | `docs/08_SETUP.md` | Update setup instructions |
+| **Bug Fix** (FIX:) | `docs/12_CHANGELOG.md` | Add changelog entry (if significant) |
+| **Business Process Change** | `knowledge-base/{department}/` | Update or create process doc with document ID |
+
+### Portal Architecture Reference
+
+The Portal CLAUDE.md (`S:\01_Repos\BeFirst_Portal\CLAUDE.md`) contains the definitive architecture details:
+- **18 MVC Areas** with domain descriptions
+- **Framework layer** structure (BaseController, BePlex, Data contexts)
+- **Authentication** (Cookie-based, OWIN, ASP.NET Identity 2.0)
+- **Frontend stack** (Bootstrap 5.3, jQuery 3.7, Chart.js, Three.js, etc.)
+- **Navigation** (MenuIndex.cs dynamic menu system)
+- **Key conventions** (raw SQL via Queries, Repository pattern, localization)
+
+**When documenting Portal changes, always read the Portal's CLAUDE.md first** for accurate context. Do NOT speculate about Portal architecture without reading it.
+
+### How to Trigger Sync
+
+Claude checks Portal changes automatically when:
+- User says "sync from portal", "check portal changes", "update docs from portal"
+- User starts a session in this repo and recent Portal commits exist
+- User says "document the rebranding" or similar change-specific requests
+
+### Example: Documenting the Current Rebranding
+
+Recent Portal changes (as of 2026-02-24):
+- `STYLE: Rebranding home pages for befirst` — Logo, footer, layout changes (Lacroix → Safari Circuits)
+- `DELETE: Remove customs modules` — Removed Continual Improvements, Customs, Finances, Instructions, Managements areas
+- Pending: BackTrackController and ContinualImprovementController deleted
+
+**These need:**
+1. `docs/06_WORKFLOWS.md` — Update area list (18 → fewer), remove deleted area descriptions
+2. `docs/02_ARCHITECTURE.md` — Update branding references, area count
+3. `docs/12_CHANGELOG.md` — Add rebranding + module removal entries
+4. `knowledge-base/it-systems/` — Consider IT change record for rebranding
+
+## Contact and Support
+
+- **Repository Owner**: SafariCircuitsLLC GitHub organization
+- **Repository Location**: `S:\01_Repos\BeFirst_Docs`
+- **Technical Documentation**: This repository (single source of truth)
+- **Organizational Standards**: `organizational-docs` repository (company-wide IT standards)
+- **Facility Identifier**: ELEC_NAM_JUA (Organization Level 3)
+- **Primary System**: PLEX ERP (source of truth for manufacturing data)
+- **Platform Name**: BeFirst Manufacturing Intelligence Platform
+- **Target Organization**: Safari Circuits
+
+### Key Contacts
+
+| Role | Name | Email | Phone |
+|------|------|-------|-------|
+| IT Manager | Eduardo D. Marquez | GR_IT@safaricircuits.com | 915-343-5626 |
+
+**For Documentation Updates:**
+1. Create feature branch: `git checkout -b feature/[description]`
+2. Make changes to markdown files in `docs/`
+3. Regenerate affected deliverables
+4. Commit and push: `git add . && git commit -m "DOCS: [description]"`
+5. Create pull request for review
+
+**For Questions or Issues:**
+- Check `docs/09_TROUBLESHOOTING.md` for common issues
+- Review `docs/11_BUILD_DOCS_GUIDE.md` for documentation builder help
+- Contact IT team for repository access or technical support

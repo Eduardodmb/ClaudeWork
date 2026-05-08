@@ -1,0 +1,10 @@
+namespace APIs_BeFirst.Models.Response
+{
+    public class AOIQualityChangeStatusResponse
+    {
+        public int PartID { get; set; }
+        public string CirRef { get; set; } = string.Empty;
+        public string ContainsText { get; set; } = string.Empty;
+        public int DefectCodeID { get; set; }
+    }
+}

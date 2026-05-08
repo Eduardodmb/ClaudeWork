@@ -1,0 +1,203 @@
+# ✓ Home Computer Vault Ready!
+
+**Your Claude Context Management vault for home is ready to use.**
+
+Created: 2026-05-08
+
+---
+
+## Computer Configuration
+
+| Setting | Value |
+|---------|-------|
+| **Vault location** | `D:\OneDrive\16 - Obsidian\01_Claude_Home` |
+| **User path** | `C:\Users\eduar` |
+| **Claude path** | `C:\Users\eduar\.claude` |
+| **Type** | Personal/Home (separate from work) |
+
+---
+
+## What Was Created
+
+### Core Files
+
+| File | Purpose |
+|------|---------|
+| ✓ `README.md` | Complete vault guide |
+| ✓ `QUICK-START.md` | 10-minute setup guide ← **Start here** |
+| ✓ `SETUP-COMPLETE.md` | This file |
+| ✓ `.setup/create-links.ps1` | Link creation script (HOME version) |
+
+### Dashboard Files
+
+| File | Purpose |
+|------|---------|
+| ✓ `00-Dashboard/Context-Quality-Dashboard.md` | Visual overview of context health |
+| ✓ `00-Dashboard/Context-Review-Weekly-TEMPLATE.md` | 30-min weekly review template |
+| ✓ `00-Dashboard/Context-Deep-Dive-Monthly-TEMPLATE.md` | 60-min monthly review template |
+
+### Folder Structure
+
+```
+D:\OneDrive\16 - Obsidian\01_Claude_Home\
+├── README.md
+├── QUICK-START.md                         ← Start here
+├── SETUP-COMPLETE.md                      ← You are here
+├── 00-Dashboard/
+│   ├── Context-Quality-Dashboard.md       ← Open this every Friday
+│   ├── Context-Review-Weekly-TEMPLATE.md
+│   ├── Context-Deep-Dive-Monthly-TEMPLATE.md
+│   └── Reviews/                           ← Your reviews go here
+├── 01-Personal-Context/                   ← (Links created by setup script)
+├── 02-Learnings/                          ← (Links created by setup script)
+├── 03-Skills/                             ← (Links created by setup script)
+├── 04-Commands/                           ← (Links created by setup script)
+├── 05-Reference/                          ← (Links created by setup script)
+├── 99-Archive/                            ← Move stale content here
+├── .setup/
+│   └── create-links.ps1                   ← Run this (HOME version)
+└── .obsidian/                             ← Obsidian configuration
+```
+
+---
+
+## When You're at Home Computer
+
+### One-Time Setup
+
+Follow `QUICK-START.md`:
+
+1. **Install Obsidian** (if not installed)
+2. **Wait for OneDrive sync** (this folder should exist)
+3. **Open vault** in Obsidian
+4. **Install Dataview plugin**
+5. **Run setup script:**
+   ```powershell
+   cd "D:\OneDrive\16 - Obsidian\01_Claude_Home\.setup"
+   .\create-links.ps1
+   ```
+6. **Verify:** Open `01-Personal-Context/CLAUDE.md`
+
+---
+
+## Work vs Home Setup
+
+### Work Computer (Already Setup)
+- **Vault:** `C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude`
+- **Links to:** `C:\Users\emarquez\.claude\`
+- **Context:** BeFirst, Safari Circuits, work projects
+- **Account:** Work Claude account
+
+### Home Computer (This Vault)
+- **Vault:** `D:\OneDrive\16 - Obsidian\01_Claude_Home`
+- **Links to:** `C:\Users\eduar\.claude\`
+- **Context:** Personal projects, learning, hobbies
+- **Account:** Personal Claude account
+
+**Completely separate systems** - no context mixing between work and home.
+
+---
+
+## OneDrive Sync
+
+**This folder syncs via OneDrive** to all your personal devices.
+
+**What syncs:**
+- ✓ Vault structure
+- ✓ Dashboard templates
+- ✓ Your review notes
+- ✓ Obsidian settings
+
+**What doesn't sync (computer-specific):**
+- ✗ Symbolic links (must recreate per computer)
+
+**To use on another home device:**
+1. Wait for OneDrive sync
+2. Install Obsidian
+3. Open vault
+4. Install Dataview plugin
+5. Run setup script
+
+---
+
+## Weekly Routine (Starting Friday)
+
+**Every Friday, 4:00 PM (30 minutes):**
+
+1. Open `Context-Quality-Dashboard.md`
+2. Dataview shows stale files automatically
+3. Triage: Keep/Archive/Update/Promote
+4. Update CLAUDE.md if needed
+5. Check graph view (`Ctrl+G`)
+
+---
+
+## Key Differences from Work Vault
+
+| Feature | Work Vault | Home Vault |
+|---------|------------|------------|
+| **Focus** | BeFirst, Safari work | Personal learning |
+| **Tags** | #befirst, #infrastructure | #personal, #hobby-projects |
+| **Reviews** | Work context only | Personal context only |
+| **Sync** | Work OneDrive | Personal OneDrive |
+
+---
+
+## Next Steps
+
+**Right now (at work computer):**
+- ✓ Vault created and ready
+- ✓ OneDrive will sync to home computer
+- ✓ When home, follow `QUICK-START.md`
+
+**When you get home:**
+1. Wait for OneDrive sync (5-10 minutes)
+2. Verify folder exists: `D:\OneDrive\16 - Obsidian\01_Claude_Home`
+3. Follow `QUICK-START.md` (10 minutes)
+4. Done!
+
+---
+
+## Quick Reference Card
+
+**Print this for home computer:**
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Claude Context Management - HOME COMPUTER          │
+├─────────────────────────────────────────────────────┤
+│  Location: D:\OneDrive\16 - Obsidian\               │
+│            01_Claude_Home                           │
+│  User: C:\Users\eduar                               │
+│                                                     │
+│  Setup Steps:                                       │
+│  1. Install Obsidian (obsidian.md)                  │
+│  2. Open vault (folder above)                       │
+│  3. Install Dataview plugin                         │
+│  4. Run: .setup\create-links.ps1 (as Admin)         │
+│  5. Verify: 01-Personal-Context\CLAUDE.md           │
+│  6. Done!                                           │
+│                                                     │
+│  Weekly: Friday 4:00 PM (30 min)                    │
+│  Monthly: First Monday (60 min)                     │
+│                                                     │
+│  Shortcuts:                                         │
+│  • Ctrl+G: Graph view                               │
+│  • Ctrl+O: Quick switcher                           │
+│  • Ctrl+P: Command palette                          │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Files Reference
+
+| File | Purpose |
+|------|---------|
+| **QUICK-START.md** | ← Read this first at home (10-min setup) |
+| **SETUP-COMPLETE.md** | Summary & reference (this file) |
+| **README.md** | Complete vault documentation |
+
+---
+
+**You're all set!** OneDrive will sync this to your home computer. When there, follow `QUICK-START.md`.

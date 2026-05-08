@@ -1,0 +1,103 @@
+# PowerShell script to update Excel timeline for 03_Projects.xlsx
+$filePath = "S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\03_Projects.xlsx"
+
+Write-Host "Opening Excel file: $filePath" -ForegroundColor Cyan
+
+# Create Excel COM object
+$excel = New-Object -ComObject Excel.Application
+$excel.Visible = $false
+$excel.DisplayAlerts = $false
+
+try {
+    # Check if file exists
+    if (-not (Test-Path $filePath)) {
+        Write-Host "ERROR: File not found at: $filePath" -ForegroundColor Red
+        throw "File not found"
+    }
+
+    Write-Host "File found. Opening workbook..." -ForegroundColor Gray
+
+    # Open the workbook
+    $workbook = $excel.Workbooks.Open($filePath)
+
+    if ($workbook -eq $null) {
+        Write-Host "ERROR: Failed to open workbook" -ForegroundColor Red
+        throw "Workbook is null"
+    }
+
+    Write-Host "Workbook opened. Getting worksheet..." -ForegroundColor Gray
+    $worksheet = $workbook.Worksheets.Item(1)
+
+    # Get dimensions
+    $lastRow = $worksheet.UsedRange.Rows.Count
+    $lastCol = $worksheet.UsedRange.Columns.Count
+
+    Write-Host "Processing $lastRow rows, columns A-F unchanged, processing G onwards..." -ForegroundColor Yellow
+
+    # Process each row starting from row 2 (skip header)
+    for ($row = 2; $row -le $lastRow; $row++) {
+        $timelineData = @()
+
+        # Collect non-empty cells from column G (7) onwards
+        for ($col = 7; $col -le $lastCol; $col++) {
+            $cellValue = $worksheet.Cells.Item($row, $col).Value2
+
+            if ($cellValue -ne $null -and $cellValue.ToString().Trim() -ne "") {
+                # Get header date from row 1
+                $headerValue = $worksheet.Cells.Item(1, $col).Value2
+
+                if ($headerValue -ne $null) {
+                    # Format date if it's a DateTime
+                    if ($headerValue -is [DateTime]) {
+                        $dateStr = $headerValue.ToString("MM-dd")
+                    } else {
+                        $dateStr = $headerValue.ToString()
+                    }
+
+                    # Check if date prefix already exists
+                    if (-not $cellValue.ToString().StartsWith($dateStr)) {
+                        $formattedValue = "$dateStr $cellValue"
+                    } else {
+                        $formattedValue = $cellValue.ToString()
+                    }
+                } else {
+                    $formattedValue = $cellValue.ToString()
+                }
+
+                $timelineData += $formattedValue
+            }
+        }
+
+        # Clear cells from column G onwards
+        for ($col = 7; $col -le $lastCol; $col++) {
+            $worksheet.Cells.Item($row, $col).Value2 = $null
+        }
+
+        # Write back consolidated timeline data
+        for ($i = 0; $i -lt $timelineData.Count; $i++) {
+            $worksheet.Cells.Item($row, 7 + $i).Value2 = $timelineData[$i]
+        }
+
+        if ($timelineData.Count -gt 0) {
+            Write-Host "Row $row : Consolidated $($timelineData.Count) entries" -ForegroundColor Green
+        }
+    }
+
+    # Save and close
+    $workbook.Save()
+    $workbook.Close()
+
+    Write-Host "`nFile updated successfully!" -ForegroundColor Green
+    Write-Host "Timeline created - empty cells removed and entries prefixed with dates" -ForegroundColor Cyan
+
+} catch {
+    Write-Host "Error: $_" -ForegroundColor Red
+} finally {
+    # Clean up
+    $excel.Quit()
+    [System.Runtime.Interopservices.Marshal]::ReleaseComObject($excel) | Out-Null
+    [System.GC]::Collect()
+    [System.GC]::WaitForPendingFinalizers()
+}
+
+Write-Host "`nDone!" -ForegroundColor Green
