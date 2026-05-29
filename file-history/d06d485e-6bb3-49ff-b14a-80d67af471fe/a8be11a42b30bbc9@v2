@@ -1,0 +1,165 @@
+Imports System.IO
+
+Public Class frm_printer_config
+
+    Private ConfigFilePath As String = "C:\BeFirst\Configuration\Production_Printers.txt"
+    Private printerSettings As Dictionary(Of String, String)
+
+    Private Sub frm_printer_config_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadPrinterConfiguration()
+        PopulateForm()
+    End Sub
+
+    ''' <summary>
+    ''' Loads printer configuration from the text file
+    ''' </summary>
+    Private Sub LoadPrinterConfiguration()
+        printerSettings = New Dictionary(Of String, String)()
+
+        Try
+            If File.Exists(ConfigFilePath) Then
+                Dim lines() As String = File.ReadAllLines(ConfigFilePath)
+
+                For Each line As String In lines
+                    If line.Trim().StartsWith("@") And line.Contains("^") Then
+                        Dim parts() As String = line.Split("^"c)
+                        If parts.Length = 2 Then
+                            Dim key As String = parts(0).Replace("@", "").Trim()
+                            Dim value As String = parts(1).Trim()
+                            printerSettings(key) = value
+                        End If
+                    End If
+                Next
+            Else
+                MessageBox.Show("Configuration file not found: " & ConfigFilePath, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Error loading configuration: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Populates form controls with loaded printer settings
+    ''' </summary>
+    Private Sub PopulateForm()
+        ' Printer 1
+        txt_Printer1_IP.Text = GetSetting("PRINTER_1_IP")
+        txt_Printer1_Name.Text = GetSetting("PRINTER_1_Name")
+        txt_Printer1_Path.Text = GetSetting("PRINTER_1_Path")
+        cmb_Printer1_Type.SelectedIndex = GetTypeIndex(GetSetting("PRINTER_1_Type"))
+
+        ' Printer 2
+        txt_Printer2_IP.Text = GetSetting("PRINTER_2_IP")
+        txt_Printer2_Name.Text = GetSetting("PRINTER_2_Name")
+        txt_Printer2_Path.Text = GetSetting("PRINTER_2_Path")
+        cmb_Printer2_Type.SelectedIndex = GetTypeIndex(GetSetting("PRINTER_2_Type"))
+
+        ' Printer 3
+        txt_Printer3_IP.Text = GetSetting("PRINTER_3_IP")
+        txt_Printer3_Name.Text = GetSetting("PRINTER_3_Name")
+        txt_Printer3_Path.Text = GetSetting("PRINTER_3_Path")
+        cmb_Printer3_Type.SelectedIndex = GetTypeIndex(GetSetting("PRINTER_3_Type"))
+
+        ' Packout 1
+        txt_Packout1_IP.Text = GetSetting("PRINTER_packout1_IP")
+        txt_Packout1_Name.Text = GetSetting("PRINTER_packout1_Name")
+        txt_Packout1_Path.Text = GetSetting("PRINTER_packout1_Path")
+        cmb_Packout1_Type.SelectedIndex = GetTypeIndex(GetSetting("PRINTER_packout1_Type"))
+
+        ' Packout 2
+        txt_Packout2_IP.Text = GetSetting("PRINTER_packout2_IP")
+        txt_Packout2_Name.Text = GetSetting("PRINTER_packout2_Name")
+        txt_Packout2_Path.Text = GetSetting("PRINTER_packout2_Path")
+        cmb_Packout2_Type.SelectedIndex = GetTypeIndex(GetSetting("PRINTER_packout2_Type"))
+    End Sub
+
+    ''' <summary>
+    ''' Gets a setting value from the dictionary
+    ''' </summary>
+    Private Function GetSetting(key As String) As String
+        If printerSettings.ContainsKey(key) Then
+            Return printerSettings(key)
+        End If
+        Return ""
+    End Function
+
+    ''' <summary>
+    ''' Converts type string to combo box index
+    ''' </summary>
+    Private Function GetTypeIndex(typeValue As String) As Integer
+        If String.IsNullOrEmpty(typeValue) Then Return 0
+        Dim typeNum As Integer
+        If Integer.TryParse(typeValue, typeNum) Then
+            Return typeNum
+        End If
+        Return 0
+    End Function
+
+    ''' <summary>
+    ''' Saves the printer configuration to file
+    ''' </summary>
+    Private Sub btn_Save_Click(sender As Object, e As EventArgs) Handles btn_Save.Click
+        Try
+            Dim lines As New List(Of String)()
+
+            ' Printer 1
+            lines.Add("@PRINTER_1_IP^" & txt_Printer1_IP.Text.Trim())
+            lines.Add("@PRINTER_1_Name^" & txt_Printer1_Name.Text.Trim())
+            lines.Add("@PRINTER_1_Path^" & txt_Printer1_Path.Text.Trim())
+            lines.Add("@PRINTER_1_Type^" & cmb_Printer1_Type.SelectedIndex.ToString())
+
+            ' Printer 2
+            lines.Add("@PRINTER_2_IP^" & txt_Printer2_IP.Text.Trim())
+            lines.Add("@PRINTER_2_Name^" & txt_Printer2_Name.Text.Trim())
+            lines.Add("@PRINTER_2_Path^" & txt_Printer2_Path.Text.Trim())
+            lines.Add("@PRINTER_2_Type^" & cmb_Printer2_Type.SelectedIndex.ToString())
+
+            ' Printer 3
+            lines.Add("@PRINTER_3_IP^" & txt_Printer3_IP.Text.Trim())
+            lines.Add("@PRINTER_3_Name^" & txt_Printer3_Name.Text.Trim())
+            lines.Add("@PRINTER_3_Path^" & txt_Printer3_Path.Text.Trim())
+            lines.Add("@PRINTER_3_Type^" & cmb_Printer3_Type.SelectedIndex.ToString())
+
+            ' Packout 1
+            lines.Add("@PRINTER_packout1_IP^" & txt_Packout1_IP.Text.Trim())
+            lines.Add("@PRINTER_packout1_Name^" & txt_Packout1_Name.Text.Trim())
+            lines.Add("@PRINTER_packout1_Path^" & txt_Packout1_Path.Text.Trim())
+            lines.Add("@PRINTER_packout1_Type^" & cmb_Packout1_Type.SelectedIndex.ToString())
+
+            ' Packout 2
+            lines.Add("@PRINTER_packout2_IP^" & txt_Packout2_IP.Text.Trim())
+            lines.Add("@PRINTER_packout2_Name^" & txt_Packout2_Name.Text.Trim())
+            lines.Add("@PRINTER_packout2_Path^" & txt_Packout2_Path.Text.Trim())
+            lines.Add("@PRINTER_packout2_Type^" & cmb_Packout2_Type.SelectedIndex.ToString())
+
+            ' Add comment line
+            lines.Add("#Types: 1Name 2 3Other")
+            lines.Add("")
+
+            ' Create directory if it doesn't exist
+            Dim directory As String = Path.GetDirectoryName(ConfigFilePath)
+            If Not Directory.Exists(directory) Then
+                Directory.CreateDirectory(directory)
+            End If
+
+            ' Write to file
+            File.WriteAllLines(ConfigFilePath, lines)
+
+            MessageBox.Show("Printer configuration saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Me.DialogResult = DialogResult.OK
+            Me.Close()
+
+        Catch ex As Exception
+            MessageBox.Show("Error saving configuration: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Cancels and closes the form
+    ''' </summary>
+    Private Sub btn_Cancel_Click(sender As Object, e As EventArgs) Handles btn_Cancel.Click
+        Me.DialogResult = DialogResult.Cancel
+        Me.Close()
+    End Sub
+
+End Class

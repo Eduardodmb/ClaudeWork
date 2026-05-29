@@ -1,0 +1,48 @@
+# ENVSelect PowerShell launcher script
+# Run as Administrator for registry modifications
+
+# Check if running as Administrator
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if (-not $isAdmin) {
+    Write-Host "This script requires Administrator privileges to modify registry." -ForegroundColor Yellow
+    Write-Host "Relaunching as Administrator..." -ForegroundColor Yellow
+
+    # Relaunch as administrator
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    exit
+}
+
+# Get script directory
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+# Check if Python is installed
+$pythonCmd = $null
+if (Get-Command python -ErrorAction SilentlyContinue) {
+    $pythonCmd = "python"
+} elseif (Get-Command python3 -ErrorAction SilentlyContinue) {
+    $pythonCmd = "python3"
+} else {
+    Write-Host "Error: Python is not installed or not in PATH" -ForegroundColor Red
+    Read-Host "Press Enter to exit"
+    exit 1
+}
+
+# Check if psutil is installed
+$psutilInstalled = & $pythonCmd -c "import psutil" 2>$null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Installing required dependencies..." -ForegroundColor Yellow
+    & $pythonCmd -m pip install -r "$scriptDir\requirements.txt"
+}
+
+# Run ENVSelect
+Write-Host "`nStarting ENVSelect..." -ForegroundColor Green
+Write-Host "========================================`n" -ForegroundColor Green
+
+& $pythonCmd "$scriptDir\ENVSelect.py"
+
+# Keep window open if there was an error
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "`nScript completed with errors." -ForegroundColor Red
+    Read-Host "Press Enter to exit"
+}

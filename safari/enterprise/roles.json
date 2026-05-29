@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Role-based access control for skill management",
+  "roles": {
+    "skill-viewer": {
+      "description": "Can view and use published skills",
+      "permissions": ["view", "use"],
+      "skill_states_visible": ["published"]
+    },
+    "skill-developer": {
+      "description": "Can create and edit own draft skills",
+      "permissions": ["view", "use", "create", "edit_own", "submit_review"],
+      "skill_states_visible": ["draft", "review", "published"],
+      "can_create_in_states": ["draft"],
+      "can_edit_in_states": ["draft"]
+    },
+    "skill-reviewer": {
+      "description": "Can review and approve/reject skills",
+      "permissions": ["view", "use", "create", "edit_own", "submit_review", "review", "approve", "reject", "request_changes"],
+      "skill_states_visible": ["draft", "review", "approved", "published"],
+      "can_review_in_states": ["review"],
+      "can_transition_to": ["approved", "draft"]
+    },
+    "skill-admin": {
+      "description": "Full access to all skill operations",
+      "permissions": ["*"],
+      "skill_states_visible": ["*"],
+      "can_edit_in_states": ["*"],
+      "can_transition_to": ["*"],
+      "can_delete": true,
+      "can_assign_roles": true
+    }
+  },
+  "role_hierarchy": [
+    "skill-viewer",
+    "skill-developer",
+    "skill-reviewer",
+    "skill-admin"
+  ],
+  "assignments": {
+    "users": {
+      "dkmcintyre": "skill-admin"
+    },
+    "groups": {
+      "engineering": "skill-developer",
+      "tech-leads": "skill-reviewer",
+      "platform-team": "skill-admin"
+    },
+    "default": "skill-viewer"
+  },
+  "audit": {
+    "log_all_operations": true,
+    "log_file": ".claude/audit/skill-operations.log",
+    "retention_days": 90
+  }
+}

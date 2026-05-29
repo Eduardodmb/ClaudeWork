@@ -1,0 +1,361 @@
+"""
+Properly extract DOCX to Markdown with images in correct locations
+Organizes images in document-specific folder
+"""
+from docx import Document
+from docx.oxml import parse_xml
+import os
+import re
+
+def get_paragraph_image_rids(paragraph):
+    """Get image relationship IDs from a paragraph"""
+    rids = []
+    for run in paragraph.runs:
+        # Look for image references in the run
+        drawings = run._element.findall('.//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}drawing')
+        for drawing in drawings:
+            blips = drawing.findall('.//{http://schemas.openxmlformats.org/drawingml/2006/main}blip')
+            for blip in blips:
+                embed = blip.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed')
+                if embed:
+                    rids.append(embed)
+    return rids
+
+def extract_docx_with_image_positions(docx_path, image_output_dir):
+    """
+    Extract DOCX content and track where images actually appear
+    Returns: list of (paragraph_text, paragraph_style, image_files)
+    """
+    doc = Document(docx_path)
+    os.makedirs(image_output_dir, exist_ok=True)
+
+    # First, extract all images and map rId to filename
+    rid_to_filename = {}
+    image_counter = 1
+
+    for rel_id, rel in doc.part.rels.items():
+        if "image" in rel.target_ref:
+            image_part = rel.target_part
+            image_bytes = image_part.blob
+            ext = rel.target_ref.split('.')[-1]
+            filename = f"image{image_counter:02d}.{ext}"
+
+            filepath = os.path.join(image_output_dir, filename)
+            with open(filepath, 'wb') as f:
+                f.write(image_bytes)
+
+            rid_to_filename[rel_id] = filename
+            print(f"Extracted: {filename} (rId: {rel_id})")
+            image_counter += 1
+
+    # Now go through paragraphs and track which images appear where
+    content_structure = []
+
+    for para in doc.paragraphs:
+        text = para.text.strip()
+        style = para.style.name if para.style else "Normal"
+
+        # Get images in this paragraph
+        image_rids = get_paragraph_image_rids(para)
+        image_files = [rid_to_filename.get(rid) for rid in image_rids if rid in rid_to_filename]
+
+        content_structure.append({
+            'text': text,
+            'style': style,
+            'images': image_files
+        })
+
+    # Also process tables
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for para in cell.paragraphs:
+                    text = para.text.strip()
+                    if text:
+                        content_structure.append({
+                            'text': text,
+                            'style': 'Table',
+                            'images': []
+                        })
+
+    return content_structure, len(rid_to_filename)
+
+# Translation mappings
+translations = {
+    # Headers
+    "General": "General",
+    "Image": "Image",
+    "Serialization": "Serialization",
+    "Tools Validation": "Tools Validation",
+    "Packout Options": "Packout Options",
+    "Areas by panel": "Areas by Panel",
+    "Areas with gages": "Areas with Gages",
+    "Areas Formats": "Areas Formats",
+    "Areas with pallets": "Areas with Pallets",
+    "Areas Locks": "Areas Locks",
+    "2 Min Defects": "2 Min Defects",
+    "2 Custom Defects": "2 Custom Defects",
+    "2 Row Label test": "2 Row Label Test",
+    "2 Reprint options validations": "2 Reprint Options Validations",
+    "2 Label shipping validation": "2 Label Shipping Validation",
+    "BOM": "BOM",
+    "Print Option": "Print Option",
+    "Packout Alternate": "Packout Alternate",
+    "Approved Stations": "Approved Stations",
+    "Parameter stations": "Parameter Stations",
+    "Routing": "Routing",
+    "Rates": "Rates",
+    "Assembly Instructions": "Assembly Instructions",
+    "Groups": "Groups",
+    "Bins": "Bins",
+    "Group Bins": "Group Bins",
+    "Printers": "Printers",
+    "Force AOI": "Force AOI",
+    "Search AOI": "Search AOI",
+
+    # Content
+    "En esta opción podremos modificar los siguientes campos": "In this option you can modify the following fields:",
+    "Componente=número de parte de un componente": "**Component** = Component part number",
+    "Wip=número de parte de piso": "**Wip** = Shop floor part number",
+    "Cambiar cliente": "Change customer",
+    "Desactivar número de parte": "Deactivate part number",
+    "Elegir entre Juárez o el paso": "Choose between Juarez or El Paso",
+    "Agregar una descripción al número de parte": "Add a description to the part number",
+    "Esta opción es para agregar una imagen al producto, solo se selecciona la imagen    y se da clic en el botón guardar": "This option allows you to add an image to the product. Simply select the image and click the save button.",
+    "Indicar cuando el modelo es Laser": "Indicate when the model uses Laser marking",
+    "Activar que se puedan imprimir etiquetas por panel": "Enable label printing by panel",
+    "Poner nombre de etiqueta": "Enter label template name",
+    "Numero de piezas por panel": "Number of pieces per panel",
+    "Hacer merge": "Enable merge of serial numbers",
+    "Generar el panel cuando se serializa": "Generate panel master when serializing",
+    "Formato individual": "Individual serial format (regex pattern)",
+    "Formato panel": "Panel serial format (regex pattern)",
+    "En esta opción podremos agregar pastas,conformal coating y  hojas de parámetros": "In this option you can add solder paste, conformal coating, and parameter sheets",
+    "Se agrega el precio de la pieza": "Add the piece price",
+    "Se agrega el costo de la pieza": "Add the piece cost",
+    "Se agrega cuando quieres que se escanee en PVS": "Enable when you want it scanned in PVS",
+    "Es el tamaño de piezas por caja": "Number of pieces per box",
+    "Es el tamaño de capas que lleva por caja": "Number of layers per box",
+    "Permitir capas duplicadas": "Allow duplicate layers",
+    "Es el tiempo permitido de pruebas": "Minimum time after testing before packing (hours)",
+    "El tipo de escaneo que se va a realizar": "Type of scan: Serial, Quantity, or Panel",
+    "Cantidad de piezas por escaneo": "Quantity of pieces per scan",
+    "Opción (Serial modify.) tiene dos secciones   substring": "**Serial Modify Option - Substring Section**",
+    "En esta opción  mi serial en todas las estaciones  es (C310820101381) pero en empaque  se convierte a (#80A906093C    ##812774456#060920*X57 A3B3003FVG3*=300820102045C80A) con esta opción podemos hacer que  BEFIRST lea una parte del  serial para este caso  haremos lo siguiente  en área ponemos PackOUT  y en fomat (51,2) que vendría siendo (Inicio, Total de caracteres)": "Serial at stations: `C310820101381` → Packing serial: `#80A906093C...`. Configure: Area=`PackOUT`, Format=`(51,2)` (Start position, Character count)",
+    "Opción (Defines the default number of partial allowed.) esta opcion define cuantas parciales se pueden tener abiertas": "**Define number of partial boxes allowed** - How many partial boxes can be open simultaneously",
+    "Solo colocas el número de cajas y seleccionas add": "Enter number of boxes and click **Add**",
+    "Si deseas eliminar esta opción presionas el botón delete": "To remove, click **Delete**",
+    "Opción (Serial modify.) opción   supstring": "**Serial Modify Option - Supstring Section**",
+    "Siguiendo el ejemplo anterior del serial (#80A906093C    ##812774456#060920*X57 A3B3003FVG3*=300820102045C80A) vamos a tomar el fomat (51,2)   agregado en SUBSTRING pero le agregaremos C y lo modificaremos  de la siguiente manera": "Using substring format `(51,2)`, add prefix `C`",
+    "En área seleccionaremos (Packout)  y en SupString (C{SN})": "Area=`Packout`, SupString=`C{SN}`",
+    "Esta opción se utiliza para AUDI": "Used for AUDI parts",
+    "Escaneo de un componente en empaque": "**Component scanning at packing**",
+    "Ejemplo para osram se escanea un cable con código (12345679) con esta opción  en el campo Format  agregamos el  formato de  nuestro código  y en titulo el nombre del componente que deseamos escanear en empaque": "Example: Scan cable code `12345679`. Format=code pattern, Title=component name",
+    "Opción (Validate screw) esta opción es para GR": "**Validate Screw** - For Grand Rapids facility",
+    "Opción (Layers)": "**Layers Option**",
+    "En esta opción se activa se configura de la siguiente manera": "Configuration:",
+    "Define si se escanea en ooba": "Enable OOBA scanning",
+    "Indica el numero de charolas o tapas vacías que van al inicio": "Number of empty trays/lids at beginning",
+    "Define si se va a escanear charola o tapa": "Select tray or lid scanning",
+    "Indica el número de charolas o tapas vacías que van al final": "Number of empty trays/lids at end",
+    "Formato del código de charola o tapa": "Tray/lid barcode format",
+    "En esta opción agregaremos las áreas donde se escaneará por panel": "Add areas where scanning is done by panel",
+    "Donde solo seleccionamos el área y presionamos el botón ADD": "Select area and click **ADD**",
+    "Si deseamos eliminar una are de por panel solo presionamos el botón (Delete)": "To remove, click **Delete**",
+    "En esta opción agregaremos los Gages y el área donde se usaran": "Add gages and their areas",
+    "Primero seleccionamos el área donde se usará": "Select area",
+    "El nombre del gage": "Enter gage name/ID",
+    "Si deseamos eliminar el gage solo presionamos el botón de (delete)": "To remove, click **Delete**",
+    "En esta opción se utiliza cuando el formato de número de serie cambia entre estaciones": "Use when serial format changes between stations",
+    "Seleccionamos el área donde aplica": "Select area",
+    "Agregamos el formato del nuevo número de serie y presionamos el botón ADD": "Enter new serial format and click **ADD**",
+    "Si deseamos eliminar el formato solo presionamos el botón (Delete)": "To remove, click **Delete**",
+    "Esta opción se utiliza para definir un formato de pallet en un área especifica": "Define pallet format for specific area",
+    "Agregamos el formato del pallet y presionamos el botón ADD": "Enter pallet format and click **ADD**",
+    "Esta opción es exclusiva de administradores de Befirst": "**Administrator Only**",
+    "Esta opción aplica para cuando quieres que un área se bloquee si existe una falla entre 15 minutos de diferencia": "Lock area if same defect occurs within 15 minutes",
+    "Seleccionamos el área donde aplica y presionamos el botón ADD": "Select area and click **ADD**",
+    "Si deseamos eliminar el área solo presionamos el botón (Delete)": "To remove, click **Delete**",
+    "En esta opción podremos agregar defectos específicos al número de parte": "Add specific defects for this part number",
+    "Donde solo seleccionamos el defecto y presionamos el botón ADD": "Select defect and click **ADD**",
+    "Si deseamos eliminar solo presionamos el botón (delete)": "To remove, click **Delete**",
+    "Esta opción es para validar las reimpresiones de etiquetas": "Configure label reprint validation",
+    "Agregamos el formato y presionamos el botón ADD": "Enter format and click **ADD**",
+    "Esta opción es para asignar el orden de validación de etiquetas y el formato que debe llevar": "Set label validation order and format",
+    "Se agrega el tipo de etiqueta": "Add label type",
+    "Se agrega un formato": "Add format",
+    "Y el orden en que se validara": "Set validation order",
+    "Si se desea eliminar algún elemento, solo presionamos el botón eliminar": "To delete, click **Delete**",
+    "Esta opción muestra el BOM del número de parte": "Display Bill of Materials for part number",
+    "Si no se encuentran algún elemento   damos clic en el botón (Update)": "If missing components, click **Update**",
+    "Define las impresoras que se utilizaran en MLS (Etiquetas Azules y verdes)": "Define printers for MLS (Blue/Green labels)",
+    "Seleccionamos la estación donde se va a imprimir": "Select printing station",
+    "Agregamos el nombre de la impresora": "Enter printer name",
+    "En Force Values lo dejamos en lancos": "Leave **Force Values** blank",
+    "Presionamos ADD": "Click **ADD**",
+    "Si deseamos eliminar la impresora, presionamos el boton delete": "To remove, click **Delete**",
+    "Esta opción verifica los componentes del número de parte y verifica si lleva alternos, si los lleva imprimirá una etiqueta indicando que lleva alternos.": "Check if part has alternate components and print warning label",
+    "Aquí solo debemos presionar el botón ADD": "Click **ADD**",
+    "Para anular opción solo presionamos el botón eliminar": "To cancel, click **Delete**",
+    "Con esta opción solo se podrá correr en el área seleccionada": "Part can only run in selected stations",
+    "Seleccionas área": "Select area",
+    "Seleccionas estación": "Select station",
+    "Presionas el botón (ADD)": "Click **ADD**",
+    "Si deseas activar esta opción    presionas el botón (Delete)": "To deactivate, click **Delete**",
+    "Esta opción es para agregar hojas de parámetros": "Add parameter sheets (work instructions)",
+    "Seleccionamos área": "Select area",
+    "Seleccionamos estación": "Select station",
+    "Seleccionamos lado": "Select side (A/B)",
+    "Seleccionamos la hoja de parámetros": "Select parameter sheet",
+    "después presionamos botón (ADD)": "Click **ADD**",
+    "sí deseamos eliminar algún parámetro presionamos el botón eliminar": "To remove, click **Delete**",
+    "Esta opción sirve para ver las rutas de BF y poder actualizarlas, definir packout o evitar estación anterior": "View/update routes, define packout, skip stations",
+    "Si solo deseamos actualizar rutas solo presionamos el botón update": "To update routes, click **Update**",
+    "Si deseamos evitar la estación anterior seleccionamos área, lado y la fecha hasta donde  estará activo": "To skip station: select area, side, end date",
+    "Si deseamos cancelar esta opción presionamos el botón (Clear Skips)": "To cancel, click **Clear Skips**",
+    "Si deseamos definir la ruta como packout presionamos (Set Packout)": "To set as packout, click **Set Packout**",
+    "Esta opción es para cargar los rates": "Load production rates",
+    "Seleccionamos área, estación, Lado y agregamos el rate  una vez llenos todos los campos presionamos el botón (ADD)": "Select area, station, side, enter rate, click **ADD**",
+    "Esta opción es para cargar las ayudas visuales": "Upload visual aids (work instructions)",
+    "Ahora llenamos los siguientes datos (área, Subestación, Lado comentarios y cargamos la instrucción de trabajo )": "Fill: Area, Substation, Side, Comments, upload work instruction",
+    "Una vez llenados todos los campos presionamos el boton ADD": "Click **ADD**",
+    "La instrucción de trabajo no deberá aprobarse, al momento de darse de alta quedará aprobada en automático.": "Work instructions are auto-approved upon creation",
+    "Esta opción es para agregar grupos a los números de partes": "Add groups to part numbers",
+    "En gruoupname agregamos  el nombre de grupo": "Enter group name in **GroupName**",
+    "Si deseamos eliminar un grupo presionamos el botón eliminar": "To remove, click **Delete**",
+    "Esta opción es para agregar BINS a los números de partes.": "Add inventory bins to part numbers",
+    "En BINNAME agregamos  el nombre del BIN": "Enter bin name in **BINNAME**",
+    "Si aplica conversión llenamos ese campo": "Enter conversion factor if applicable",
+    "Si deseamos eliminar un BIN presionamos el botón eliminar": "To remove, click **Delete**",
+    "Esta opción es para agregar Group BINS a los números de partes.": "Add group bins to part numbers",
+    "Seleccionas el grupo, numero de parte, Bin y si es padre, también eliges el número de veces que se va a escanear": "Select group, part number, bin, parent status, scan count",
+    "Esta opción se utiliza para osram e imprime la lista de seriales de la caja en una hoja que se embarca a cliente.": "Print serial list on packing slip (Osram)",
+    "Solo pones el nombre de la impresora y unidades por hoja y presionas el botón (ADD)": "Enter printer name, units per sheet, click **ADD**",
+    "Si deseas eliminar la configuración presionas el botón (Delete)": "To remove, click **Delete**",
+    "Esta opción es para que befirst escanee en automático en SMT": "Enable automatic AOI scanning in SMT",
+    "Nota para esta opción tenemos que asegurar que la AOI lea los QR y sean enviados a BEFIRST": "**Note:** AOI must read QR codes and send to BeFirst",
+    "Para configurarla solo seleccionamos área y lado y presionamos en el botón ADD": "Select area and side, click **ADD**",
+    "Para eliminarla solo presionamos el botón ADD": "To remove, click **Delete**",
+    "Esta opción es para pedir que befirst requiera que las piezas tengan registro de AOI": "Require parts to have AOI record",
+    "Seleccionamos el área y lado donde queremos que solicite el escaneo de AOI después presionamos el botón ADD": "Select area and side, click **ADD**",
+    "Si deseamos eliminar esta opción presionamos el botón DElete": "To remove, click **Delete**",
+}
+
+def translate(text):
+    """Translate text with fallback"""
+    return translations.get(text.strip(), text)
+
+def create_markdown_from_structure(content_structure, image_folder_name):
+    """Create markdown from content structure"""
+
+    md_lines = []
+
+    # Header
+    md_lines.extend([
+        "# IT-030 W1 - BeFirst Part Number Configuration",
+        "",
+        "**Document ID:** IT-030 W1  ",
+        "**Application:** BeFirst  ",
+        "**Owner:** IT Department  ",
+        "**Status:** Active  ",
+        "**Last Updated:** 2026-05-11",
+        "",
+        "---",
+        "",
+        "## Document Summary",
+        "",
+        "| Field | Value |",
+        "|-------|-------|",
+        "| **Document Name** | Part Number Configuration Manual |",
+        "| **Objective** | Guide to configure part numbers in BeFirst system |",
+        "| **Version** | A |",
+        "| **Date** | 9/4/2023 |",
+        "| **Author** | Jose Grajeda |",
+        "",
+        "---",
+        ""
+    ])
+
+    # Process content
+    skip_next = False
+    for i, item in enumerate(content_structure):
+        if skip_next:
+            skip_next = False
+            continue
+
+        text = item['text']
+        style = item['style']
+        images = item['images']
+
+        if not text and not images:
+            continue
+
+        # Skip document summary/history
+        if text in ['Document summary', 'Document history']:
+            continue
+
+        # Handle headings
+        if style.startswith('Heading'):
+            level = int(style.replace('Heading ', ''))
+            translated = translate(text)
+            md_lines.append("")
+            md_lines.append(f"{'#' * (level + 1)} {translated}")
+            md_lines.append("")
+
+        # Handle list items
+        elif style == 'List Paragraph':
+            translated = translate(text)
+            md_lines.append(f"- {translated}")
+
+        # Handle normal paragraphs
+        elif text:
+            translated = translate(text)
+            md_lines.append(translated)
+            md_lines.append("")
+
+        # Add images right after the text
+        if images:
+            for img in images:
+                md_lines.append(f"![Screenshot]({image_folder_name}/{img})")
+                md_lines.append("")
+
+    return '\n'.join(md_lines)
+
+def main():
+    docx_path = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Enterprise Solution Architecture\Enterprise Systems\BeFirst\01_User_Manuals\IT-013 W1 F9 Part Number.docx"
+    base_dir = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Enterprise Solution Architecture\Enterprise Systems\BeFirst\01_User_Manuals_MD"
+
+    doc_id = "IT-030_W1"
+    image_folder = os.path.join(base_dir, doc_id)
+    md_file = os.path.join(base_dir, f"{doc_id}_BeFirst_Part_Number_Configuration.md")
+
+    print("=" * 80)
+    print("Extracting IT-030 W1 with Proper Image Placement")
+    print("=" * 80)
+    print()
+
+    # Extract content with image positions
+    print("Step 1: Extracting content and images...")
+    content_structure, num_images = extract_docx_with_image_positions(docx_path, image_folder)
+    print(f"Extracted {num_images} images to {doc_id}/")
+    print()
+
+    # Create markdown
+    print("Step 2: Creating markdown with proper image placement...")
+    markdown_content = create_markdown_from_structure(content_structure, doc_id)
+
+    with open(md_file, 'w', encoding='utf-8') as f:
+        f.write(markdown_content)
+
+    print(f"Created: {md_file}")
+    print()
+
+    print("=" * 80)
+    print("Complete!")
+    print(f"- Markdown: {doc_id}_BeFirst_Part_Number_Configuration.md")
+    print(f"- Images: {num_images} files in {doc_id}/ folder")
+    print(f"- Images placed where they appear in original document")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,37 @@
+
+The following sections have been defined but have not been rendered for the layout page "~/Views/Shared/_Layout_portal.cshtml": "scripts".
+Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
+
+Exception Details: System.Web.HttpException: The following sections have been defined but have not been rendered for the layout page "~/Views/Shared/_Layout_portal.cshtml": "scripts".
+
+Source Error:
+
+An unhandled exception was generated during the execution of the current web request. Information regarding the origin and location of the exception can be identified using the exception stack trace below.
+
+Stack Trace:
+
+
+[HttpException (0x80004005): The following sections have been defined but have not been rendered for the layout page "~/Views/Shared/_Layout_portal.cshtml": "scripts".]
+   System.Web.WebPages.WebPageBase.VerifyRenderedBodyOrSections() +755
+   System.Web.WebPages.WebPageBase.PopContext() +415
+   System.Web.WebPages.<>c__DisplayClass40_0.<RenderPageCore>b__0(TextWriter writer) +309
+   System.Web.WebPages.WebPageBase.Write(HelperResult result) +108
+   System.Web.WebPages.WebPageBase.RenderSurrounding(String partialViewName, Action`1 body) +89
+   System.Web.WebPages.WebPageBase.PopContext() +310
+   System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context) +378
+   System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult) +91
+   System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult) +795
+   System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult) +81
+   System.Web.Mvc.Async.<>c__DisplayClass3_1.<BeginInvokeAction>b__1(IAsyncResult asyncResult) +188
+   System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult) +38
+   System.Web.Mvc.<>c.<BeginExecuteCore>b__152_1(IAsyncResult asyncResult, ExecuteCoreState innerState) +29
+   System.Web.Mvc.Async.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult) +73
+   System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult) +52
+   System.Web.Mvc.Async.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult) +39
+   System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult) +38
+   System.Web.Mvc.<>c.<BeginProcessRequest>b__20_1(IAsyncResult asyncResult, ProcessRequestState innerState) +43
+   System.Web.Mvc.Async.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult) +73
+   System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult) +38
+   System.Web.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute() +646
+   System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step) +182
+   System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously) +134

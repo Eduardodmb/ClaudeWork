@@ -1,0 +1,382 @@
+# Git Setup - WORK VAULT
+
+**Repository:** https://github.com/Eduardodmb/ClaudeWork.git
+
+**Purpose:** Version control and sync for `C:\Users\emarquez\.claude\` directory
+
+---
+
+## Why Git for Context?
+
+**OneDrive syncs:** Vault structure (dashboards, templates)
+**Git syncs:** Actual context files (CLAUDE.md, learnings, skills)
+
+| Content | Syncs Via | Why |
+|---------|-----------|-----|
+| **Vault structure** | OneDrive | Easy multi-computer access |
+| **Context files** | Git | Version control, backup, history |
+
+---
+
+## One-Time Setup (First Time)
+
+### Step 1: Initialize Git in ~/.claude
+
+```bash
+# Navigate to Claude directory
+cd "C:\Users\emarquez\.claude"
+
+# Initialize Git
+git init
+
+# Add remote
+git remote add origin https://github.com/Eduardodmb/ClaudeWork.git
+
+# Create .gitignore
+cat > .gitignore << 'EOF'
+# Ignore temporary files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+
+# Ignore state files (session-specific)
+state/phase.md
+state/session-graph.json
+state/work-tracker.json
+
+# Ignore large binary files
+*.pdf
+*.docx
+*.pptx
+
+# Keep everything else (learnings, skills, commands, CLAUDE.md)
+EOF
+
+# Stage all files
+git add .
+
+# Initial commit
+git commit -m "Initial context commit - Work vault"
+
+# Push to GitHub
+git push -u origin main
+```
+
+**Note:** If `main` branch doesn't exist, use `git push -u origin master`
+
+---
+
+## Daily Workflow
+
+### Morning (Pull Latest Context)
+
+```bash
+# Before starting work
+cd "C:\Users\emarquez\.claude"
+git pull
+```
+
+**What this does:** Gets latest context changes from other computers
+
+---
+
+### During Work (Optional - Save Progress)
+
+```bash
+# After making significant context changes
+cd "C:\Users\emarquez\.claude"
+git add .
+git commit -m "Update: [what you changed]"
+git push
+```
+
+**Examples:**
+```bash
+git commit -m "Update: Add BeFirst database optimization patterns"
+git commit -m "Update: Document new stakeholder preferences"
+git commit -m "Skill: Add SQL performance analysis workflow"
+```
+
+---
+
+### End of Day (Push Context)
+
+```bash
+# Before closing work
+cd "C:\Users\emarquez\.claude"
+git add .
+git commit -m "EOD: Context updates $(date +%Y-%m-%d)"
+git push
+```
+
+---
+
+## Automated Git Sync (Optional)
+
+### Option 1: PowerShell Profile (Auto-pull on terminal start)
+
+Add to `$PROFILE`:
+```powershell
+# Auto-pull Claude context on terminal start
+if (Test-Path "C:\Users\emarquez\.claude\.git") {
+    Push-Location "C:\Users\emarquez\.claude"
+    git pull --quiet
+    Pop-Location
+}
+```
+
+### Option 2: Scheduled Task (Auto-commit every hour)
+
+**Create:** `C:\Users\emarquez\.claude\scripts\git-auto-sync.ps1`
+
+```powershell
+# Auto-sync Claude context
+cd "C:\Users\emarquez\.claude"
+
+# Check for changes
+$changes = git status --porcelain
+if ($changes) {
+    git add .
+    git commit -m "Auto-sync: $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+    git push
+    Write-Host "Context synced to Git" -ForegroundColor Green
+} else {
+    Write-Host "No context changes to sync" -ForegroundColor Gray
+}
+```
+
+**Schedule:** Task Scheduler → Run every hour during work hours
+
+---
+
+## Git + Obsidian Workflow
+
+### When Editing in Obsidian
+
+**Remember:** Obsidian edits files in `~/.claude/` via symbolic links.
+
+**After editing:**
+1. Changes save to `~/.claude/` automatically
+2. Run Git commands to commit/push
+3. Other computers pull to get updates
+
+**Best practice:**
+- Edit in Obsidian (visual interface)
+- Commit via Git (version control)
+- Pull on other computers (sync)
+
+---
+
+## Multi-Computer Sync
+
+### Work Computer Setup (Current)
+
+```bash
+# Already done above
+cd "C:\Users\emarquez\.claude"
+git remote -v
+# Should show: origin  https://github.com/Eduardodmb/ClaudeWork.git
+```
+
+### Other Work Computers (If Any)
+
+```bash
+# Clone context repository
+cd "C:\Users\emarquez"
+git clone https://github.com/Eduardodmb/ClaudeWork.git .claude
+
+# Or if .claude already exists:
+cd "C:\Users\emarquez\.claude"
+git init
+git remote add origin https://github.com/Eduardodmb/ClaudeWork.git
+git pull origin main
+```
+
+Then run Obsidian setup script to create links.
+
+---
+
+## What to Commit vs Ignore
+
+### Always Commit:
+- ✓ `CLAUDE.md` (personal context)
+- ✓ `learning/` (all learnings)
+- ✓ `skills/` (all skills)
+- ✓ `commands/` (all commands)
+- ✓ `reference/` (reference docs)
+
+### Never Commit (in .gitignore):
+- ✗ `state/` files (session-specific)
+- ✗ `.tmp` files
+- ✗ Large binaries (PDFs, Word docs)
+- ✗ Logs
+
+---
+
+## Git Commands Cheat Sheet
+
+```bash
+# Check status
+git status
+
+# Pull latest changes
+git pull
+
+# Stage all changes
+git add .
+
+# Commit with message
+git commit -m "Description of changes"
+
+# Push to GitHub
+git push
+
+# View commit history
+git log --oneline -10
+
+# See what changed
+git diff
+
+# Undo uncommitted changes to a file
+git checkout -- filename.md
+
+# View remote URL
+git remote -v
+```
+
+---
+
+## Troubleshooting
+
+### Merge Conflicts
+
+**Symptom:** `git pull` shows merge conflict
+
+**Solution:**
+```bash
+# Option 1: Keep remote version (discard local)
+git fetch origin
+git reset --hard origin/main
+
+# Option 2: Keep local version (force push - CAREFUL!)
+git push --force origin main
+
+# Option 3: Resolve manually
+# Edit conflicted files, then:
+git add .
+git commit -m "Resolve merge conflict"
+git push
+```
+
+### Authentication Issues
+
+**Symptom:** Git asks for username/password
+
+**Solution:** Use Personal Access Token (PAT)
+1. GitHub → Settings → Developer settings → Personal access tokens
+2. Generate token with `repo` scope
+3. Use token as password when prompted
+
+**Or:** Use SSH keys
+```bash
+# Generate SSH key
+ssh-keygen -t ed25519 -C "your-email@example.com"
+
+# Add to GitHub
+cat ~/.ssh/id_ed25519.pub
+# Copy and paste to GitHub Settings → SSH Keys
+
+# Change remote to SSH
+git remote set-url origin git@github.com:Eduardodmb/ClaudeWork.git
+```
+
+### Large Repository Size
+
+**Symptom:** Repository growing too large
+
+**Solution:**
+```bash
+# Check repo size
+du -sh .git
+
+# Clean old history (CAREFUL - removes history)
+git gc --aggressive --prune=now
+
+# Or use Git LFS for large files
+git lfs install
+git lfs track "*.pdf"
+```
+
+---
+
+## Integration with Context Review
+
+### During Weekly Review (Friday)
+
+1. **Pull latest context:**
+   ```bash
+   cd "C:\Users\emarquez\.claude"
+   git pull
+   ```
+
+2. **Do review in Obsidian** (as usual)
+
+3. **Commit context improvements:**
+   ```bash
+   git add .
+   git commit -m "Weekly review: [what improved]"
+   git push
+   ```
+
+### After Major Context Changes
+
+**Examples:**
+- Added new BeFirst documentation → Commit
+- Created new skill → Commit
+- Archived old learnings → Commit
+- Updated CLAUDE.md preferences → Commit
+
+```bash
+cd "C:\Users\emarquez\.claude"
+git add .
+git commit -m "Add: [description]"
+git push
+```
+
+---
+
+## Security Considerations
+
+**Public vs Private Repository:**
+- ✓ **Private** (recommended): Keeps your context private
+- ✗ **Public**: Anyone can see your preferences, learnings
+
+**Verify repository is private:**
+1. Go to: https://github.com/Eduardodmb/ClaudeWork
+2. Check: Should say "Private" badge
+3. Settings → Danger Zone → Change visibility if needed
+
+**What to NEVER commit:**
+- Passwords or API keys
+- Personal identifying information
+- Sensitive company data
+- SSH private keys
+
+---
+
+## Quick Start Checklist
+
+- [ ] Navigate to `C:\Users\emarquez\.claude`
+- [ ] Run `git init`
+- [ ] Add remote: `git remote add origin https://github.com/Eduardodmb/ClaudeWork.git`
+- [ ] Create `.gitignore`
+- [ ] Stage files: `git add .`
+- [ ] Initial commit: `git commit -m "Initial context commit"`
+- [ ] Push: `git push -u origin main`
+- [ ] Verify on GitHub: https://github.com/Eduardodmb/ClaudeWork
+- [ ] Add to daily workflow: Pull → Work → Commit → Push
+
+---
+
+**Done! Your work context now has version control and multi-computer sync via Git.**

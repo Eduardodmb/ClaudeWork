@@ -1,0 +1,237 @@
+@using NonFactors.Mvc.Grid;
+@using System.Data;
+@using System.Data.SqlClient;
+@using System.Globalization;
+
+@model Firstronic.Areas.Production.Models.Reports.Transaction_Report
+
+@section head
+{
+  <script src="~/Content/vendor/d3/d3.v4.min.js"></script>
+
+  <script src="~/Content/vendor/jqueryui/jquery-ui.js"></script>
+  <script src="~/Content/vendor/FileSaver/js/FileSaver.js"></script>
+  <style>
+    tfoot {
+      border: 1px solid #dee2e6;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .backyellow {
+      background-color: #FFFF00;
+    }
+  </style>
+}
+
+@{
+  var FirstronicFacilitiesList = new List<SelectListItem>();
+  FirstronicFacilitiesList = Firstronic.Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+
+}
+
+<div class="container container-big" id="ContainerBig">
+
+  @Html.Partial("_Breadcrumb", "Transaction Report")
+
+  <div class="row">
+    @*<div class="col-3 ">
+          <div class="p-0 input-group mb-3 mn-r-10">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">
+                      @Html.Label("Facility", new { @class = "m-0 fs-14" })
+                  </span>
+              </div>
+              @Html.DropDownList("Facility_Key", (IEnumerable<SelectListItem>)FirstronicFacilitiesList, new { @class = "form-control", id = "ddlFacility", disabled = "disabled" })
+          </div>
+      </div>*@
+    @*<div class="col-3 ">
+          <div class="p-0 input-group mb-3 mn-r-10">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">
+                      @Html.Label("PN", new { @class = "m-0 fs-14" })
+                  </span>
+              </div>
+              @Html.DropDownListFor(model => model.partkey, (IEnumerable<SelectListItem>)PNList, new { @class = "form-control", id = "ddlPN" })
+          </div>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              $("#ddlPN").chosen({ "search_contains": true });
+          </script>
+      </div>*@
+    <div class="col-3 ">
+      <div class="p-0 input-group mb-3 mn-r-10">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            @Html.Label("Start", new { @class = "m-0 fs-14" })
+          </span>
+        </div>
+        @Html.Editor("Start", "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "form-control", id = "ddlDateStart", @Value = Model.stardate.ToString("MM/dd/yy") } })
+      </div>
+    </div>
+    <div class="col-3 ">
+      <div class="p-0 input-group mb-3 mn-r-10">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            @Html.Label("End", new { @class = "m-0 fs-14" })
+          </span>
+        </div>
+        @Html.Editor("End", "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "form-control", id = "ddlDateEnd", @Value = Model.enddate.ToString("MM/dd/yy") } })
+      </div>
+    </div>
+    <script type="text/javascript" nonce="@Html.ScriptNonce()">
+      $("#ddlDateStart").datepicker({
+        dateFormat: "mm/dd/y",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-10:+5"
+      });
+
+      $("#ddlDateEnd").datepicker({
+        dateFormat: "mm/dd/y",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-10:+5"
+      });
+    </script>
+
+    <div class="col-3 ">
+      <div class="p-0 input-group mb-3 mn-r-10">
+        <input id="btnUpdateChart" type="button" value="Search" class="md-btn md-btn-primary md-btn-small" />
+      </div>
+    </div>
+
+    <script type="text/javascript" nonce="@Html.ScriptNonce()">
+      $('#btnUpdateChart').click(function (e) {
+        e.preventDefault(); // <------------------ stop default behaviour of button
+        $('#Chart-Preview').html('');
+        updatechart();
+      });
+
+      function updatechart() {
+        var v_Date_Start = $("#ddlDateStart").val();
+        var v_Date_End = $("#ddlDateEnd").val();
+
+        var ids = { stardate: v_Date_Start, enddate: v_Date_End, LoadID: "123" };
+
+
+        WaitingForm_Start();
+
+        $("body").addClass("loading");
+
+        window.location.replace('/Production/Reports/PlexVSBeFirst?' + $.param(ids));
+
+      }
+    </script>
+  </div>
+
+  @if (Model.LoadID.ToString().Length > 0)
+  {
+    var seguidas = Model.stardate.AddHours(+6);
+
+    var seguidae = Model.enddate.AddHours(+6).AddDays(+1);
+
+    List<int> areas = new List<int>();
+
+    DataTable dt_areas = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable(
+      plexOperation: true);
+
+    foreach (DataRow row2 in dt_areas.Rows)
+    {
+      string titulo = "";
+
+      DataTable dtComparacion = new DataTable();
+      dtComparacion.Columns.Add("AreaID", typeof(System.String));
+      dtComparacion.Columns.Add("Area", typeof(System.String));
+      dtComparacion.Columns.Add("Operation", typeof(System.String));
+      dtComparacion.Columns.Add("StationID", typeof(System.String));
+      dtComparacion.Columns.Add("StationName", typeof(System.String));
+      dtComparacion.Columns.Add("PartID", typeof(System.String));
+      dtComparacion.Columns.Add("PN", typeof(System.String));
+      dtComparacion.Columns.Add("Side", typeof(System.String));
+      dtComparacion.Columns.Add("BeFirst", typeof(System.Int32));
+      dtComparacion.Columns.Add("Plex", typeof(System.Int32));
+      dtComparacion.Columns.Add("Diferencia", typeof(System.Int32));
+      dtComparacion.Columns.Add("InBF", typeof(System.Int32));
+      dtComparacion.Columns.Add("Adjustments", typeof(System.Int32));
+
+      List<int> stations = new List<int>();
+
+      SqlParameter[] ParametersInt = new SqlParameter[]{
+                new SqlParameter("@ID",SqlDbType.Int){Value = Convert.ToInt32(row2[0])}
+              };
+
+      DataTable dt_stations = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT [StationID],[StationName],[Workcenter_Key_1],[Workcenter_Key_2],[Workcenter_Key_Kanban_1],[Workcenter_Key_Kanban_2]
+      ,[Workcenter_PLC_Name_1]
+      ,[Workcenter_PLC_Name_2]
+      ,[Workcenter_PLC_Name_Kanban_1]
+      ,[Workcenter_PLC_Name_Kanban_2]
+  FROM [PD_idt_stations] where areaid=@ID and StationID in (select stationid from PD_tbl_station_position)  order by StationName asc",ParametersInt);
+
+      foreach (DataRow row in dt_stations.Rows)
+      {
+        dtComparacion.Merge(Firstronic.Framework.Functions.Others.GetComparationStation(seguidas, seguidae, row[0].ToString(), row2[0].ToString(), row2[1].ToString()));
+      }
+
+      //PIINRT TO FILE
+
+      <div>
+        @row2[1].ToString()
+      </div>
+
+      dtComparacion.Columns.Remove("AreaID");
+      dtComparacion.Columns.Remove("StationID");
+      dtComparacion.Columns.Remove("PartID");
+
+      <div class="col-12 mvc-grid mn-b-30">
+        <table border="1">
+          <thead>
+            <tr>
+
+              @foreach (System.Data.DataColumn col in dtComparacion.Columns)
+              {
+                <th>@col.Caption</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (System.Data.DataRow rowsu in dtComparacion.Rows)
+            {
+              string classcolor = "";
+
+              if (rowsu[5].ToString() == "0")
+              {
+                classcolor = "backyellow";
+              }
+              else if (rowsu[7].ToString() == "0")
+              {
+                classcolor = "bg-HoneyDew";
+              }
+              else if (int.Parse(rowsu[7].ToString()) > 0)
+              {
+                classcolor = "bg-MistyRose";
+              }
+              else if (int.Parse(rowsu[7].ToString()) < 0)
+              {
+                classcolor = "bg-YellowLight";
+              }
+
+
+              int varcell1 = 1;
+              <tr>
+                @foreach (var cell in rowsu.ItemArray)
+                {
+                  <td class="@classcolor">@cell.ToString() </td>
+                  varcell1++;
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+  }
+
+</div>

@@ -1,0 +1,131 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+**BeFirst Portal** is an ASP.NET MVC 5 manufacturing portal (.NET Framework 4.8) for tracking production, quality, materials, dashboards, and other factory floor operations. It integrates heavily with the **PLEX ERP** system via SOAP APIs.
+
+- **Solution**: `Portal_BeFirst.sln`
+- **Main project**: `firstronic/Portal_BeFirst.csproj`
+- **Assembly/Namespace**: `Firstronic`
+- **Source control**: GitLab (`gitlab.lcx.app`)
+
+## Build & Run
+
+This is a classic .NET Framework 4.8 project. It does **not** support `dotnet build` or `dotnet run`.
+
+```bash
+# Build via MSBuild (Visual Studio Developer Command Prompt)
+msbuild firstronic/Portal_BeFirst.csproj /p:Configuration=Debug
+
+# Or open Portal_BeFirst.sln in Visual Studio and build (F5 to run with IIS Express)
+```
+
+There are no unit tests in this project. There is no linting or formatting tool configured.
+
+## Required Environment Variables
+
+All configuration is via environment variables (nothing in Web.config). These must be set before running:
+
+| Variable | Purpose |
+|----------|---------|
+| `BeFirst:ConnectionString` | Main SQL Server database |
+| `BeFirst:ConnectionString_STG` | Staging database |
+| `BeFirst:ConnectionString_ODS` | Operational data store |
+| `BeFirst:ConnectionString_DWH` | Data warehouse |
+| `BeFirst:ConnectionStringMachines` | Machine data |
+| `BeFirst:ConnectionStringHanwha` | Hanwha SMT machines |
+| `BeFirst:PLEXSOAPUsername/Password` | PLEX ERP SOAP credentials |
+| `BeFirst:APIUrl/APIUser/APIPassword` | Internal API |
+| `BeFirst:SMTPEmail/SMTPPassword` | Email sending |
+| `BeFirst:FilesIP` | Network file storage |
+
+Full list in `firstronic/Framework/GlobalVariables/GlobalVariables.cs`.
+
+## Architecture
+
+### Areas Pattern (Primary Organization)
+
+The app is organized into **18 MVC Areas** under `firstronic/Areas/`. Each area has its own `Controllers/`, `Models/`, `Views/`, and `{Name}AreaRegistration.cs`:
+
+| Area | Domain |
+|------|--------|
+| **Dashboards** | TV displays, 3D floor layout (Three.js), OEE, downtime, packout charts |
+| **Production** | Packout goals, shortages, rework, reports, PLEX transaction reconciliation |
+| **Quality** | CAPAS audits, ESD audits, 5S audits, first piece inspection, defects, scrap |
+| **Materials** | Warehouse ops, kanban, tool crib, MSL reset, receiving, shortages |
+| **Engineering** | Part numbers, setups, rates, tools, feeders, stencils |
+| **Tracking** | Unit history, container movements, BOM used, serial tracking, road map |
+| **Manufacturing** | OEE, SMT reports (SPI, AOI, pick & place), solder paste |
+| **Manage** | Stations, areas, cells, users, roles, settings, agents, extractors |
+| **Planning** | Production planning tool, balance, job hints |
+| **Tickets** | Internal ticketing system with dashboards |
+| **Personnel** | Teams/bonus, visitors, QA user locks |
+| **Mobile** | Mobile-optimized interfaces (SMT) |
+| **Rework** | Rework tracking |
+| **Testing** | Test operations |
+| **Purchasing** | Procurement |
+| **IS/IT** | Information systems, trainings |
+| **Utils** | Printers |
+
+### Framework Layer (`firstronic/Framework/`)
+
+Custom infrastructure providing cross-cutting concerns:
+
+- **`BaseController.cs`** - All controllers inherit from this. Provides language/culture selection (cookie-based), notification helpers (Success/Error/Info/Warning), error handling
+- **`BePlex.cs`** - Large (480KB) PLEX ERP SOAP integration. Production data, BOMs, work orders
+- **`Data/`** - Dual database context approach:
+  - `LegacyDataContext/DataContext.cs` - EF6 `IdentityDbContext` for ASP.NET Identity and legacy tables
+  - `AppDataContext/AppDbContext.cs` - EF Core 3.1 for newer features (PLEX maintenance data)
+  - `Repository.cs` / `IRepository.cs` - Generic repository pattern over EF6
+- **`Functions/Queries.cs`** - Raw ADO.NET SQL helpers (`GetDatatableFromQuery()`, `GetIntFromQuery()`)
+- **`GlobalVariables/GlobalVariables.cs`** - All environment variable configuration
+- **`Account/`** - ASP.NET Identity 2.0 (`ApplicationUser` with Badge, ControlID, Location fields)
+- **`UI/`** - Custom HTML helpers (`HtmlHelper.Fst()` extensions), `ViewComponentBase`
+- **`Cache/`** - `MemoryCacheManager` / `ICacheManager` (singleton)
+- **`Languages/`** - Localization via `Settings.resx` (English/Spanish)
+- **`APIs/`** - Internal API clients (Station, Materials, Containers, Account)
+
+### Dependency Injection
+
+Uses **Autofac** (configured in `App_Start/DependencyRegister.cs`):
+- `DataContext` as `IDataContext` (per-request)
+- `AppDbContext` (per-request)
+- `MemoryCacheManager` as `ICacheManager` (singleton)
+- `ApplicationUserService` for Identity
+- `Engine.cs` provides service locator via `Engine.Resolve<T>()`
+
+### Authentication
+
+Cookie-based via OWIN middleware (`App_Start/Startup.Auth.cs`). ASP.NET Identity 2.0 with custom `ApplicationUser` extending `IdentityUser`.
+
+### Frontend
+
+- **Razor views** (~1800 `.cshtml` files) with layouts:
+  - `_Layout.cshtml` - Main layout
+  - `_Layout_portal.cshtml` - Portal layout
+  - `_Layout_tvs_*.cshtml` - TV dashboard layouts (color variants)
+- **CSS/JS bundling** via `BundleConfig.cs`
+- **Key libraries**: Bootstrap 5.3, jQuery 3.7, Font Awesome 6, Chart.js, DataTables, Select2, TinyMCE, Toastr, Three.js (3D factory layout), D3.js
+- Static assets in `firstronic/Content/` (css, img, vendor libraries)
+
+### Navigation
+
+Menu structure is built dynamically in `Models/Menus/MenuIndex.cs` using database queries for areas/stations. Uses custom `Nav`/`Dropdown` classes from `Framework/UI/`.
+
+## Key Conventions
+
+- Controllers use raw SQL via `Queries.GetDatatableFromQuery()` for read-heavy operations and the `Repository<T>` pattern for CRUD
+- Localization strings are in `Framework/Languages/Settings.resx` (accessed via `Resources.Menu.*`, `Resources.Settings.*`)
+- New services should be registered in `App_Start/DependencyRegister.cs`
+- Database entities extend `Framework/Entities/BaseEntity`
+- File uploads go to `firstronic/ExcelUploads/` and `firstronic/UploadedFiles/`
+- Session timeout is 60 minutes (Web.config)
+- Max upload size is 1GB (Web.config `maxRequestLength`)
+
+## Git Workflow
+
+- **Primary branch**: `develop` (active development)
+- **Main branch**: `master`
+- Commit message prefixes used: `STYLE:`, `DELETE:`, `FIX`, `Fix:`

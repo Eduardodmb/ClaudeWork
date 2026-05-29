@@ -1,0 +1,302 @@
+@using NonFactors.Mvc.Grid;
+@using System.Data;
+@using System.Data.SqlClient;
+@using System.Globalization;
+@using Firstronic.Framework.Charts;
+
+
+@model Firstronic.Areas.Production.Models.Reports.ProductionSummary
+
+@section head{
+  <script src="~/Content/vendor/d3/d3.v4.min.js"></script>
+  <script src="~/Content/vendor/chartjs/Chart.min.js"></script>
+  <script src="~/Content/vendor/xlsx/xlsx.full.min.js"></script>
+}
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text"> Successes Details </h3>
+  </div>
+
+  <div class="md-card-content">
+    @if (Model.execute == true)
+    {
+      ViewBag.Title = Model.Part_No;
+
+      var dateStart = Model.dateStart.GetValueOrDefault().AddHours(+6);
+
+      var dateEnd = Model.dateEnd.GetValueOrDefault().AddHours(+6).AddDays(+1);
+
+      DataTable dtResult = new DataTable();
+
+      if (Model.selectedCustomers == "" && Model.selectedPartID == "")
+      {
+        Model.selectedCustomers = ",0,";
+        Model.selectedPartID = "";
+      }
+
+      var Customers = Model.selectedCustomers.ToString().Split(',');
+
+      SqlParameter[] partParameters = new SqlParameter[]
+      {
+        new SqlParameter("@PartNumber",SqlDbType.VarChar){Value = Model.selectedPartID}
+                };
+
+      int PartId = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [PartID] FROM [CS_IDT_PARTNUMBERS] where partnumber=@PartNumber", partParameters);
+
+      var PartIDS = PartId.ToString().Split(',');
+
+      foreach (var PartID in PartIDS)
+      {
+        if (PartID != "")
+        {
+          Customers = ",,".Split(',');
+        }
+      }
+
+      DataTable dtSerials = new DataTable();
+
+      foreach (var PartID in PartIDS)
+      {
+        if (PartID != "")
+        {
+          SqlParameter[] parameters = new SqlParameter[]
+          {
+            new SqlParameter("@AreaID",SqlDbType.Int){Value = Model.AreaID},
+            new SqlParameter("@StationID",SqlDbType.Int){Value = Model.StationID},
+            new SqlParameter("@PartID",SqlDbType.Int){Value = PartID},
+            new SqlParameter("@dateStart",SqlDbType.DateTime){Value =dateStart.ToString("MM/dd/yyyy HH:mm:ss")},
+            new SqlParameter("@dateEnd",SqlDbType.DateTime){Value =dateEnd.ToString("MM/dd/yyyy HH:mm:ss")}
+                    };
+
+          DataTable dtAreaSTATIONPART = Firstronic.Framework.Queries.GetDatatableFromQuery(@"WITH w AS (
+SELECT
+ut.SSN AS UnitID,
+ut.TrnDate,
+pn.PartNumber,
+a.Area,
+ec.CustomerName,
+ut.JobSide,
+ISNULL(pb.Bin_Name, '') AS Bin_Name,
+ut.IsGood AS Status,
+ut.SSNIndex AS RN
+FROM PD_tbl_units_tracking ut WITH (NOLOCK)
+INNER JOIN CS_idt_partnumbers pn ON ut.PartID = pn.PartID
+INNER JOIN CS_idt_external_customers ec ON pn.CustomerID = ec.CustomerID
+INNER JOIN PD_idt_areas a ON ut.AreaID = a.AreaID
+INNER JOIN PD_idt_stations s ON ut.StationID = s.StationID
+LEFT JOIN PART_BIN pb ON ut.PartID = pb.Part_ID AND ut.GroupMLS = pb.Bin_ID
+WHERE ut.TrnDate BETWEEN @dateStart AND @dateEnd
+AND (pn.PartID = @PartID OR @PartID=0)
+AND (ut.AreaID = @AreaID OR @AreaID=0)
+AND (ut.StationID = @StationID OR @StationID=0)
+)
+SELECT * FROM (SELECT * FROM w where w.rn = 1  and w.status='1') jz
+", parameters);
+
+          dtResult.Merge(dtAreaSTATIONPART);
+
+          dtSerials.Merge(dtAreaSTATIONPART);
+        }
+      }
+
+      if (dtResult.Rows.Count > 0)
+      {
+        <div class="uk-grid" uk-grid>
+          <div class="uk-width-1-3@s">
+            <canvas id="myChart" width="400" height="250"></canvas>
+          </div>
+        </div>
+
+
+        // Group the DataTable by Area and count occurrences
+        var groupedData = dtResult.AsEnumerable()
+        .GroupBy(row => row.Field<string>
+          ("Area"))
+          .Select(g => new { Area = g.Key, Count = g.Count() })
+          .ToList();
+
+        // Create arrays for chart labels (Area) and values (Count)
+        var areas = groupedData.Select(x => x.Area).ToArray();
+        var counts = groupedData.Select(x => x.Count).ToArray();
+
+        // Pass data to JavaScript
+        var areasJson = Newtonsoft.Json.JsonConvert.SerializeObject(areas);
+        var countsJson = Newtonsoft.Json.JsonConvert.SerializeObject(counts);
+
+
+        <div class="mvc-grid">
+          <h3 class="md-card-toolbar-heading-text"> Details </h3>
+          <table id="ExportDetails" border="1">
+            <thead>
+              <tr>
+                @{
+                  int colin = 0;
+                }
+                @foreach (System.Data.DataColumn col in dtResult.Columns)
+                {
+                  <th>@col.Caption</th>
+                  colin++;
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (System.Data.DataRow rowstation in dtResult.Rows)
+              {
+                <tr>
+                  @{
+                    int varcell1 = 1;
+                    foreach (var cell in rowstation.ItemArray)
+                    {
+                      if (varcell1 == 1)
+                      {
+                        <td><a href="@Url.Action("History","Units", new { Area = "Tracking", SSN = cell.ToString(), IsPanel = false, GetChilds = false })" target="_blank">@cell.ToString()</a></td>
+                      }
+                      else
+                      {
+                        <td> @cell.ToString() </td>
+                      }
+                      varcell1++;
+                    }
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <script type="text/javascript" nonce="@Html.ScriptNonce()">
+        // Get the grouped data from Razor
+        var areas = @Html.Raw(areasJson);
+        var counts = @Html.Raw(countsJson);
+
+        // Create a chart
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar', // You can change this to 'pie', 'line', etc.
+            data: {
+                labels: areas,
+                datasets: [{
+                    label: '# of Successes',
+                    data: counts,
+                    backgroundColor: 'rgba(75, 192, 75, 0.2)',
+                    borderColor: 'rgba(75, 192, 75, 1)',
+                    borderWidth: 1
+                }]
+            },
+          options: {
+                responsive: true,
+                scales: {
+                  yAxes: [{
+                    id: 'y-axis-0',
+                    gridLines: {
+                      display: true,
+                      lineWidth: 1,
+                      color: "rgba(0,0,0,0.30)"
+                    },
+                    ticks: {
+                      beginAtZero: true,
+                      mirror: false,
+                      suggestedMin: 0,
+                    },
+                    afterBuildTicks: function (chart) {
+
+                    }
+                  }],
+                  xAxes: [{
+                    id: 'x-axis-0',
+                    gridLines: {
+                      display: false
+                    },
+                    ticks: {
+                      beginAtZero: true
+                    }
+                  }]
+                },
+              maintainAspectRatio: true,
+            }
+        });
+        </script>
+
+        <input id="btnExport" type="button" value="Export" class="md-btn md-btn-primary md-btn-mini uk-align-right mn-t-10 mn-b-0" />
+      }
+    }
+
+  </div>
+</div>
+
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $("#ddlCustomers").select2();
+</script>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $("#ddlParts").select2();
+</script>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $("#ddlDateStart").datepicker({
+    dateFormat: "mm/dd/y",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-5:+1"
+  });
+
+  $("#ddlDateEnd").datepicker({
+    dateFormat: "mm/dd/y",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-5:+1"
+  });
+</script>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $(document).ready(function () {
+    FillStations()
+  });
+</script>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  function FillStations() {
+    var AreaID = $('#ddlareaid').val();
+    var req2 = { AreaID: AreaID, All: 'ALL' };
+    $.ajax({
+      type: "POST",
+      url: "/Manage/Areas/FillStations",
+      async: false,
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify(req2),
+      success: function (response) {
+        //console.log(response);
+        $("#ddlsubstation").html("");
+        $.each(response, function (index, value) {
+          $("#ddlsubstation").append(
+            $('<option></option>').val(value.Value).html(value.Text));
+        });
+      },
+      error: function () {
+        $("#ddlsubstation").html("");
+        $("#ddlsubstation").append(
+          $('<option></option>').val(0).html("NA"));
+      }
+    });
+  }
+</script>
+
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  document.getElementById("btnExport").addEventListener('click', function () {
+
+    $("body").addClass("loading");
+
+    /* Create worksheet from HTML DOM TABLE */
+    var wb = XLSX.utils.table_to_book(document.getElementById("ExportDetails"));
+    /* Export to file (start a download) */
+    const d = new Date();
+    let text = moment(d).format('YYYYMMDDHHMMSS');
+
+    XLSX.writeFile(wb, "Successes" + text + ".xlsx");
+
+    $("body").removeClass("loading");
+  });
+</script>

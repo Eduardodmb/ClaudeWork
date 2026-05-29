@@ -1,0 +1,38 @@
+# Update Chart.js from 2.9 to 4.4.1
+# Run this from BeFirst_Portal root directory
+
+$vendorPath = ".\firstronic\Content\vendor\chartjs"
+$chartJsUrl = "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+
+Write-Host "Updating Chart.js from 2.9 to 4.4.1..." -ForegroundColor Cyan
+Write-Host "Target directory: $vendorPath" -ForegroundColor Yellow
+
+# Backup old version
+if (Test-Path "$vendorPath\Chart.min.js") {
+    $backupPath = "$vendorPath\Chart.min.js.v2.9.backup"
+    Write-Host "Backing up old version to Chart.min.js.v2.9.backup" -ForegroundColor Yellow
+    Copy-Item "$vendorPath\Chart.min.js" -Destination $backupPath -Force
+}
+
+# Download Chart.js 4.4.1
+Write-Host "Downloading Chart.js 4.4.1..." -ForegroundColor Cyan
+try {
+    Invoke-WebRequest -Uri $chartJsUrl -OutFile "$vendorPath\chart.umd.min.js"
+    Write-Host "✓ Downloaded: chart.umd.min.js" -ForegroundColor Green
+
+    # Also save with the old filename for compatibility
+    Copy-Item "$vendorPath\chart.umd.min.js" -Destination "$vendorPath\Chart.min.js" -Force
+    Write-Host "✓ Copied to: Chart.min.js (for compatibility)" -ForegroundColor Green
+
+    Write-Host "`n✓ Chart.js updated successfully to version 4.4.1!" -ForegroundColor Green
+    Write-Host "`nFiles in chartjs folder:" -ForegroundColor Cyan
+    Get-ChildItem $vendorPath | Select-Object Name, Length, LastWriteTime | Format-Table
+
+} catch {
+    Write-Host "✗ Error downloading Chart.js: $_" -ForegroundColor Red
+    Write-Host "`nManual download option:" -ForegroundColor Yellow
+    Write-Host "1. Go to: https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" -ForegroundColor White
+    Write-Host "2. Save as: $vendorPath\Chart.min.js" -ForegroundColor White
+}
+
+Write-Host "`nDone! Refresh your browser to see the new chart." -ForegroundColor Green

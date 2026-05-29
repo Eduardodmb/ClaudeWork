@@ -1,0 +1,162 @@
+# Conflict Resolution Rules
+# Used by Claude's git-sync automation to resolve merge conflicts automatically
+# See: ~/.claude/commands/git-sync.md
+
+version: "1.0"
+
+# Resolution strategies
+strategies:
+  prefer_remote:
+    description: "Accept remote version, discard local changes"
+    command: "git checkout --theirs {file} && git add {file}"
+    use_case: "Team documentation, shared standards"
+
+  prefer_local:
+    description: "Keep local version, discard remote changes"
+    command: "git checkout --ours {file} && git add {file}"
+    use_case: "User configuration, local preferences"
+
+  manual:
+    description: "Notify user, require human resolution"
+    command: null
+    use_case: "Code files, complex merges, critical config"
+
+  local_only:
+    description: "File should never be pushed or pulled"
+    command: null
+    use_case: "Local state files, personal notes"
+
+# Resolution rules by file pattern
+# Order matters - first match wins
+resolution_rules:
+
+  # --- Exceptions (check first) ---
+
+  - pattern: "**/CHANGELOG.md"
+    strategy: manual
+    reason: "Changelog entries may conflict; need manual ordering"
+
+  - pattern: "**/index.yaml"
+    strategy: manual
+    reason: "Master index requires careful merge"
+
+  - pattern: "**/phase.md"
+    strategy: local_only
+    reason: "Local session state, never sync"
+
+  - pattern: "**/session.json"
+    strategy: local_only
+    reason: "Local session state"
+
+  - pattern: "**/work-tracker.json"
+    strategy: local_only
+    reason: "Local work tracking state"
+
+  - pattern: "**/git-sync.json"
+    strategy: local_only
+    reason: "Local sync state"
+
+  # --- State files (never sync) ---
+
+  - pattern: "**/.claude/state/**"
+    strategy: local_only
+    reason: "All state files are local only"
+
+  # --- Documentation (prefer team edits) ---
+
+  - pattern: "**/*.md"
+    strategy: prefer_remote
+    reason: "Team documentation likely more current"
+    exceptions:
+      - "**/CHANGELOG.md"
+      - "**/phase.md"
+
+  # --- Config files (prefer local user settings) ---
+
+  - pattern: "**/.claude/settings.json"
+    strategy: prefer_local
+    reason: "User's personal Claude settings"
+
+  - pattern: "**/settings.json"
+    strategy: prefer_local
+    reason: "Local configuration preferences"
+
+  - pattern: "**/.vscode/**"
+    strategy: prefer_local
+    reason: "User's editor settings"
+
+  # --- Learning files (prefer team knowledge) ---
+
+  - pattern: "**/learning/**/*.md"
+    strategy: prefer_remote
+    reason: "Team learnings and best practices"
+
+  - pattern: "**/best-practices/**"
+    strategy: prefer_remote
+    reason: "Shared team standards"
+
+  # --- Git hooks (prefer team standard) ---
+
+  - pattern: ".githooks/**"
+    strategy: prefer_remote
+    reason: "Team-standard hooks should be consistent"
+
+  - pattern: "**/.git/hooks/**"
+    strategy: prefer_remote
+    reason: "Git hooks from team repo"
+
+  # --- Code files (require human review) ---
+
+  - pattern: "**/*.ts"
+    strategy: manual
+    reason: "TypeScript code requires human merge"
+
+  - pattern: "**/*.tsx"
+    strategy: manual
+    reason: "React/TypeScript code requires human merge"
+
+  - pattern: "**/*.js"
+    strategy: manual
+    reason: "JavaScript code requires human merge"
+
+  - pattern: "**/*.py"
+    strategy: manual
+    reason: "Python code requires human merge"
+
+  - pattern: "**/*.go"
+    strategy: manual
+    reason: "Go code requires human merge"
+
+  - pattern: "**/*.scala"
+    strategy: manual
+    reason: "Scala code requires human merge"
+
+  - pattern: "**/*.sql"
+    strategy: manual
+    reason: "SQL requires human review"
+
+  # --- Data files (manual) ---
+
+  - pattern: "**/*.yaml"
+    strategy: manual
+    reason: "YAML config may have semantic conflicts"
+    exceptions:
+      - "conflict-rules.yaml"  # This file uses prefer_remote
+
+  - pattern: "**/*.yml"
+    strategy: manual
+    reason: "YAML config may have semantic conflicts"
+
+  # --- Default fallback ---
+
+  - pattern: "**/*"
+    strategy: manual
+    reason: "Unknown file type, require human review"
+
+# Notification settings
+notifications:
+  on_auto_resolve: false  # Don't notify when auto-resolved
+  on_manual_required: true  # Notify when user intervention needed
+
+# When conflicts are auto-resolved, use this commit message
+auto_resolve_commit_message: "chore: auto-resolve merge conflicts [git-sync]"

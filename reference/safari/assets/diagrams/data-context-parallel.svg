@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrow-map" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#475569"/>
+    </marker>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="520" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" fill="#e2e8f0" font-size="22" font-weight="bold" font-family="system-ui, sans-serif">Applying Proven Data Governance to Context</text>
+  <text x="450" y="58" text-anchor="middle" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">Every concept has a direct equivalent</text>
+
+  <!-- Column Headers -->
+  <rect x="50" y="80" width="300" height="32" fill="#3b82f6" rx="6"/>
+  <text x="200" y="102" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="bold" font-family="system-ui, sans-serif">Data Governance Concept</text>
+
+  <rect x="550" y="80" width="300" height="32" fill="#9B1C1C" rx="6"/>
+  <text x="700" y="102" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="bold" font-family="system-ui, sans-serif">Context Equivalent</text>
+
+  <!-- Row 1: Catalog → Registry -->
+  <g transform="translate(50, 130)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#60a5fa" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Data Catalog</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Collibra, Alation, OpenMetadata</text>
+  </g>
+  <line x1="350" y1="155" x2="550" y2="155" stroke="#475569" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrow-map)"/>
+  <g transform="translate(550, 130)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#9B1C1C" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#f87171" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Context Registry</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">context-registry.json</text>
+  </g>
+
+  <!-- Row 2: Lineage → Lineage -->
+  <g transform="translate(50, 190)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#60a5fa" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Data Lineage</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Upstream/downstream tracking</text>
+  </g>
+  <line x1="350" y1="215" x2="550" y2="215" stroke="#475569" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrow-map)"/>
+  <g transform="translate(550, 190)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#9B1C1C" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#f87171" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Context Lineage</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">safari:context_lineage</text>
+  </g>
+
+  <!-- Row 3: Quality → Quality -->
+  <g transform="translate(50, 250)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#60a5fa" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Data Quality</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Freshness, completeness, accuracy</text>
+  </g>
+  <line x1="350" y1="275" x2="550" y2="275" stroke="#475569" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrow-map)"/>
+  <g transform="translate(550, 250)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#9B1C1C" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#f87171" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Context Quality</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">safari:context_quality (freshness, tokens, consistency)</text>
+  </g>
+
+  <!-- Row 4: Discovery → Discovery -->
+  <g transform="translate(50, 310)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#60a5fa" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Data Discovery</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Search, tags, domains</text>
+  </g>
+  <line x1="350" y1="335" x2="550" y2="335" stroke="#475569" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrow-map)"/>
+  <g transform="translate(550, 310)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#9B1C1C" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#f87171" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Context Discovery</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">safari:context_select (tags, domains, freshness)</text>
+  </g>
+
+  <!-- Row 5: Products → Products -->
+  <g transform="translate(50, 370)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#60a5fa" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Data Products</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Versioned, discoverable, owned</text>
+  </g>
+  <line x1="350" y1="395" x2="550" y2="395" stroke="#475569" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrow-map)"/>
+  <g transform="translate(550, 370)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#9B1C1C" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#f87171" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Context Products (Skills)</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Packaged expertise with CPI contracts</text>
+  </g>
+
+  <!-- Row 6: SQL → SCL -->
+  <g transform="translate(50, 430)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#60a5fa" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Query Language (SQL)</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">SELECT, JOIN, WHERE</text>
+  </g>
+  <line x1="350" y1="455" x2="550" y2="455" stroke="#475569" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrow-map)"/>
+  <g transform="translate(550, 430)">
+    <rect width="300" height="50" fill="#1e293b" stroke="#9B1C1C" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#f87171" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Context Language (SCL)</text>
+    <text x="20" y="38" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">SELECT, RESOLVE, OPTIMIZE, ALLOCATE, LINK</text>
+  </g>
+
+  <!-- Safari logo -->
+  <circle cx="855" cy="35" r="22" fill="#9B1C1C" filter="url(#glow)"/>
+  <text x="855" y="42" text-anchor="middle" fill="#e2e8f0" font-size="18" font-weight="bold" font-family="system-ui, sans-serif">S</text>
+
+  <!-- Footer -->
+  <text x="50" y="505" fill="#475569" font-size="10" font-family="system-ui, sans-serif">Safari Circuits, LLC &bull; Context Governance &bull; 2026</text>
+</svg>

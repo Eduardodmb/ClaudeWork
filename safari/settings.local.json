@@ -1,0 +1,20 @@
+{
+  "enabledMcpjsonServers": [
+    "azure-devops",
+    "ms-365",
+    "powerbi-desktop",
+    "chrome-devtools",
+    "confluent-kafka",
+    "postgresql",
+    "mssql",
+    "iceberg",
+    "trino",
+    "openmetadata",
+    "kubernetes",
+    "spark-history",
+    "dbt",
+    "Safari MCP",
+    "microsoft-entra"
+  ],
+  "enableAllProjectMcpServers": true
+}

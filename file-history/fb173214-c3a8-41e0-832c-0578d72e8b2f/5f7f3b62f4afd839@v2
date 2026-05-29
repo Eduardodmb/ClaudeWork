@@ -1,0 +1,196 @@
+Imports System.Text.RegularExpressions
+
+Public Class frm_Labels_labelReprint2
+
+    ' Form load event
+    Private Sub frm_Labels_labelReprint2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Set focus to Part Number field
+        txt_PartNum.Select()
+        txt_PartNum.Focus()
+    End Sub
+
+    ' Part Number KeyPress - move to QR scan field on Enter
+    Private Sub txt_PartNum_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txt_PartNum.KeyPress
+        If e.KeyChar = Convert.ToChar(13) Then
+            e.Handled = True
+            txt_QRScan.Select()
+            txt_QRScan.Focus()
+        End If
+    End Sub
+
+    ' QR Scan KeyPress - process on Enter
+    Private Sub txt_QRScan_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txt_QRScan.KeyPress
+        If e.KeyChar = Convert.ToChar(13) Then
+            e.Handled = True
+            ProcessQRCode()
+        End If
+    End Sub
+
+    ' Bag Color KeyPress - print on Enter
+    Private Sub txt_BagColor_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txt_BagColor.KeyPress
+        If e.KeyChar = Convert.ToChar(13) Then
+            e.Handled = True
+            btn_Print.PerformClick()
+        End If
+    End Sub
+
+    ' Process QR Code - split into components
+    Private Sub ProcessQRCode()
+        Try
+            Dim qrData As String = txt_QRScan.Text.Trim()
+
+            If String.IsNullOrEmpty(qrData) Then
+                MessageBox.Show("Please scan a QR code.", "QR Code Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                txt_QRScan.Focus()
+                Return
+            End If
+
+            ' Split QR code by hyphen: NCNSerial-RemSerial-DatePaired
+            Dim parts() As String = qrData.Split("-"c)
+
+            If parts.Length <> 3 Then
+                MessageBox.Show("Invalid QR code format. Expected format: NCNSerial-RemSerial-DatePaired", "Invalid QR Code", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                txt_QRScan.SelectAll()
+                txt_QRScan.Focus()
+                Return
+            End If
+
+            ' Populate fields from QR code
+            txt_McmSerial.Text = parts(0).Trim()  ' NCN Serial (MCM Serial)
+            txt_RemSerial.Text = parts(1).Trim()  ' REM Serial
+            txt_DatePaired.Text = parts(2).Trim() ' Date Paired
+
+            ' Move focus to Bag Color
+            txt_BagColor.Select()
+            txt_BagColor.Focus()
+
+        Catch ex As Exception
+            MessageBox.Show("Error processing QR code: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            txt_QRScan.SelectAll()
+            txt_QRScan.Focus()
+        End Try
+    End Sub
+
+    ' Print button click
+    Private Sub btn_Print_Click(sender As Object, e As EventArgs) Handles btn_Print.Click
+        Try
+            ' Validate all required fields
+            If String.IsNullOrEmpty(txt_PartNum.Text.Trim()) Then
+                MessageBox.Show("Please enter Part Number.", "Part Number Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                txt_PartNum.Focus()
+                Return
+            End If
+
+            If String.IsNullOrEmpty(txt_McmSerial.Text.Trim()) Then
+                MessageBox.Show("Please scan a QR code first.", "QR Code Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                txt_QRScan.Focus()
+                Return
+            End If
+
+            If String.IsNullOrEmpty(txt_RemSerial.Text.Trim()) Then
+                MessageBox.Show("REM Serial is missing. Please scan a valid QR code.", "REM Serial Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                txt_QRScan.Focus()
+                Return
+            End If
+
+            If String.IsNullOrEmpty(txt_DatePaired.Text.Trim()) Then
+                MessageBox.Show("Date Paired is missing. Please scan a valid QR code.", "Date Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                txt_QRScan.Focus()
+                Return
+            End If
+
+            If String.IsNullOrEmpty(txt_BagColor.Text.Trim()) Then
+                MessageBox.Show("Please enter Bag Color.", "Bag Color Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                txt_BagColor.Focus()
+                Return
+            End If
+
+            ' Build ZPL code with replacements
+            Dim zplCode As String = BuildZPLCode()
+
+            ' Send to printer
+            BeZebraPrint.SendStringToPrinter("DEFAULT", zplCode)
+
+            ' Show success message
+            lbl_Status.Text = "Label printed successfully!"
+            lbl_Status.ForeColor = Color.Green
+
+            ' Clear fields for next label
+            ClearSerialFields()
+
+        Catch ex As Exception
+            MessageBox.Show("Error printing label: " & ex.Message, "Print Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            lbl_Status.Text = "Print failed!"
+            lbl_Status.ForeColor = Color.Red
+        End Try
+    End Sub
+
+    ' Build ZPL code with data replacements
+    Private Function BuildZPLCode() As String
+        ' Reconstruct QR code content: NCNSerial-RemSerial-DatePaired
+        Dim qrContent As String = txt_McmSerial.Text.Trim() & "-" & txt_RemSerial.Text.Trim() & "-" & txt_DatePaired.Text.Trim()
+
+        ' ZPL template with placeholders
+        Dim zpl As String = "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD25^JUS^LRN^CI0^XZ" & vbCrLf &
+                           "^XA" & vbCrLf &
+                           "^MMT" & vbCrLf &
+                           "^PW1200" & vbCrLf &
+                           "^LL0600" & vbCrLf &
+                           "^LS0" & vbCrLf &
+                           "^FT55,102^A0N,83,76^FH\^FDPart #:^FS" & vbCrLf &
+                           "^FT288,102^A0N,83,76^FH\^FD%PartNum%^FS" & vbCrLf &
+                           "^FT55,262^A0N,58,55^FH\^FDREM SERIAL #:^FS" & vbCrLf &
+                           "^FT443,262^A0N,58,55^FH\^FD%RemSerial%^FS" & vbCrLf &
+                           "^FT455,175^A0N,58,55^FH\^FD%McmSerial%^FS" & vbCrLf &
+                           "^FT55,176^A0N,58,55^FH\^FDMCM SERIAL #:^FS" & vbCrLf &
+                           "^FT55,434^A0N,58,55^FH\^FDBAG COLOR:^FS" & vbCrLf &
+                           "^FT55,349^A0N,58,55^FH\^FDDATE PAIRED:^FS" & vbCrLf &
+                           "^FT426,349^A0N,58,55^FH\^FD%DatePaired%^FS" & vbCrLf &
+                           "^FT375,435^A0N,58,55^FH\^FD%BagColor%^FS" & vbCrLf &
+                           "^BY3,3,94^FT55,552^BCN,,N,N" & vbCrLf &
+                           "^FD>%BarcodeMcmSerial%^FS" & vbCrLf &
+                           "^FT806,579^BQN,2,9" & vbCrLf &
+                           "^FH\^FDMA,%QRSerial%^FS" & vbCrLf &
+                           "^PQ1,0,1,Y^XZ"
+
+        ' Replace placeholders with actual data
+        zpl = zpl.Replace("%PartNum%", txt_PartNum.Text.Trim())
+        zpl = zpl.Replace("%RemSerial%", txt_RemSerial.Text.Trim())
+        zpl = zpl.Replace("%McmSerial%", txt_McmSerial.Text.Trim())
+        zpl = zpl.Replace("%DatePaired%", txt_DatePaired.Text.Trim())
+        zpl = zpl.Replace("%BagColor%", txt_BagColor.Text.Trim())
+        zpl = zpl.Replace("%BarcodeMcmSerial%", txt_McmSerial.Text.Trim())
+        zpl = zpl.Replace("%QRSerial%", qrContent)
+
+        Return zpl
+    End Function
+
+    ' Clear serial number fields for next label
+    Private Sub ClearSerialFields()
+        txt_QRScan.Text = ""
+        txt_McmSerial.Text = ""
+        txt_RemSerial.Text = ""
+        txt_DatePaired.Text = ""
+        txt_BagColor.Text = ""
+        lbl_Status.Text = ""
+
+        ' Return focus to QR scan field (Part Number stays same for batch)
+        txt_QRScan.Select()
+        txt_QRScan.Focus()
+    End Sub
+
+    ' Clear All button - reset entire form
+    Private Sub btn_ClearAll_Click(sender As Object, e As EventArgs) Handles btn_ClearAll.Click
+        txt_PartNum.Text = ""
+        ClearSerialFields()
+        lbl_Status.Text = ""
+        txt_PartNum.Select()
+        txt_PartNum.Focus()
+    End Sub
+
+    ' Form closing event
+    Private Sub frm_Labels_labelReprint2_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        ' Cleanup if needed
+    End Sub
+
+End Class

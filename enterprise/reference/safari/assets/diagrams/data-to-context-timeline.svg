@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1100 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrow-slate" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#9B1C1C"/>
+    </marker>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="420" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="550" y="35" text-anchor="middle" fill="#e2e8f0" font-size="22" font-weight="bold" font-family="system-ui, sans-serif">The Data Management Evolution</text>
+  <text x="550" y="58" text-anchor="middle" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">70 Years of Proven Patterns &mdash; Now Applied to Context</text>
+
+  <!-- Timeline line -->
+  <line x1="60" y1="200" x2="1040" y2="200" stroke="#334155" stroke-width="2"/>
+
+  <!-- Era 1: File Systems -->
+  <g transform="translate(70, 100)">
+    <rect width="105" height="80" fill="#1e293b" stroke="#64748b" stroke-width="1.5" rx="6"/>
+    <rect width="105" height="24" fill="#64748b" rx="6" ry="0"/>
+    <text x="52" y="17" text-anchor="middle" fill="#e2e8f0" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">File Systems</text>
+    <text x="52" y="42" text-anchor="middle" fill="#e2e8f0" font-size="9" font-family="system-ui, sans-serif">1950s–60s</text>
+    <text x="52" y="57" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Flat files, tape</text>
+    <text x="52" y="72" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">App-specific storage</text>
+  </g>
+  <circle cx="122" cy="200" r="5" fill="#64748b"/>
+  <line x1="175" y1="200" x2="195" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+  <!-- Era 2: Relational -->
+  <g transform="translate(200, 100)">
+    <rect width="105" height="80" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
+    <rect width="105" height="24" fill="#3b82f6" rx="6" ry="0"/>
+    <text x="52" y="17" text-anchor="middle" fill="#e2e8f0" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Relational</text>
+    <text x="52" y="42" text-anchor="middle" fill="#e2e8f0" font-size="9" font-family="system-ui, sans-serif">1970</text>
+    <text x="52" y="57" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Edgar Codd</text>
+    <text x="52" y="72" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Logical / Physical</text>
+  </g>
+  <circle cx="252" cy="200" r="5" fill="#3b82f6"/>
+  <line x1="305" y1="200" x2="325" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+  <!-- Era 3: SQL & Commercial -->
+  <g transform="translate(330, 100)">
+    <rect width="105" height="80" fill="#1e293b" stroke="#60a5fa" stroke-width="1.5" rx="6"/>
+    <rect width="105" height="24" fill="#60a5fa" rx="6" ry="0"/>
+    <text x="52" y="17" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">SQL Era</text>
+    <text x="52" y="42" text-anchor="middle" fill="#e2e8f0" font-size="9" font-family="system-ui, sans-serif">1980s</text>
+    <text x="52" y="57" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Oracle, DB2</text>
+    <text x="52" y="72" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Standard query language</text>
+  </g>
+  <circle cx="382" cy="200" r="5" fill="#60a5fa"/>
+  <line x1="435" y1="200" x2="455" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+  <!-- Era 4: Data Warehouse -->
+  <g transform="translate(460, 100)">
+    <rect width="105" height="80" fill="#1e293b" stroke="#34d399" stroke-width="1.5" rx="6"/>
+    <rect width="105" height="24" fill="#34d399" rx="6" ry="0"/>
+    <text x="52" y="17" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Warehouse</text>
+    <text x="52" y="42" text-anchor="middle" fill="#e2e8f0" font-size="9" font-family="system-ui, sans-serif">1990s</text>
+    <text x="52" y="57" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Inmon, Kimball</text>
+    <text x="52" y="72" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Analytics, history</text>
+  </g>
+  <circle cx="512" cy="200" r="5" fill="#34d399"/>
+  <line x1="565" y1="200" x2="585" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+  <!-- Era 5: Big Data -->
+  <g transform="translate(590, 100)">
+    <rect width="105" height="80" fill="#1e293b" stroke="#fb923c" stroke-width="1.5" rx="6"/>
+    <rect width="105" height="24" fill="#fb923c" rx="6" ry="0"/>
+    <text x="52" y="17" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Big Data</text>
+    <text x="52" y="42" text-anchor="middle" fill="#e2e8f0" font-size="9" font-family="system-ui, sans-serif">2005–2015</text>
+    <text x="52" y="57" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Hadoop, Spark</text>
+    <text x="52" y="72" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Scale, unstructured</text>
+  </g>
+  <circle cx="642" cy="200" r="5" fill="#fb923c"/>
+  <line x1="695" y1="200" x2="715" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+  <!-- Era 6: Governance -->
+  <g transform="translate(720, 100)">
+    <rect width="105" height="80" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5" rx="6"/>
+    <rect width="105" height="24" fill="#a78bfa" rx="6" ry="0"/>
+    <text x="52" y="17" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Governance</text>
+    <text x="52" y="42" text-anchor="middle" fill="#e2e8f0" font-size="9" font-family="system-ui, sans-serif">2015+</text>
+    <text x="52" y="57" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Collibra, Alation</text>
+    <text x="52" y="72" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Lineage, quality</text>
+  </g>
+  <circle cx="772" cy="200" r="5" fill="#a78bfa"/>
+  <line x1="825" y1="200" x2="845" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow-slate)"/>
+
+  <!-- Era 7: Data Mesh -->
+  <g transform="translate(850, 100)">
+    <rect width="105" height="80" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" rx="6"/>
+    <rect width="105" height="24" fill="#38bdf8" rx="6" ry="0"/>
+    <text x="52" y="17" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Data Mesh</text>
+    <text x="52" y="42" text-anchor="middle" fill="#e2e8f0" font-size="9" font-family="system-ui, sans-serif">2019+</text>
+    <text x="52" y="57" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Dehghani</text>
+    <text x="52" y="72" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="system-ui, sans-serif">Federated domains</text>
+  </g>
+  <circle cx="902" cy="200" r="5" fill="#38bdf8"/>
+
+  <!-- Descend arrow to Context -->
+  <line x1="902" y1="205" x2="902" y2="240" stroke="#9B1C1C" stroke-width="2"/>
+  <line x1="902" y1="240" x2="550" y2="240" stroke="#9B1C1C" stroke-width="2"/>
+  <line x1="550" y1="240" x2="550" y2="265" stroke="#9B1C1C" stroke-width="2" marker-end="url(#arrow-red)"/>
+
+  <!-- Era 8: Context Governance (highlighted) -->
+  <g transform="translate(430, 270)">
+    <rect width="240" height="100" fill="#1e293b" stroke="#9B1C1C" stroke-width="3" rx="8" filter="url(#glow)"/>
+    <rect width="240" height="28" fill="#9B1C1C" rx="8" ry="0"/>
+    <text x="120" y="20" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="bold" font-family="system-ui, sans-serif">Context Governance</text>
+    <text x="120" y="50" text-anchor="middle" fill="#e2e8f0" font-size="11" font-family="system-ui, sans-serif">2026+ &mdash; Safari Circuits</text>
+    <text x="120" y="68" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Registry, SCL, CPI, Safari MCP</text>
+    <text x="120" y="83" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Same principles, new substrate</text>
+  </g>
+
+  <!-- Universal pattern label -->
+  <g transform="translate(60, 280)">
+    <rect width="340" height="90" fill="#0f172a" stroke="#334155" stroke-width="1" rx="6"/>
+    <text x="170" y="22" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold" font-family="system-ui, sans-serif">The Universal Pattern</text>
+    <text x="170" y="44" text-anchor="middle" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">Scattered Files</text>
+    <text x="218" y="44" fill="#475569" font-size="10" font-family="system-ui, sans-serif"> &#8594; Centralized Store</text>
+    <text x="170" y="62" text-anchor="middle" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">&#8594; Query Language &#8594; Governance</text>
+    <text x="170" y="80" text-anchor="middle" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">&#8594; Federated Mesh</text>
+  </g>
+
+  <!-- Safari logo -->
+  <circle cx="1055" cy="35" r="22" fill="#9B1C1C" filter="url(#glow)"/>
+  <text x="1055" y="42" text-anchor="middle" fill="#e2e8f0" font-size="18" font-weight="bold" font-family="system-ui, sans-serif">S</text>
+
+  <!-- Footer -->
+  <text x="60" y="405" fill="#475569" font-size="10" font-family="system-ui, sans-serif">Safari Circuits, LLC &bull; Context Governance &bull; 2026</text>
+</svg>

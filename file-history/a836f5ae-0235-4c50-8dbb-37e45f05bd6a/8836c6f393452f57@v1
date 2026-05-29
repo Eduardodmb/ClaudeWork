@@ -1,0 +1,264 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace Firstronic.Areas.Production.Models
+{
+  public class Reports
+  {
+
+    public class Failures_Report
+    {
+      public bool execute { get; set; }
+
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public int CustomerID { get; set; }
+
+    }
+    public class GradeValidation
+    {
+      public DateTime? dateStart { get; set; }
+
+      public DateTime? dateEnd { get; set; }
+
+      public bool execute { get; set; } = false;
+
+      public int partkey { get; set; }
+
+      public string Part_No { get; set; }
+    }
+    public class ProductionVsHanwha
+    {
+      public DateTime? dateStart { get; set; }
+
+      public DateTime? dateEnd { get; set; }
+
+      public bool execute { get; set; } = false;
+
+      public int partkey { get; set; }
+
+      public string Part_No { get; set; }
+    }
+    public class ProductionFailReason
+    {
+      public DateTime? dateStart { get; set; }
+
+      public DateTime? dateEnd { get; set; }
+
+      public bool execute { get; set; } = false;
+
+      public int partkey { get; set; }
+
+      public string Part_No { get; set; }
+    }
+
+
+    public class ProductionSummary
+    {
+
+      public bool execute { get; set; }
+      public bool prepareDownload { get; set; }
+      public bool defectsDownload { get; set; }
+      public DateTime? dateStart { get; set; }
+
+      public DateTime? dateEnd { get; set; }
+
+      public string selectedCustomers { get; set; }
+      public string selectedPartID { get; set; }
+
+      public int partkey { get; set; }
+
+      public string Part_No { get; set; }
+      public int AreaID { get; set; }
+
+      public int StationID { get; set; }
+    }
+
+
+
+    public class ProductionFullReport
+    {
+      public DateTime? dateStart { get; set; }
+
+      public DateTime? dateEnd { get; set; }
+
+      public string selectedPN { get; set; }
+
+      public int partkey { get; set; }
+
+      public int Shift { get; set; }
+      public int StationID { get; set; }
+
+      public int AreaID { get; set; }
+
+      public string JobID { get; set; }
+
+      public bool KanbanFlag { get; set; }
+
+      public bool IgnoreREV { get; set; }
+
+
+      public string Part_No { get; set; }
+    }
+
+
+    public class Schedule_Report
+    {
+      public DateTime stardate { get; set; }
+
+
+    }
+
+    public class Schedule_Planning
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string vstations { get; set; }
+
+    }
+
+    public class Station_Eficency
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string vstations { get; set; }
+
+    }
+
+    public class Station_Reels
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string vstations { get; set; }
+
+    }
+
+    public class SearchAudit_models
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string vstations { get; set; }
+
+    }
+
+    public class TraceabilityNozzles_models
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string vstations { get; set; }
+
+    }
+    public class TemperatureControl_models
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string vstations { get; set; }
+
+    }
+    public class changing_models
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string vstations { get; set; }
+
+    }
+    public class OOBA_Report
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string vstations { get; set; }
+
+    }
+    public class IT_tbl_tasks_monitor
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string Owners { get; set; }
+
+      public string Status { get; set; }
+    }
+    public class PD_tbl_station_issues
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string Owners { get; set; }
+
+      public string Status { get; set; }
+    }
+    public class Station_PackNoSMT
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string vstations { get; set; }
+
+    }
+    // =====================================
+
+    public class Bonus_History
+    {
+      public DateTime stardate { get; set; }
+
+      public DateTime enddate { get; set; }
+
+      public string Gafete { get; set; }
+
+      public int v_Type { get; set; }
+
+    }
+
+    public class Transaction_Report
+    {
+      public string Serial_no { get; set; }
+      public DateTime stardate { get; set; }
+      public DateTime enddate { get; set; }
+
+      public string partkey { get; set; }
+      public string workcenter_key { get; set; }
+      public int areaid { get; set; }
+
+      public string Part_No { get; set; }
+
+      public int partid { get; set; }
+      public string LoadID { get; set; }
+    }
+
+    public class OEE_Report
+    {
+      public string Serial_no { get; set; }
+      public DateTime stardate { get; set; }
+      public DateTime enddate { get; set; }
+
+      public string partkey { get; set; }
+      public string workcenter_key { get; set; }
+
+      public string Part_No { get; set; }
+      public string LoadID { get; set; }
+    }
+  }
+}

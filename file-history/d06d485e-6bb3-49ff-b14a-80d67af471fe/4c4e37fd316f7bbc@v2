@@ -1,0 +1,604 @@
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+Partial Class frm_printer_config
+    Inherits System.Windows.Forms.Form
+
+    'Form overrides dispose to clean up the component list.
+    <System.Diagnostics.DebuggerNonUserCode()>
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        Try
+            If disposing AndAlso components IsNot Nothing Then
+                components.Dispose()
+            End If
+        Finally
+            MyBase.Dispose(disposing)
+        End Try
+    End Sub
+
+    'Required by the Windows Form Designer
+    Private components As System.ComponentModel.IContainer
+
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.
+    'Do not modify it using the code editor.
+    <System.Diagnostics.DebuggerStepThrough()>
+    Private Sub InitializeComponent()
+        Me.grp_Printer1 = New System.Windows.Forms.GroupBox()
+        Me.cmb_Printer1_Type = New System.Windows.Forms.ComboBox()
+        Me.txt_Printer1_Path = New System.Windows.Forms.TextBox()
+        Me.txt_Printer1_Name = New System.Windows.Forms.TextBox()
+        Me.txt_Printer1_IP = New System.Windows.Forms.TextBox()
+        Me.lbl_Printer1_Type = New System.Windows.Forms.Label()
+        Me.lbl_Printer1_Path = New System.Windows.Forms.Label()
+        Me.lbl_Printer1_Name = New System.Windows.Forms.Label()
+        Me.lbl_Printer1_IP = New System.Windows.Forms.Label()
+        Me.grp_Printer2 = New System.Windows.Forms.GroupBox()
+        Me.cmb_Printer2_Type = New System.Windows.Forms.ComboBox()
+        Me.txt_Printer2_Path = New System.Windows.Forms.TextBox()
+        Me.txt_Printer2_Name = New System.Windows.Forms.TextBox()
+        Me.txt_Printer2_IP = New System.Windows.Forms.TextBox()
+        Me.lbl_Printer2_Type = New System.Windows.Forms.Label()
+        Me.lbl_Printer2_Path = New System.Windows.Forms.Label()
+        Me.lbl_Printer2_Name = New System.Windows.Forms.Label()
+        Me.lbl_Printer2_IP = New System.Windows.Forms.Label()
+        Me.grp_Printer3 = New System.Windows.Forms.GroupBox()
+        Me.cmb_Printer3_Type = New System.Windows.Forms.ComboBox()
+        Me.txt_Printer3_Path = New System.Windows.Forms.TextBox()
+        Me.txt_Printer3_Name = New System.Windows.Forms.TextBox()
+        Me.txt_Printer3_IP = New System.Windows.Forms.TextBox()
+        Me.lbl_Printer3_Type = New System.Windows.Forms.Label()
+        Me.lbl_Printer3_Path = New System.Windows.Forms.Label()
+        Me.lbl_Printer3_Name = New System.Windows.Forms.Label()
+        Me.lbl_Printer3_IP = New System.Windows.Forms.Label()
+        Me.grp_Packout1 = New System.Windows.Forms.GroupBox()
+        Me.cmb_Packout1_Type = New System.Windows.Forms.ComboBox()
+        Me.txt_Packout1_Path = New System.Windows.Forms.TextBox()
+        Me.txt_Packout1_Name = New System.Windows.Forms.TextBox()
+        Me.txt_Packout1_IP = New System.Windows.Forms.TextBox()
+        Me.lbl_Packout1_Type = New System.Windows.Forms.Label()
+        Me.lbl_Packout1_Path = New System.Windows.Forms.Label()
+        Me.lbl_Packout1_Name = New System.Windows.Forms.Label()
+        Me.lbl_Packout1_IP = New System.Windows.Forms.Label()
+        Me.grp_Packout2 = New System.Windows.Forms.GroupBox()
+        Me.cmb_Packout2_Type = New System.Windows.Forms.ComboBox()
+        Me.txt_Packout2_Path = New System.Windows.Forms.TextBox()
+        Me.txt_Packout2_Name = New System.Windows.Forms.TextBox()
+        Me.txt_Packout2_IP = New System.Windows.Forms.TextBox()
+        Me.lbl_Packout2_Type = New System.Windows.Forms.Label()
+        Me.lbl_Packout2_Path = New System.Windows.Forms.Label()
+        Me.lbl_Packout2_Name = New System.Windows.Forms.Label()
+        Me.lbl_Packout2_IP = New System.Windows.Forms.Label()
+        Me.btn_Save = New System.Windows.Forms.Button()
+        Me.btn_Cancel = New System.Windows.Forms.Button()
+        Me.grp_Printer1.SuspendLayout()
+        Me.grp_Printer2.SuspendLayout()
+        Me.grp_Printer3.SuspendLayout()
+        Me.grp_Packout1.SuspendLayout()
+        Me.grp_Packout2.SuspendLayout()
+        Me.SuspendLayout()
+        '
+        'grp_Printer1
+        '
+        Me.grp_Printer1.Controls.Add(Me.cmb_Printer1_Type)
+        Me.grp_Printer1.Controls.Add(Me.txt_Printer1_Path)
+        Me.grp_Printer1.Controls.Add(Me.txt_Printer1_Name)
+        Me.grp_Printer1.Controls.Add(Me.txt_Printer1_IP)
+        Me.grp_Printer1.Controls.Add(Me.lbl_Printer1_Type)
+        Me.grp_Printer1.Controls.Add(Me.lbl_Printer1_Path)
+        Me.grp_Printer1.Controls.Add(Me.lbl_Printer1_Name)
+        Me.grp_Printer1.Controls.Add(Me.lbl_Printer1_IP)
+        Me.grp_Printer1.Location = New System.Drawing.Point(12, 12)
+        Me.grp_Printer1.Name = "grp_Printer1"
+        Me.grp_Printer1.Size = New System.Drawing.Size(360, 140)
+        Me.grp_Printer1.TabIndex = 0
+        Me.grp_Printer1.TabStop = False
+        Me.grp_Printer1.Text = "Printer 1"
+        '
+        'cmb_Printer1_Type
+        '
+        Me.cmb_Printer1_Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Printer1_Type.FormattingEnabled = True
+        Me.cmb_Printer1_Type.Items.AddRange(New Object() {"", "1", "2", "3"})
+        Me.cmb_Printer1_Type.Location = New System.Drawing.Point(80, 105)
+        Me.cmb_Printer1_Type.Name = "cmb_Printer1_Type"
+        Me.cmb_Printer1_Type.Size = New System.Drawing.Size(260, 21)
+        Me.cmb_Printer1_Type.TabIndex = 7
+        '
+        'txt_Printer1_Path
+        '
+        Me.txt_Printer1_Path.Location = New System.Drawing.Point(80, 79)
+        Me.txt_Printer1_Path.Name = "txt_Printer1_Path"
+        Me.txt_Printer1_Path.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Printer1_Path.TabIndex = 6
+        '
+        'txt_Printer1_Name
+        '
+        Me.txt_Printer1_Name.Location = New System.Drawing.Point(80, 53)
+        Me.txt_Printer1_Name.Name = "txt_Printer1_Name"
+        Me.txt_Printer1_Name.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Printer1_Name.TabIndex = 5
+        '
+        'txt_Printer1_IP
+        '
+        Me.txt_Printer1_IP.Location = New System.Drawing.Point(80, 27)
+        Me.txt_Printer1_IP.Name = "txt_Printer1_IP"
+        Me.txt_Printer1_IP.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Printer1_IP.TabIndex = 4
+        '
+        'lbl_Printer1_Type
+        '
+        Me.lbl_Printer1_Type.AutoSize = True
+        Me.lbl_Printer1_Type.Location = New System.Drawing.Point(15, 108)
+        Me.lbl_Printer1_Type.Name = "lbl_Printer1_Type"
+        Me.lbl_Printer1_Type.Size = New System.Drawing.Size(34, 13)
+        Me.lbl_Printer1_Type.TabIndex = 3
+        Me.lbl_Printer1_Type.Text = "Type:"
+        '
+        'lbl_Printer1_Path
+        '
+        Me.lbl_Printer1_Path.AutoSize = True
+        Me.lbl_Printer1_Path.Location = New System.Drawing.Point(15, 82)
+        Me.lbl_Printer1_Path.Name = "lbl_Printer1_Path"
+        Me.lbl_Printer1_Path.Size = New System.Drawing.Size(32, 13)
+        Me.lbl_Printer1_Path.TabIndex = 2
+        Me.lbl_Printer1_Path.Text = "Path:"
+        '
+        'lbl_Printer1_Name
+        '
+        Me.lbl_Printer1_Name.AutoSize = True
+        Me.lbl_Printer1_Name.Location = New System.Drawing.Point(15, 56)
+        Me.lbl_Printer1_Name.Name = "lbl_Printer1_Name"
+        Me.lbl_Printer1_Name.Size = New System.Drawing.Size(38, 13)
+        Me.lbl_Printer1_Name.TabIndex = 1
+        Me.lbl_Printer1_Name.Text = "Name:"
+        '
+        'lbl_Printer1_IP
+        '
+        Me.lbl_Printer1_IP.AutoSize = True
+        Me.lbl_Printer1_IP.Location = New System.Drawing.Point(15, 30)
+        Me.lbl_Printer1_IP.Name = "lbl_Printer1_IP"
+        Me.lbl_Printer1_IP.Size = New System.Drawing.Size(20, 13)
+        Me.lbl_Printer1_IP.TabIndex = 0
+        Me.lbl_Printer1_IP.Text = "IP:"
+        '
+        'grp_Printer2
+        '
+        Me.grp_Printer2.Controls.Add(Me.cmb_Printer2_Type)
+        Me.grp_Printer2.Controls.Add(Me.txt_Printer2_Path)
+        Me.grp_Printer2.Controls.Add(Me.txt_Printer2_Name)
+        Me.grp_Printer2.Controls.Add(Me.txt_Printer2_IP)
+        Me.grp_Printer2.Controls.Add(Me.lbl_Printer2_Type)
+        Me.grp_Printer2.Controls.Add(Me.lbl_Printer2_Path)
+        Me.grp_Printer2.Controls.Add(Me.lbl_Printer2_Name)
+        Me.grp_Printer2.Controls.Add(Me.lbl_Printer2_IP)
+        Me.grp_Printer2.Location = New System.Drawing.Point(378, 12)
+        Me.grp_Printer2.Name = "grp_Printer2"
+        Me.grp_Printer2.Size = New System.Drawing.Size(360, 140)
+        Me.grp_Printer2.TabIndex = 1
+        Me.grp_Printer2.TabStop = False
+        Me.grp_Printer2.Text = "Printer 2"
+        '
+        'cmb_Printer2_Type
+        '
+        Me.cmb_Printer2_Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Printer2_Type.FormattingEnabled = True
+        Me.cmb_Printer2_Type.Items.AddRange(New Object() {"", "1", "2", "3"})
+        Me.cmb_Printer2_Type.Location = New System.Drawing.Point(80, 105)
+        Me.cmb_Printer2_Type.Name = "cmb_Printer2_Type"
+        Me.cmb_Printer2_Type.Size = New System.Drawing.Size(260, 21)
+        Me.cmb_Printer2_Type.TabIndex = 7
+        '
+        'txt_Printer2_Path
+        '
+        Me.txt_Printer2_Path.Location = New System.Drawing.Point(80, 79)
+        Me.txt_Printer2_Path.Name = "txt_Printer2_Path"
+        Me.txt_Printer2_Path.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Printer2_Path.TabIndex = 6
+        '
+        'txt_Printer2_Name
+        '
+        Me.txt_Printer2_Name.Location = New System.Drawing.Point(80, 53)
+        Me.txt_Printer2_Name.Name = "txt_Printer2_Name"
+        Me.txt_Printer2_Name.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Printer2_Name.TabIndex = 5
+        '
+        'txt_Printer2_IP
+        '
+        Me.txt_Printer2_IP.Location = New System.Drawing.Point(80, 27)
+        Me.txt_Printer2_IP.Name = "txt_Printer2_IP"
+        Me.txt_Printer2_IP.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Printer2_IP.TabIndex = 4
+        '
+        'lbl_Printer2_Type
+        '
+        Me.lbl_Printer2_Type.AutoSize = True
+        Me.lbl_Printer2_Type.Location = New System.Drawing.Point(15, 108)
+        Me.lbl_Printer2_Type.Name = "lbl_Printer2_Type"
+        Me.lbl_Printer2_Type.Size = New System.Drawing.Size(34, 13)
+        Me.lbl_Printer2_Type.TabIndex = 3
+        Me.lbl_Printer2_Type.Text = "Type:"
+        '
+        'lbl_Printer2_Path
+        '
+        Me.lbl_Printer2_Path.AutoSize = True
+        Me.lbl_Printer2_Path.Location = New System.Drawing.Point(15, 82)
+        Me.lbl_Printer2_Path.Name = "lbl_Printer2_Path"
+        Me.lbl_Printer2_Path.Size = New System.Drawing.Size(32, 13)
+        Me.lbl_Printer2_Path.TabIndex = 2
+        Me.lbl_Printer2_Path.Text = "Path:"
+        '
+        'lbl_Printer2_Name
+        '
+        Me.lbl_Printer2_Name.AutoSize = True
+        Me.lbl_Printer2_Name.Location = New System.Drawing.Point(15, 56)
+        Me.lbl_Printer2_Name.Name = "lbl_Printer2_Name"
+        Me.lbl_Printer2_Name.Size = New System.Drawing.Size(38, 13)
+        Me.lbl_Printer2_Name.TabIndex = 1
+        Me.lbl_Printer2_Name.Text = "Name:"
+        '
+        'lbl_Printer2_IP
+        '
+        Me.lbl_Printer2_IP.AutoSize = True
+        Me.lbl_Printer2_IP.Location = New System.Drawing.Point(15, 30)
+        Me.lbl_Printer2_IP.Name = "lbl_Printer2_IP"
+        Me.lbl_Printer2_IP.Size = New System.Drawing.Size(20, 13)
+        Me.lbl_Printer2_IP.TabIndex = 0
+        Me.lbl_Printer2_IP.Text = "IP:"
+        '
+        'grp_Printer3
+        '
+        Me.grp_Printer3.Controls.Add(Me.cmb_Printer3_Type)
+        Me.grp_Printer3.Controls.Add(Me.txt_Printer3_Path)
+        Me.grp_Printer3.Controls.Add(Me.txt_Printer3_Name)
+        Me.grp_Printer3.Controls.Add(Me.txt_Printer3_IP)
+        Me.grp_Printer3.Controls.Add(Me.lbl_Printer3_Type)
+        Me.grp_Printer3.Controls.Add(Me.lbl_Printer3_Path)
+        Me.grp_Printer3.Controls.Add(Me.lbl_Printer3_Name)
+        Me.grp_Printer3.Controls.Add(Me.lbl_Printer3_IP)
+        Me.grp_Printer3.Location = New System.Drawing.Point(12, 158)
+        Me.grp_Printer3.Name = "grp_Printer3"
+        Me.grp_Printer3.Size = New System.Drawing.Size(360, 140)
+        Me.grp_Printer3.TabIndex = 2
+        Me.grp_Printer3.TabStop = False
+        Me.grp_Printer3.Text = "Printer 3"
+        '
+        'cmb_Printer3_Type
+        '
+        Me.cmb_Printer3_Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Printer3_Type.FormattingEnabled = True
+        Me.cmb_Printer3_Type.Items.AddRange(New Object() {"", "1", "2", "3"})
+        Me.cmb_Printer3_Type.Location = New System.Drawing.Point(80, 105)
+        Me.cmb_Printer3_Type.Name = "cmb_Printer3_Type"
+        Me.cmb_Printer3_Type.Size = New System.Drawing.Size(260, 21)
+        Me.cmb_Printer3_Type.TabIndex = 7
+        '
+        'txt_Printer3_Path
+        '
+        Me.txt_Printer3_Path.Location = New System.Drawing.Point(80, 79)
+        Me.txt_Printer3_Path.Name = "txt_Printer3_Path"
+        Me.txt_Printer3_Path.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Printer3_Path.TabIndex = 6
+        '
+        'txt_Printer3_Name
+        '
+        Me.txt_Printer3_Name.Location = New System.Drawing.Point(80, 53)
+        Me.txt_Printer3_Name.Name = "txt_Printer3_Name"
+        Me.txt_Printer3_Name.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Printer3_Name.TabIndex = 5
+        '
+        'txt_Printer3_IP
+        '
+        Me.txt_Printer3_IP.Location = New System.Drawing.Point(80, 27)
+        Me.txt_Printer3_IP.Name = "txt_Printer3_IP"
+        Me.txt_Printer3_IP.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Printer3_IP.TabIndex = 4
+        '
+        'lbl_Printer3_Type
+        '
+        Me.lbl_Printer3_Type.AutoSize = True
+        Me.lbl_Printer3_Type.Location = New System.Drawing.Point(15, 108)
+        Me.lbl_Printer3_Type.Name = "lbl_Printer3_Type"
+        Me.lbl_Printer3_Type.Size = New System.Drawing.Size(34, 13)
+        Me.lbl_Printer3_Type.TabIndex = 3
+        Me.lbl_Printer3_Type.Text = "Type:"
+        '
+        'lbl_Printer3_Path
+        '
+        Me.lbl_Printer3_Path.AutoSize = True
+        Me.lbl_Printer3_Path.Location = New System.Drawing.Point(15, 82)
+        Me.lbl_Printer3_Path.Name = "lbl_Printer3_Path"
+        Me.lbl_Printer3_Path.Size = New System.Drawing.Size(32, 13)
+        Me.lbl_Printer3_Path.TabIndex = 2
+        Me.lbl_Printer3_Path.Text = "Path:"
+        '
+        'lbl_Printer3_Name
+        '
+        Me.lbl_Printer3_Name.AutoSize = True
+        Me.lbl_Printer3_Name.Location = New System.Drawing.Point(15, 56)
+        Me.lbl_Printer3_Name.Name = "lbl_Printer3_Name"
+        Me.lbl_Printer3_Name.Size = New System.Drawing.Size(38, 13)
+        Me.lbl_Printer3_Name.TabIndex = 1
+        Me.lbl_Printer3_Name.Text = "Name:"
+        '
+        'lbl_Printer3_IP
+        '
+        Me.lbl_Printer3_IP.AutoSize = True
+        Me.lbl_Printer3_IP.Location = New System.Drawing.Point(15, 30)
+        Me.lbl_Printer3_IP.Name = "lbl_Printer3_IP"
+        Me.lbl_Printer3_IP.Size = New System.Drawing.Size(20, 13)
+        Me.lbl_Printer3_IP.TabIndex = 0
+        Me.lbl_Printer3_IP.Text = "IP:"
+        '
+        'grp_Packout1
+        '
+        Me.grp_Packout1.Controls.Add(Me.cmb_Packout1_Type)
+        Me.grp_Packout1.Controls.Add(Me.txt_Packout1_Path)
+        Me.grp_Packout1.Controls.Add(Me.txt_Packout1_Name)
+        Me.grp_Packout1.Controls.Add(Me.txt_Packout1_IP)
+        Me.grp_Packout1.Controls.Add(Me.lbl_Packout1_Type)
+        Me.grp_Packout1.Controls.Add(Me.lbl_Packout1_Path)
+        Me.grp_Packout1.Controls.Add(Me.lbl_Packout1_Name)
+        Me.grp_Packout1.Controls.Add(Me.lbl_Packout1_IP)
+        Me.grp_Packout1.Location = New System.Drawing.Point(378, 158)
+        Me.grp_Packout1.Name = "grp_Packout1"
+        Me.grp_Packout1.Size = New System.Drawing.Size(360, 140)
+        Me.grp_Packout1.TabIndex = 3
+        Me.grp_Packout1.TabStop = False
+        Me.grp_Packout1.Text = "Packout Printer 1"
+        '
+        'cmb_Packout1_Type
+        '
+        Me.cmb_Packout1_Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Packout1_Type.FormattingEnabled = True
+        Me.cmb_Packout1_Type.Items.AddRange(New Object() {"", "1", "2", "3"})
+        Me.cmb_Packout1_Type.Location = New System.Drawing.Point(80, 105)
+        Me.cmb_Packout1_Type.Name = "cmb_Packout1_Type"
+        Me.cmb_Packout1_Type.Size = New System.Drawing.Size(260, 21)
+        Me.cmb_Packout1_Type.TabIndex = 7
+        '
+        'txt_Packout1_Path
+        '
+        Me.txt_Packout1_Path.Location = New System.Drawing.Point(80, 79)
+        Me.txt_Packout1_Path.Name = "txt_Packout1_Path"
+        Me.txt_Packout1_Path.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Packout1_Path.TabIndex = 6
+        '
+        'txt_Packout1_Name
+        '
+        Me.txt_Packout1_Name.Location = New System.Drawing.Point(80, 53)
+        Me.txt_Packout1_Name.Name = "txt_Packout1_Name"
+        Me.txt_Packout1_Name.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Packout1_Name.TabIndex = 5
+        '
+        'txt_Packout1_IP
+        '
+        Me.txt_Packout1_IP.Location = New System.Drawing.Point(80, 27)
+        Me.txt_Packout1_IP.Name = "txt_Packout1_IP"
+        Me.txt_Packout1_IP.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Packout1_IP.TabIndex = 4
+        '
+        'lbl_Packout1_Type
+        '
+        Me.lbl_Packout1_Type.AutoSize = True
+        Me.lbl_Packout1_Type.Location = New System.Drawing.Point(15, 108)
+        Me.lbl_Packout1_Type.Name = "lbl_Packout1_Type"
+        Me.lbl_Packout1_Type.Size = New System.Drawing.Size(34, 13)
+        Me.lbl_Packout1_Type.TabIndex = 3
+        Me.lbl_Packout1_Type.Text = "Type:"
+        '
+        'lbl_Packout1_Path
+        '
+        Me.lbl_Packout1_Path.AutoSize = True
+        Me.lbl_Packout1_Path.Location = New System.Drawing.Point(15, 82)
+        Me.lbl_Packout1_Path.Name = "lbl_Packout1_Path"
+        Me.lbl_Packout1_Path.Size = New System.Drawing.Size(32, 13)
+        Me.lbl_Packout1_Path.TabIndex = 2
+        Me.lbl_Packout1_Path.Text = "Path:"
+        '
+        'lbl_Packout1_Name
+        '
+        Me.lbl_Packout1_Name.AutoSize = True
+        Me.lbl_Packout1_Name.Location = New System.Drawing.Point(15, 56)
+        Me.lbl_Packout1_Name.Name = "lbl_Packout1_Name"
+        Me.lbl_Packout1_Name.Size = New System.Drawing.Size(38, 13)
+        Me.lbl_Packout1_Name.TabIndex = 1
+        Me.lbl_Packout1_Name.Text = "Name:"
+        '
+        'lbl_Packout1_IP
+        '
+        Me.lbl_Packout1_IP.AutoSize = True
+        Me.lbl_Packout1_IP.Location = New System.Drawing.Point(15, 30)
+        Me.lbl_Packout1_IP.Name = "lbl_Packout1_IP"
+        Me.lbl_Packout1_IP.Size = New System.Drawing.Size(20, 13)
+        Me.lbl_Packout1_IP.TabIndex = 0
+        Me.lbl_Packout1_IP.Text = "IP:"
+        '
+        'grp_Packout2
+        '
+        Me.grp_Packout2.Controls.Add(Me.cmb_Packout2_Type)
+        Me.grp_Packout2.Controls.Add(Me.txt_Packout2_Path)
+        Me.grp_Packout2.Controls.Add(Me.txt_Packout2_Name)
+        Me.grp_Packout2.Controls.Add(Me.txt_Packout2_IP)
+        Me.grp_Packout2.Controls.Add(Me.lbl_Packout2_Type)
+        Me.grp_Packout2.Controls.Add(Me.lbl_Packout2_Path)
+        Me.grp_Packout2.Controls.Add(Me.lbl_Packout2_Name)
+        Me.grp_Packout2.Controls.Add(Me.lbl_Packout2_IP)
+        Me.grp_Packout2.Location = New System.Drawing.Point(12, 304)
+        Me.grp_Packout2.Name = "grp_Packout2"
+        Me.grp_Packout2.Size = New System.Drawing.Size(360, 140)
+        Me.grp_Packout2.TabIndex = 4
+        Me.grp_Packout2.TabStop = False
+        Me.grp_Packout2.Text = "Packout Printer 2"
+        '
+        'cmb_Packout2_Type
+        '
+        Me.cmb_Packout2_Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Packout2_Type.FormattingEnabled = True
+        Me.cmb_Packout2_Type.Items.AddRange(New Object() {"", "1", "2", "3"})
+        Me.cmb_Packout2_Type.Location = New System.Drawing.Point(80, 105)
+        Me.cmb_Packout2_Type.Name = "cmb_Packout2_Type"
+        Me.cmb_Packout2_Type.Size = New System.Drawing.Size(260, 21)
+        Me.cmb_Packout2_Type.TabIndex = 7
+        '
+        'txt_Packout2_Path
+        '
+        Me.txt_Packout2_Path.Location = New System.Drawing.Point(80, 79)
+        Me.txt_Packout2_Path.Name = "txt_Packout2_Path"
+        Me.txt_Packout2_Path.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Packout2_Path.TabIndex = 6
+        '
+        'txt_Packout2_Name
+        '
+        Me.txt_Packout2_Name.Location = New System.Drawing.Point(80, 53)
+        Me.txt_Packout2_Name.Name = "txt_Packout2_Name"
+        Me.txt_Packout2_Name.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Packout2_Name.TabIndex = 5
+        '
+        'txt_Packout2_IP
+        '
+        Me.txt_Packout2_IP.Location = New System.Drawing.Point(80, 27)
+        Me.txt_Packout2_IP.Name = "txt_Packout2_IP"
+        Me.txt_Packout2_IP.Size = New System.Drawing.Size(260, 20)
+        Me.txt_Packout2_IP.TabIndex = 4
+        '
+        'lbl_Packout2_Type
+        '
+        Me.lbl_Packout2_Type.AutoSize = True
+        Me.lbl_Packout2_Type.Location = New System.Drawing.Point(15, 108)
+        Me.lbl_Packout2_Type.Name = "lbl_Packout2_Type"
+        Me.lbl_Packout2_Type.Size = New System.Drawing.Size(34, 13)
+        Me.lbl_Packout2_Type.TabIndex = 3
+        Me.lbl_Packout2_Type.Text = "Type:"
+        '
+        'lbl_Packout2_Path
+        '
+        Me.lbl_Packout2_Path.AutoSize = True
+        Me.lbl_Packout2_Path.Location = New System.Drawing.Point(15, 82)
+        Me.lbl_Packout2_Path.Name = "lbl_Packout2_Path"
+        Me.lbl_Packout2_Path.Size = New System.Drawing.Size(32, 13)
+        Me.lbl_Packout2_Path.TabIndex = 2
+        Me.lbl_Packout2_Path.Text = "Path:"
+        '
+        'lbl_Packout2_Name
+        '
+        Me.lbl_Packout2_Name.AutoSize = True
+        Me.lbl_Packout2_Name.Location = New System.Drawing.Point(15, 56)
+        Me.lbl_Packout2_Name.Name = "lbl_Packout2_Name"
+        Me.lbl_Packout2_Name.Size = New System.Drawing.Size(38, 13)
+        Me.lbl_Packout2_Name.TabIndex = 1
+        Me.lbl_Packout2_Name.Text = "Name:"
+        '
+        'lbl_Packout2_IP
+        '
+        Me.lbl_Packout2_IP.AutoSize = True
+        Me.lbl_Packout2_IP.Location = New System.Drawing.Point(15, 30)
+        Me.lbl_Packout2_IP.Name = "lbl_Packout2_IP"
+        Me.lbl_Packout2_IP.Size = New System.Drawing.Size(20, 13)
+        Me.lbl_Packout2_IP.TabIndex = 0
+        Me.lbl_Packout2_IP.Text = "IP:"
+        '
+        'btn_Save
+        '
+        Me.btn_Save.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(122, Byte), Integer), CType(CType(204, Byte), Integer))
+        Me.btn_Save.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_Save.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_Save.ForeColor = System.Drawing.Color.White
+        Me.btn_Save.Location = New System.Drawing.Point(558, 304)
+        Me.btn_Save.Name = "btn_Save"
+        Me.btn_Save.Size = New System.Drawing.Size(180, 60)
+        Me.btn_Save.TabIndex = 5
+        Me.btn_Save.Text = "Save"
+        Me.btn_Save.UseVisualStyleBackColor = False
+        '
+        'btn_Cancel
+        '
+        Me.btn_Cancel.BackColor = System.Drawing.Color.Gray
+        Me.btn_Cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_Cancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_Cancel.ForeColor = System.Drawing.Color.White
+        Me.btn_Cancel.Location = New System.Drawing.Point(558, 384)
+        Me.btn_Cancel.Name = "btn_Cancel"
+        Me.btn_Cancel.Size = New System.Drawing.Size(180, 60)
+        Me.btn_Cancel.TabIndex = 6
+        Me.btn_Cancel.Text = "Cancel"
+        Me.btn_Cancel.UseVisualStyleBackColor = False
+        '
+        'frm_printer_config
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.ClientSize = New System.Drawing.Size(750, 456)
+        Me.Controls.Add(Me.btn_Cancel)
+        Me.Controls.Add(Me.btn_Save)
+        Me.Controls.Add(Me.grp_Packout2)
+        Me.Controls.Add(Me.grp_Packout1)
+        Me.Controls.Add(Me.grp_Printer3)
+        Me.Controls.Add(Me.grp_Printer2)
+        Me.Controls.Add(Me.grp_Printer1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
+        Me.Name = "frm_printer_config"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Printer Configuration"
+        Me.grp_Printer1.ResumeLayout(False)
+        Me.grp_Printer1.PerformLayout()
+        Me.grp_Printer2.ResumeLayout(False)
+        Me.grp_Printer2.PerformLayout()
+        Me.grp_Printer3.ResumeLayout(False)
+        Me.grp_Printer3.PerformLayout()
+        Me.grp_Packout1.ResumeLayout(False)
+        Me.grp_Packout1.PerformLayout()
+        Me.grp_Packout2.ResumeLayout(False)
+        Me.grp_Packout2.PerformLayout()
+        Me.ResumeLayout(False)
+
+    End Sub
+
+    Friend WithEvents grp_Printer1 As GroupBox
+    Friend WithEvents cmb_Printer1_Type As ComboBox
+    Friend WithEvents txt_Printer1_Path As TextBox
+    Friend WithEvents txt_Printer1_Name As TextBox
+    Friend WithEvents txt_Printer1_IP As TextBox
+    Friend WithEvents lbl_Printer1_Type As Label
+    Friend WithEvents lbl_Printer1_Path As Label
+    Friend WithEvents lbl_Printer1_Name As Label
+    Friend WithEvents lbl_Printer1_IP As Label
+    Friend WithEvents grp_Printer2 As GroupBox
+    Friend WithEvents cmb_Printer2_Type As ComboBox
+    Friend WithEvents txt_Printer2_Path As TextBox
+    Friend WithEvents txt_Printer2_Name As TextBox
+    Friend WithEvents txt_Printer2_IP As TextBox
+    Friend WithEvents lbl_Printer2_Type As Label
+    Friend WithEvents lbl_Printer2_Path As Label
+    Friend WithEvents lbl_Printer2_Name As Label
+    Friend WithEvents lbl_Printer2_IP As Label
+    Friend WithEvents grp_Printer3 As GroupBox
+    Friend WithEvents cmb_Printer3_Type As ComboBox
+    Friend WithEvents txt_Printer3_Path As TextBox
+    Friend WithEvents txt_Printer3_Name As TextBox
+    Friend WithEvents txt_Printer3_IP As TextBox
+    Friend WithEvents lbl_Printer3_Type As Label
+    Friend WithEvents lbl_Printer3_Path As Label
+    Friend WithEvents lbl_Printer3_Name As Label
+    Friend WithEvents lbl_Printer3_IP As Label
+    Friend WithEvents grp_Packout1 As GroupBox
+    Friend WithEvents cmb_Packout1_Type As ComboBox
+    Friend WithEvents txt_Packout1_Path As TextBox
+    Friend WithEvents txt_Packout1_Name As TextBox
+    Friend WithEvents txt_Packout1_IP As TextBox
+    Friend WithEvents lbl_Packout1_Type As Label
+    Friend WithEvents lbl_Packout1_Path As Label
+    Friend WithEvents lbl_Packout1_Name As Label
+    Friend WithEvents lbl_Packout1_IP As Label
+    Friend WithEvents grp_Packout2 As GroupBox
+    Friend WithEvents cmb_Packout2_Type As ComboBox
+    Friend WithEvents txt_Packout2_Path As TextBox
+    Friend WithEvents txt_Packout2_Name As TextBox
+    Friend WithEvents txt_Packout2_IP As TextBox
+    Friend WithEvents lbl_Packout2_Type As Label
+    Friend WithEvents lbl_Packout2_Path As Label
+    Friend WithEvents lbl_Packout2_Name As Label
+    Friend WithEvents lbl_Packout2_IP As Label
+    Friend WithEvents btn_Save As Button
+    Friend WithEvents btn_Cancel As Button
+End Class

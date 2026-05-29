@@ -1,0 +1,337 @@
+using Firstronic.Framework.Entities;
+using Firstronic.Core.Entities.App.First;
+using Firstronic.Framework.Data;
+using Firstronic.Framework.Attributes;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace Firstronic.Areas.Manage.Controllers
+{
+  [Authorize(Roles = "BF Administrator")]
+  public class BuildingController : BaseSecurityController
+  {
+    private readonly DataContext db;
+
+    #region Ctor
+
+    public BuildingController()
+    {
+      db = new DataContext();
+    }
+
+    #endregion Ctor
+
+    // GET: Manage/Building
+    public ActionResult Index()
+    {
+      var model = db.Database.SqlQuery<tbl_Common_Building>($@"
+        SELECT
+          b.[Building_Key],
+          b.[Building_Code],
+          b.[Name],
+          b.[Default_Location],
+          b.[Receiving_Location],
+          b.[Shipping_Location],
+          b.[Width],
+          b.[Height],
+          b.[Facility_Key],
+          f.[Facility_Name],
+          b.[Main_Facility],
+          b.[PRODUCTION],
+          b.[WAREHOUSE],
+          b.[SHIPPING]
+        FROM [dbo].[Common_Building] b
+        LEFT JOIN [dbo].[Common_Facilities] f ON b.Facility_Key = f.Facility_Key
+        ORDER BY b.Building_Code
+      ").ToArray().ToList().AsQueryable();
+
+      return View(model);
+    }
+
+    // GET: Manage/Building/Create
+    public ActionResult Create()
+    {
+      var model = new tbl_Common_Building();
+
+      // Load facilities dropdown
+      model.FacilityList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(
+        "SELECT [Facility_Key],[Facility_Name] FROM [Common_Facilities]");
+
+      return View(model);
+    }
+
+    // POST: Manage/Building/Create
+    [HttpPost]
+    [ValidateInput(false)]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Create")]
+    public ActionResult Create(tbl_Common_Building model)
+    {
+      if (ModelState.IsValid)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@Building_Key",SqlDbType.Int){Value = model.Building_Key ?? 0},
+          new SqlParameter("@Building_Code",SqlDbType.NVarChar){Value = (model.Building_Code ?? "").ToString()},
+          new SqlParameter("@Name",SqlDbType.NVarChar){Value = (model.Name ?? "").ToString()},
+          new SqlParameter("@Default_Location",SqlDbType.NVarChar){Value = (model.Default_Location ?? "").ToString()},
+          new SqlParameter("@Receiving_Location",SqlDbType.NVarChar){Value = (model.Receiving_Location ?? "").ToString()},
+          new SqlParameter("@Shipping_Location",SqlDbType.NVarChar){Value = (model.Shipping_Location ?? "").ToString()},
+          new SqlParameter("@Width",SqlDbType.Int){Value = model.Width ?? 0},
+          new SqlParameter("@Height",SqlDbType.Int){Value = model.Height ?? 0},
+          new SqlParameter("@Facility_Key",SqlDbType.Int){Value = model.Facility_Key ?? 0},
+          new SqlParameter("@Main_Facility",SqlDbType.Bit){Value = model.Main_Facility},
+          new SqlParameter("@PRODUCTION",SqlDbType.Bit){Value = model.PRODUCTION},
+          new SqlParameter("@WAREHOUSE",SqlDbType.Bit){Value = model.WAREHOUSE},
+          new SqlParameter("@SHIPPING",SqlDbType.Bit){Value = model.SHIPPING}
+        };
+
+        var result = Firstronic.Framework.Queries.InsertQuery($@"
+          INSERT INTO [dbo].[Common_Building]
+            ([Building_Key],[Building_Code],[Name],[Default_Location],[Receiving_Location],
+             [Shipping_Location],[Width],[Height],[Facility_Key],[Main_Facility],
+             [PRODUCTION],[WAREHOUSE],[SHIPPING])
+          VALUES
+            (@Building_Key,@Building_Code,@Name,@Default_Location,@Receiving_Location,
+             @Shipping_Location,@Width,@Height,@Facility_Key,@Main_Facility,
+             @PRODUCTION,@WAREHOUSE,@SHIPPING)", parameters);
+
+        if (result > 0)
+        {
+          this.NotifySuccess("Successfully saved.");
+          return RedirectToAction("Edit", new { Id = model.Building_Key });
+        }
+        else if (result == 0)
+        {
+          this.NotifyError("Record can not save!");
+          return RedirectToAction("Index");
+        }
+        else
+        {
+          this.NotifyError("Error in database.");
+          return RedirectToAction("Index");
+        }
+      }
+
+      // Reload facilities dropdown on validation error
+      model.FacilityList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(
+        "SELECT [Facility_Key],[Facility_Name] FROM [Common_Facilities]");
+
+      return View(model);
+    }
+
+    // GET: Manage/Building/Edit/5
+    public ActionResult Edit(int id)
+    {
+      SqlParameter[] parameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id},
+      };
+
+      var model0 = Framework.Functions.Utilies.ConvertTo<tbl_Common_Building>(
+        Firstronic.Framework.Queries.GetDatatableFromQuery(
+          "SELECT * FROM Common_Building WHERE Building_Key=@Id", parameters)).FirstOrDefault();
+
+      if (model0 == null)
+      {
+        this.NotifyError("Not found.");
+        return RedirectToAction("Index");
+      }
+
+      var model = new tbl_Common_Building
+      {
+        Building_Key = model0.Building_Key,
+        Building_Code = model0.Building_Code,
+        Name = model0.Name,
+        Default_Location = model0.Default_Location,
+        Receiving_Location = model0.Receiving_Location,
+        Shipping_Location = model0.Shipping_Location,
+        Width = model0.Width,
+        Height = model0.Height,
+        Facility_Key = model0.Facility_Key,
+        Main_Facility = model0.Main_Facility,
+        PRODUCTION = model0.PRODUCTION,
+        WAREHOUSE = model0.WAREHOUSE,
+        SHIPPING = model0.SHIPPING
+      };
+
+      // Load facilities dropdown
+      model.FacilityList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(
+        "SELECT [Facility_Key],[Facility_Name] FROM [Common_Facilities]");
+
+      return View(model);
+    }
+
+    // POST: Manage/Building/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Edit")]
+    public ActionResult Edit(tbl_Common_Building model)
+    {
+      if (ModelState.IsValid)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@Id",SqlDbType.Int){Value = model.Building_Key},
+        };
+
+        var record = Framework.Functions.Utilies.ConvertTo<tbl_Common_Building>(
+          Firstronic.Framework.Queries.GetDatatableFromQuery(
+            "SELECT * FROM Common_Building WHERE Building_Key=@Id", parameters)).FirstOrDefault();
+
+        if (record is null)
+        {
+          this.NotifyError("Record not found.");
+          return RedirectToAction("Index");
+        }
+
+        SqlParameter[] updateParameters = new SqlParameter[]{
+          new SqlParameter("@Building_Key",SqlDbType.Int){Value = model.Building_Key},
+          new SqlParameter("@Building_Code",SqlDbType.NVarChar){Value = (model.Building_Code ?? "").ToString()},
+          new SqlParameter("@Name",SqlDbType.NVarChar){Value = (model.Name ?? "").ToString()},
+          new SqlParameter("@Default_Location",SqlDbType.NVarChar){Value = (model.Default_Location ?? "").ToString()},
+          new SqlParameter("@Receiving_Location",SqlDbType.NVarChar){Value = (model.Receiving_Location ?? "").ToString()},
+          new SqlParameter("@Shipping_Location",SqlDbType.NVarChar){Value = (model.Shipping_Location ?? "").ToString()},
+          new SqlParameter("@Width",SqlDbType.Int){Value = model.Width ?? 0},
+          new SqlParameter("@Height",SqlDbType.Int){Value = (model.Height ?? 0)},
+          new SqlParameter("@Facility_Key",SqlDbType.Int){Value = model.Facility_Key ?? 0},
+          new SqlParameter("@Main_Facility",SqlDbType.Bit){Value = model.Main_Facility},
+          new SqlParameter("@PRODUCTION",SqlDbType.Bit){Value = model.PRODUCTION},
+          new SqlParameter("@WAREHOUSE",SqlDbType.Bit){Value = model.WAREHOUSE},
+          new SqlParameter("@SHIPPING",SqlDbType.Bit){Value = model.SHIPPING}
+        };
+
+        var result = Firstronic.Framework.Queries.ExecuteQuery(@"
+          UPDATE Common_Building SET
+            Building_Code = @Building_Code,
+            Name = @Name,
+            Default_Location = @Default_Location,
+            Receiving_Location = @Receiving_Location,
+            Shipping_Location = @Shipping_Location,
+            Width = @Width,
+            Height = @Height,
+            Facility_Key = @Facility_Key,
+            Main_Facility = @Main_Facility,
+            PRODUCTION = @PRODUCTION,
+            WAREHOUSE = @WAREHOUSE,
+            SHIPPING = @SHIPPING
+          WHERE Building_Key = @Building_Key", updateParameters);
+
+        if (result > 0)
+          this.NotifySuccess("Successfully saved.");
+        else if (result == 0)
+          this.NotifyError("Record can not save!");
+        else
+          this.NotifyError("Error in database.");
+
+        return RedirectToAction("Edit", new { id = model.Building_Key });
+      }
+
+      // Reload facilities dropdown on validation error
+      model.FacilityList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(
+        "SELECT [Facility_Key],[Facility_Name] FROM [Common_Facilities]");
+
+      return View(model);
+    }
+
+    // POST: Delete
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Delete")]
+    public ActionResult Delete(tbl_Common_Building model)
+    {
+      if (ModelState.IsValid)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@Id",SqlDbType.Int){Value = model.Building_Key},
+        };
+
+        var record = Framework.Functions.Utilies.ConvertTo<tbl_Common_Building>(
+          Firstronic.Framework.Queries.GetDatatableFromQuery(
+            "SELECT * FROM Common_Building WHERE Building_Key=@Id", parameters)).FirstOrDefault();
+
+        if (record is null)
+        {
+          this.NotifyError("Record not found.");
+          return RedirectToAction("Index");
+        }
+
+        SqlParameter[] delParameters = new SqlParameter[]{
+          new SqlParameter("@Id",SqlDbType.Int){Value = model.Building_Key},
+        };
+
+        var result = Firstronic.Framework.Queries.ExecuteQuery(
+          "DELETE FROM Common_Building WHERE Building_Key=@Id", delParameters);
+
+        if (result > 0)
+          this.NotifySuccess("Successfully deleted.");
+        else if (result == 0)
+          this.NotifyError("Record can not be deleted!");
+        else
+          this.NotifyError("Error in database.");
+
+        return RedirectToAction("Index");
+      }
+
+      return View(model);
+    }
+  }
+
+  // Entity class for Common_Building
+  [Table("Common_Building")]
+  public class tbl_Common_Building : BaseEntity
+  {
+    [Display(Name = "Building Key")]
+    public int? Building_Key { get; set; }
+
+    [Display(Name = "Building Code")]
+    [MaxLength(100)]
+    public string Building_Code { get; set; }
+
+    [Display(Name = "Building Name")]
+    [MaxLength(50)]
+    public string Name { get; set; }
+
+    [Display(Name = "Default Location")]
+    [MaxLength(50)]
+    public string Default_Location { get; set; }
+
+    [Display(Name = "Receiving Location")]
+    [MaxLength(50)]
+    public string Receiving_Location { get; set; }
+
+    [Display(Name = "Shipping Location")]
+    [MaxLength(50)]
+    public string Shipping_Location { get; set; }
+
+    [Display(Name = "Width")]
+    public int? Width { get; set; }
+
+    [Display(Name = "Height")]
+    public int? Height { get; set; }
+
+    [Display(Name = "Facility")]
+    public int? Facility_Key { get; set; }
+
+    [Display(Name = "Facility Name")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Main Facility")]
+    public bool Main_Facility { get; set; }
+
+    [Display(Name = "Production")]
+    public bool PRODUCTION { get; set; }
+
+    [Display(Name = "Warehouse")]
+    public bool WAREHOUSE { get; set; }
+
+    [Display(Name = "Shipping")]
+    public bool SHIPPING { get; set; }
+
+    public IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+}

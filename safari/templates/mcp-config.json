@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json.schemastore.org/mcp-config",
+  "mcpServers": {
+    "azure-devops": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure-devops/mcp",
+        "SafariCircuitsLLC"
+      ]
+    },
+    "ms-365": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@softeria/ms-365-mcp-server",
+        "--org-mode"
+      ],
+      "env": {
+        "MS365_MCP_TOKEN_CACHE_PATH": "{{USER_HOME}}\\.config\\ms365-mcp\\.token-cache.json",
+        "MS365_MCP_SELECTED_ACCOUNT_PATH": "{{USER_HOME}}\\.config\\ms365-mcp\\.selected-account.json"
+      }
+    },
+    "powerbi-desktop": {
+      "command": "{{USER_HOME}}\\PowerBI-MCP\\powerbi-desktop-mcp.exe",
+      "args": []
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    },
+    "confluent-kafka": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@confluentinc/mcp-confluent"
+      ],
+      "env": {
+        "CONFLUENT_CLOUD_API_KEY": "${CONFLUENT_CLOUD_API_KEY}",
+        "CONFLUENT_CLOUD_API_SECRET": "${CONFLUENT_CLOUD_API_SECRET}"
+      }
+    },
+    "postgresql": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "${POSTGRES_CONNECTION_STRING}"
+      ]
+    },
+    "mssql": {
+      "command": "python",
+      "args": [
+        "-m",
+        "mssql_mcp_server"
+      ],
+      "env": {
+        "MSSQL_HOST": "${MSSQL_HOST}",
+        "MSSQL_USER": "${MSSQL_USER}",
+        "MSSQL_PASSWORD": "${MSSQL_PASSWORD}",
+        "MSSQL_DATABASE": "${MSSQL_DATABASE}"
+      }
+    },
+    "iceberg": {
+      "command": "python",
+      "args": [
+        "-m",
+        "iceberg_mcp"
+      ],
+      "env": {
+        "ICEBERG_CATALOG_URI": "${ICEBERG_CATALOG_URI}",
+        "ICEBERG_CATALOG_WAREHOUSE": "${ICEBERG_CATALOG_WAREHOUSE}"
+      }
+    },
+    "trino": {
+      "command": "python",
+      "args": [
+        "-m",
+        "trino_mcp"
+      ],
+      "env": {
+        "TRINO_HOST": "${TRINO_HOST}",
+        "TRINO_PORT": "${TRINO_PORT:-8080}",
+        "TRINO_USER": "${TRINO_USER}",
+        "TRINO_CATALOG": "${TRINO_CATALOG}",
+        "TRINO_SCHEMA": "${TRINO_SCHEMA}"
+      }
+    },
+    "openmetadata": {
+      "command": "mcp-server-openmetadata",
+      "args": [],
+      "env": {
+        "OPENMETADATA_HOST": "${OPENMETADATA_HOST}",
+        "OPENMETADATA_TOKEN": "${OPENMETADATA_TOKEN}"
+      }
+    },
+    "kubernetes": {
+      "command": "python",
+      "args": [
+        "-m",
+        "mcp_kubernetes_server"
+      ],
+      "env": {
+        "KUBECONFIG": "${KUBECONFIG:-~/.kube/config}"
+      }
+    },
+    "spark-history": {
+      "command": "spark-mcp",
+      "args": [],
+      "env": {
+        "SPARK_HISTORY_SERVER_URL": "${SPARK_HISTORY_SERVER_URL}"
+      }
+    },
+    "dbt": {
+      "command": "uvx",
+      "args": [
+        "dbt-mcp"
+      ],
+      "env": {
+        "DBT_PROJECT_DIR": "${DBT_PROJECT_DIR}",
+        "DBT_PROFILES_DIR": "${DBT_PROFILES_DIR:-~/.dbt}"
+      }
+    },
+    "Safari MCP": {
+      "command": "node",
+      "args": [
+        "{{USER_HOME}}\\.claude\\mcp-servers\\safari-mcp\\dist\\index.js"
+      ],
+      "env": {
+        "CONTEXT_ROOT": "{{USER_HOME}}\\.claude",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "microsoft-entra": {
+      "type": "http",
+      "url": "https://mcp.svc.cloud.microsoft/enterprise"
+    }
+  }
+}

@@ -1,0 +1,192 @@
+2026-05-14T12:28:16.204Z [DEBUG] [init] configureGlobalMTLS starting
+2026-05-14T12:28:16.204Z [DEBUG] [init] configureGlobalMTLS complete
+2026-05-14T12:28:16.204Z [DEBUG] [init] configureGlobalAgents starting
+2026-05-14T12:28:16.204Z [DEBUG] [init] configureGlobalAgents complete
+2026-05-14T12:28:16.246Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2026-05-14T12:28:16.265Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-05-14T12:28:16.276Z [DEBUG] [ToolSearch:optimistic] mode=tst-auto, ENABLE_TOOL_SEARCH=undefined, result=true
+2026-05-14T12:28:16.277Z [DEBUG] [STARTUP] Running setup()...
+2026-05-14T12:28:16.277Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2026-05-14T12:28:16.285Z [DEBUG] Loading skills from: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\emarquez\.claude\skills, project=[]
+2026-05-14T12:28:16.286Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at Pw5 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:1200)
+    at oA1 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2071)
+2026-05-14T12:28:16.286Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-14T12:28:16.286Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-14T12:28:16.286Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at f04 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24927)
+    at Object.callback (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:7624:507)
+2026-05-14T12:28:16.286Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at Fy1 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:362:1158)
+2026-05-14T12:28:16.286Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at my1 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:362:1763)
+2026-05-14T12:28:16.286Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at q_8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:962:43470)
+2026-05-14T12:28:16.286Z [DEBUG] Error log sink initialized
+2026-05-14T12:28:16.305Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2026-05-14T12:28:16.305Z [DEBUG] Total plugin skills loaded: 0
+2026-05-14T12:28:16.305Z [DEBUG] Total plugin commands loaded: 0
+2026-05-14T12:28:16.308Z [DEBUG] [STARTUP] setup() completed in 31ms
+2026-05-14T12:28:16.308Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-05-14T12:28:16.329Z [DEBUG] Registered 0 hooks from 0 plugins
+2026-05-14T12:28:16.337Z [DEBUG] [Claude in Chrome] Found chrome profiles: Default
+2026-05-14T12:28:16.348Z [DEBUG] [Claude in Chrome] Found edge profiles: Default, Profile 1, Profile 2, Profile 3
+2026-05-14T12:28:16.367Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\codebase-locator.md is missing required 'name' in frontmatter
+2026-05-14T12:28:16.367Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\codebase-locator.md: Missing required "name" field in frontmatter
+2026-05-14T12:28:16.367Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\codebase-analyzer.md is missing required 'name' in frontmatter
+2026-05-14T12:28:16.367Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\codebase-analyzer.md: Missing required "name" field in frontmatter
+2026-05-14T12:28:16.368Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\pattern-finder.md is missing required 'name' in frontmatter
+2026-05-14T12:28:16.368Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\pattern-finder.md: Missing required "name" field in frontmatter
+2026-05-14T12:28:16.368Z [DEBUG] Agent file C:\Users\emarquez\.claude\agents\README.md is missing required 'name' in frontmatter
+2026-05-14T12:28:16.368Z [DEBUG] Failed to parse agent from C:\Users\emarquez\.claude\agents\README.md: Missing required "name" field in frontmatter
+2026-05-14T12:28:16.369Z [DEBUG] Total plugin agents loaded: 0
+2026-05-14T12:28:16.375Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\emarquez\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2026-05-14T12:28:16.377Z [DEBUG] [Claude in Chrome] Extension not found in any browser
+2026-05-14T12:28:16.385Z [DEBUG] Loaded 15 unique skills (15 unconditional, 0 conditional, managed: 0, user: 1, project: 0, additional: 0, legacy commands: 14)
+2026-05-14T12:28:16.385Z [DEBUG] getSkills returning: 15 skill dir commands, 0 plugin skills, 2 bundled skills
+2026-05-14T12:28:16.387Z [DEBUG] [STARTUP] Commands and agents loaded in 79ms
+2026-05-14T12:28:16.391Z [DEBUG] [STARTUP] Running showSetupScreens()...
+2026-05-14T12:28:16.395Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-14T12:28:16.402Z [DEBUG] [keybindings] KeybindingSetup initialized with 102 bindings, 0 warnings
+2026-05-14T12:28:16.416Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at _46 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8508)
+    at E7 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:10239)
+    at zr (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:222:2282)
+2026-05-14T12:28:16.452Z [DEBUG] [keybindings] Skipping file watcher - user customization disabled
+2026-05-14T12:28:16.619Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.23544.1778761696619
+2026-05-14T12:28:16.619Z [DEBUG] Preserving file permissions: 100666
+2026-05-14T12:28:16.620Z [DEBUG] Temp file written successfully, size: 39522 bytes
+2026-05-14T12:28:16.620Z [DEBUG] Applied original permissions to temp file
+2026-05-14T12:28:16.620Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.23544.1778761696619 to C:\Users\emarquez\.claude.json
+2026-05-14T12:28:16.625Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-14T12:28:16.634Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.23544.1778761696634
+2026-05-14T12:28:16.634Z [DEBUG] Preserving file permissions: 100666
+2026-05-14T12:28:16.635Z [DEBUG] Temp file written successfully, size: 39521 bytes
+2026-05-14T12:28:16.635Z [DEBUG] Applied original permissions to temp file
+2026-05-14T12:28:16.635Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.23544.1778761696634 to C:\Users\emarquez\.claude.json
+2026-05-14T12:28:16.642Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-14T12:28:16.649Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.23544.1778761696649
+2026-05-14T12:28:16.649Z [DEBUG] Preserving file permissions: 100666
+2026-05-14T12:28:16.650Z [DEBUG] Temp file written successfully, size: 39520 bytes
+2026-05-14T12:28:16.650Z [DEBUG] Applied original permissions to temp file
+2026-05-14T12:28:16.650Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.23544.1778761696649 to C:\Users\emarquez\.claude.json
+2026-05-14T12:28:16.654Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-14T12:28:16.661Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.23544.1778761696661
+2026-05-14T12:28:16.661Z [DEBUG] Preserving file permissions: 100666
+2026-05-14T12:28:16.662Z [DEBUG] Temp file written successfully, size: 39519 bytes
+2026-05-14T12:28:16.662Z [DEBUG] Applied original permissions to temp file
+2026-05-14T12:28:16.662Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.23544.1778761696661 to C:\Users\emarquez\.claude.json
+2026-05-14T12:28:16.666Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-14T12:28:16.916Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.23544.1778761696916
+2026-05-14T12:28:16.916Z [DEBUG] Preserving file permissions: 100666
+2026-05-14T12:28:16.917Z [DEBUG] Temp file written successfully, size: 39519 bytes
+2026-05-14T12:28:16.917Z [DEBUG] Applied original permissions to temp file
+2026-05-14T12:28:16.917Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.23544.1778761696916 to C:\Users\emarquez\.claude.json
+2026-05-14T12:28:16.922Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-14T12:28:17.058Z [DEBUG] Remote settings: No settings found (404)
+2026-05-14T12:28:17.058Z [DEBUG] Programmatic settings change notification for policySettings
+2026-05-14T12:28:17.058Z [DEBUG] Plugin hooks: reloading due to policySettings change
+2026-05-14T12:28:17.062Z [DEBUG] Settings changed from policySettings, updating app state
+2026-05-14T12:28:17.064Z [DEBUG] Replacing all allow rules for destination 'userSettings' with 0 rule(s): []
+2026-05-14T12:28:17.064Z [DEBUG] Replacing all deny rules for destination 'userSettings' with 0 rule(s): []
+2026-05-14T12:28:17.064Z [DEBUG] Replacing all ask rules for destination 'userSettings' with 0 rule(s): []
+2026-05-14T12:28:17.064Z [DEBUG] Replacing all allow rules for destination 'projectSettings' with 0 rule(s): []
+2026-05-14T12:28:17.064Z [DEBUG] Replacing all deny rules for destination 'projectSettings' with 0 rule(s): []
+2026-05-14T12:28:17.064Z [DEBUG] Replacing all ask rules for destination 'projectSettings' with 0 rule(s): []
+2026-05-14T12:28:17.064Z [DEBUG] Replacing all allow rules for destination 'localSettings' with 0 rule(s): []
+2026-05-14T12:28:17.064Z [DEBUG] Replacing all deny rules for destination 'localSettings' with 0 rule(s): []
+2026-05-14T12:28:17.064Z [DEBUG] Replacing all ask rules for destination 'localSettings' with 0 rule(s): []
+2026-05-14T12:28:17.064Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2026-05-14T12:28:17.064Z [DEBUG] Registered 0 hooks from 0 plugins
+2026-05-14T12:28:17.728Z [ERROR] AxiosError: AxiosError: Request failed with status code 401
+    at Kb (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:34:1138)
+    at Unzip.<anonymous> (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:35:9777)
+    at Unzip.emit (node:events:520:35)
+    at endReadableNT (node:internal/streams/readable:1701:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+    at zv1.request (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:37:2132)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async _b9 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1983:366)
+    at async Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:54:19575)
+    at async Xb9 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1983:510)
+2026-05-14T12:28:18.587Z [DEBUG] Skipping SessionEnd:other hook execution - workspace trust not accepted

@@ -1,0 +1,266 @@
+@using System.Data
+@model Firstronic.Core.Entities.App.Quality.tbl_QA_tbl_alerts_FULL
+
+@{
+  bool isNew = !(Model != null && Model.ID > 0);
+
+  if (isNew)
+  {
+    Model.ExpiredDate = DateTime.Now;
+  }
+}
+
+@section head{
+  <script src="~/Content/vendor/jqueryui/jquery-ui.js"></script>
+}
+
+@using (Html.BeginForm())
+{
+
+  <div class="md-card">
+    <div class="md-card-toolbar">
+      <h3 class="md-card-toolbar-heading-text">Manage QA Alert: @Model.Title</h3>
+    </div>
+    <div class="md-card-content">
+      @Html.AntiForgeryToken()
+      @Html.ValidationSummary("", new { @class = "hide" })
+      @Html.HiddenFor(y => y.ID, new { id = "txtPart_ID" })
+
+      <div class="tab-content mt-4" id="component-1-content">
+        <div class="tab-pane fade show active" id="component-1-1" role="tabpanel" aria-labelledby="component-1-1">
+          <div class="input-group mb-3">
+            @Html.LabelFor(y => y.Title, new { @class = "m-0 fs-14" })
+            @Html.TextBoxFor(y => y.Title, new { @class = "md-input" })
+          </div>
+          <div class="input-group mb-3">
+            @Html.LabelFor(y => y.Description, new { @class = "m-0 fs-14" })
+            @Html.TextAreaFor(y => y.Description, new { @class = "md-input", @rows = 4 })
+          </div>
+          <div class="input-group mb-3">
+            @Html.LabelFor(y => y.PartID, new { @class = "m-0 fs-14" })
+            @{
+              var pnlist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery("SELECT cast(-1 as int) as PartID,' ALL' PartNumber UNION SELECT PartID,PartNumber " +
+"FROM CS_idt_partnumbers Order By Partnumber asc "); ;
+            }
+            @Html.DropDownListFor(y => y.PartID, (IEnumerable<SelectListItem>)pnlist, new { @class = "md-input" })
+          </div>
+
+          @{
+            DataTable arealist1 = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable(
+              areaTypeIds: new int[] { 1 });
+
+            <div class="row mn-b-20">
+              @foreach (DataRow item in arealist1.Rows)
+              {
+                if (Model.AreasID != null)
+                {
+                  if (Model.AreasID.Contains("," + item[0].ToString() + ","))
+                  {
+                    <div class="col-3">
+                      @Html.CheckBox(item[0].ToString(), true, new { @class = "extraItemList",@id= "checkboxId_" + item[0].ToString() }) @item[1].ToString()
+                    </div>
+                  }
+                  else
+                  {
+                    <div class="col-3">
+                      @Html.CheckBox(item[0].ToString(), false, new { @class = "extraItemList", @id = "checkboxId_" + item[0].ToString() }) @item[1].ToString()
+                    </div>
+                  }
+                }
+                else
+                {
+                  <div class="col-3">
+                    @Html.CheckBox(item[0].ToString(), false, new {  @class = "extraItemList", @id = "checkboxId_" + item[0].ToString() }) @item[1].ToString()
+                  </div>
+                }
+              }
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                $(document).on("click", "INPUT[id^=checkboxId_]", function (event) {
+                  var element = event.target;
+
+                  var txtPost = document.getElementById("txtareas");
+                  var n = txtPost.value.includes("," + element.name + ",");
+                  if (element.checked) {
+                    if (n) {
+
+                    } else {
+                      //add
+                      txtPost.value = txtPost.value + "," + element.name + ",";
+                    }
+                  }
+                  else {
+                    if (n) {
+                      txtPost.value = txtPost.value.replace("," + element.name + ",", "");
+                    } else {
+                      // Dejar igual
+                    }
+                  }
+
+                  //if ($("#" + targetId + ":checked").length > 0) {
+                  //  alert('checked');
+                  //}
+                  //else {
+                  //  alert('unchecked');
+                  //}
+                });
+
+                
+              </script>
+            </div>
+          }
+
+
+          <div class="input-group mb-3 hide">
+            @Html.LabelFor(y => y.AreasID, new { @class = "m-0 fs-14" })
+            @Html.TextBoxFor(y => y.AreasID, new { @class = "md-input", @id = "txtareas" })
+          </div>
+
+
+          <div class="input-group mb-3">
+            @Html.LabelFor(y => y.ExpiredDate, new { @class = "m-0 fs-14" })
+            @Html.TextBoxFor(y => y.ExpiredDate, new { @class = "md-input", @id = "ddlDateStart" })
+          </div>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+            $("#ddlDateStart").datepicker({
+              dateFormat: "mm/dd/y",
+              changeMonth: true,
+              changeYear: true,
+              yearRange: "-10:+5"
+            });
+          </script>
+
+          @if (!isNew)
+          {
+            if (Model.PicNot.Length > 15)
+            {
+
+              <div class="col-12 image-container" style="text-align:center;margin-bottom:15px;border:1px solid #ddd;padding:15px;">
+                <img src="@Html.Raw(Path.Combine("/UploadedFiles/QA_Alerts/", Model.PicNot.ToString().Replace("[img]","").Replace("[/img]","")))" class="img-element" style="max-height:250px;max-width:250px;" />
+              </div>
+            }
+          }
+
+          @if (!isNew)
+          {
+            <div class="input-group mb-3">
+              @Html.Label("Image", new { @class = "m-0 fs-14" })
+              @Html.TextBoxFor(Model => Model.PicNot, new { @class = "md-input Filevalidation3", @id = "txtpnpicture", type = "file" })
+            </div>
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              Filevalidation3 = () => {
+                const fi = document.getElementById('txtpnpicture');
+                // Check if any file is selected.
+                if (fi.files.length > 0) {
+                  for (var i = 0; i <= fi.files.length - 1; i++) {
+                    const fsize = fi.files.item(i).size;
+                    const file = Math.round((fsize / 1024));
+                    // The size of the file.
+                    if (file >= 30096) {
+                      alert(
+                        "File too Big, please select a file less than 30mb");
+                      $("#txtpnpicture").html("");
+                    }
+                  }
+                }
+
+                var PartID = $("#txtPart_ID").val();
+                if (PartID > 0 && $("#txtpnpicture").val().length > 10) {
+
+                  try {
+
+                    x = true;
+
+                    if (x == true) {
+                      var nurl = ""
+
+                      var fileUpload = $("#txtpnpicture").get(0);
+                      var files = fileUpload.files;
+
+                      var fileData = new FormData();
+
+                      // Looping over all files and add it to FormData object
+                      for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                      }
+
+                      $.ajax({
+                        type: "POST",
+                        url: "/Quality/Alerts/UploadFile",
+                        async: false,
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (response) {
+                          nurl = response;
+                        },
+                        error: function () {
+
+                        }
+                      });
+
+                      console.log(nurl);
+
+                      if (nurl != "") {
+                        var req3 = { PartID: PartID, HTML: nurl };
+
+                        // UPDATE ELEMENT 1
+                        $.ajax({
+                          type: "POST",
+                          url: "/Quality/Alerts/AddPicture",
+                          async: false,
+                          contentType: "application/json; charset=utf-8",
+                          data: JSON.stringify(req3),
+                          success: function (response) {
+                            location.reload();
+                          },
+                          error: function () {
+                            location.reload();
+                          }
+                        });
+                      }
+                    }
+                  } catch (ex) {
+
+                  }
+
+                  //alert("Saved")
+
+                  //alert("Assembly " + AssemblyID + " | SlideID " + SlideID + " | Element " + ElementID + " | Description " + Description + " | HTML " + HTML + " | Badges " + Badges.join('\n') + " | Tools " + Tools.join('\n'))
+
+                } else {
+                  alert("Error")
+                }
+              }
+            </script>
+          }
+        </div>
+      </div>
+      <div class="tab-pane">
+        <div class="form-group">
+          <div class="form-group mt-4 pt-4 border-top">
+            <button type="submit" name="action:@(isNew ? "Create": "Edit")" class="md-btn md-btn-primary md-btn-small">
+              Save
+            </button>
+
+            @if (!isNew)
+            {
+              @(Html.Fst().ConfirmModal("Delete", "Alerts", new { @id = Model.ID })
+                                                                                      .Title("Confirm Delete")
+                                                                                      .Content("Are you sure do you want to Delete?")
+                                                                                      .For(Html.Fst().Button().Text("Delete").Color(BootstrapColor.Secondary).Size(ButtonSize.Small))
+              )
+            }
+
+            <div class="d-inline-block">
+              <span class="mx-2 text-light font-weight-light fs-15">or</span>
+              <i class="fas fa-long-arrow-alt-left fs-13 text-primary o-8"></i>
+              <a href="@Url.Action("List", "Alerts")" class="m-link fs-15"> Back to list</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+}

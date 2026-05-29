@@ -1,0 +1,70 @@
+﻿Imports System.Data.SqlClient
+Imports System.Text.RegularExpressions
+
+Public Class frm_PVS_labelAdditionalAdd
+    Private Sub frm_PVS_Capacitor_Add_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        lbltitle.Text = "Favor de escanear " & ExData.Selected_Area.Selected_Casilla.Packout_Capacitor_Request_Title
+
+        txt_serial.Select()
+    End Sub
+
+    Private Sub btn_liberar_Click(sender As Object, e As EventArgs) Handles btn_liberar.Click
+
+        Dim ssn = txt_serial.Text.Replace("'", "")
+
+        Dim resultado As Boolean = False
+
+        Dim regex1 As Regex
+        regex1 = New Regex(ExData.Selected_Area.Selected_Casilla.Packout_Capacitor_Request_Format)
+        Dim match As Match = regex1.Match(ssn)
+
+        If match.Success Then
+
+            Dim insertParameter() As SqlParameter = New SqlParameter() _
+                   {
+                        New SqlParameter("@SSN", SqlDbType.NVarChar) With {.Value = ExData.Selected_Area.Selected_Casilla.Packout_Capacitor_Request_SSN},
+                        New SqlParameter("@SSN_Capacitor", SqlDbType.NVarChar) With {.Value = ssn}
+                   }
+
+            ''Verificar duplicados
+
+            Dim InsertData As Boolean = False
+            Dim duplicateSSN As String = ""
+
+            Dim dtduplicated As DataTable = BeConn.GetDt("SELECT [AutoID], [SSN]FROM  [PD_tbl_units_packed_capacitors] Where  SSN_Capacitor = @SSN_Capacitor  ", insertParameter)
+            If dtduplicated.Rows.Count > 0 Then
+                duplicateSSN = dtduplicated.Rows(0).Item("SSN").ToString()
+                ''verificamos que no sea  de osram
+                Dim dtallowDuplicated As DataTable = BeConn.GetDt("SELECT   CS_idt_partnumbers.CustomerID
+                                                                    FROM            CS_idt_partnumbers INNER JOIN  PD_tbl_units_packed_capacitors_allowDuplicated ON CS_idt_partnumbers.CustomerID = PD_tbl_units_packed_capacitors_allowDuplicated.CustomerID
+                                                                    WHERE        (CS_idt_partnumbers.PartID = " & ExData.Selected_Area.Selected_Casilla.PartID & ")", insertParameter)
+                If dtallowDuplicated.Rows.Count > 0 Then
+                    InsertData = True
+                End If
+            Else
+                InsertData = True
+            End If
+            If InsertData = True Then
+                BeConn.InsertRecords("INSERT INTO [dbo].[PD_tbl_units_packed_capacitors] (TrnDate,SSN,SSN_Capacitor)  VALUES  (GETDATE(),@SSN,@SSN_Capacitor)", insertParameter)
+                lblmsg.Text = "OK"
+                lblmsg.ForeColor = Color.Green
+                lblmsg.BackColor = Color.Honeydew
+                ExData.Selected_Area.Selected_Casilla.Packout_Capacitor_Request_OK = True
+                Me.Close()
+            Else
+                lblmsg.Text = "Duplicate " & ssn & " in " & duplicateSSN
+                lblmsg.ForeColor = Color.Red
+                lblmsg.BackColor = Color.MistyRose
+            End If
+
+        Else
+            lblmsg.Text = My.Resources.Messages.Serial_invalid
+            lblmsg.ForeColor = Color.Red
+            lblmsg.BackColor = Color.MistyRose
+
+            txt_serial.Text = ""
+            txt_serial.Select()
+        End If
+    End Sub
+End Class

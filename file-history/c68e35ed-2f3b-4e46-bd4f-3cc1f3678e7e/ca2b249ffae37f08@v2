@@ -1,0 +1,259 @@
+"""
+Fixed DOCX to Markdown extractor with proper image detection
+"""
+from docx import Document
+from docx.oxml.shared import qn
+import os
+import sys
+import re
+
+def extract_all_images(doc, image_output_dir):
+    """Extract all images and create rId mapping"""
+    os.makedirs(image_output_dir, exist_ok=True)
+
+    rid_to_filename = {}
+    image_counter = 1
+
+    for rel_id, rel in doc.part.rels.items():
+        if "image" in rel.target_ref:
+            try:
+                image_part = rel.target_part
+                image_bytes = image_part.blob
+                ext = rel.target_ref.split('.')[-1]
+                filename = f"image{image_counter:02d}.{ext}"
+
+                filepath = os.path.join(image_output_dir, filename)
+                with open(filepath, 'wb') as f:
+                    f.write(image_bytes)
+
+                rid_to_filename[rel_id] = filename
+                print(f"  Extracted: {filename} (rId: {rel_id})")
+                image_counter += 1
+            except Exception as e:
+                print(f"  Warning: Could not extract image {rel_id}: {e}")
+
+    return rid_to_filename
+
+def get_images_in_paragraph(paragraph, rid_to_filename):
+    """Get all images in a paragraph using multiple detection methods"""
+    images = []
+
+    # Method 1: Check for drawing elements
+    for run in paragraph.runs:
+        # Look for drawings
+        for drawing in run._element.findall('.//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}drawing'):
+            # Find blips (images)
+            for blip in drawing.findall('.//{http://schemas.openxmlformats.org/drawingml/2006/main}blip'):
+                embed_id = blip.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed')
+                if embed_id and embed_id in rid_to_filename:
+                    images.append(rid_to_filename[embed_id])
+
+        # Also check for pict elements (older format)
+        for pict in run._element.findall('.//{http://schemas.openxmlformats.org/vml}shape'):
+            for imagedata in pict.findall('.//{http://schemas.openxmlformats.org/vml}imagedata'):
+                rel_id = imagedata.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')
+                if rel_id and rel_id in rid_to_filename:
+                    images.append(rid_to_filename[rel_id])
+
+    return images
+
+def process_document_structure(doc, rid_to_filename):
+    """Process document and create structure with images"""
+    content = []
+
+    for para in doc.paragraphs:
+        text = para.text.strip()
+        style = para.style.name if para.style else "Normal"
+
+        # Get images in this paragraph
+        images = get_images_in_paragraph(para, rid_to_filename)
+
+        # Add to content if there's text or images
+        if text or images:
+            content.append({
+                'type': 'paragraph',
+                'text': text,
+                'style': style,
+                'images': images
+            })
+
+    # Also process tables
+    for table in doc.tables:
+        rows = []
+        for row in table.rows:
+            cells = []
+            for cell in row.cells:
+                cells.append(cell.text.strip())
+            if any(cells):
+                rows.append(cells)
+
+        if rows:
+            content.append({
+                'type': 'table',
+                'rows': rows,
+                'images': []
+            })
+
+    return content
+
+def create_markdown(content, doc_id, doc_title, app_name, image_folder_name):
+    """Create markdown from content structure"""
+    lines = []
+
+    # Header
+    lines.extend([
+        f"# {doc_id} - {app_name} {doc_title}",
+        "",
+        f"**Document ID:** {doc_id}  ",
+        f"**Application:** {app_name}  ",
+        "**Owner:** IT Department  ",
+        "**Status:** Active  ",
+        "**Last Updated:** 2026-05-11",
+        "",
+        "---",
+        ""
+    ])
+
+    in_list = False
+
+    for item in content:
+        if item['type'] == 'paragraph':
+            text = item['text']
+            style = item['style']
+            images = item['images']
+
+            # Skip empty
+            if not text and not images:
+                continue
+
+            # Skip document markers
+            if text.lower() in ['document summary', 'document history']:
+                continue
+
+            # Headings
+            if style.startswith('Heading'):
+                if in_list:
+                    lines.append("")
+                    in_list = False
+
+                level = int(style.replace('Heading ', ''))
+                lines.extend(["", f"{'#' * (level + 1)} {text}", ""])
+
+            # List items
+            elif style == 'List Paragraph' and text:
+                lines.append(f"- {text}")
+                in_list = True
+
+            # Normal text
+            elif text:
+                if in_list:
+                    lines.append("")
+                    in_list = False
+                lines.extend([text, ""])
+
+            # Add images after text
+            if images:
+                if in_list:
+                    lines.append("")
+                    in_list = False
+                for img in images:
+                    lines.extend([f"![Screenshot]({image_folder_name}/{img})", ""])
+
+        elif item['type'] == 'table':
+            if in_list:
+                lines.append("")
+                in_list = False
+
+            # Simple table formatting
+            for row in item['rows']:
+                lines.append("| " + " | ".join(row) + " |")
+            lines.append("")
+
+    # Footer
+    lines.extend([
+        "",
+        "---",
+        "",
+        "**End of Document**",
+        ""
+    ])
+
+    return '\n'.join(lines)
+
+def extract_document(docx_path, doc_id, doc_title, app_name="BeFirst"):
+    """Main extraction function"""
+    base_dir = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Enterprise Solution Architecture\Enterprise Systems\BeFirst\01_User_Manuals_MD"
+
+    safe_title = re.sub(r'[^\w\s-]', '', doc_title).strip().replace(' ', '_')
+    image_folder = os.path.join(base_dir, doc_id)
+    md_file = os.path.join(base_dir, f"{doc_id}_{app_name}_{safe_title}.md")
+
+    print("=" * 80)
+    print(f"Extracting {doc_id} - {doc_title}")
+    print("=" * 80)
+    print()
+
+    # Load document
+    print("Step 1: Loading document...")
+    doc = Document(docx_path)
+    print(f"  Loaded: {len(doc.paragraphs)} paragraphs")
+    print()
+
+    # Extract images
+    print("Step 2: Extracting images...")
+    rid_to_filename = extract_all_images(doc, image_folder)
+    print(f"  Total: {len(rid_to_filename)} images extracted")
+    print()
+
+    # Process document structure
+    print("Step 3: Processing document structure...")
+    content = process_document_structure(doc, rid_to_filename)
+
+    # Count how many content items have images
+    items_with_images = sum(1 for item in content if item['images'])
+    print(f"  Found {items_with_images} paragraphs with images")
+    print()
+
+    # Create markdown
+    print("Step 4: Creating markdown...")
+    markdown_content = create_markdown(content, doc_id, doc_title, app_name, doc_id)
+
+    with open(md_file, 'w', encoding='utf-8') as f:
+        f.write(markdown_content)
+
+    print(f"  Created: {os.path.basename(md_file)}")
+    print()
+
+    # Count image references in markdown
+    image_refs = markdown_content.count(f"![Screenshot]({doc_id}/")
+
+    print("=" * 80)
+    print("Complete!")
+    print(f"- Markdown file: {os.path.basename(md_file)}")
+    print(f"- Images extracted: {len(rid_to_filename)}")
+    print(f"- Images referenced in markdown: {image_refs}")
+    print(f"- Full path: {md_file}")
+    print("=" * 80)
+
+    if image_refs == 0 and len(rid_to_filename) > 0:
+        print()
+        print("WARNING: Images were extracted but not placed in markdown!")
+        print("This may indicate images are in a format the script can't detect.")
+
+    return md_file, image_folder, len(rid_to_filename)
+
+if __name__ == "__main__":
+    if len(sys.argv) < 4:
+        print("Usage: python extract_docx_fixed.py <docx_path> <doc_id> <doc_title> [app_name]")
+        sys.exit(1)
+
+    docx_path = sys.argv[1]
+    doc_id = sys.argv[2]
+    doc_title = sys.argv[3]
+    app_name = sys.argv[4] if len(sys.argv) > 4 else "BeFirst"
+
+    if not os.path.exists(docx_path):
+        print(f"Error: File not found: {docx_path}")
+        sys.exit(1)
+
+    extract_document(docx_path, doc_id, doc_title, app_name)

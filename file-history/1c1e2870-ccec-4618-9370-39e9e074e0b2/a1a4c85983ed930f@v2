@@ -1,0 +1,373 @@
+# Complete Setup Guide - HOME VAULT
+
+**With Git version control + Obsidian visual management**
+
+---
+
+## Overview
+
+This vault combines three powerful tools:
+
+| Tool | Purpose | What It Does |
+|------|---------|--------------|
+| **Git** | Version control | Tracks changes, enables sync across devices |
+| **Obsidian** | Visual UI | Graph view, queries, rich editing |
+| **Claude Code** | Context backend | Where Claude reads your preferences from |
+
+**Repository:** https://github.com/Eduardodmb/ClaudeHome.git
+**Vault:** `D:\OneDrive\16 - Obsidian\01_Claude_Home`
+**Context:** `C:\Users\eduar\.claude`
+
+---
+
+## Complete Setup (First Time - 15 minutes)
+
+### Step 1: Install Prerequisites (5 min)
+
+**Install Obsidian:**
+- Download: https://obsidian.md/
+- Install (no account needed)
+
+**Install Git (if not installed):**
+- Download: https://git-scm.com/
+- Install with default options
+- Verify: `git --version` in terminal
+
+### Step 2: Setup Git for Context (3 min)
+
+```bash
+# Navigate to Claude directory
+cd "C:\Users\eduar\.claude"
+
+# Initialize Git
+git init
+
+# Add remote repository
+git remote add origin https://github.com/Eduardodmb/ClaudeHome.git
+
+# Create .gitignore file
+cat > .gitignore << 'EOF'
+# Ignore temporary files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+
+# Ignore state files (session-specific)
+state/
+work-tracker.json
+
+# Ignore large binaries
+*.pdf
+*.docx
+*.pptx
+EOF
+
+# Stage all context files
+git add .
+
+# Initial commit
+git commit -m "Initial context commit - Home vault"
+
+# Push to GitHub
+git push -u origin main
+```
+
+**Verify:** Visit https://github.com/Eduardodmb/ClaudeHome to see your context files
+
+### Step 3: Open Obsidian Vault (2 min)
+
+1. Launch Obsidian
+2. Click **"Open folder as vault"**
+3. Navigate to: `D:\OneDrive\16 - Obsidian\01_Claude_Home`
+4. Click **"Open"**
+
+### Step 4: Install Dataview Plugin (2 min)
+
+1. Settings (gear icon) → Community plugins
+2. Turn off "Restricted mode"
+3. Click "Browse" → Search "Dataview"
+4. Install → Enable
+
+**Optional but recommended:**
+- Calendar (schedule reviews)
+- Templater (auto-fill templates)
+- Tag Wrangler (manage tags)
+
+### Step 5: Create Symbolic Links (3 min)
+
+```powershell
+# Run PowerShell as Administrator
+cd "D:\OneDrive\16 - Obsidian\01_Claude_Home\.setup"
+.\create-links.ps1
+```
+
+**What this does:** Links Obsidian vault folders to your `~/.claude/` directory
+
+**Expected output:**
+```
+• CLAUDE.md: Created (symlink) ✓
+• Learning: Created (symlink) ✓
+• Skills: Created (symlink) ✓
+• Commands: Created (symlink) ✓
+• Reference: Created (symlink) ✓
+```
+
+### Step 6: Verify Everything Works (1 min)
+
+**In Obsidian:**
+1. Open: `01-Personal-Context/CLAUDE.md`
+2. Should show your personal context section
+3. Press `Ctrl+G` to see graph view
+4. Open: `00-Dashboard/Context-Quality-Dashboard.md`
+
+**In terminal:**
+```bash
+cd "C:\Users\eduar\.claude"
+git status
+# Should show: "On branch main, nothing to commit, working tree clean"
+```
+
+---
+
+## Daily Workflow
+
+### Before Working
+
+```bash
+# Pull latest context changes
+cd "C:\Users\eduar\.claude"
+git pull
+```
+
+### During Work
+
+**Edit context in Obsidian:**
+- Changes save to `~/.claude/` automatically via symbolic links
+- Claude reads these files in every session
+
+**Commit significant changes:**
+```bash
+cd "C:\Users\eduar\.claude"
+git add .
+git commit -m "Add: [what you changed]"
+git push
+```
+
+### End of Session
+
+```bash
+# Commit and push context
+cd "C:\Users\eduar\.claude"
+git add .
+git commit -m "EOD: Context updates $(date +%Y-%m-%d)"
+git push
+```
+
+---
+
+## Weekly Review (Friday 4:00 PM - 30 min)
+
+### Process:
+
+1. **Pull latest changes:**
+   ```bash
+   cd "C:\Users\eduar\.claude"
+   git pull
+   ```
+
+2. **Open Obsidian dashboard:**
+   - `00-Dashboard/Context-Quality-Dashboard.md`
+
+3. **Run auto-queries:**
+   - Dataview shows stale files, recent additions, untagged items
+
+4. **Triage:**
+   - Keep + Update (still relevant)
+   - Archive to `99-Archive/`
+   - Promote learnings → skills
+   - Tag untagged files
+
+5. **Update personal context:**
+   - Open `01-Personal-Context/CLAUDE.md`
+   - Update "Current Focus Areas"
+   - Add new preferences
+
+6. **Commit improvements:**
+   ```bash
+   cd "C:\Users\eduar\.claude"
+   git add .
+   git commit -m "Weekly review: [improvements made]"
+   git push
+   ```
+
+---
+
+## Multi-Device Sync
+
+### Home Desktop (Primary - Setup Above)
+✓ Obsidian vault via OneDrive
+✓ Context files via Git
+✓ Symbolic links created
+
+### Laptop / Other Home Devices
+
+**OneDrive syncs vault automatically.**
+
+**On new device:**
+
+1. **Install Obsidian**
+2. **Wait for OneDrive sync** (vault folder appears)
+3. **Clone Git repository:**
+   ```bash
+   cd "C:\Users\eduar"
+
+   # If .claude doesn't exist:
+   git clone https://github.com/Eduardodmb/ClaudeHome.git .claude
+
+   # If .claude exists:
+   cd .claude
+   git init
+   git remote add origin https://github.com/Eduardodmb/ClaudeHome.git
+   git pull origin main
+   ```
+4. **Open vault in Obsidian**
+5. **Install Dataview plugin**
+6. **Run setup script** (create symbolic links)
+7. **Verify** `01-Personal-Context/CLAUDE.md` shows content
+
+---
+
+## What Syncs Where
+
+| Content | Syncs Via | Location | Purpose |
+|---------|-----------|----------|---------|
+| **CLAUDE.md** | Git | `~/.claude/` | Personal context/preferences |
+| **Learning files** | Git | `~/.claude/learning/` | Captured insights |
+| **Skills** | Git | `~/.claude/skills/` | Reusable expertise |
+| **Commands** | Git | `~/.claude/commands/` | Custom workflows |
+| **Dashboard** | OneDrive | Vault folder | Review templates |
+| **Reviews** | OneDrive | Vault folder | Your review notes |
+| **Obsidian settings** | OneDrive | Vault/.obsidian | Plugin configs |
+| **Symbolic links** | *(recreate)* | Per-device | Device-specific |
+
+---
+
+## Git Commands Quick Reference
+
+```bash
+# Daily pull (before working)
+git pull
+
+# Check what changed
+git status
+
+# Stage all changes
+git add .
+
+# Commit with message
+git commit -m "Description"
+
+# Push to GitHub
+git push
+
+# View history
+git log --oneline -10
+
+# See differences
+git diff
+
+# Undo changes to file
+git checkout -- filename.md
+```
+
+---
+
+## Troubleshooting
+
+### "git: command not found"
+**Solution:** Install Git from https://git-scm.com/
+
+### "Authentication failed"
+**Solution:** Use Personal Access Token:
+1. GitHub → Settings → Developer settings → Personal access tokens
+2. Generate token (repo scope)
+3. Use token as password
+
+### "Symbolic links not working"
+**Solution:** Re-run setup script as Administrator
+
+### "Merge conflict on git pull"
+**Solution:**
+```bash
+# Keep remote version (discard local)
+git fetch origin
+git reset --hard origin/main
+
+# Or resolve manually
+git status  # See conflicted files
+# Edit files, then:
+git add .
+git commit -m "Resolve conflicts"
+git push
+```
+
+### "Obsidian queries show no results"
+**Solution:**
+1. Verify Dataview plugin is enabled
+2. Wait 5 seconds (indexing)
+3. Restart Obsidian
+
+---
+
+## Security Checklist
+
+- [ ] Repository is **private** (verify on GitHub)
+- [ ] No passwords in committed files
+- [ ] No API keys in CLAUDE.md
+- [ ] `.gitignore` excludes sensitive files
+- [ ] Using strong GitHub password + 2FA
+
+---
+
+## Quick Start Checklist
+
+**First time setup:**
+- [ ] Git installed
+- [ ] Obsidian installed
+- [ ] Git repository initialized (`~/.claude/.git`)
+- [ ] Remote added (ClaudeHome.git)
+- [ ] Initial commit pushed
+- [ ] Vault opened in Obsidian
+- [ ] Dataview plugin installed
+- [ ] Symbolic links created (setup script)
+- [ ] Verification: CLAUDE.md shows in Obsidian
+
+**Daily checklist:**
+- [ ] Before work: `git pull`
+- [ ] Work: Edit in Obsidian
+- [ ] Major changes: `git commit` + `git push`
+- [ ] End of session: `git add .` + commit + push
+
+**Weekly checklist:**
+- [ ] Friday 4 PM: Open dashboard
+- [ ] Review stale content
+- [ ] Update CLAUDE.md
+- [ ] Commit improvements
+- [ ] Push to Git
+
+---
+
+## Documentation Files
+
+| File | Purpose |
+|------|---------|
+| `README.md` | Vault overview |
+| **`COMPLETE-SETUP-GUIDE.md`** | **This file - Full setup** |
+| `QUICK-START.md` | 10-minute quick start |
+| `.setup/GIT-SETUP.md` | Detailed Git guide |
+| `.setup/create-links.ps1` | Link creation script (HOME version) |
+
+---
+
+**You're all set! Git + Obsidian + Claude = Powerful context management for personal projects.**

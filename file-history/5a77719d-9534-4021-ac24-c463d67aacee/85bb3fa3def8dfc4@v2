@@ -1,0 +1,105 @@
+using Firstronic.Core.Entities.App.First;
+using Firstronic.Framework.Data;
+using Firstronic.Framework.Attributes;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace Firstronic.Areas.Quality.Controllers
+{
+  [Authorize(Roles = "System Administrator,BF Capas Areas Edit")]
+  public class CapasAreasController : BaseSecurityController
+  {
+    #region Fields
+    private readonly DataContext db;
+    #endregion Fields
+
+    #region Ctor
+    public CapasAreasController()
+    {
+      db = new DataContext();
+    }
+    #endregion Ctor
+
+
+    // GET: Quality/CapasAreas
+    public ActionResult Index()
+        {
+            return View();
+        }
+
+    public ActionResult List()
+    {
+
+      return View();
+    }
+    public ActionResult Create()
+    {
+      var model = new Quality_Capas_Areas_FULL();
+      var FirstronicFacilitiesList = new List<SelectListItem>();
+      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      model.FacilityList = FirstronicFacilitiesList;
+      return View(model);
+    }
+
+    [HttpPost]
+    [ValidateInput(false)]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Create")]
+    public ActionResult Create(Quality_Capas_Areas_FULL model)
+    {
+      if (ModelState.IsValid)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@ID",SqlDbType.Int){Value =model.CellID},
+                    new SqlParameter("@TypeID",SqlDbType.Int){Value =model.TypeID},
+                };
+        var result = db.ExecuteInsertCommand($@"INSERT INTO [dbo].[Quality_Capas_Areas]([ID],[TypeID]) VALUES (@ID,@TypeID)",parameters);
+        if (result > 0)
+        {
+          this.NotifySuccess("Successfully saved.");
+          return RedirectToAction("List");
+        }
+        else if (result == 0)
+        {
+          this.NotifyError("Record can not save!");
+          return RedirectToAction("List");
+        }
+        else
+        {
+          this.NotifyError("Error in database.");
+          return RedirectToAction("List");
+        }
+      }
+
+      return View(model);
+    }
+
+    public ActionResult Delete(int id)
+    {
+      SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@ID",SqlDbType.Int){Value = id},
+      };
+
+      var result = db.ExecuteCommand($@"DELETE FROM [dbo].[Quality_Capas_Areas] WHERE AutoID=@ID", parameters);
+
+      this.NotifySuccess("Successfully saved.");
+      return RedirectToAction("List");
+    }
+
+
+    //Fill station.
+    [HttpPost]
+    [AllowAnonymous]
+    public ActionResult FillStations(int? TypeID, string All = "", string onlyactive = "-1")
+    {
+      var stations = Firstronic.Framework.Functions.Dropdowns.GetAreasList();
+      if (TypeID == 2)
+      {
+        stations = (List<SelectListItem>)Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT CellID,CellName FROM [PD_idt_cells]");
+      }
+      return Json(stations, JsonRequestBehavior.AllowGet);
+    }
+  }
+}

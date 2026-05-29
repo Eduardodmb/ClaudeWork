@@ -1,0 +1,24 @@
+#!/bin/bash
+# ENVSelect launcher script
+
+# Get the directory where this script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Check if Python is installed
+if ! command -v python &> /dev/null && ! command -v python3 &> /dev/null; then
+    echo "Error: Python is not installed or not in PATH"
+    exit 1
+fi
+
+# Use python3 if available, otherwise python
+PYTHON_CMD=$(command -v python3 || command -v python)
+
+# Check if psutil is installed
+if ! $PYTHON_CMD -c "import psutil" &> /dev/null; then
+    echo "Installing required dependencies..."
+    $PYTHON_CMD -m pip install -r "$SCRIPT_DIR/requirements.txt"
+fi
+
+# Run the script with admin privileges
+echo "Starting ENVSelect..."
+$PYTHON_CMD "$SCRIPT_DIR/ENVSelect.py"

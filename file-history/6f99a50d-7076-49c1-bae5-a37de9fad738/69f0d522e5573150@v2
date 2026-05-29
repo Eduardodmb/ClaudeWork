@@ -1,0 +1,162 @@
+# IT Documentation - Document ID Control
+
+**Purpose:** Central registry for all IT documentation across Safari Circuits projects.
+
+**Last Updated:** 2026-05-26
+
+---
+
+## Document ID Format
+
+| Format | Description | Example | Filename Example |
+|--------|-------------|---------|------------------|
+| **IT-XXX** | General IT documents | IT-017 | `IT-017_IT_Computer_Use_Policy.md` |
+| **IT-XXX W1** | Work instructions / manuals | IT-030 W1 | `IT-030_W1_BeFirst_Part_Number_Config.md` |
+| **IT-XXX W1 FN** | Multiple topics under same procedure | IT-030 W1 F1 | `IT-030_W1_F1_BeFirst_General_Settings.md` |
+
+**Filename Convention:** `ID_AppName_Description.md`
+- ID: IT-XXX or IT-XXX_W1 or IT-XXX_W1_FN
+- AppName: BeFirst, Plex, or IT
+- Description: Short descriptive name (use underscores for spaces)
+
+**F Number Usage:** Different topics within the same procedure (F1, F2, F3...)
+
+---
+
+## Updating the Registry
+
+To update this document registry with current files:
+
+```bash
+cd "S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub"
+python update_document_control.py
+```
+
+**What the script does:**
+- Scans configured folders for IT and BeFirst documents
+- Extracts document IDs from filenames (IT-XXX, IT-XXX W1, IT-XXX W1 FN)
+- Groups F variants (F1, F2, F3...) into their base document row
+- Updates this table with current files
+- Creates backup (`.md.bak`) before making changes
+- Documents without valid IDs appear with empty ID column
+
+**Requirements:**
+- Python 3.x installed
+- Run from Grand Rapids IT Hub folder
+
+---
+
+## Document Locations
+
+The registry automatically scans the following locations:
+
+### IT Hub (Grand Rapids)
+- `01_Policies` - IT policies and governance
+- `02_Procedures` - IT procedures and work instructions
+- `03_Architecture_and_infrastructure` - Network diagrams, configs, manuals
+- `05_Forms` - Templates, checklists, forms
+
+### BeFirst (Product Platform)
+- `Product and Platform\BeFirst\01_User_Manuals` - User manuals (PDF only)
+- `Product and Platform\BeFirst\02_Development\00 - Dev Manuals\01 - Procedures` - Development procedures (DOCX only)
+
+**Note:** Archived folders (`99_Archive`) are automatically skipped.
+
+---
+
+## Document Registry
+
+### Complete Document List
+
+| ID | Type | Title | App | Owner | F1 | F2 | F3 | F4 | F5 | F8 | F9 | Status | Path |
+|----|------|-------|-----|-------|----|----|----|----|----|----|----|----|------|
+| IT-000 | Procedure | 000 - Copy | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\02_Procedures |
+| IT-011 | Form |  | IT | IT | Form IT User Charter | Form IT Admin Charter |  |  |  |  |  | Legacy (DOCX) | IT Hub\05_Forms |
+| IT-012 | Form | Safari GR PC Install Checklist | IT | IT |  |  |  |  |  |  |  | Legacy (XLSX) | IT Hub\05_Forms |
+| IT-013 W1 | Work Instruction |  | BeFirst | IT | Software Development Process | Software Development Main Document | Module feature project scope | Software requirements specifications | Release plan |  | End user module feature template | Legacy (DOCX) | BeFirst\02_Development\01_Procedures |
+| IT-015 | Procedure | 015 Incident Response Plan | IT | IT | Incident Response Worksheet Template |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\02_Procedures |
+| IT-016 | Procedure | 016 Risk Assessment | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\02_Procedures |
+| IT-017 | Policy | Computer Use Policy | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\01_Policies |
+| IT-020 | Form | Incident Report Template | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\05_Forms |
+| IT-030 | Work Instruction | W1 BeFirst PartNumbers | BeFirst | IT |  |  |  |  |  |  |  | Legacy (PDF) | BeFirst\01_User_Manuals |
+| IT-031 | Work Instruction | W1 BeFirst Packout | BeFirst | IT |  |  |  |  |  |  |  | Legacy (PDF) | BeFirst\01_User_Manuals |
+|  | Manual | Aruba 5420 | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\03_Architecture_and_infrastructure |
+|  | Manual | Aruba5420 Switchs | IT | IT |  |  |  |  |  |  |  | Legacy (PDF) | IT Hub\03_Architecture_and_infrastructure |
+|  | Procedure | Creating VM in Hyper-V Failover Cluster SOP | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\02_Procedures |
+|  | Manual | GRP1 IT Plant Drawing | IT | IT |  |  |  |  |  |  |  | Legacy (PDF) | IT Hub\03_Architecture_and_infrastructure |
+|  | Manual | GRP1 Infrastructure Inventory | IT | IT |  |  |  |  |  |  |  | Legacy (XLSX) | IT Hub\03_Architecture_and_infrastructure |
+|  | Manual | GRP1 Network - IP - Port address list | IT | IT |  |  |  |  |  |  |  | Legacy (XLSX) | IT Hub\03_Architecture_and_infrastructure |
+|  | Manual | GRP1 Network Diagram | IT | IT |  |  |  |  |  |  |  | Legacy (VSDX) | IT Hub\03_Architecture_and_infrastructure |
+|  | Manual | GRP1 VLANs | IT | IT |  |  |  |  |  |  |  | Legacy (XLSX) | IT Hub\03_Architecture_and_infrastructure |
+|  | Manual | GRP1 VPN Diagram | IT | IT |  |  |  |  |  |  |  | Legacy (VSDX) | IT Hub\03_Architecture_and_infrastructure |
+|  | Work Instruction | Part Number | BeFirst | IT |  |  |  |  |  |  |  | Legacy (PDF) | BeFirst\01_User_Manuals |
+|  | Manual | PowerVault | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\03_Architecture_and_infrastructure |
+|  | Manual | Powervault-ME5 | IT | IT |  |  |  |  |  |  |  | Legacy (PDF) | IT Hub\03_Architecture_and_infrastructure |
+|  | Procedure | SOP Plex PC Setup | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\02_Procedures |
+|  | Manual | Veeam Backup | IT | IT |  |  |  |  |  |  |  | Legacy (PDF) | IT Hub\03_Architecture_and_infrastructure |
+|  | Manual | Veeam Backup Oct 2025 | IT | IT |  |  |  |  |  |  |  | Legacy (PDF) | IT Hub\03_Architecture_and_infrastructure |
+|  | Manual | WindowsServer HyperV | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\03_Architecture_and_infrastructure |
+|  | Procedure | Zabbix install Ubuntu SOP | IT | IT |  |  |  |  |  |  |  | Legacy (DOCX) | IT Hub\02_Procedures |
+---
+
+## Document Types
+
+- **Policy** - IT governance and compliance documents
+- **Procedure** - Step-by-step IT operational procedures
+- **Work Instruction** - Detailed work instructions and user manuals
+- **Form** - Templates, checklists, and forms
+- **Manual** - Comprehensive user or system manuals
+
+---
+
+## Status Values
+
+- **New (MD)** - New Markdown document in new location
+- **Migrated** - Converted from DOCX to MD and moved to new location
+- **Legacy (DOCX)** - Still in old location as DOCX file
+- **Legacy (XLSX)** - Excel file in old location
+- **Draft** - Work in progress
+- **Archived** - Old version, superseded by newer document
+
+---
+
+## Next Available IDs
+
+- **Work Instructions (W1):** IT-035 W1
+- **General IT (Policies/Procedures/Forms):** IT-042
+
+---
+
+## Directory Structure
+
+```
+S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\
+├── Enterprise Solution Architecture\
+│   └── Enterprise Systems\
+│       ├── BeFirst\
+│       │   ├── 01_User_Manuals\             ← Legacy DOCX files
+│       │   └── 01_User_Manuals_MD\          ← New MD files
+│       │       └── assets\                  ← Screenshots
+│       └── Plex\
+│           ├── 01_User_Manuals\             ← Legacy DOCX files
+│           └── 01_User_Manuals_MD\          ← New MD files
+│               └── assets\                  ← Screenshots
+└── Grand Rapids IT Hub\
+    ├── 01_Policies\                         ← IT policies (IT-XXX)
+    ├── 02_Procedures\                       ← IT procedures (IT-XXX)
+    ├── 05_Forms\                            ← IT forms and templates (IT-XXX)
+    ├── DOCUMENT-ID-CONTROL.md               ← This file
+    └── README-DOCUMENT-CONTROL.md           ← Quick reference
+```
+
+---
+
+## Notes
+
+- All Markdown files use naming convention: `ID_AppName_Description.md`
+- Screenshots stored in `assets/` subfolder within each manual directory
+- Document control maintained at IT Hub level
+- F numbers track different topics/forms under the same procedure ID
+- Old DOCX/XLSX files remain in original folders until migrated
+- IT-001 shows as "W1" (was listed as "WI" - confirm if correct)
+- Some documents have non-sequential F numbers (e.g., F1, F2, F3, F4, F5, F8, F9)

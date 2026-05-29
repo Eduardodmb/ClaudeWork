@@ -1,0 +1,244 @@
+"""
+Universal DOCX to Markdown extractor with proper image placement
+Organizes images in document-specific folders
+"""
+from docx import Document
+import os
+import sys
+import re
+
+def get_paragraph_image_rids(paragraph):
+    """Get image relationship IDs from a paragraph"""
+    rids = []
+    for run in paragraph.runs:
+        drawings = run._element.findall('.//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}drawing')
+        for drawing in drawings:
+            blips = drawing.findall('.//{http://schemas.openxmlformats.org/drawingml/2006/main}blip')
+            for blip in blips:
+                embed = blip.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed')
+                if embed:
+                    rids.append(embed)
+    return rids
+
+def extract_docx_with_image_positions(docx_path, image_output_dir):
+    """Extract DOCX content and track where images actually appear"""
+    doc = Document(docx_path)
+    os.makedirs(image_output_dir, exist_ok=True)
+
+    # Extract all images and map rId to filename
+    rid_to_filename = {}
+    image_counter = 1
+
+    for rel_id, rel in doc.part.rels.items():
+        if "image" in rel.target_ref:
+            image_part = rel.target_part
+            image_bytes = image_part.blob
+            ext = rel.target_ref.split('.')[-1]
+            filename = f"image{image_counter:02d}.{ext}"
+
+            filepath = os.path.join(image_output_dir, filename)
+            with open(filepath, 'wb') as f:
+                f.write(image_bytes)
+
+            rid_to_filename[rel_id] = filename
+            print(f"  Extracted: {filename}")
+            image_counter += 1
+
+    # Process paragraphs and track which images appear where
+    content_structure = []
+
+    for para in doc.paragraphs:
+        text = para.text.strip()
+        style = para.style.name if para.style else "Normal"
+
+        # Get images in this paragraph
+        image_rids = get_paragraph_image_rids(para)
+        image_files = [rid_to_filename.get(rid) for rid in image_rids if rid in rid_to_filename]
+
+        if text or image_files:
+            content_structure.append({
+                'text': text,
+                'style': style,
+                'images': image_files
+            })
+
+    # Process tables
+    for table in doc.tables:
+        for row in table.rows:
+            row_data = []
+            for cell in row.cells:
+                cell_text = cell.text.strip()
+                if cell_text:
+                    row_data.append(cell_text)
+            if row_data:
+                content_structure.append({
+                    'text': ' | '.join(row_data),
+                    'style': 'Table',
+                    'images': []
+                })
+
+    return content_structure, len(rid_to_filename)
+
+def create_markdown_from_structure(content_structure, doc_id, doc_title, app_name, image_folder_name):
+    """Create markdown from content structure"""
+
+    md_lines = []
+
+    # Header
+    md_lines.extend([
+        f"# {doc_id} - {app_name} {doc_title}",
+        "",
+        f"**Document ID:** {doc_id}  ",
+        f"**Application:** {app_name}  ",
+        "**Owner:** IT Department  ",
+        "**Status:** Active  ",
+        "**Last Updated:** 2026-05-11",
+        "",
+        "---",
+        "",
+    ])
+
+    # Try to extract document summary from tables
+    summary_found = False
+    for i, item in enumerate(content_structure[:20]):  # Check first 20 items
+        if item['style'] == 'Table' and not summary_found:
+            if any(keyword in item['text'].lower() for keyword in ['document', 'version', 'author', 'objective']):
+                if not summary_found:
+                    md_lines.append("## Document Summary")
+                    md_lines.append("")
+                    summary_found = True
+                md_lines.append(f"{item['text']}")
+                md_lines.append("")
+
+    if summary_found:
+        md_lines.append("---")
+        md_lines.append("")
+
+    # Process content
+    in_list = False
+    for item in content_structure:
+        text = item['text']
+        style = item['style']
+        images = item['images']
+
+        # Skip document summary/history markers
+        if text.lower() in ['document summary', 'document history', '']:
+            continue
+
+        # Handle headings
+        if style.startswith('Heading'):
+            if in_list:
+                md_lines.append("")
+                in_list = False
+
+            level = int(style.replace('Heading ', ''))
+            md_lines.append("")
+            md_lines.append(f"{'#' * (level + 1)} {text}")
+            md_lines.append("")
+
+        # Handle list items
+        elif style == 'List Paragraph' and text:
+            md_lines.append(f"- {text}")
+            in_list = True
+
+        # Handle tables (but not in summary)
+        elif style == 'Table' and summary_found:
+            if in_list:
+                md_lines.append("")
+                in_list = False
+            md_lines.append(f"| {text.replace(' | ', ' | ')} |")
+
+        # Handle normal paragraphs
+        elif text:
+            if in_list:
+                md_lines.append("")
+                in_list = False
+            md_lines.append(text)
+            md_lines.append("")
+
+        # Add images right after the text
+        if images:
+            if in_list:
+                md_lines.append("")
+                in_list = False
+            for img in images:
+                md_lines.append(f"![Screenshot]({image_folder_name}/{img})")
+                md_lines.append("")
+
+    # Add footer
+    md_lines.extend([
+        "",
+        "---",
+        "",
+        "**End of Document**",
+        "",
+        "For questions or support, contact:",
+        "- **IT Department**: GR_IT@safaricircuits.com",
+        ""
+    ])
+
+    return '\n'.join(md_lines)
+
+def extract_document(docx_path, doc_id, doc_title, app_name="BeFirst"):
+    """Main extraction function"""
+
+    base_dir = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Enterprise Solution Architecture\Enterprise Systems\BeFirst\01_User_Manuals_MD"
+
+    # Clean up title for filename
+    safe_title = re.sub(r'[^\w\s-]', '', doc_title).strip().replace(' ', '_')
+
+    image_folder = os.path.join(base_dir, doc_id)
+    md_file = os.path.join(base_dir, f"{doc_id}_{app_name}_{safe_title}.md")
+
+    print("=" * 80)
+    print(f"Extracting {doc_id} - {doc_title}")
+    print("=" * 80)
+    print()
+
+    # Extract content with image positions
+    print("Step 1: Extracting content and images...")
+    content_structure, num_images = extract_docx_with_image_positions(docx_path, image_folder)
+    print(f"  Total: {num_images} images extracted to {doc_id}/")
+    print()
+
+    # Create markdown
+    print("Step 2: Creating markdown...")
+    markdown_content = create_markdown_from_structure(
+        content_structure,
+        doc_id,
+        doc_title,
+        app_name,
+        doc_id
+    )
+
+    with open(md_file, 'w', encoding='utf-8') as f:
+        f.write(markdown_content)
+
+    print(f"  Created: {os.path.basename(md_file)}")
+    print()
+
+    print("=" * 80)
+    print("Complete!")
+    print(f"- Markdown: {os.path.basename(md_file)}")
+    print(f"- Images: {num_images} files in {doc_id}/ folder")
+    print(f"- Full path: {md_file}")
+    print("=" * 80)
+
+    return md_file, image_folder, num_images
+
+if __name__ == "__main__":
+    if len(sys.argv) < 4:
+        print("Usage: python extract_any_docx_to_md.py <docx_path> <doc_id> <doc_title> [app_name]")
+        print("Example: python extract_any_docx_to_md.py 'path/to/doc.docx' 'IT-031_W1' 'Packout Process' 'BeFirst'")
+        sys.exit(1)
+
+    docx_path = sys.argv[1]
+    doc_id = sys.argv[2]
+    doc_title = sys.argv[3]
+    app_name = sys.argv[4] if len(sys.argv) > 4 else "BeFirst"
+
+    if not os.path.exists(docx_path):
+        print(f"Error: File not found: {docx_path}")
+        sys.exit(1)
+
+    extract_document(docx_path, doc_id, doc_title, app_name)

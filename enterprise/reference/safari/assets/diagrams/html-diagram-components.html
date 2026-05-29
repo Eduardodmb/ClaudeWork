@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari HTML Diagram Component Library</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            /* Safari Brand Colors */
+            --safari-red: #9B1C1C;
+            --safari-red-light: #B82424;
+            --safari-red-dark: #7B1616;
+
+            /* Dark Theme */
+            --dark-bg: #0F172A;
+            --dark-surface: #1E293B;
+            --dark-border: #334155;
+            --dark-text: #F8FAFC;
+            --dark-text-muted: #94A3B8;
+
+            /* Light Theme */
+            --light-bg: #FEFDFF;
+            --light-surface: #FFFFFF;
+            --light-surface-alt: #F8F7F5;
+            --light-border: #E5E5E5;
+            --light-text: #1E1E1E;
+            --light-text-muted: #6B7280;
+
+            /* Accent Colors */
+            --blue: #60A5FA;
+            --blue-dark: #1E40AF;
+            --green: #34D399;
+            --green-dark: #166534;
+            --amber: #F59E0B;
+            --amber-dark: #92400E;
+            --purple: #A855F7;
+            --purple-dark: #6B21A8;
+            --teal: #14B8A6;
+            --teal-dark: #0F766E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-surface) 100%);
+            color: var(--dark-text);
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .header p {
+            color: var(--dark-text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Section */
+        .section {
+            background: var(--light-surface);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--safari-red);
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--light-border);
+        }
+
+        .section-desc {
+            color: var(--light-text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* Demo containers */
+        .demo-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .demo-box {
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .demo-dark {
+            background: var(--dark-bg);
+        }
+
+        .demo-light {
+            background: var(--light-surface-alt);
+            border: 1px solid var(--light-border);
+        }
+
+        .demo-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--light-text-muted);
+            margin-bottom: 12px;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--dark-surface);
+            color: var(--dark-text);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-top: 16px;
+        }
+
+        .code-block .comment { color: #6A9955; }
+        .code-block .tag { color: #569CD6; }
+        .code-block .attr { color: #9CDCFE; }
+        .code-block .value { color: #CE9178; }
+
+        /* Component Cards (for reference) */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .component-card {
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .component-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .component-card .role {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            margin-bottom: 8px;
+        }
+
+        .component-card p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        /* Flow Steps */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .step-content p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--safari-red);
+        }
+
+        /* Inline badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .copy-hint {
+            background: var(--safari-red);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        /* Table of contents */
+        .toc {
+            background: var(--light-surface-alt);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+        }
+
+        .toc h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: var(--safari-red);
+        }
+
+        .toc ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+        }
+
+        .toc a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .toc a:hover {
+            color: var(--safari-red);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Safari HTML Diagram Component Library</h1>
+        <p>Reusable SVG primitives for consistent, on-brand diagrams in HTML deliverables</p>
+    </div>
+
+    <div class="container">
+        <div class="toc">
+            <h3>Components</h3>
+            <ul>
+                <li><a href="#arrows">1. Arrow Components</a></li>
+                <li><a href="#boxes">2. Box Components</a></li>
+                <li><a href="#flow-steps">3. Flow Steps</a></li>
+                <li><a href="#component-cards">4. Component Cards</a></li>
+                <li><a href="#layer-diagram">5. Layer/Stack Diagram</a></li>
+                <li><a href="#architecture">6. Architecture Diagram</a></li>
+                <li><a href="#process-flow">7. Process Flow</a></li>
+                <li><a href="#badges">8. Status Badges</a></li>
+            </ul>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 1: ARROWS -->
+        <!-- ========================================== -->
+        <div class="section" id="arrows">
+            <h2>1. Arrow Components</h2>
+            <p class="section-desc">Directional arrows with arrowhead markers. Includes static and animated variants.</p>
+
+            <div class="demo-row">
+                <div>
+                    <div class="demo-label">Dark Background</div>
+                    <div class="demo-box demo-dark">
+                        <svg width="300" height="100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Arrow marker definition -->
+                            <defs>
+                                <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#9B1C1C"/>
+                                </marker>
+                                <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#60A5FA"/>
+                                </marker>
+                                <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#34D399"/>
+                                </marker>
+                            </defs>
+
+                            <!-- Static arrows -->
+                            <line x1="20" y1="25" x2="130" y2="25" stroke="#9B1C1C" stroke-width="2" marker-end="url(#arrow-red)"/>
+                            <line x1="20" y1="50" x2="130" y2="50" stroke="#60A5FA" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                            <line x1="20" y1="75" x2="130" y2="75" stroke="#34D399" stroke-width="2" marker-end="url(#arrow-green)"/>
+
+                            <!-- Animated arrow -->
+                            <line x1="160" y1="50" x2="280" y2="50" stroke="#9B1C1C" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow-red)">
+                                <animate attributeName="stroke-dashoffset" from="10" to="0" dur="0.5s" repeatCount="indefinite"/>
+                            </line>
+
+                            <!-- Labels -->
+                            <text x="75" y="18" fill="#94A3B8" font-family="Poppins" font-size="10" text-anchor="middle">Static</text>
+                            <text x="220" y="38" fill="#94A3B8" font-family="Poppins" font-size="10" text-anchor="middle">Animated</text>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <div class="demo-label">Light Background</div>
+                    <div class="demo-box demo-light">
+                        <svg width="300" height="100" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="arrow-red-l" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#9B1C1C"/>
+                                </marker>
+                                <marker id="arrow-dark" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#1E293B"/>
+                                </marker>
+                            </defs>
+
+                            <line x1="20" y1="35" x2="130" y2="35" stroke="#9B1C1C" stroke-width="2" marker-end="url(#arrow-red-l)"/>
+                            <line x1="20" y1="65" x2="130" y2="65" stroke="#1E293B" stroke-width="2" marker-end="url(#arrow-dark)"/>
+
+                            <!-- Bidirectional -->
+                            <line x1="170" y1="50" x2="280" y2="50" stroke="#9B1C1C" stroke-width="2" marker-start="url(#arrow-red-l)" marker-end="url(#arrow-red-l)"/>
+                            <text x="225" y="38" fill="#6B7280" font-family="Poppins" font-size="10" text-anchor="middle">Bidirectional</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copy-hint">Copy this SVG snippet:</div>
+            <div class="code-block"><span class="comment">&lt;!-- Arrow with marker definition --&gt;</span>
+<span class="tag">&lt;svg</span> <span class="attr">width</span>=<span class="value">"200"</span> <span class="attr">height</span>=<span class="value">"50"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;defs&gt;</span>
+    <span class="tag">&lt;marker</span> <span class="attr">id</span>=<span class="value">"arrowhead"</span> <span class="attr">markerWidth</span>=<span class="value">"10"</span> <span class="attr">markerHeight</span>=<span class="value">"7"</span>
+            <span class="attr">refX</span>=<span class="value">"9"</span> <span class="attr">refY</span>=<span class="value">"3.5"</span> <span class="attr">orient</span>=<span class="value">"auto"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;polygon</span> <span class="attr">points</span>=<span class="value">"0 0, 10 3.5, 0 7"</span> <span class="attr">fill</span>=<span class="value">"#9B1C1C"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/marker&gt;</span>
+  <span class="tag">&lt;/defs&gt;</span>
+  <span class="tag">&lt;line</span> <span class="attr">x1</span>=<span class="value">"20"</span> <span class="attr">y1</span>=<span class="value">"25"</span> <span class="attr">x2</span>=<span class="value">"180"</span> <span class="attr">y2</span>=<span class="value">"25"</span>
+        <span class="attr">stroke</span>=<span class="value">"#9B1C1C"</span> <span class="attr">stroke-width</span>=<span class="value">"2"</span> <span class="attr">marker-end</span>=<span class="value">"url(#arrowhead)"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/svg&gt;</span>
+
+<span class="comment">&lt;!-- Animated arrow (add inside &lt;line&gt;) --&gt;</span>
+<span class="tag">&lt;line</span> ... <span class="attr">stroke-dasharray</span>=<span class="value">"5,5"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;animate</span> <span class="attr">attributeName</span>=<span class="value">"stroke-dashoffset"</span> <span class="attr">from</span>=<span class="value">"10"</span> <span class="attr">to</span>=<span class="value">"0"</span>
+           <span class="attr">dur</span>=<span class="value">"0.5s"</span> <span class="attr">repeatCount</span>=<span class="value">"indefinite"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/line&gt;</span></div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: BOXES -->
+        <!-- ========================================== -->
+        <div class="section" id="boxes">
+            <h2>2. Box Components</h2>
+            <p class="section-desc">Rounded rectangles with labels, icons, and optional borders.</p>
+
+            <div class="demo-row">
+                <div>
+                    <div class="demo-label">Dark Background</div>
+                    <div class="demo-box demo-dark">
+                        <svg width="320" height="160" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Solid fill box -->
+                            <rect x="10" y="20" width="140" height="50" rx="8" fill="#9B1C1C"/>
+                            <text x="80" y="50" fill="white" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">Primary Box</text>
+
+                            <!-- Gradient box -->
+                            <defs>
+                                <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#1E40AF"/>
+                                    <stop offset="100%" style="stop-color:#60A5FA"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="170" y="20" width="140" height="50" rx="8" fill="url(#grad-blue)"/>
+                            <text x="240" y="50" fill="white" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">Gradient Box</text>
+
+                            <!-- Outline box -->
+                            <rect x="10" y="90" width="140" height="50" rx="8" fill="none" stroke="#60A5FA" stroke-width="2"/>
+                            <text x="80" y="120" fill="#60A5FA" font-family="Poppins" font-size="12" font-weight="500" text-anchor="middle">Outline Box</text>
+
+                            <!-- Dashed box -->
+                            <rect x="170" y="90" width="140" height="50" rx="8" fill="none" stroke="#94A3B8" stroke-width="2" stroke-dasharray="6,4"/>
+                            <text x="240" y="120" fill="#94A3B8" font-family="Poppins" font-size="12" font-weight="500" text-anchor="middle">Dashed Box</text>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <div class="demo-label">Light Background</div>
+                    <div class="demo-box demo-light">
+                        <svg width="320" height="160" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Solid fill box -->
+                            <rect x="10" y="20" width="140" height="50" rx="8" fill="#9B1C1C"/>
+                            <text x="80" y="50" fill="white" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">Primary Box</text>
+
+                            <!-- Surface box with shadow effect -->
+                            <rect x="170" y="20" width="140" height="50" rx="8" fill="white" stroke="#E5E5E5" stroke-width="1"/>
+                            <rect x="170" y="20" width="140" height="50" rx="8" fill="none" stroke="#9B1C1C" stroke-width="2" stroke-dasharray="0" style="clip-path: inset(0 0 46px 0)"/>
+                            <text x="240" y="50" fill="#1E1E1E" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">Card Box</text>
+
+                            <!-- Subtle fill -->
+                            <rect x="10" y="90" width="140" height="50" rx="8" fill="#F8F7F5" stroke="#E5E5E5"/>
+                            <text x="80" y="120" fill="#1E1E1E" font-family="Poppins" font-size="12" font-weight="500" text-anchor="middle">Subtle Box</text>
+
+                            <!-- Accent border -->
+                            <rect x="170" y="90" width="140" height="50" rx="8" fill="white" stroke="#34D399" stroke-width="2"/>
+                            <text x="240" y="120" fill="#166534" font-family="Poppins" font-size="12" font-weight="500" text-anchor="middle">Success Box</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copy-hint">Copy this SVG snippet:</div>
+            <div class="code-block"><span class="comment">&lt;!-- Basic rounded box with centered text --&gt;</span>
+<span class="tag">&lt;rect</span> <span class="attr">x</span>=<span class="value">"10"</span> <span class="attr">y</span>=<span class="value">"10"</span> <span class="attr">width</span>=<span class="value">"140"</span> <span class="attr">height</span>=<span class="value">"50"</span> <span class="attr">rx</span>=<span class="value">"8"</span> <span class="attr">fill</span>=<span class="value">"#9B1C1C"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;text</span> <span class="attr">x</span>=<span class="value">"80"</span> <span class="attr">y</span>=<span class="value">"40"</span> <span class="attr">fill</span>=<span class="value">"white"</span> <span class="attr">font-family</span>=<span class="value">"Poppins"</span>
+      <span class="attr">font-size</span>=<span class="value">"12"</span> <span class="attr">font-weight</span>=<span class="value">"600"</span> <span class="attr">text-anchor</span>=<span class="value">"middle"</span><span class="tag">&gt;</span>Label<span class="tag">&lt;/text&gt;</span>
+
+<span class="comment">&lt;!-- Gradient box --&gt;</span>
+<span class="tag">&lt;defs&gt;</span>
+  <span class="tag">&lt;linearGradient</span> <span class="attr">id</span>=<span class="value">"grad"</span> <span class="attr">x1</span>=<span class="value">"0%"</span> <span class="attr">y1</span>=<span class="value">"0%"</span> <span class="attr">x2</span>=<span class="value">"100%"</span> <span class="attr">y2</span>=<span class="value">"100%"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;stop</span> <span class="attr">offset</span>=<span class="value">"0%"</span> <span class="attr">style</span>=<span class="value">"stop-color:#1E40AF"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;stop</span> <span class="attr">offset</span>=<span class="value">"100%"</span> <span class="attr">style</span>=<span class="value">"stop-color:#60A5FA"</span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;/linearGradient&gt;</span>
+<span class="tag">&lt;/defs&gt;</span>
+<span class="tag">&lt;rect</span> ... <span class="attr">fill</span>=<span class="value">"url(#grad)"</span><span class="tag">/&gt;</span></div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: FLOW STEPS -->
+        <!-- ========================================== -->
+        <div class="section" id="flow-steps">
+            <h2>3. Flow Steps</h2>
+            <p class="section-desc">Numbered steps with connecting arrows for process flows.</p>
+
+            <div class="demo-row">
+                <div>
+                    <div class="demo-label">Dark Background</div>
+                    <div class="demo-box demo-dark">
+                        <svg width="400" height="80" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="flow-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                                    <polygon points="0 0, 8 3, 0 6" fill="#9B1C1C"/>
+                                </marker>
+                            </defs>
+
+                            <!-- Step 1 -->
+                            <circle cx="40" cy="40" r="20" fill="#9B1C1C"/>
+                            <text x="40" y="45" fill="white" font-family="Poppins" font-size="14" font-weight="600" text-anchor="middle">1</text>
+                            <text x="40" y="75" fill="#94A3B8" font-family="Poppins" font-size="10" text-anchor="middle">Capture</text>
+
+                            <!-- Arrow 1-2 -->
+                            <line x1="65" y1="40" x2="105" y2="40" stroke="#9B1C1C" stroke-width="2" marker-end="url(#flow-arrow)"/>
+
+                            <!-- Step 2 -->
+                            <circle cx="130" cy="40" r="20" fill="#60A5FA"/>
+                            <text x="130" y="45" fill="white" font-family="Poppins" font-size="14" font-weight="600" text-anchor="middle">2</text>
+                            <text x="130" y="75" fill="#94A3B8" font-family="Poppins" font-size="10" text-anchor="middle">Process</text>
+
+                            <!-- Arrow 2-3 -->
+                            <line x1="155" y1="40" x2="195" y2="40" stroke="#9B1C1C" stroke-width="2" marker-end="url(#flow-arrow)"/>
+
+                            <!-- Step 3 -->
+                            <circle cx="220" cy="40" r="20" fill="#34D399"/>
+                            <text x="220" y="45" fill="white" font-family="Poppins" font-size="14" font-weight="600" text-anchor="middle">3</text>
+                            <text x="220" y="75" fill="#94A3B8" font-family="Poppins" font-size="10" text-anchor="middle">Validate</text>
+
+                            <!-- Arrow 3-4 -->
+                            <line x1="245" y1="40" x2="285" y2="40" stroke="#9B1C1C" stroke-width="2" marker-end="url(#flow-arrow)"/>
+
+                            <!-- Step 4 -->
+                            <circle cx="310" cy="40" r="20" fill="#A855F7"/>
+                            <text x="310" y="45" fill="white" font-family="Poppins" font-size="14" font-weight="600" text-anchor="middle">4</text>
+                            <text x="310" y="75" fill="#94A3B8" font-family="Poppins" font-size="10" text-anchor="middle">Deploy</text>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <div class="demo-label">Vertical Flow</div>
+                    <div class="demo-box demo-dark" style="min-height: 280px;">
+                        <svg width="200" height="240" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="flow-arrow-v" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                                    <polygon points="0 0, 8 3, 0 6" fill="#9B1C1C"/>
+                                </marker>
+                            </defs>
+
+                            <!-- Step 1 -->
+                            <circle cx="30" cy="30" r="18" fill="#9B1C1C"/>
+                            <text x="30" y="35" fill="white" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">1</text>
+                            <text x="80" y="28" fill="#F8FAFC" font-family="Poppins" font-size="11" font-weight="500">Research</text>
+                            <text x="80" y="42" fill="#94A3B8" font-family="Poppins" font-size="9">Explore codebase</text>
+
+                            <!-- Arrow -->
+                            <line x1="30" y1="52" x2="30" y2="68" stroke="#9B1C1C" stroke-width="2" marker-end="url(#flow-arrow-v)"/>
+
+                            <!-- Step 2 -->
+                            <circle cx="30" cy="90" r="18" fill="#60A5FA"/>
+                            <text x="30" y="95" fill="white" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">2</text>
+                            <text x="80" y="88" fill="#F8FAFC" font-family="Poppins" font-size="11" font-weight="500">Plan</text>
+                            <text x="80" y="102" fill="#94A3B8" font-family="Poppins" font-size="9">Design solution</text>
+
+                            <!-- Arrow -->
+                            <line x1="30" y1="112" x2="30" y2="128" stroke="#9B1C1C" stroke-width="2" marker-end="url(#flow-arrow-v)"/>
+
+                            <!-- Step 3 -->
+                            <circle cx="30" cy="150" r="18" fill="#34D399"/>
+                            <text x="30" y="155" fill="white" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">3</text>
+                            <text x="80" y="148" fill="#F8FAFC" font-family="Poppins" font-size="11" font-weight="500">Implement</text>
+                            <text x="80" y="162" fill="#94A3B8" font-family="Poppins" font-size="9">Write code</text>
+
+                            <!-- Arrow -->
+                            <line x1="30" y1="172" x2="30" y2="188" stroke="#9B1C1C" stroke-width="2" marker-end="url(#flow-arrow-v)"/>
+
+                            <!-- Step 4 -->
+                            <circle cx="30" cy="210" r="18" fill="#A855F7"/>
+                            <text x="30" y="215" fill="white" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">4</text>
+                            <text x="80" y="208" fill="#F8FAFC" font-family="Poppins" font-size="11" font-weight="500">Verify</text>
+                            <text x="80" y="222" fill="#94A3B8" font-family="Poppins" font-size="9">Test & validate</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copy-hint">Copy this SVG snippet:</div>
+            <div class="code-block"><span class="comment">&lt;!-- Single flow step --&gt;</span>
+<span class="tag">&lt;circle</span> <span class="attr">cx</span>=<span class="value">"40"</span> <span class="attr">cy</span>=<span class="value">"40"</span> <span class="attr">r</span>=<span class="value">"20"</span> <span class="attr">fill</span>=<span class="value">"#9B1C1C"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;text</span> <span class="attr">x</span>=<span class="value">"40"</span> <span class="attr">y</span>=<span class="value">"45"</span> <span class="attr">fill</span>=<span class="value">"white"</span> <span class="attr">font-family</span>=<span class="value">"Poppins"</span>
+      <span class="attr">font-size</span>=<span class="value">"14"</span> <span class="attr">font-weight</span>=<span class="value">"600"</span> <span class="attr">text-anchor</span>=<span class="value">"middle"</span><span class="tag">&gt;</span>1<span class="tag">&lt;/text&gt;</span>
+<span class="tag">&lt;text</span> <span class="attr">x</span>=<span class="value">"40"</span> <span class="attr">y</span>=<span class="value">"75"</span> <span class="attr">fill</span>=<span class="value">"#94A3B8"</span> <span class="attr">font-family</span>=<span class="value">"Poppins"</span>
+      <span class="attr">font-size</span>=<span class="value">"10"</span> <span class="attr">text-anchor</span>=<span class="value">"middle"</span><span class="tag">&gt;</span>Label<span class="tag">&lt;/text&gt;</span>
+
+<span class="comment">&lt;!-- Color palette for steps --&gt;</span>
+Step 1: #9B1C1C (Safari Red)
+Step 2: #60A5FA (Blue)
+Step 3: #34D399 (Green)
+Step 4: #A855F7 (Purple)
+Step 5: #F59E0B (Amber)</div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 4: COMPONENT CARDS -->
+        <!-- ========================================== -->
+        <div class="section" id="component-cards">
+            <h2>4. Component Cards</h2>
+            <p class="section-desc">Gradient-filled cards for system components with role and description.</p>
+
+            <div class="demo-box demo-light" style="min-height: auto; padding: 24px;">
+                <div class="component-grid" style="width: 100%;">
+                    <div class="component-card" style="background: linear-gradient(135deg, #7B1616, #9B1C1C);">
+                        <h4>OpenMetadata</h4>
+                        <div class="role">Data Catalog</div>
+                        <p>Central metadata repository with lineage tracking</p>
+                    </div>
+                    <div class="component-card" style="background: linear-gradient(135deg, #1E40AF, #60A5FA);">
+                        <h4>Apache Kafka</h4>
+                        <div class="role">Event Streaming</div>
+                        <p>Real-time data pipeline and event bus</p>
+                    </div>
+                    <div class="component-card" style="background: linear-gradient(135deg, #166534, #34D399);">
+                        <h4>Apache Iceberg</h4>
+                        <div class="role">Table Format</div>
+                        <p>Open lakehouse format with time travel</p>
+                    </div>
+                    <div class="component-card" style="background: linear-gradient(135deg, #6B21A8, #A855F7);">
+                        <h4>Trino</h4>
+                        <div class="role">Query Engine</div>
+                        <p>Distributed SQL for federated queries</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copy-hint">Copy this HTML/CSS snippet:</div>
+            <div class="code-block"><span class="comment">&lt;!-- Component card (HTML + inline style) --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">style</span>=<span class="value">"
+  background: linear-gradient(135deg, #7B1616, #9B1C1C);
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h4</span> <span class="attr">style</span>=<span class="value">"font-size: 1rem; font-weight: 600; margin-bottom: 4px;"</span><span class="tag">&gt;</span>Component Name<span class="tag">&lt;/h4&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">style</span>=<span class="value">"font-size: 0.8rem; opacity: 0.85; margin-bottom: 8px;"</span><span class="tag">&gt;</span>Role<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;p</span> <span class="attr">style</span>=<span class="value">"font-size: 0.85rem; opacity: 0.9;"</span><span class="tag">&gt;</span>Description text<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="comment">&lt;!-- Gradient presets --&gt;</span>
+Safari Red:  linear-gradient(135deg, #7B1616, #9B1C1C)
+Blue:        linear-gradient(135deg, #1E40AF, #60A5FA)
+Green:       linear-gradient(135deg, #166534, #34D399)
+Purple:      linear-gradient(135deg, #6B21A8, #A855F7)
+Amber:       linear-gradient(135deg, #92400E, #F59E0B)
+Teal:        linear-gradient(135deg, #0F766E, #14B8A6)</div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 5: LAYER DIAGRAM -->
+        <!-- ========================================== -->
+        <div class="section" id="layer-diagram">
+            <h2>5. Layer/Stack Diagram</h2>
+            <p class="section-desc">Horizontal layers showing architecture tiers or stack components.</p>
+
+            <div class="demo-row">
+                <div>
+                    <div class="demo-label">Architecture Layers (Dark)</div>
+                    <div class="demo-box demo-dark" style="min-height: 280px;">
+                        <svg width="340" height="240" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Layer 1 - Top -->
+                            <rect x="20" y="20" width="300" height="45" rx="6" fill="#9B1C1C"/>
+                            <text x="170" y="38" fill="white" font-family="Poppins" font-size="10" font-weight="600" text-anchor="middle">PRESENTATION LAYER</text>
+                            <text x="170" y="52" fill="rgba(255,255,255,0.8)" font-family="Poppins" font-size="9" text-anchor="middle">Safari Docs Portal, HTML Export, PDF</text>
+
+                            <!-- Layer 2 -->
+                            <rect x="20" y="75" width="300" height="45" rx="6" fill="#60A5FA"/>
+                            <text x="170" y="93" fill="white" font-family="Poppins" font-size="10" font-weight="600" text-anchor="middle">APPLICATION LAYER</text>
+                            <text x="170" y="107" fill="rgba(255,255,255,0.8)" font-family="Poppins" font-size="9" text-anchor="middle">Safari MCP, Context Compiler, Skills</text>
+
+                            <!-- Layer 3 -->
+                            <rect x="20" y="130" width="300" height="45" rx="6" fill="#34D399"/>
+                            <text x="170" y="148" fill="white" font-family="Poppins" font-size="10" font-weight="600" text-anchor="middle">DATA LAYER</text>
+                            <text x="170" y="162" fill="rgba(255,255,255,0.8)" font-family="Poppins" font-size="9" text-anchor="middle">Neo4j Graph, Context Registry, Git</text>
+
+                            <!-- Layer 4 - Bottom -->
+                            <rect x="20" y="185" width="300" height="45" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+                            <text x="170" y="203" fill="#F8FAFC" font-family="Poppins" font-size="10" font-weight="600" text-anchor="middle">INFRASTRUCTURE LAYER</text>
+                            <text x="170" y="217" fill="#94A3B8" font-family="Poppins" font-size="9" text-anchor="middle">Docker, Azure, On-Prem Servers</text>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <div class="demo-label">Context Hierarchy (Light)</div>
+                    <div class="demo-box demo-light" style="min-height: 280px;">
+                        <svg width="340" height="240" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Tier labels -->
+                            <text x="20" y="45" fill="#6B7280" font-family="Poppins" font-size="9" font-weight="500">TIER 1</text>
+                            <text x="20" y="95" fill="#6B7280" font-family="Poppins" font-size="9" font-weight="500">TIER 2</text>
+                            <text x="20" y="145" fill="#6B7280" font-family="Poppins" font-size="9" font-weight="500">TIER 3</text>
+                            <text x="20" y="195" fill="#6B7280" font-family="Poppins" font-size="9" font-weight="500">TIER 4</text>
+
+                            <!-- Layer 1 -->
+                            <rect x="60" y="20" width="260" height="40" rx="6" fill="#9B1C1C"/>
+                            <text x="190" y="45" fill="white" font-family="Poppins" font-size="11" font-weight="600" text-anchor="middle">Personal Context</text>
+
+                            <!-- Layer 2 -->
+                            <rect x="60" y="70" width="260" height="40" rx="6" fill="#60A5FA"/>
+                            <text x="190" y="95" fill="white" font-family="Poppins" font-size="11" font-weight="600" text-anchor="middle">Domain Context</text>
+
+                            <!-- Layer 3 -->
+                            <rect x="60" y="120" width="260" height="40" rx="6" fill="#34D399"/>
+                            <text x="190" y="145" fill="white" font-family="Poppins" font-size="11" font-weight="600" text-anchor="middle">Project Context</text>
+
+                            <!-- Layer 4 -->
+                            <rect x="60" y="170" width="260" height="40" rx="6" fill="#F8F7F5" stroke="#E5E5E5"/>
+                            <text x="190" y="195" fill="#1E1E1E" font-family="Poppins" font-size="11" font-weight="600" text-anchor="middle">Enterprise Context</text>
+
+                            <!-- Priority indicator -->
+                            <text x="190" y="230" fill="#6B7280" font-family="Poppins" font-size="9" text-anchor="middle">Higher priority overrides lower</text>
+                            <line x1="100" y1="225" x2="280" y2="225" stroke="#E5E5E5" stroke-width="1"/>
+                            <polygon points="100,222 100,228 90,225" fill="#9B1C1C"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copy-hint">Copy this SVG snippet:</div>
+            <div class="code-block"><span class="comment">&lt;!-- Single layer in stack --&gt;</span>
+<span class="tag">&lt;rect</span> <span class="attr">x</span>=<span class="value">"20"</span> <span class="attr">y</span>=<span class="value">"20"</span> <span class="attr">width</span>=<span class="value">"300"</span> <span class="attr">height</span>=<span class="value">"45"</span> <span class="attr">rx</span>=<span class="value">"6"</span> <span class="attr">fill</span>=<span class="value">"#9B1C1C"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;text</span> <span class="attr">x</span>=<span class="value">"170"</span> <span class="attr">y</span>=<span class="value">"38"</span> <span class="attr">fill</span>=<span class="value">"white"</span> <span class="attr">font-family</span>=<span class="value">"Poppins"</span>
+      <span class="attr">font-size</span>=<span class="value">"10"</span> <span class="attr">font-weight</span>=<span class="value">"600"</span> <span class="attr">text-anchor</span>=<span class="value">"middle"</span><span class="tag">&gt;</span>LAYER NAME<span class="tag">&lt;/text&gt;</span>
+<span class="tag">&lt;text</span> <span class="attr">x</span>=<span class="value">"170"</span> <span class="attr">y</span>=<span class="value">"52"</span> <span class="attr">fill</span>=<span class="value">"rgba(255,255,255,0.8)"</span> <span class="attr">font-family</span>=<span class="value">"Poppins"</span>
+      <span class="attr">font-size</span>=<span class="value">"9"</span> <span class="attr">text-anchor</span>=<span class="value">"middle"</span><span class="tag">&gt;</span>Description<span class="tag">&lt;/text&gt;</span>
+
+<span class="comment">&lt;!-- Stack spacing: Use y increments of 55px for consistent gaps --&gt;</span>
+Layer 1: y="20"
+Layer 2: y="75"
+Layer 3: y="130"
+Layer 4: y="185"</div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 6: ARCHITECTURE DIAGRAM -->
+        <!-- ========================================== -->
+        <div class="section" id="architecture">
+            <h2>6. Architecture Diagram</h2>
+            <p class="section-desc">Multi-component diagram with boxes and connecting arrows.</p>
+
+            <div class="demo-box demo-dark" style="min-height: 320px;">
+                <svg width="600" height="280" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <marker id="arch-arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#64748B"/>
+                        </marker>
+                        <marker id="arch-arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#9B1C1C"/>
+                        </marker>
+                    </defs>
+
+                    <!-- Source -->
+                    <rect x="20" y="110" width="100" height="60" rx="8" fill="#1E293B" stroke="#334155"/>
+                    <text x="70" y="135" fill="#F8FAFC" font-family="Poppins" font-size="11" font-weight="600" text-anchor="middle">Markdown</text>
+                    <text x="70" y="150" fill="#94A3B8" font-family="Poppins" font-size="9" text-anchor="middle">+ YAML</text>
+
+                    <!-- Arrow to processor -->
+                    <line x1="125" y1="140" x2="175" y2="140" stroke="#64748B" stroke-width="2" marker-end="url(#arch-arrow)"/>
+
+                    <!-- Central processor -->
+                    <rect x="180" y="90" width="140" height="100" rx="8" fill="#9B1C1C"/>
+                    <text x="250" y="125" fill="white" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">Visualization</text>
+                    <text x="250" y="142" fill="white" font-family="Poppins" font-size="12" font-weight="600" text-anchor="middle">Governance</text>
+                    <text x="250" y="165" fill="rgba(255,255,255,0.8)" font-family="Poppins" font-size="9" text-anchor="middle">STD-VIS-001</text>
+
+                    <!-- Outputs -->
+                    <!-- Safari Docs -->
+                    <line x1="325" y1="115" x2="395" y2="65" stroke="#64748B" stroke-width="2" marker-end="url(#arch-arrow)"/>
+                    <rect x="400" y="30" width="120" height="50" rx="8" fill="#60A5FA"/>
+                    <text x="460" y="52" fill="white" font-family="Poppins" font-size="10" font-weight="600" text-anchor="middle">Safari Docs</text>
+                    <text x="460" y="66" fill="rgba(255,255,255,0.8)" font-family="Poppins" font-size="9" text-anchor="middle">React + Mermaid</text>
+
+                    <!-- HTML Export -->
+                    <line x1="325" y1="140" x2="395" y2="140" stroke="#64748B" stroke-width="2" marker-end="url(#arch-arrow)"/>
+                    <rect x="400" y="115" width="120" height="50" rx="8" fill="#34D399"/>
+                    <text x="460" y="137" fill="white" font-family="Poppins" font-size="10" font-weight="600" text-anchor="middle">HTML Export</text>
+                    <text x="460" y="151" fill="rgba(255,255,255,0.8)" font-family="Poppins" font-size="9" text-anchor="middle">Inline SVG</text>
+
+                    <!-- PDF -->
+                    <line x1="325" y1="165" x2="395" y2="215" stroke="#64748B" stroke-width="2" marker-end="url(#arch-arrow)"/>
+                    <rect x="400" y="200" width="120" height="50" rx="8" fill="#A855F7"/>
+                    <text x="460" y="222" fill="white" font-family="Poppins" font-size="10" font-weight="600" text-anchor="middle">PDF Export</text>
+                    <text x="460" y="236" fill="rgba(255,255,255,0.8)" font-family="Poppins" font-size="9" text-anchor="middle">Print-ready</text>
+
+                    <!-- Theme selection label -->
+                    <rect x="190" y="200" width="120" height="30" rx="4" fill="none" stroke="#334155" stroke-dasharray="4,2"/>
+                    <text x="250" y="220" fill="#94A3B8" font-family="Poppins" font-size="9" text-anchor="middle">Theme: visualization</text>
+                    <line x1="250" y1="190" x2="250" y2="198" stroke="#334155" stroke-width="1" stroke-dasharray="2,2"/>
+                </svg>
+            </div>
+
+            <div class="copy-hint">Pattern: Source → Processor → Multiple Outputs</div>
+            <div class="code-block"><span class="comment">&lt;!-- Architecture diagram template structure --&gt;</span>
+1. Define arrow markers in <span class="tag">&lt;defs&gt;</span>
+2. Draw source box (left)
+3. Draw central processor (center, highlighted)
+4. Draw output boxes (right, fan out)
+5. Connect with arrows
+
+<span class="comment">&lt;!-- Diagonal arrow (for fan-out) --&gt;</span>
+<span class="tag">&lt;line</span> <span class="attr">x1</span>=<span class="value">"325"</span> <span class="attr">y1</span>=<span class="value">"115"</span> <span class="attr">x2</span>=<span class="value">"395"</span> <span class="attr">y2</span>=<span class="value">"65"</span>
+      <span class="attr">stroke</span>=<span class="value">"#64748B"</span> <span class="attr">stroke-width</span>=<span class="value">"2"</span> <span class="attr">marker-end</span>=<span class="value">"url(#arrow)"</span><span class="tag">/&gt;</span></div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 7: PROCESS FLOW -->
+        <!-- ========================================== -->
+        <div class="section" id="process-flow">
+            <h2>7. Process Flow Diagram</h2>
+            <p class="section-desc">Decision-based flow with branches and conditional paths.</p>
+
+            <div class="demo-box demo-dark" style="min-height: 340px;">
+                <svg width="500" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <marker id="proc-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                            <polygon points="0 0, 8 3, 0 6" fill="#64748B"/>
+                        </marker>
+                    </defs>
+
+                    <!-- Start -->
+                    <rect x="200" y="15" width="100" height="35" rx="17" fill="#34D399"/>
+                    <text x="250" y="38" fill="white" font-family="Poppins" font-size="11" font-weight="600" text-anchor="middle">Start</text>
+
+                    <!-- Arrow down -->
+                    <line x1="250" y1="50" x2="250" y2="75" stroke="#64748B" stroke-width="2" marker-end="url(#proc-arrow)"/>
+
+                    <!-- Decision diamond -->
+                    <polygon points="250,80 310,115 250,150 190,115" fill="#F59E0B"/>
+                    <text x="250" y="112" fill="white" font-family="Poppins" font-size="9" font-weight="600" text-anchor="middle">Need</text>
+                    <text x="250" y="124" fill="white" font-family="Poppins" font-size="9" font-weight="600" text-anchor="middle">diagram?</text>
+
+                    <!-- Yes path (right) -->
+                    <line x1="310" y1="115" x2="360" y2="115" stroke="#64748B" stroke-width="2" marker-end="url(#proc-arrow)"/>
+                    <text x="335" y="108" fill="#34D399" font-family="Poppins" font-size="9" font-weight="500">Yes</text>
+
+                    <rect x="365" y="95" width="110" height="40" rx="6" fill="#60A5FA"/>
+                    <text x="420" y="115" fill="white" font-family="Poppins" font-size="10" font-weight="500" text-anchor="middle">Create inline</text>
+                    <text x="420" y="127" fill="rgba(255,255,255,0.8)" font-family="Poppins" font-size="9" text-anchor="middle">SVG</text>
+
+                    <!-- No path (left) -->
+                    <line x1="190" y1="115" x2="140" y2="115" stroke="#64748B" stroke-width="2" marker-end="url(#proc-arrow)"/>
+                    <text x="165" y="108" fill="#9B1C1C" font-family="Poppins" font-size="9" font-weight="500">No</text>
+
+                    <rect x="25" y="95" width="110" height="40" rx="6" fill="#1E293B" stroke="#334155"/>
+                    <text x="80" y="115" fill="#F8FAFC" font-family="Poppins" font-size="10" font-weight="500" text-anchor="middle">Use text</text>
+                    <text x="80" y="127" fill="#94A3B8" font-family="Poppins" font-size="9" text-anchor="middle">tables</text>
+
+                    <!-- Converge paths -->
+                    <line x1="420" y1="135" x2="420" y2="200" stroke="#64748B" stroke-width="2"/>
+                    <line x1="80" y1="135" x2="80" y2="200" stroke="#64748B" stroke-width="2"/>
+                    <line x1="80" y1="200" x2="245" y2="200" stroke="#64748B" stroke-width="2"/>
+                    <line x1="420" y1="200" x2="255" y2="200" stroke="#64748B" stroke-width="2"/>
+                    <line x1="250" y1="200" x2="250" y2="220" stroke="#64748B" stroke-width="2" marker-end="url(#proc-arrow)"/>
+
+                    <!-- Apply branding -->
+                    <rect x="175" y="225" width="150" height="40" rx="6" fill="#9B1C1C"/>
+                    <text x="250" y="250" fill="white" font-family="Poppins" font-size="10" font-weight="500" text-anchor="middle">Apply Safari branding</text>
+
+                    <!-- End -->
+                    <line x1="250" y1="265" x2="250" y2="280" stroke="#64748B" stroke-width="2" marker-end="url(#proc-arrow)"/>
+                    <circle cx="250" cy="290" r="8" fill="none" stroke="#34D399" stroke-width="2"/>
+                    <circle cx="250" cy="290" r="4" fill="#34D399"/>
+                </svg>
+            </div>
+
+            <div class="copy-hint">Copy this SVG snippet:</div>
+            <div class="code-block"><span class="comment">&lt;!-- Decision diamond --&gt;</span>
+<span class="tag">&lt;polygon</span> <span class="attr">points</span>=<span class="value">"250,80 310,115 250,150 190,115"</span> <span class="attr">fill</span>=<span class="value">"#F59E0B"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;text</span> <span class="attr">x</span>=<span class="value">"250"</span> <span class="attr">y</span>=<span class="value">"118"</span> ... <span class="attr">text-anchor</span>=<span class="value">"middle"</span><span class="tag">&gt;</span>Question?<span class="tag">&lt;/text&gt;</span>
+
+<span class="comment">&lt;!-- Start/End pill shape --&gt;</span>
+<span class="tag">&lt;rect</span> <span class="attr">x</span>=<span class="value">"200"</span> <span class="attr">y</span>=<span class="value">"15"</span> <span class="attr">width</span>=<span class="value">"100"</span> <span class="attr">height</span>=<span class="value">"35"</span> <span class="attr">rx</span>=<span class="value">"17"</span> <span class="attr">fill</span>=<span class="value">"#34D399"</span><span class="tag">/&gt;</span>
+
+<span class="comment">&lt;!-- End circle (double ring) --&gt;</span>
+<span class="tag">&lt;circle</span> <span class="attr">cx</span>=<span class="value">"250"</span> <span class="attr">cy</span>=<span class="value">"290"</span> <span class="attr">r</span>=<span class="value">"8"</span> <span class="attr">fill</span>=<span class="value">"none"</span> <span class="attr">stroke</span>=<span class="value">"#34D399"</span> <span class="attr">stroke-width</span>=<span class="value">"2"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;circle</span> <span class="attr">cx</span>=<span class="value">"250"</span> <span class="attr">cy</span>=<span class="value">"290"</span> <span class="attr">r</span>=<span class="value">"4"</span> <span class="attr">fill</span>=<span class="value">"#34D399"</span><span class="tag">/&gt;</span>
+
+<span class="comment">&lt;!-- Branch labels --&gt;</span>
+Yes: fill="#34D399"
+No:  fill="#9B1C1C"</div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 8: BADGES -->
+        <!-- ========================================== -->
+        <div class="section" id="badges">
+            <h2>8. Status Badges</h2>
+            <p class="section-desc">Inline badges for categories, status, and labels.</p>
+
+            <div class="demo-row">
+                <div>
+                    <div class="demo-label">Category Badges (Dark BG)</div>
+                    <div class="demo-box demo-dark" style="min-height: 120px; gap: 12px; flex-wrap: wrap;">
+                        <span class="badge" style="background: #1E293B; color: #F8FAFC;">technical</span>
+                        <span class="badge" style="background: #A855F7; color: white;">strategic</span>
+                        <span class="badge" style="background: #34D399; color: #0F172A;">process</span>
+                        <span class="badge" style="background: #9B1C1C; color: white;">governance</span>
+                        <span class="badge" style="background: #F59E0B; color: #0F172A;">business</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="demo-label">Status Badges (Light BG)</div>
+                    <div class="demo-box demo-light" style="min-height: 120px; gap: 12px; flex-wrap: wrap;">
+                        <span class="badge" style="background: #DCFCE7; color: #166534;">Active</span>
+                        <span class="badge" style="background: #FEF3C7; color: #92400E;">Pending</span>
+                        <span class="badge" style="background: #FEE2E2; color: #991B1B;">Blocked</span>
+                        <span class="badge" style="background: #E0E7FF; color: #3730A3;">Draft</span>
+                        <span class="badge" style="background: #F3F4F6; color: #374151;">Archived</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copy-hint">Copy this HTML snippet:</div>
+            <div class="code-block"><span class="comment">&lt;!-- Badge base style --&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">style</span>=<span class="value">"
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: #9B1C1C;
+  color: white;
+"</span><span class="tag">&gt;</span>governance<span class="tag">&lt;/span&gt;</span>
+
+<span class="comment">&lt;!-- Category badge colors (for dark backgrounds) --&gt;</span>
+technical:  bg=#1E293B, color=#F8FAFC
+strategic:  bg=#A855F7, color=white
+process:    bg=#34D399, color=#0F172A
+governance: bg=#9B1C1C, color=white
+business:   bg=#F59E0B, color=#0F172A
+
+<span class="comment">&lt;!-- Status badge colors (for light backgrounds) --&gt;</span>
+Active:   bg=#DCFCE7, color=#166534
+Pending:  bg=#FEF3C7, color=#92400E
+Blocked:  bg=#FEE2E2, color=#991B1B
+Draft:    bg=#E0E7FF, color=#3730A3
+Archived: bg=#F3F4F6, color=#374151</div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- QUICK REFERENCE -->
+        <!-- ========================================== -->
+        <div class="section">
+            <h2>Quick Reference: Safari Brand Colors</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 20px;">
+                <div style="background: #9B1C1C; color: white; padding: 16px; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 600;">Safari Red</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">#9B1C1C</div>
+                </div>
+                <div style="background: #0F172A; color: white; padding: 16px; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 600;">Dark BG</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">#0F172A</div>
+                </div>
+                <div style="background: #1E293B; color: white; padding: 16px; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 600;">Dark Surface</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">#1E293B</div>
+                </div>
+                <div style="background: #60A5FA; color: white; padding: 16px; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 600;">Blue</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">#60A5FA</div>
+                </div>
+                <div style="background: #34D399; color: #0F172A; padding: 16px; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 600;">Green</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">#34D399</div>
+                </div>
+                <div style="background: #A855F7; color: white; padding: 16px; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 600;">Purple</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">#A855F7</div>
+                </div>
+                <div style="background: #F59E0B; color: #0F172A; padding: 16px; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 600;">Amber</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">#F59E0B</div>
+                </div>
+                <div style="background: #14B8A6; color: white; padding: 16px; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 600;">Teal</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">#14B8A6</div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px; color: var(--safari-red);">Text Colors</h3>
+            <table style="margin-top: 16px;">
+                <tr>
+                    <th>Context</th>
+                    <th>Dark Theme</th>
+                    <th>Light Theme</th>
+                </tr>
+                <tr>
+                    <td>Primary Text</td>
+                    <td><code>#F8FAFC</code></td>
+                    <td><code>#1E1E1E</code></td>
+                </tr>
+                <tr>
+                    <td>Secondary Text</td>
+                    <td><code>#E2E8F0</code></td>
+                    <td><code>#2D2D2D</code></td>
+                </tr>
+                <tr>
+                    <td>Muted Text</td>
+                    <td><code>#94A3B8</code></td>
+                    <td><code>#6B7280</code></td>
+                </tr>
+                <tr>
+                    <td>Border</td>
+                    <td><code>#334155</code></td>
+                    <td><code>#E5E5E5</code></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 40px; color: var(--light-text-muted); font-size: 0.9rem; border-top: 1px solid var(--light-border); margin-top: 40px;">
+            <p>Safari Circuits HTML Diagram Component Library | v1.0.0 | February 2026</p>
+            <p style="margin-top: 8px;">Reference: <code>organizational-docs/shared/assets/diagrams/html-diagram-components.html</code></p>
+        </div>
+    </div>
+</body>
+</html>

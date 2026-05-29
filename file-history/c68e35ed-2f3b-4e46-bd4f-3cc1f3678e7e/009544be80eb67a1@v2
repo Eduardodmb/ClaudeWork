@@ -1,0 +1,722 @@
+"""
+Rebuild IT-030 W1 Markdown with proper image placement and complete translations
+"""
+from docx import Document
+import os
+
+def extract_images(docx_path, output_dir):
+    """Extract all images from DOCX"""
+    doc = Document(docx_path)
+    os.makedirs(output_dir, exist_ok=True)
+
+    image_counter = 1
+    for rel in doc.part.rels.values():
+        if "image" in rel.target_ref:
+            image_part = rel.target_part
+            image_bytes = image_part.blob
+            ext = rel.target_ref.split('.')[-1]
+            filename = f"image{image_counter:02d}.{ext}"
+
+            with open(os.path.join(output_dir, filename), 'wb') as f:
+                f.write(image_bytes)
+
+            print(f"Extracted: {filename}")
+            image_counter += 1
+
+    return image_counter - 1
+
+def create_comprehensive_markdown():
+    """Create complete markdown with all sections and images"""
+
+    md = """# IT-030 W1 - BeFirst Part Number Configuration
+
+**Document ID:** IT-030 W1
+**Application:** BeFirst
+**Owner:** IT Department
+**Status:** Active
+**Last Updated:** 2026-05-11
+
+---
+
+## Document Summary
+
+| Field | Value |
+|-------|-------|
+| **Document Name** | Part Number Configuration Manual |
+| **Objective** | Guide to configure part numbers in BeFirst system |
+| **Version** | A |
+| **Date** | 9/4/2023 |
+| **Author** | Jose Grajeda |
+
+---
+
+## Table of Contents
+
+1. [General](#general)
+2. [Image](#image)
+3. [Serialization](#serialization)
+4. [Tools Validation](#tools-validation)
+5. [Packout Options](#packout-options)
+6. [Areas by Panel](#areas-by-panel)
+7. [Areas with Gages](#areas-with-gages)
+8. [Areas Formats](#areas-formats)
+9. [Areas with Pallets](#areas-with-pallets)
+10. [Areas Locks](#areas-locks)
+11. [2 Min Defects](#2-min-defects)
+12. [2 Custom Defects](#2-custom-defects)
+13. [2 Row Label Test](#2-row-label-test)
+14. [2 Reprint Options Validations](#2-reprint-options-validations)
+15. [2 Label Shipping Validation](#2-label-shipping-validation)
+16. [BOM](#bom)
+17. [Print Option](#print-option)
+18. [Packout Alternate](#packout-alternate)
+19. [Approved Stations](#approved-stations)
+20. [Parameter Stations](#parameter-stations)
+21. [Routing](#routing)
+22. [Rates](#rates)
+23. [Assembly Instructions](#assembly-instructions)
+24. [Groups](#groups)
+25. [Bins](#bins)
+26. [Group Bins](#group-bins)
+27. [Printers](#printers)
+28. [Force AOI](#force-aoi)
+29. [Search AOI](#search-aoi)
+
+---
+
+## General
+
+In this option you can modify the following fields:
+
+### PartType
+- **Component** = Component part number
+- **Wip** = Shop floor part number
+
+![General Settings](assets/image01.png)
+
+### CustomerID
+Change the customer assigned to the part number.
+
+### ISactive
+Deactivate or activate the part number.
+
+### Facility
+Choose between Juarez (JUA1/JUA2) or El Paso.
+
+![Facility Selection](assets/image02.png)
+
+### PartDesc
+Add a description to the part number.
+
+---
+
+## Image
+
+This option allows you to add an image to the product. Simply select the image and click the **Save** button.
+
+![Image Upload Section](assets/image03.png)
+
+**Steps:**
+1. Click **Choose File** or drag and drop image
+2. Preview the image
+3. Click **Save** to apply
+
+---
+
+## Serialization
+
+In this option you can modify the following serialization fields:
+
+![Serialization Settings](assets/image04.png)
+
+### Laser
+Indicate when the model uses Laser marking.
+
+### LabelByPanel
+Enable label printing by panel instead of individual pieces.
+
+### LabelsID
+Enter the label template name to be used.
+
+![Label Configuration](assets/image05.png)
+
+### PiecesBy Panel
+Number of pieces per panel.
+
+### Merge Serials
+Enable merging of serial numbers.
+
+### Generate Panel Master Automatically
+Generate the panel master serial when serializing individual pieces.
+
+![Panel Settings](assets/image06.png)
+
+### PartSerialFormatEasy
+Individual serial number format (regex pattern).
+
+### PartSerialPanelFormatEasy
+Panel serial number format (regex pattern).
+
+---
+
+## Tools Validation
+
+In this option you can add:
+- Solder paste validations
+- Conformal coating requirements
+- Parameter sheets
+
+![Tools Validation](assets/image07.png)
+
+Select the required tools and validation parameters for the part number.
+
+---
+
+## Packout Options
+
+Configure packing and shipping settings:
+
+![Packout Options Overview](assets/image08.png)
+
+### Price
+Add the piece price for cost tracking.
+
+### Cost
+Add the piece cost.
+
+### HavePVS
+Enable scanning in PVS (Packout Verification Software).
+
+![PVS Settings](assets/image09.png)
+
+### BoxSize
+Number of pieces per box.
+
+### Layers
+Number of layers per box.
+
+### Layers_Allow_Duplicate
+Allow duplicate serial numbers in different layers.
+
+![Box Configuration](assets/image10.png)
+
+### PackRowSize
+Number of pieces per row in packing.
+
+### Fense Required Before Packout
+Minimum time required after testing before packing (in hours).
+
+### Default Stock Location
+Default inventory location after packing.
+
+### PackType
+Type of scan to perform:
+- **Serial** - Scan individual serials
+- **Quantity** - Scan by quantity
+- **Panel** - Scan panel serials
+
+![Pack Type Selection](assets/image11.png)
+
+### Quantity Per Scan
+Number of pieces to add per scan when using Quantity pack type.
+
+---
+
+### Serial Modify Options
+
+#### Substring Option
+
+![Substring Configuration](assets/image12.png)
+
+In this option, the serial number at all stations might be different from the serial at packing.
+
+**Example:**
+- Station serial: `C310820101381`
+- Packing serial: `#80A906093C    ##812774456#060920*X57 A3B3003FVG3*=300820102045C80A`
+
+With this option, BeFirst can read part of the serial:
+
+**Configuration:**
+- **Area**: Select `PackOUT`
+- **Format**: Enter `(51,2)` which means:
+  - Position 51 = Start position
+  - 2 = Total characters to read
+
+![Substring Example](assets/image13.png)
+
+#### Supstring Option
+
+![Supstring Configuration](assets/image14.png)
+
+Following the previous example, if you need to add a prefix to the extracted serial:
+
+**Configuration:**
+- **Area**: Select `Packout`
+- **SupString**: Enter `C{SN}` (adds "C" before the serial number)
+
+This option is commonly used for AUDI parts.
+
+---
+
+### Partial Boxes Configuration
+
+![Partial Boxes](assets/image15.png)
+
+**Defines the default number of partials allowed**
+
+This option defines how many partial boxes can be open simultaneously.
+
+**Steps:**
+1. Enter the number of allowed partial boxes
+2. Click **Add**
+3. To remove, click **Delete**
+
+---
+
+### Component Scanning at Packing
+
+![Component Scanning](assets/image16.png)
+
+Scan specific components during packing process.
+
+**Example for Osram:**
+Scan a cable with code `12345679` at packing.
+
+**Configuration:**
+- **Format**: Add the component barcode format
+- **Title**: Enter the component name
+
+![Component Example](assets/image17.png)
+
+---
+
+### Validate Screw Option
+
+![Validate Screw](assets/image18.png)
+
+This option is specific to Grand Rapids (GR) facility.
+Validates that screws are properly installed before packing.
+
+---
+
+### Layers Configuration
+
+![Layers Configuration](assets/image19.png)
+
+This option configures empty trays/lids in boxes.
+
+**Fields:**
+
+#### OOBA
+Define if the part scans in OOBA (Out of Box Audit).
+
+#### LayersInicio
+Number of empty trays or lids at the beginning of the box.
+
+#### LayersIniciotype
+Define whether tray or lid will be scanned at beginning.
+
+#### LayersFinal
+Number of empty trays or lids at the end of the box.
+
+![Layers Detail](assets/image20.png)
+
+#### LayerCode
+Format of the tray or lid barcode.
+
+**Example:** `^TRAY\d{6}$` for 6-digit tray codes
+
+---
+
+## Areas by Panel
+
+Configure which manufacturing areas scan by panel instead of individual pieces.
+
+![Areas by Panel](assets/image21.png)
+
+**Steps:**
+1. Select the area from dropdown
+2. Click **ADD**
+3. To remove an area, select it and click **Delete**
+
+---
+
+## Areas with Gages
+
+Configure gages (measurement tools) required for specific areas.
+
+![Areas with Gages](assets/image22.png)
+
+**Steps:**
+1. Select the area where gage will be used
+2. Enter the gage name or ID
+3. Click **ADD**
+4. To remove, select the gage and click **Delete**
+
+---
+
+## Areas Formats
+
+Use when the serial number format changes between manufacturing stations.
+
+![Areas Formats](assets/image23.png)
+
+**Steps:**
+1. Select the area where format change applies
+2. Enter the new serial number format (regex)
+3. Click **ADD**
+4. To remove, select format and click **Delete**
+
+---
+
+## Areas with Pallets
+
+Define pallet format requirements for specific areas.
+
+![Areas with Pallets](assets/image24.png)
+
+**Steps:**
+1. Select the area
+2. Enter the pallet barcode format
+3. Click **ADD**
+4. To remove, select and click **Delete**
+
+---
+
+## Areas Locks
+
+![Areas Locks](assets/image25.png)
+
+**Administrator Only Feature**
+
+This option is exclusive to BeFirst administrators for locking/unlocking manufacturing areas.
+
+---
+
+## 2 Min Defects
+
+Lock an area if the same defect occurs within 15 minutes.
+
+![2 Min Defects](assets/image26.png)
+
+**Steps:**
+1. Select the area to monitor
+2. Click **ADD**
+3. To remove, select area and click **Delete**
+
+This helps identify systemic issues quickly.
+
+---
+
+## 2 Custom Defects
+
+Add specific defect codes for this part number.
+
+![2 Custom Defects](assets/image27.png)
+
+**Steps:**
+1. Select the defect from the list
+2. Click **ADD**
+3. To remove, select defect and click **Delete**
+
+---
+
+## 2 Row Label Test
+
+![2 Row Label Test](assets/image28.png)
+
+**Administrator Only Feature**
+
+Used for testing label printing functionality.
+
+---
+
+## 2 Reprint Options Validations
+
+Configure validation requirements for label reprints.
+
+![2 Reprint Options](assets/image29.png)
+
+**Steps:**
+1. Select the area
+2. Enter the validation format
+3. Click **ADD**
+4. To remove, select and click **Delete**
+
+---
+
+## 2 Label Shipping Validation
+
+Configure shipping label validation order and formats.
+
+![Label Shipping Validation](assets/image30.png)
+
+**Steps:**
+1. Add label type
+2. Enter format pattern
+3. Specify validation order (1, 2, 3...)
+4. Click **ADD**
+5. To remove, click **Delete**
+
+![Label Validation Example](assets/image31.png)
+
+---
+
+## BOM
+
+Display the Bill of Materials for the part number.
+
+![BOM View](assets/image32.png)
+
+**Steps:**
+- View component list
+- If components are missing, click **Update** to refresh from PLEX
+
+---
+
+## Print Option
+
+Define printers for MLS (Manufacturing Label System) - Blue and Green labels.
+
+![Print Options](assets/image33.png)
+
+**Steps:**
+1. Select the station
+2. Enter printer name
+3. Leave **Force Values** blank (unless specific values needed)
+4. Click **ADD**
+5. To remove, click **Delete**
+
+---
+
+## Packout Alternate
+
+Verify if part has alternate components and print notification label.
+
+![Packout Alternate](assets/image34.png)
+
+**Steps:**
+1. Click **ADD** to enable
+2. System will check BOM for alternates
+3. If alternates exist, prints warning label
+4. To disable, click **Delete**
+
+---
+
+## Approved Stations
+
+Restrict part to run only on approved stations.
+
+![Approved Stations](assets/image35.png)
+
+**Steps:**
+1. Select area
+2. Select station
+3. Click **ADD**
+4. Part can only run on listed stations
+5. To remove restriction, click **Delete**
+
+---
+
+## Parameter Stations
+
+Assign parameter sheets (work instructions) to stations.
+
+![Parameter Stations](assets/image36.png)
+
+**Steps:**
+1. Select area
+2. Select station
+3. Select side (A or B)
+4. Select parameter sheet
+5. Click **ADD**
+6. To remove, click **Delete**
+
+---
+
+## Routing
+
+View and update BeFirst manufacturing routes.
+
+**Functions:**
+- Update routes from PLEX
+- Define packout station
+- Skip previous station temporarily
+
+**Steps:**
+
+### Update Routes
+Click **Update** to refresh routing from PLEX.
+
+### Skip Previous Station
+1. Select area
+2. Select side
+3. Enter date until skip is active
+4. Click **Add Skip**
+5. To cancel, click **Clear Skips**
+
+### Set Packout
+Click **Set Packout** to define this route as the packing station.
+
+---
+
+## Rates
+
+Load production rates for stations.
+
+**Steps:**
+1. Select area
+2. Select station
+3. Select side
+4. Enter rate (pieces per hour)
+5. Click **ADD**
+
+---
+
+## Assembly Instructions
+
+Upload visual aids (work instructions) for stations.
+
+**Steps:**
+1. Select area
+2. Select substation
+3. Select side
+4. Enter comments
+5. Upload work instruction file (PDF, image)
+6. Click **ADD**
+
+**Note:** Work instructions are automatically approved upon upload.
+
+---
+
+## Groups
+
+Create groups to organize part numbers.
+
+**Steps:**
+1. Enter group name in **GroupName** field
+2. Click **ADD**
+3. To remove, select group and click **Delete**
+
+---
+
+## Bins
+
+Add inventory bins for part numbers.
+
+**Steps:**
+1. Enter bin name in **BINNAME** field
+2. If conversion factor applies, enter it
+3. Click **ADD**
+4. To remove, select bin and click **Delete**
+
+---
+
+## Group Bins
+
+Assign bins to groups with parent-child relationships.
+
+**Steps:**
+1. Select group
+2. Select part number
+3. Select bin
+4. Check **Is Parent** if applicable
+5. Enter scan quantity (how many times to scan)
+6. Click **ADD**
+
+---
+
+## Printers
+
+Configure printers for serial lists (Osram specific).
+
+Prints list of serials in box on a packing slip.
+
+**Steps:**
+1. Enter printer name
+2. Enter units per sheet
+3. Click **ADD**
+4. To remove, click **Delete**
+
+---
+
+## Force AOI
+
+Enable automatic AOI (Automated Optical Inspection) scanning in SMT.
+
+**Requirements:**
+- AOI machine must read QR codes
+- AOI must send data to BeFirst automatically
+
+**Steps:**
+1. Select area (SMT)
+2. Select side
+3. Click **ADD**
+4. To remove, click **Delete**
+
+---
+
+## Search AOI
+
+Require parts to have AOI record before continuing.
+
+**Steps:**
+1. Select area where AOI verification is required
+2. Select side
+3. Click **ADD**
+4. System will block parts without AOI scan
+5. To remove, click **Delete**
+
+---
+
+## Summary
+
+This document covers all configuration options for part numbers in the BeFirst system. Each section controls specific aspects of manufacturing, quality, and packing processes.
+
+For questions or issues, contact:
+- **IT Department**: GR_IT@safaricircuits.com
+- **Original Author**: Jose Grajeda
+
+---
+
+**End of Document**
+"""
+
+    return md
+
+def main():
+    docx_path = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Enterprise Solution Architecture\Enterprise Systems\BeFirst\01_User_Manuals\IT-013 W1 F9 Part Number.docx"
+    output_dir = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Enterprise Solution Architecture\Enterprise Systems\BeFirst\01_User_Manuals_MD"
+    assets_dir = os.path.join(output_dir, "assets")
+    md_path = os.path.join(output_dir, "IT-030_W1_BeFirst_Part_Number_Configuration.md")
+
+    print("=" * 80)
+    print("Rebuilding IT-030 W1 with Complete Content and Images")
+    print("=" * 80)
+    print()
+
+    # Extract images
+    print("Step 1: Extracting images...")
+    num_images = extract_images(docx_path, assets_dir)
+    print(f"Extracted {num_images} images to assets/")
+    print()
+
+    # Create markdown
+    print("Step 2: Creating comprehensive markdown...")
+    md_content = create_comprehensive_markdown()
+
+    with open(md_path, 'w', encoding='utf-8') as f:
+        f.write(md_content)
+
+    print(f"Created: {md_path}")
+    print()
+
+    print("=" * 80)
+    print("Complete!")
+    print(f"- Markdown file: IT-030_W1_BeFirst_Part_Number_Configuration.md")
+    print(f"- Images: {num_images} files in assets/ folder")
+    print(f"- All sections included with proper image references")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,207 @@
+@using System.Data;
+@using System.Data.SqlClient;
+@using System;
+
+@model Firstronic.Areas.Production.Models.Reports.Transaction_Report
+@{
+  ViewBag.Title = "Plex vs BeFirst";
+}
+
+@section head
+{
+  <script src="~/Content/vendor/d3/d3.v4.min.js"></script>
+
+  <script src="~/Content/vendor/jqueryui/jquery-ui.js"></script>
+  <script src="~/Content/vendor/FileSaver/js/FileSaver.js"></script>
+  <style>
+    tfoot {
+      border: 1px solid #dee2e6;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .backyellow {
+      background-color: #FFFF00;
+    }
+  </style>
+}
+
+@{
+  var FirstronicFacilitiesList = new List<SelectListItem>();
+  FirstronicFacilitiesList = Firstronic.Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+
+}
+
+@{
+  SqlParameter[] idParameters = new SqlParameter[]{
+       new SqlParameter("@AreaID",SqlDbType.Int){Value = Model.areaid}
+  };
+
+  var areaslist = Firstronic.Framework.Functions.Dropdowns.GetAreasList(includeAll: true);
+  var pnlistbisn = Firstronic.Framework.Functions.Dropdowns.GetPartNumbersList(null, "", true);
+}
+
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text"> Transaction Plex vs BeFirst Report </h3>
+  </div>
+  <div class="md-card-content">
+
+    <div class="row">
+      <div class="col-3 ">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("Start", new { @class = "m-0 fs-14" })
+          @Html.Editor("Start", "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "md-input", id = "ddlDateStart", @Value = Model.stardate.ToString("MM/dd/yy") } })
+        </div>
+      </div>
+      <div class="col-3 ">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("End", new { @class = "m-0 fs-14" })
+          @Html.Editor("End", "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "md-input", id = "ddlDateEnd", @Value = Model.enddate.ToString("MM/dd/yy") } })
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("Area", new { @class = "m-0 fs-14" })
+          @Html.DropDownList("AreaID", (IEnumerable<SelectListItem>)areaslist, new { @class = "md-input", @id = "ddlareaid" })
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("Part", new { @class = "m-0 fs-14" })
+          @Html.DropDownList("Parts", (IEnumerable<SelectListItem>)pnlistbisn, new { @class = "md-input", @id = "ddlpnid" })
+        </div>
+      </div>
+      <script type="text/javascript" nonce="@Html.ScriptNonce()">
+        $("#ddlDateStart").datepicker({
+          dateFormat: "mm/dd/y",
+          changeMonth: true,
+          changeYear: true,
+          yearRange: "-10:+5"
+        });
+
+        $("#ddlDateEnd").datepicker({
+          dateFormat: "mm/dd/y",
+          changeMonth: true,
+          changeYear: true,
+          yearRange: "-10:+5"
+        });
+      </script>
+
+      <div class="col-3 ">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          <input id="btnUpdateChart" type="button" value="Search" class="md-btn md-btn-primary md-btn-small" />
+        </div>
+      </div>
+
+      <script type="text/javascript" nonce="@Html.ScriptNonce()">
+        $('#btnUpdateChart').click(function (e) {
+          e.preventDefault(); // <------------------ stop default behaviour of button
+          $('#Chart-Preview').html('');
+          updatechart();
+        });
+
+        function updatechart() {
+          var v_Date_Start = $("#ddlDateStart").val();
+          var v_Date_End = $("#ddlDateEnd").val();
+          var AreaID = $('#ddlareaid').val();
+          var PartID = $('#ddlpnid').val();
+
+          var ids = { stardate: v_Date_Start, enddate: v_Date_End, LoadID: "123", areaid: AreaID, PartID: PartID };
+
+          WaitingForm_Start();
+
+          $("body").addClass("loading");
+
+          window.location.replace('/Production/Reports/PlexVSBeFirst_Area?' + $.param(ids));
+
+        }
+      </script>
+    </div>
+
+    @if (Model.LoadID.ToString().Length > 0)
+    {
+      DateTime seguidas = Model.stardate.AddHours(+6);
+
+      DateTime seguidae = Model.enddate.AddHours(+6).AddDays(+1);
+
+      List<int> areas = new List<int>();
+
+      DataTable dt_areas = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable(
+        plexOperation: true,
+        includeAreaIds: Model.areaid > 0 ? new int[] { Model.areaid } : null);
+
+      foreach (DataRow row2 in dt_areas.Rows)
+      {
+        string titulo = "";
+
+        DataTable dtComparacion = new DataTable();
+        dtComparacion.Columns.Add("AreaID", typeof(System.String));
+        dtComparacion.Columns.Add("Area", typeof(System.String));
+        dtComparacion.Columns.Add("StationID", typeof(System.String));
+        dtComparacion.Columns.Add("StationName", typeof(System.String));
+        dtComparacion.Columns.Add("PartID", typeof(System.String));
+        dtComparacion.Columns.Add("PN", typeof(System.String));
+        dtComparacion.Columns.Add("Side", typeof(System.String));
+        dtComparacion.Columns.Add("BeFirst", typeof(System.Int32));
+        dtComparacion.Columns.Add("Plex", typeof(System.Int32));
+        dtComparacion.Columns.Add("Diferencia", typeof(System.Int32));
+
+        dtComparacion.Merge(Firstronic.Framework.Functions.Others.GetComparationArea(seguidas, seguidae, "0", row2[0].ToString(), row2[1].ToString(), Model.partid));
+
+
+        <div>
+          @row2[1].ToString()
+        </div>
+
+        //PIINRT TO FILE
+        <div class="col-12 mvc-grid mn-b-30">
+          <table border="1">
+            <thead>
+              <tr>
+
+                @foreach (System.Data.DataColumn col in dtComparacion.Columns)
+                {
+                  <th>@col.Caption</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (System.Data.DataRow rowsu in dtComparacion.Rows)
+              {
+                string classcolor = "";
+
+                if (rowsu[6].ToString() == "0")
+                {
+                  classcolor = "backyellow";
+                }
+                else if (rowsu[9].ToString() == "0")
+                {
+                  classcolor = "bg-HoneyDew";
+                }
+                else if (int.Parse(rowsu[9].ToString()) > 0)
+                {
+                  classcolor = "bg-MistyRose";
+                }
+
+                int varcell1 = 1;
+                <tr>
+                  @foreach (var cell in rowsu.ItemArray)
+                  {
+                    <td class="@classcolor">@cell.ToString() </td>
+                    varcell1++;
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+

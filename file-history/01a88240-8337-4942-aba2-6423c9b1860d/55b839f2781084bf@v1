@@ -1,0 +1,355 @@
+# CLAUDE.md
+
+**BeFirst_Docs** - Single source of truth for BeFirst Manufacturing Intelligence Platform documentation.
+
+## Core Principles
+
+- ✅ **Everything in Git** - All documentation assets version controlled here
+- ✅ **Deliverables committed** - Generated HTML, PDF, DOCX committed to `deliverables/`
+- ✅ **Self-contained** - No external dependencies (OneDrive, file shares)
+- ❌ **No parallel documentation** - This repo is the single source
+
+## Quick Start
+
+```bash
+# Clone and setup
+git clone <repository-url>
+cd BeFirst_Docs
+
+# Create Python virtual environment
+python -m venv venv
+venv\Scripts\Activate.ps1  # Windows
+source venv/bin/activate    # macOS/Linux
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Build documentation
+python scripts/build_docs.py --config complete-docs
+
+# Deactivate when done
+deactivate
+```
+
+**See `docs/08_SETUP.md` for detailed setup and `docs/09_TROUBLESHOOTING.md` for common issues.**
+
+## Platform Overview
+
+**BeFirst Platform**: 13-repository manufacturing intelligence ecosystem for Safari Circuits
+
+**Architecture:**
+```
+PLEX ERP (Source) → ETL (Talend) → 4 Databases → APIs/Services → Portal/Apps
+```
+
+**Key Components:**
+- **6 Application Repos**: Portal (ASP.NET MVC 5), APIs (.NET Core 7.0), Services (VB.NET), Desktop apps
+- **4 Database Repos**: PROD_DWH (49 tables), MES (824 tables), MACHINES_RESULTS (22), TESTERS_RESULTS (4)
+- **1 ETL Repo**: Talend Open Studio (40+ modules)
+- **1 Reporting Repo**: SSRS (54+ dashboards)
+- **1 Documentation Repo**: **BeFirst_Docs (this repo)**
+
+**Facilities:** GRA1 (Granby, QC), JUA1/JUA2 (Ciudad Juárez, Mexico)
+
+**See `docs/02_ARCHITECTURE.md` for complete architecture details.**
+
+## Repository Structure
+
+```
+S:\01_Repos\BeFirst_Docs\
+├── docs/                              # TECHNICAL DOCS (Platform/System)
+│   ├── 01_README.md                   # Platform overview
+│   ├── 02_ARCHITECTURE.md             # Complete architecture
+│   ├── 04_DATABASE.md                 # Database schemas
+│   ├── 05_API.md                      # REST API docs
+│   ├── 11_BUILD_DOCS_GUIDE.md         # Documentation builder guide
+│   ├── diagrams/                      # Architecture diagrams
+│   └── integrations/                  # Integration patterns
+├── knowledge-base/                    # BUSINESS KNOWLEDGE (Processes/Departments)
+│   ├── purchasing/                    # PUR-* files (no subfolders)
+│   ├── manufacturing/                 # MFG-* files
+│   ├── quality/                       # QUA-* files
+│   ├── DOCUMENT-ID-CONTROL.md         # Document ID standards
+│   └── README.md                      # Knowledge base guide
+├── deliverables/                      # GENERATED OUTPUTS (committed to Git)
+│   ├── html/                          # HTML documentation builds
+│   ├── manuals/                       # User manuals (MD + DOCX)
+│   ├── presentations/                 # PowerPoint files
+│   └── reports/                       # Generated reports
+├── scripts/                           # Build scripts
+│   └── build_docs.py                  # Python documentation builder
+├── config/                            # Build configurations
+│   └── docs_builder.yaml              # Doc builder configs
+├── .claude/                           # Claude Code templates/skills
+│   ├── templates/                     # HTML templates, Python generators
+│   └── skills/                        # Custom skills
+├── requirements.txt                   # Python dependencies
+└── README.md                          # Repository overview
+```
+
+## Documentation Types
+
+**docs/ vs knowledge-base/**:
+
+| Location | Content | Scope | Audience |
+|----------|---------|-------|----------|
+| **docs/** | Technical platform documentation | BeFirst-specific | IT/Developers |
+| **knowledge-base/** | Business processes | Company-wide | All teams |
+
+**Examples:**
+- BeFirst database schemas → `docs/04_DATABASE.md`
+- How suppliers submit reports → `knowledge-base/purchasing/PUR-PR-001-*.md`
+- BeFirst API endpoints → `docs/05_API.md`
+- User manuals → `deliverables/manuals/[ID]-[title].md` (edit in Typora → export DOCX)
+
+## Common Tasks
+
+### Build Documentation
+
+```bash
+# Activate venv first
+venv\Scripts\activate
+
+# Build complete docs
+python scripts/build_docs.py --config complete-docs
+
+# Build specific configs
+python scripts/build_docs.py --config api-reference
+python scripts/build_docs.py --config developer-guide
+python scripts/build_docs.py --config architecture-guide
+
+# List all configs
+python scripts/build_docs.py --list-configs
+```
+
+**Output:** `deliverables/html/[name].html`
+
+**Pre-defined configs:** complete-docs, api-reference, developer-guide, architecture-guide, operations-guide, database-guide
+
+### Generate User Manuals
+
+**Workflow:** Markdown → Edit in Typora → Export DOCX → Commit both
+
+```bash
+# 1. Claude creates: deliverables/manuals/[ID]-[title].md
+# 2. Edit in Typora (add screenshots, refine content)
+# 3. Export to DOCX via Typora: File → Export → Word (.docx)
+# 4. Commit both files
+git add deliverables/manuals/[name].md deliverables/manuals/[name].docx
+git commit -m "DELIVERABLE: Create [title] manual"
+```
+
+### Update Documentation
+
+```bash
+# 1. Pull latest
+git pull origin main
+
+# 2. Create feature branch
+git checkout -b feature/update-api-docs
+
+# 3. Edit markdown in docs/
+# (make changes)
+
+# 4. Rebuild affected deliverables
+python scripts/build_docs.py --config api-reference
+
+# 5. Commit source + deliverables
+git add docs/ deliverables/
+git commit -m "DOCS: Update API documentation with new endpoints"
+
+# 6. Push and create PR
+git push origin feature/update-api-docs
+```
+
+## Git Workflow
+
+**Branch Strategy:**
+- `main` - Production-ready documentation
+- `feature/*` - Documentation updates
+- `hotfix/*` - Urgent corrections
+
+**Commit Message Standards:**
+- `DOCS:` - Documentation content updates
+- `BUILD:` - Build script/config changes
+- `TEMPLATE:` - Template modifications
+- `DELIVERABLE:` - New deliverable generated
+- `FIX:` - Documentation corrections
+
+## Technology Stack
+
+**Web:**
+- Portal: ASP.NET MVC 5, .NET Framework 4.8, EF 6
+- APIs: ASP.NET Core 7.0, EF Core 7.0
+- Auth: Azure AD (OAuth2/OIDC, JWT)
+
+**Services:**
+- VB.NET, .NET Framework 4.8, Windows Services
+
+**ETL:**
+- Talend Open Studio 8.0.1, Java 8+, JS7 JobScheduler
+
+**Database:**
+- SQL Server 2016+
+
+**Documentation:**
+- Python 3.7+, Markdown, Jinja2, PyYAML
+- Typora for manual editing
+
+## Key Platform Concepts
+
+### Portal Areas (18)
+Accounting, Assemblies, BOM, Customers, DataImport, Engineering, HR, Inventory, Machines, Manufacturing, Nomenclatures, OEE, Params, Planning, Purchasing, Quality, Shipping, Suppliers
+
+**See `docs/06_WORKFLOWS.md` for complete area descriptions.**
+
+### API Controllers (15)
+All secured with JWT Bearer (Azure AD), exposing REST endpoints for Portal/external consumers
+
+**See `docs/05_API.md` for endpoint documentation.**
+
+### Databases
+- **PLEX** (source): 10.122.40.10:1438, read-only
+- **PROD_DWH** (warehouse): 10.122.40.10:1439, read/write (49 tables)
+- **MES**: Manufacturing execution (824 tables)
+- **MACHINES_RESULTS**: Equipment OEE (22 tables)
+- **TESTERS_RESULTS**: Test data (4 tables)
+
+**See `docs/04_DATABASE.md` for complete schemas.**
+
+## Documentation Standards
+
+**Formatting:**
+- GitHub-flavored Markdown
+- Tables for structured data
+- Code blocks with language hints (```sql, ```bash, etc.)
+- Mermaid diagrams for architecture visuals
+- **No emojis** in generated documentation - use plain text (e.g., "Note:", "Warning:")
+- Relative links for cross-references
+
+**When Updating:**
+1. Pull latest changes first
+2. Edit markdown sources in `docs/` or `knowledge-base/`
+3. Maintain consistency with existing structure
+4. Update cross-references if needed
+5. Regenerate deliverables
+6. Commit both source and deliverables
+7. Create PR for review
+
+**When Creating Deliverables:**
+1. Use `python scripts/build_docs.py --config [name]`
+2. Test output in browser
+3. Verify formatting (tables, code blocks, navigation)
+4. Save to correct `deliverables/` subdirectory
+5. Commit to Git
+
+## Team Sharing
+
+**Repository Location:** `S:\01_Repos\BeFirst_Docs`
+
+**Access:**
+- **IT team**: Git clone + full access
+- **Operations**: Read-only Git or `deliverables/` folder
+- **Management**: Deliverables via email or network share
+- **External**: Specific files only (no repo access)
+
+**Distribution (optional secondary):**
+- PLEX manuals: `S:\OneDrive - Safari Circuits, LLC\...\01_PLEX`
+- BeFirst manuals: `S:\OneDrive - Safari Circuits, LLC\...\02_BeFirst`
+- **Primary source remains Git repository**
+
+## Portal Sync
+
+**BeFirst_Portal** (`S:\01_Repos\BeFirst_Portal`) is the primary source for documentation updates.
+
+**When Portal changes:**
+1. Check recent commits: `git -C "S:\01_Repos\BeFirst_Portal" log --oneline -20`
+2. Map changes to docs:
+   - New/deleted areas → `docs/06_WORKFLOWS.md` + `docs/02_ARCHITECTURE.md`
+   - Database changes → `docs/04_DATABASE.md`
+   - API changes → `docs/05_API.md`
+   - Rebranding → `docs/02_ARCHITECTURE.md`
+   - Business process → `knowledge-base/{department}/`
+3. Update markdown sources
+4. Rebuild affected deliverables
+
+**Always read Portal's CLAUDE.md first** for accurate architecture context.
+
+## Knowledge Base
+
+**Location:** `knowledge-base/`
+
+**Purpose:** Claude's growing brain for BeFirst business processes
+
+**Structure:**
+- Department folders (purchasing, manufacturing, quality, etc.)
+- Files directly in department folder with document IDs (PUR-PR-001, MFG-DS-002, etc.)
+- **No subfolders** - flat structure with IDs
+
+**How to Use:**
+- Tell Claude about processes conversationally
+- Claude creates/updates files with document IDs
+- Process definitions link to technical docs
+- Knowledge grows organically over time
+
+**See `knowledge-base/README.md` for complete guide.**
+
+## Deliverables Strategy
+
+**Commit deliverables to Git** for team-wide sharing:
+- ✅ Teams without Python can access HTML/DOCX immediately
+- ✅ Version history shows what docs existed at any point
+- ✅ Single source of truth (no "which version?" confusion)
+- ✅ Git distribution more reliable than file shares
+
+**Commit:** HTML, DOCX, PDF, PPTX
+**Don't commit:** Build logs, venv/, temp files
+
+## Templates
+
+**Location:** `.claude/templates/`
+
+**HTML Templates:**
+- `documentation_template.html` - Documentation builds
+- `presentation_template.html` - Presentations (keyboard navigation)
+- `report_template.html` - Reports
+
+**Python Generators:**
+- `generate_sop_document.py` - SOP/manual generator (DOCX)
+- `generate_slide_deck.py` - PowerPoint generator
+
+**Placeholder syntax:** `{{DOC_TITLE}}`, `{{COMPANY_NAME}}`, `{{DOC_CONTENT}}`, etc.
+
+## Contact
+
+**Repository Owner:** SafariCircuitsLLC GitHub organization
+**Location:** `S:\01_Repos\BeFirst_Docs`
+**IT Manager:** Eduardo D. Marquez (GR_IT@safaricircuits.com)
+
+**For Documentation Updates:**
+1. Create feature branch
+2. Edit markdown sources
+3. Regenerate deliverables
+4. Commit and create PR
+
+**For Help:**
+- Setup: `docs/08_SETUP.md`
+- Troubleshooting: `docs/09_TROUBLESHOOTING.md`
+- Build guide: `docs/11_BUILD_DOCS_GUIDE.md`
+- Contact IT team for repository access
+
+## Key Documentation Files
+
+| Document | Purpose |
+|----------|---------|
+| `docs/01_README.md` | Platform overview and quick start |
+| `docs/02_ARCHITECTURE.md` | Complete system architecture |
+| `docs/04_DATABASE.md` | Database schemas (all 4 databases) |
+| `docs/05_API.md` | REST API endpoints (15 controllers) |
+| `docs/06_WORKFLOWS.md` | Application workflows (Portal, Services, ETL) |
+| `docs/08_SETUP.md` | Development environment setup |
+| `docs/09_TROUBLESHOOTING.md` | Common issues and solutions |
+| `docs/11_BUILD_DOCS_GUIDE.md` | Complete documentation builder guide |
+| `knowledge-base/README.md` | Knowledge base guide and structure |
+
+**Start with `docs/01_README.md` for platform overview.**

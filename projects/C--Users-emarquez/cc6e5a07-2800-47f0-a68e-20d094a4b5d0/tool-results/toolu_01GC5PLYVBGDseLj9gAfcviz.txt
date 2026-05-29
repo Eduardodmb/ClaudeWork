@@ -1,0 +1,208 @@
+ M .claude/enterprise/learning/PIPELINE.md
+ M .claude/enterprise/learning/best-practices/example-learning.md
+ M .claude/enterprise/learning/ideas/backlog.md
+A  .claude/project-memory/C--Users-emarquez--claude/8e0abc0e-19a0-449a-bb45-19d37e96d658.jsonl
+A  .claude/project-memory/C--Users-emarquez/38c0a6cb-ccb1-44bd-aed1-31e5f8a3fbb7.jsonl
+A  .claude/project-memory/C--Users-emarquez/55031b87-b7d2-4cc7-881a-838e37bff111.jsonl
+A  .claude/project-memory/C--Users-emarquez/cc6e5a07-2800-47f0-a68e-20d094a4b5d0.jsonl
+A  .claude/project-memory/C--Users-emarquez/fec8fe4d-72d6-4d04-8eb7-60402350601c.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-APIs/2cd724a5-ff7f-4a31-87cd-31f6793d5e57.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Database-MES-Database-MES/dd6e7648-37cd-491b-99e9-64b47fa7c319.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Database-MES-Database/memory/MEMORY.md
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/1c1e2870-ccec-4618-9370-39e9e074e0b2.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/24246da3-b107-4d07-a3b5-2ed5f0f63f0e.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/subagents/agent-a26b587.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/subagents/agent-a3ebe4a.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/subagents/agent-a4fe0c5.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/subagents/agent-acompact-61f4b8.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/tool-results/toolu_0147ueHRJyyeRYEQKJMhoXWf.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/tool-results/toolu_01JxWM66E9AGiLhYAibVttAp.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/tool-results/toolu_01Q6HNnNUBnQYy3Vem1qyko5.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/2658468c-d796-4fef-8dd5-703162488b7b.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/3b5698eb-47d5-492d-b093-82555540b858/subagents/agent-acompact-a80736.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/subagents/agent-acompact-3edf4d.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/subagents/agent-acompact-b9c21e.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/subagents/agent-acompact-fa0be5.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/tool-results/toolu_01E4cdHNrRmy6Yze1JahpwH9.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/tool-results/toolu_01QJC2qGQcnY8wTKEqGaFeUW.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/tool-results/toolu_01TK87AoirmK32B6X9tQ25VJ.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/4419a42c-c549-4d57-a9a5-0b7c499364dc/subagents/agent-a219b91.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/4419a42c-c549-4d57-a9a5-0b7c499364dc/subagents/agent-a228451.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/4419a42c-c549-4d57-a9a5-0b7c499364dc/subagents/agent-ade9527.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/4419a42c-c549-4d57-a9a5-0b7c499364dc/tool-results/toolu_01HKz3XP91J4Wz6WGfenqf7k.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/5a77719d-9534-4021-ac24-c463d67aacee.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/5a77719d-9534-4021-ac24-c463d67aacee/tool-results/toolu_016rbbxzjvr9A2L5DpgD6sT6.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/718e3895-0f99-4222-991c-e896dc05ab32.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/7d63f975-4d42-4f7e-8d13-11b9e5f27fe9.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/7d63f975-4d42-4f7e-8d13-11b9e5f27fe9/tool-results/toolu_01KJ2EzWWMofZ6rnq2EeTe1w.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/87a72305-fffd-4da8-bd31-5278e984764d.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/95c88dc6-affe-41ec-b1d1-cea8be254087.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/a023581e-7eed-405a-967b-6136af015940/subagents/agent-a67890d.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/a8479ed3-f293-4912-ac91-717ed0ce0eda.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/ba6b1e2d-4db7-4351-8b6d-cb284b1354b1.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c2965b7e-8acc-484c-b8cb-738ccca1438c.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c71d0fcf-e681-4f0e-bfb6-6963a4139eea.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-a2003cf.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-a3193c5.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-a48ae40.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-acc91df.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-ad3eef8.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/tool-results/toolu_012L62VfnzGGqEMTvpQ4LH8x.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/tool-results/toolu_01KCPdFdDZRX4iaS1ghDdCHs.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/c97acd9d-1304-44a7-bab5-b2ac10544df9/subagents/agent-acompact-70f3c8.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/ca71ee5d-d7f4-4009-bdf7-f2ec92c66fba/subagents/agent-ac21eff.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/ca71ee5d-d7f4-4009-bdf7-f2ec92c66fba/subagents/agent-ace29f8.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/ca71ee5d-d7f4-4009-bdf7-f2ec92c66fba/subagents/agent-acompact-64e1f1.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/e83249c0-7ab7-4e96-ad86-410ed00e8658/subagents/agent-acompact-3c44c3.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/e83249c0-7ab7-4e96-ad86-410ed00e8658/subagents/agent-acompact-ad43de.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Docs/memory/MEMORY.md
+A  .claude/project-memory/S--01-Repos-BeFirst-ETL/7e34a8cf-2f6f-4ee7-8cea-568b429614f8/subagents/agent-a50973d.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-ETL/7e34a8cf-2f6f-4ee7-8cea-568b429614f8/subagents/agent-acc15be.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/02182ceb-854f-4c5c-ae5b-9ba5623e0a38/subagents/agent-ae18eed.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/02182ceb-854f-4c5c-ae5b-9ba5623e0a38/tool-results/toolu_01GzrE19LjLobqan7nKKKhBQ.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-a19e3c3.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-a1eb8c7.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-a878246.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-aaaf93f.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-ae9d2cf.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-afd4853.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/tool-results/toolu_01FYUQiUMmji4WHYDx3LSV9C.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/memory/MEMORY.md
+A  .claude/project-memory/S--01-Repos-BeFirst-Portal/memory/architecture.md
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/40efa8cc-6c6d-4f58-a2f5-236434e77934/subagents/agent-a3926eb.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/40efa8cc-6c6d-4f58-a2f5-236434e77934/subagents/agent-a7d5604.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/4df2e4f2-0543-4623-980f-13b96b525da0/subagents/agent-a4eefb4.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/4df2e4f2-0543-4623-980f-13b96b525da0/subagents/agent-a834781.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/4df2e4f2-0543-4623-980f-13b96b525da0/tool-results/toolu_01DZsGb8aAjdVdrTWUt3LemK.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/4df2e4f2-0543-4623-980f-13b96b525da0/tool-results/toolu_01EhARAQiEDcrCmsa1y5kZv8.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-a105a9a.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-a805498.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-a9f3d57.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-ab79f36.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-ac4e432.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-ac85bc2.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-ac95a66.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-acompact-b61916.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-af0877b.jsonl
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/tool-results/toolu_01Lr9ZnZFje5vkzbb1A6ZFMN.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/tool-results/toolu_01UETPYYnik1C12y41tkFMux.txt
+A  .claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/memory/MEMORY.md
+A  .claude/project-memory/S--01-Repos-BeFirst-Services/3fed1b97-04e3-4849-914b-03b8c77d15b0.jsonl
+A  .claude/project-memory/S--01-Repos-organizational-docs-scripts/b672292b-0f14-4bbc-9c74-3b4f16d2abff/subagents/agent-a65420d.jsonl
+A  .claude/project-memory/S--02-DevOps/248d1e9b-3973-429b-a284-91869396ce00/subagents/agent-acompact-d91ed4.jsonl
+A  .claude/project-memory/S--02-DevOps/30000cdd-757a-40d7-b51a-60a03cc7e643/subagents/agent-afdc1f5.jsonl
+A  .claude/project-memory/S--02-DevOps/4b1ef80d-f673-45f7-b8e0-0d4860be9378/subagents/agent-a62b8b4.jsonl
+A  .claude/project-memory/S--02-DevOps/4b1ef80d-f673-45f7-b8e0-0d4860be9378/subagents/agent-ab0bab2.jsonl
+A  .claude/project-memory/S--02-DevOps/4b1ef80d-f673-45f7-b8e0-0d4860be9378/subagents/agent-ad1380c.jsonl
+A  .claude/project-memory/S--02-DevOps/4b1ef80d-f673-45f7-b8e0-0d4860be9378/subagents/agent-aff97f0.jsonl
+A  .claude/project-memory/S--02-DevOps/9e17a02a-e260-4f2a-aa6f-035ab6a8ad7e/subagents/agent-ac84a6c.jsonl
+A  .claude/project-memory/S--02-DevOps/f509b6f9-b960-4d17-b0c1-653a06877f33/subagents/agent-aba5d6f.jsonl
+A  .claude/project-memory/S--02-DevOps/f509b6f9-b960-4d17-b0c1-653a06877f33/subagents/agent-acompact-9dce12.jsonl
+A  .claude/project-memory/S--02-DevOps/f509b6f9-b960-4d17-b0c1-653a06877f33/subagents/agent-acompact-bce18b.jsonl
+A  .claude/project-memory/S--03-Others-01-Transcripts/88ca81fb-b09a-4771-aea4-b32e31a19e21.jsonl
+A  .claude/project-memory/S--04-ACG-Odoo-Docker/5a0942af-607f-45d6-ae52-9a8ab7493e04.jsonl
+A  .claude/project-memory/S--04-ACG-Odoo-Docs/df7e905c-decf-421e-8ebb-39b9ef65e579.jsonl
+A  .claude/project-memory/S--1---Repos-BeFirst-ETL/02e5ce66-5923-486b-a7b0-dbe23dc1fb13/subagents/agent-ad63fab.jsonl
+A  .claude/project-memory/S--1---Repos-BeFirst-ETL/63c47183-3dda-4e61-a171-6d41522903b0/subagents/agent-aed3fcf.jsonl
+A  .claude/project-memory/S--OneDrive---Safari-Circuits--LLC-Information-Technology---Documents-Grand-Rapids-IT-Hub/983ec6e4-7bd4-4536-bb19-7923669b6837.jsonl
+A  .claude/project-memory/S--OneDrive---Safari-Circuits--LLC-Information-Technology---Documents-Grand-Rapids-IT-Hub/983ec6e4-7bd4-4536-bb19-7923669b6837/tool-results/toolu_01HPrKw9ibRMrn6F1DcW8VJr.txt
+M  .claude/scripts/setup-personal.ps1
+A  .claude/scripts/setup-project-memory-sync.ps1
+warning: in the working copy of '.claude/project-memory/C--Users-emarquez--claude/8e0abc0e-19a0-449a-bb45-19d37e96d658.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/C--Users-emarquez/38c0a6cb-ccb1-44bd-aed1-31e5f8a3fbb7.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/C--Users-emarquez/55031b87-b7d2-4cc7-881a-838e37bff111.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/C--Users-emarquez/cc6e5a07-2800-47f0-a68e-20d094a4b5d0.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/C--Users-emarquez/fec8fe4d-72d6-4d04-8eb7-60402350601c.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-APIs/2cd724a5-ff7f-4a31-87cd-31f6793d5e57.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Database-MES-Database-MES/dd6e7648-37cd-491b-99e9-64b47fa7c319.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/1c1e2870-ccec-4618-9370-39e9e074e0b2.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/24246da3-b107-4d07-a3b5-2ed5f0f63f0e.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/subagents/agent-a26b587.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/subagents/agent-a3ebe4a.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/subagents/agent-a4fe0c5.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/subagents/agent-acompact-61f4b8.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/tool-results/toolu_0147ueHRJyyeRYEQKJMhoXWf.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/tool-results/toolu_01JxWM66E9AGiLhYAibVttAp.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/24e581ea-0481-466d-92be-0cd6cf5da26c/tool-results/toolu_01Q6HNnNUBnQYy3Vem1qyko5.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/2658468c-d796-4fef-8dd5-703162488b7b.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/3b5698eb-47d5-492d-b093-82555540b858/subagents/agent-acompact-a80736.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/subagents/agent-acompact-3edf4d.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/subagents/agent-acompact-b9c21e.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/subagents/agent-acompact-fa0be5.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/400c370f-15c7-4159-9869-4860324df427/tool-results/toolu_01TK87AoirmK32B6X9tQ25VJ.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/4419a42c-c549-4d57-a9a5-0b7c499364dc/subagents/agent-a219b91.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/4419a42c-c549-4d57-a9a5-0b7c499364dc/subagents/agent-a228451.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/4419a42c-c549-4d57-a9a5-0b7c499364dc/subagents/agent-ade9527.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/4419a42c-c549-4d57-a9a5-0b7c499364dc/tool-results/toolu_01HKz3XP91J4Wz6WGfenqf7k.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/5a77719d-9534-4021-ac24-c463d67aacee.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/718e3895-0f99-4222-991c-e896dc05ab32.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/7d63f975-4d42-4f7e-8d13-11b9e5f27fe9.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/7d63f975-4d42-4f7e-8d13-11b9e5f27fe9/tool-results/toolu_01KJ2EzWWMofZ6rnq2EeTe1w.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/87a72305-fffd-4da8-bd31-5278e984764d.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/95c88dc6-affe-41ec-b1d1-cea8be254087.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/a023581e-7eed-405a-967b-6136af015940/subagents/agent-a67890d.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/a8479ed3-f293-4912-ac91-717ed0ce0eda.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/ba6b1e2d-4db7-4351-8b6d-cb284b1354b1.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c2965b7e-8acc-484c-b8cb-738ccca1438c.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c71d0fcf-e681-4f0e-bfb6-6963a4139eea.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-a2003cf.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-a3193c5.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-a48ae40.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-acc91df.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/subagents/agent-ad3eef8.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/tool-results/toolu_012L62VfnzGGqEMTvpQ4LH8x.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c8736371-751b-4baf-b073-8b6c6e05fb15/tool-results/toolu_01KCPdFdDZRX4iaS1ghDdCHs.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/c97acd9d-1304-44a7-bab5-b2ac10544df9/subagents/agent-acompact-70f3c8.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/ca71ee5d-d7f4-4009-bdf7-f2ec92c66fba/subagents/agent-ac21eff.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/ca71ee5d-d7f4-4009-bdf7-f2ec92c66fba/subagents/agent-ace29f8.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/ca71ee5d-d7f4-4009-bdf7-f2ec92c66fba/subagents/agent-acompact-64e1f1.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/e83249c0-7ab7-4e96-ad86-410ed00e8658/subagents/agent-acompact-3c44c3.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Docs/e83249c0-7ab7-4e96-ad86-410ed00e8658/subagents/agent-acompact-ad43de.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-ETL/7e34a8cf-2f6f-4ee7-8cea-568b429614f8/subagents/agent-a50973d.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-ETL/7e34a8cf-2f6f-4ee7-8cea-568b429614f8/subagents/agent-acc15be.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Portal/02182ceb-854f-4c5c-ae5b-9ba5623e0a38/subagents/agent-ae18eed.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Portal/02182ceb-854f-4c5c-ae5b-9ba5623e0a38/tool-results/toolu_01GzrE19LjLobqan7nKKKhBQ.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-a19e3c3.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-a1eb8c7.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-a878246.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-aaaf93f.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-ae9d2cf.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/subagents/agent-afd4853.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Portal/152ffe11-81c2-46b8-9daa-cc1f00e6e347/tool-results/toolu_01FYUQiUMmji4WHYDx3LSV9C.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/40efa8cc-6c6d-4f58-a2f5-236434e77934/subagents/agent-a3926eb.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/40efa8cc-6c6d-4f58-a2f5-236434e77934/subagents/agent-a7d5604.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/4df2e4f2-0543-4623-980f-13b96b525da0/subagents/agent-a4eefb4.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/4df2e4f2-0543-4623-980f-13b96b525da0/subagents/agent-a834781.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/4df2e4f2-0543-4623-980f-13b96b525da0/tool-results/toolu_01DZsGb8aAjdVdrTWUt3LemK.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/4df2e4f2-0543-4623-980f-13b96b525da0/tool-results/toolu_01EhARAQiEDcrCmsa1y5kZv8.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-a105a9a.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-a805498.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-a9f3d57.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-ab79f36.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-ac4e432.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-ac85bc2.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-ac95a66.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-acompact-b61916.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/subagents/agent-af0877b.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/tool-results/toolu_01Lr9ZnZFje5vkzbb1A6ZFMN.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Production-BeFirst/63566bea-18b1-4ac9-b7bf-120f832c43c6/tool-results/toolu_01UETPYYnik1C12y41tkFMux.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-BeFirst-Services/3fed1b97-04e3-4849-914b-03b8c77d15b0.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--01-Repos-organizational-docs-scripts/b672292b-0f14-4bbc-9c74-3b4f16d2abff/subagents/agent-a65420d.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/248d1e9b-3973-429b-a284-91869396ce00/subagents/agent-acompact-d91ed4.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/30000cdd-757a-40d7-b51a-60a03cc7e643/subagents/agent-afdc1f5.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/4b1ef80d-f673-45f7-b8e0-0d4860be9378/subagents/agent-a62b8b4.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/4b1ef80d-f673-45f7-b8e0-0d4860be9378/subagents/agent-ab0bab2.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/4b1ef80d-f673-45f7-b8e0-0d4860be9378/subagents/agent-ad1380c.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/4b1ef80d-f673-45f7-b8e0-0d4860be9378/subagents/agent-aff97f0.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/9e17a02a-e260-4f2a-aa6f-035ab6a8ad7e/subagents/agent-ac84a6c.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/f509b6f9-b960-4d17-b0c1-653a06877f33/subagents/agent-aba5d6f.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/f509b6f9-b960-4d17-b0c1-653a06877f33/subagents/agent-acompact-9dce12.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--02-DevOps/f509b6f9-b960-4d17-b0c1-653a06877f33/subagents/agent-acompact-bce18b.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--03-Others-01-Transcripts/88ca81fb-b09a-4771-aea4-b32e31a19e21.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--04-ACG-Odoo-Docker/5a0942af-607f-45d6-ae52-9a8ab7493e04.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--04-ACG-Odoo-Docs/df7e905c-decf-421e-8ebb-39b9ef65e579.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--1---Repos-BeFirst-ETL/02e5ce66-5923-486b-a7b0-dbe23dc1fb13/subagents/agent-ad63fab.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--1---Repos-BeFirst-ETL/63c47183-3dda-4e61-a171-6d41522903b0/subagents/agent-aed3fcf.jsonl', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.claude/project-memory/S--OneDrive---Safari-Circuits--LLC-Information-Technology---Documents-Grand-Rapids-IT-Hub/983ec6e4-7bd4-4536-bb19-7923669b6837.jsonl', LF will be replaced by CRLF the next time Git touches it

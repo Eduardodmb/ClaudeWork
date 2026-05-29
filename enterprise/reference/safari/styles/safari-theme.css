@@ -1,0 +1,295 @@
+/**
+ * Safari Theme CSS Variables
+ *
+ * Official CSS custom properties for Safari Circuits applications.
+ * This is the CSS equivalent of SafariTheme.js for use in stylesheets.
+ *
+ * Usage:
+ *   @import url('./safari-theme.css');
+ *
+ *   .my-component {
+ *     background: var(--safari-bg-dark);
+ *     color: var(--safari-text-primary);
+ *   }
+ *
+ * Safari Apps: Trace, Docs, Analyze, Assist, Studio
+ */
+
+/* ========================================
+   Fonts
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ========================================
+   Root Variables (Dark Theme - Default)
+   ======================================== */
+:root {
+  /* === Brand Colors === */
+  --safari-red: #9B1C1C;
+  --safari-red-dark: #7f1d1d;
+  --safari-red-light: #dc2626;
+
+  /* === Background Colors (Elevation System) === */
+  --safari-bg-dark: #0f172a;           /* Base background */
+  --safari-bg-surface: #1e293b;        /* Cards, panels (dp4) */
+  --safari-bg-elevated: #243044;       /* Modals, dropdowns (dp8) */
+  --safari-bg-dialog: #2e3a54;         /* Dialogs, menus (dp16) */
+  /* Legacy aliases */
+  --safari-bg-secondary: #1e293b;
+  --safari-bg-tertiary: #334155;
+
+  /* === Accent Colors === */
+  --safari-blue: #60a5fa;
+  --safari-green: #34d399;
+  --safari-pink: #f472b6;
+  --safari-purple: #a78bfa;
+  --safari-amber: #fbbf24;
+  --safari-orange: #f59e0b;
+
+  /* === Text Colors (WCAG AA Compliant) === */
+  --safari-text-primary: #f8fafc;
+  --safari-text-secondary: #94a3b8;
+  --safari-text-muted: #64748b;
+  --safari-text-disabled: #475569;
+
+  /* === Border Colors === */
+  --safari-border: #334155;
+  --safari-border-light: #475569;
+  --safari-border-accent: #9B1C1C;
+
+  /* === Status Colors === */
+  --safari-success: #34d399;
+  --safari-warning: #f59e0b;
+  --safari-error: #ef4444;
+  --safari-info: #60a5fa;
+
+  /* === Circuit Pattern Colors === */
+  --safari-circuit-trace: rgba(148, 163, 184, 0.08);
+  --safari-circuit-node: rgba(148, 163, 184, 0.12);
+  --safari-circuit-via: rgba(96, 165, 250, 0.15);
+
+  /* === Typography === */
+  --safari-font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --safari-font-mono: 'JetBrains Mono', 'IBM Plex Mono', 'Courier New', monospace;
+
+  /* Font Sizes */
+  --safari-text-xs: 0.75rem;     /* 12px */
+  --safari-text-sm: 0.875rem;    /* 14px */
+  --safari-text-base: 1rem;      /* 16px */
+  --safari-text-lg: 1.125rem;    /* 18px */
+  --safari-text-xl: 1.25rem;     /* 20px */
+  --safari-text-2xl: 1.5rem;     /* 24px */
+  --safari-text-3xl: 1.875rem;   /* 30px */
+  --safari-text-4xl: 2.25rem;    /* 36px */
+  --safari-text-5xl: 3rem;       /* 48px */
+  --safari-text-6xl: 3.75rem;    /* 60px */
+
+  /* Font Weights */
+  --safari-font-light: 300;
+  --safari-font-normal: 400;
+  --safari-font-medium: 500;
+  --safari-font-semibold: 600;
+  --safari-font-bold: 700;
+
+  /* Line Heights */
+  --safari-leading-tight: 1.25;
+  --safari-leading-normal: 1.5;
+  --safari-leading-relaxed: 1.75;
+
+  /* === Spacing (8px Grid) === */
+  --safari-space-0: 0;
+  --safari-space-1: 0.25rem;   /* 4px */
+  --safari-space-2: 0.5rem;    /* 8px */
+  --safari-space-3: 0.75rem;   /* 12px */
+  --safari-space-4: 1rem;      /* 16px */
+  --safari-space-5: 1.25rem;   /* 20px */
+  --safari-space-6: 1.5rem;    /* 24px */
+  --safari-space-8: 2rem;      /* 32px */
+  --safari-space-10: 2.5rem;   /* 40px */
+  --safari-space-12: 3rem;     /* 48px */
+  --safari-space-16: 4rem;     /* 64px */
+  --safari-space-20: 5rem;     /* 80px */
+  --safari-space-24: 6rem;     /* 96px */
+
+  /* === Border Radius === */
+  --safari-radius-none: 0;
+  --safari-radius-sm: 0.25rem;   /* 4px */
+  --safari-radius-md: 0.5rem;    /* 8px */
+  --safari-radius-lg: 0.75rem;   /* 12px */
+  --safari-radius-xl: 1rem;      /* 16px */
+  --safari-radius-2xl: 1.5rem;   /* 24px */
+  --safari-radius-full: 9999px;
+
+  /* === Shadows === */
+  --safari-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --safari-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --safari-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --safari-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --safari-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --safari-shadow-glow-red: 0 0 20px rgba(155, 28, 28, 0.5);
+  --safari-shadow-glow-blue: 0 0 20px rgba(96, 165, 250, 0.5);
+
+  /* === Gradients === */
+  --safari-gradient-primary: linear-gradient(135deg, #9B1C1C 0%, #dc2626 100%);
+  --safari-gradient-dark: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  --safari-gradient-accent: linear-gradient(90deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+
+  /* === Transitions === */
+  --safari-transition-fast: all 0.15s ease;
+  --safari-transition-base: all 0.2s ease;
+  --safari-transition-slow: all 0.3s ease;
+
+  /* === Z-Index Scale === */
+  --safari-z-base: 0;
+  --safari-z-dropdown: 1000;
+  --safari-z-sticky: 1100;
+  --safari-z-fixed: 1200;
+  --safari-z-modal-backdrop: 1300;
+  --safari-z-modal: 1400;
+  --safari-z-popover: 1500;
+  --safari-z-tooltip: 1600;
+
+  /* === Breakpoints (for reference in JS) === */
+  --safari-bp-sm: 640px;
+  --safari-bp-md: 768px;
+  --safari-bp-lg: 1024px;
+  --safari-bp-xl: 1280px;
+  --safari-bp-2xl: 1536px;
+}
+
+/* ========================================
+   Light Theme Override
+   ======================================== */
+[data-theme="light"],
+.safari-theme-light {
+  --safari-bg-dark: #FEFDFF;
+  --safari-bg-surface: #FFFFFF;
+  --safari-bg-elevated: #FFFFFF;
+  --safari-bg-dialog: #FFFFFF;
+  --safari-bg-secondary: #F8F7F5;
+  --safari-bg-tertiary: #F0F0F0;
+
+  --safari-text-primary: #1E1E1E;
+  --safari-text-secondary: #2D2D2D;
+  --safari-text-muted: #6B7280;
+  --safari-text-disabled: #9CA3AF;
+
+  --safari-border: #E5E5E5;
+  --safari-border-light: #F0F0F0;
+
+  --safari-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --safari-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --safari-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   App-Specific Accent Colors
+   ======================================== */
+[data-app="trace"],
+.safari-app-trace {
+  --safari-app-accent: #a78bfa;  /* Phase Purple */
+}
+
+[data-app="docs"],
+.safari-app-docs {
+  --safari-app-accent: #60a5fa;  /* Phase Blue */
+}
+
+[data-app="analyze"],
+.safari-app-analyze {
+  --safari-app-accent: #34d399;  /* Phase Green */
+}
+
+[data-app="assist"],
+.safari-app-assist {
+  --safari-app-accent: #9B1C1C;  /* Safari Red */
+}
+
+[data-app="studio"],
+.safari-app-studio {
+  --safari-app-accent: #f59e0b;  /* Phase Orange */
+}
+
+/* ========================================
+   Base Reset
+   ======================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--safari-font-sans);
+  font-size: 16px;
+  line-height: var(--safari-leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--safari-bg-dark);
+  color: var(--safari-text-primary);
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+
+/* Text Colors */
+.text-primary { color: var(--safari-text-primary); }
+.text-secondary { color: var(--safari-text-secondary); }
+.text-muted { color: var(--safari-text-muted); }
+.text-brand { color: var(--safari-red); }
+.text-success { color: var(--safari-success); }
+.text-warning { color: var(--safari-warning); }
+.text-error { color: var(--safari-error); }
+.text-info { color: var(--safari-info); }
+
+/* Background Colors */
+.bg-dark { background-color: var(--safari-bg-dark); }
+.bg-surface { background-color: var(--safari-bg-surface); }
+.bg-elevated { background-color: var(--safari-bg-elevated); }
+.bg-brand { background-color: var(--safari-red); }
+
+/* Text Sizes */
+.text-xs { font-size: var(--safari-text-xs); }
+.text-sm { font-size: var(--safari-text-sm); }
+.text-base { font-size: var(--safari-text-base); }
+.text-lg { font-size: var(--safari-text-lg); }
+.text-xl { font-size: var(--safari-text-xl); }
+.text-2xl { font-size: var(--safari-text-2xl); }
+.text-3xl { font-size: var(--safari-text-3xl); }
+
+/* Font Weights */
+.font-light { font-weight: var(--safari-font-light); }
+.font-normal { font-weight: var(--safari-font-normal); }
+.font-medium { font-weight: var(--safari-font-medium); }
+.font-semibold { font-weight: var(--safari-font-semibold); }
+.font-bold { font-weight: var(--safari-font-bold); }
+
+/* Font Families */
+.font-sans { font-family: var(--safari-font-sans); }
+.font-mono { font-family: var(--safari-font-mono); }
+
+/* Border Radius */
+.rounded-sm { border-radius: var(--safari-radius-sm); }
+.rounded-md { border-radius: var(--safari-radius-md); }
+.rounded-lg { border-radius: var(--safari-radius-lg); }
+.rounded-xl { border-radius: var(--safari-radius-xl); }
+.rounded-full { border-radius: var(--safari-radius-full); }
+
+/* Shadows */
+.shadow-sm { box-shadow: var(--safari-shadow-sm); }
+.shadow-md { box-shadow: var(--safari-shadow-md); }
+.shadow-lg { box-shadow: var(--safari-shadow-lg); }
+.shadow-glow-red { box-shadow: var(--safari-shadow-glow-red); }
+.shadow-glow-blue { box-shadow: var(--safari-shadow-glow-blue); }
+
+/* Transitions */
+.transition-fast { transition: var(--safari-transition-fast); }
+.transition-base { transition: var(--safari-transition-base); }
+.transition-slow { transition: var(--safari-transition-slow); }

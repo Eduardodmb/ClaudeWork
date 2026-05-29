@@ -1,0 +1,4 @@
+@using Firstronic.Areas.Manage.Controllers
+@model tbl_Common_Building
+
+@Html.Partial("_CreateOrUpdate", Model)

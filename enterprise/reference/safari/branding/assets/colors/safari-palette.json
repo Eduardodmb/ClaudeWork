@@ -1,0 +1,35 @@
+{
+  "brand": {
+    "primary": {
+      "safari-red": "#9B1C1C",
+      "safari-red-light": "#B82424",
+      "safari-red-dark": "#7B1616"
+    },
+    "neutrals": {
+      "white": "#FFFFFF",
+      "cream": "#F5F5F0"
+    },
+    "technical": {
+      "blue": "#60A5FA",
+      "green": "#34D399",
+      "pink": "#F472B6",
+      "purple": "#A78BFA",
+      "amber": "#FBBF24"
+    }
+  },
+  "dark": {
+    "background": {
+      "base": "#0F172A",
+      "surface": "#1E293B",
+      "elevated": "#243044",
+      "dialog": "#2E3A54"
+    },
+    "border": "#334155",
+    "text": {
+      "primary": "#F8FAFC",
+      "secondary": "#94A3B8",
+      "muted": "#64748B",
+      "disabled": "#475569"
+    }
+  }
+}

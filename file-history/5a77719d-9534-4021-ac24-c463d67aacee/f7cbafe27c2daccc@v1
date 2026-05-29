@@ -1,0 +1,699 @@
+@using System.Data
+@section head{
+  <style>
+    #mypopup {
+      width: 250px;
+      padding: 6px;
+      font-family: Arial, sans-serif;
+      font-size: 10pt !important;
+      background-color: #000000;
+      color: #fff;
+      border-radius: 6px;
+      position: absolute;
+      display: none;
+      min-height: 40px;
+      border: 1px solid #000000;
+    }
+
+      #mypopup p {
+        padding: 0px;
+        margin-bottom: 0px;
+      }
+
+      #mypopup::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        transform: rotate(45deg);
+        background-color: #000000;
+        position: absolute;
+        right: -6px;
+        top: 20px;
+        border-left: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+    #mypopup_ticket {
+      width: 150px;
+      padding: 6px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 10pt !important;
+      background-color: #000000;
+      color: #fff;
+      border-radius: 6px;
+      position: absolute;
+      display: none;
+      min-height: 40px;
+      border: 1px solid #000000;
+    }
+
+      #mypopup_ticket p {
+        padding: 0px;
+        margin-bottom: 0px;
+      }
+
+      #mypopup_ticket::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        transform: rotate(45deg);
+        background-color: #000000;
+        position: absolute;
+        right: 69px;
+        top: 33px;
+        border-right: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+  </style>
+}
+
+
+<div class="uk-grid" uk-grid>
+  <div class="uk-width-1-1">
+    <div class="md-card">
+      <div class="md-card-content">
+        <div class="uk-grid" uk-grid>
+
+          <div class="uk-width-1-1">
+            <h3>Team Status</h3>
+
+            @{
+              DataTable dt_zones = Firstronic.Framework.Functions.Queries.GetDatatableFromQuery("SELECT [AreaID],[Area]  FROM [PD_idt_areas] WHERE Area_Type_ID=1 or Area_Type_ID=2 order by FlowID asc");
+
+              DataTable dt_tipos = Firstronic.Framework.Functions.Queries.GetDatatableFromQuery("SELECT [Category_ID] as IssueTypeID,[Category_Name]  as IssueType FROM [Personel_Bonus_Categories]");
+            }
+
+          </div>
+          <div class="uk-width-1-1">
+            Areas (Clic to hide)
+
+            <div class="uk-grid" uk-grid>
+              <div class="button-checkbox uk-width-1-10">
+                <button type="button" class="btn w-100 btn-fst pd-5 fs-11 mn-b-10" onclick="updatelink2()">Select All</button>
+                <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                  function updatelink2() {
+
+                    var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname + '';
+                    window.location = newURL;
+                  }
+                </script>
+              </div>
+
+              <div class="button-checkbox uk-width-1-10">
+                <button type="button" class="btn w-100 btn-fst pd-5 fs-11 mn-b-10" onclick="updatelink()">Clean Selection</button>
+                <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                  function updatelink() {
+
+                    var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname + '?all=false';
+                    window.location = newURL;
+                  }
+                </script>
+              </div>
+
+
+              @foreach (DataRow row in dt_zones.Rows)
+              {
+                <div class="uk-width-1-10">
+                  @*<button type="button" class="btn w-100 btn-fst pd-5 fs-11 mn-b-10"></button>*@
+                  @if (Model == false)
+                  {
+                    @Html.CheckBox(@row["Area"].ToString(), new { @id = "ch_" + @row["AreaID"].ToString(), @value = @row["AreaID"].ToString(), @class = "hide fst_checkbox" })
+                  }
+                  else
+                  {
+                    @Html.CheckBox(@row["Area"].ToString(), new { @id = "ch_" + @row["AreaID"].ToString(), @value = @row["AreaID"].ToString(), @class = "hide fst_checkbox", @checked = "Checked" })
+                  }
+                  @row["Area"].ToString()
+                </div>
+              }
+            </div>
+
+
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              $(function () {
+                $('.button-checkbox').each(function () {
+
+                  // Settings
+                  var $widget = $(this),
+                    $button = $widget.find('button'),
+                    $checkbox = $widget.find('input:checkbox'),
+                    color = $button.data('color'),
+                    settings = {
+                      on: {
+                        icon: 'glyphicon glyphicon-check'
+                      },
+                      off: {
+                        icon: 'glyphicon glyphicon-unchecked'
+                      }
+                    };
+
+                  // Event Handlers
+                  $button.on('click', function () {
+                    $checkbox.prop('checked', !$checkbox.is(':checked'));
+                    $checkbox.triggerHandler('change');
+                    updateDisplay();
+                  });
+
+                  $checkbox.on('change', function () {
+                    updateDisplay();
+
+                    var items = document.getElementsByClassName('fst_checkbox');
+                    var selectedItems = "";
+                    for (var i = 0; i < items.length; i++) {
+                      if (items[i].type == 'checkbox' && items[i].checked == true)
+                        selectedItems += "\'" + items[i].value + "\',";
+                    }
+
+                    var req = { Zones: selectedItems, Search: "Si" };
+
+                    GetTimeLineChart(req, "0");
+                  });
+
+                  // Actions
+                  function updateDisplay() {
+                    var isChecked = $checkbox.is(':checked');
+
+                    // Set the button's state
+                    $button.data('state', (isChecked) ? "on" : "off");
+
+                    // Set the button's icon
+                    $button.find('.state-icon')
+                      .removeClass()
+                      .addClass('state-icon ' + settings[$button.data('state')].icon);
+
+                    // Update the button's color
+                    if (isChecked) {
+                      $button
+                        .removeClass('btn-default')
+                        .addClass('btn-' + color + ' active');
+                    }
+                    else {
+                      $button
+                        .removeClass('btn-' + color + ' active')
+                        .addClass('btn-default');
+                    }
+                  }
+
+                  // Initialization
+                  function init() {
+
+                    updateDisplay();
+
+                    // Inject the icon if applicable
+                    if ($button.find('.state-icon').length == 0) {
+                      $button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i>');
+                    }
+                  }
+                  init();
+                });
+              });
+            </script>
+          </div>
+
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+            $('#btn_update').click(function (e) {
+                e.preventDefault(); // <------------------ stop default behaviour of button
+                // Load new data
+                var items = document.getElementsByClassName('fst_checkbox');
+                var selectedItems = "";
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].type == 'checkbox' && items[i].checked == true)
+                        selectedItems += "\'" + items[i].value + "\',";
+                }
+
+                var req = { Zones: selectedItems, Search: "Si" };
+
+              GetTimeLineChart(req, "0");
+            });
+
+            //setInterval(function () {
+            //    var items = document.getElementsByClassName('fst_checkbox');
+            //    var selectedItems = "";
+            //    for (var i = 0; i < items.length; i++) {
+            //        if (items[i].type == 'checkbox' && items[i].checked == true)
+            //            selectedItems += "\'" + items[i].value + "\',";
+            //    }
+
+            //    var req = { Zones: selectedItems, Search: "Si" };
+
+            //    GetTimeLineChart(req);
+            //}, 60 * 1000);
+
+
+            $(document).ready(function () {
+
+                var items = document.getElementsByClassName('fst_checkbox');
+                var selectedItems = "";
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].type == 'checkbox' && items[i].checked == true)
+                        selectedItems += "\'" + items[i].value + "\',";
+                }
+
+                var req = { Zones: selectedItems, Search: "Si" };
+
+                GetTimeLineChart(req,"1");
+            });
+
+            function showPopup(evt) {
+                var iconPos = evt.getBoundingClientRect();
+                mypopup.style.left = (iconPos.left + 10 - 280) + "px";
+                mypopup.style.top = (window.scrollY + iconPos.top - 320) + "px";
+                mypopup.style.display = "block";
+                mypopup.innerHTML = "";
+
+                var h3 = document.createElement("h6");
+                h3.innerHTML = evt.getAttribute("aStationName") + " (" + evt.getAttribute("aAlias") + ")";
+                mypopup.appendChild(h3);
+
+                var p1 = document.createElement("p");
+                p1.innerHTML = "Area: " + evt.getAttribute("aArea");
+                mypopup.appendChild(p1);
+
+                var p2 = document.createElement("p");
+                p2.innerHTML = "PartNumber: " + evt.getAttribute("aPartNumber") + " " + evt.getAttribute("aLastSide");
+                mypopup.appendChild(p2);
+
+                //var p3 = document.createElement("p");
+                //p3.innerHTML = "Job: " + evt.getAttribute("aLastJobText");
+                //mypopup.appendChild(p3);
+
+                //var p4 = document.createElement("p");
+                //p4.innerHTML = "ID: " + evt.getAttribute("aStationID");
+                //mypopup.appendChild(p4);
+
+
+                //var p5 = document.createElement("p");
+                //p5.innerHTML = "Last Unit: " + secondsToTime(evt.getAttribute("aDowntime") * 60);
+                //mypopup.appendChild(p5);
+                var p6l = document.createElement("p");
+                p6l.innerHTML = "Lead: ";
+                mypopup.appendChild(p6l);
+
+                var p7l = document.createElement("p");
+                p7l.setAttribute("style", "font-size:11px");
+                p7l.innerHTML = evt.getAttribute("aUsersLEAD");
+                mypopup.appendChild(p7l);
+
+                var p6t = document.createElement("p");
+                p6t.innerHTML = "Technicals: ";
+                mypopup.appendChild(p6t);
+
+                var p7t = document.createElement("p");
+                p7t.setAttribute("style", "font-size:11px");
+                p7t.innerHTML = evt.getAttribute("aUsersTECH");
+                mypopup.appendChild(p7t);
+
+                var p6q = document.createElement("p");
+                p6q.innerHTML = "QA: ";
+                mypopup.appendChild(p6q);
+
+                var p7q = document.createElement("p");
+                p7q.setAttribute("style", "font-size:11px");
+                p7q.innerHTML = evt.getAttribute("aUsersQA");
+                mypopup.appendChild(p7q);
+
+                var p6 = document.createElement("p");
+                p6.innerHTML = "Users: ";
+                mypopup.appendChild(p6);
+
+                var p7 = document.createElement("p");
+                p7.setAttribute("style", "font-size:11px");
+                p7.innerHTML =  evt.getAttribute("aUsers");
+                mypopup.appendChild(p7);
+            }
+
+            function secondsToTime(sec) {
+                if (sec < 0) sec = 0;
+                return [(sec / 3600), ((sec % 3600) / 60), ((sec % 3600) % 60)]
+                    .map(v => v < 10 ? "0" + parseInt(v) : parseInt(v))
+                    .join(":");
+            }
+
+            function hidePopup(evt) {
+                mypopup.style.display = "none";
+            }
+
+            function details(evt) {
+                var w = 1200;
+                var h = 900;
+                var left = window.screen.availLeft + (screen.width / 2) - (w / 2);
+                var top = window.screen.availTop + (screen.height / 2) - (h / 2);
+                var url = window.location.origin + "/Personnel/BonusPosition/Index/" + evt.getAttribute("aStationID");
+                window.open(url, "Details", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+                return false;
+            }
+
+            function showPopup_ticket(evt) {
+                var iconPos = evt.getBoundingClientRect();
+                mypopup_ticket.style.left = (iconPos.left + 10 - 75) + "px";
+                mypopup_ticket.style.top = (window.scrollY + iconPos.top - 50) + "px";
+                mypopup_ticket.style.display = "block";
+                mypopup_ticket.innerHTML = "";
+
+                var p1 = document.createElement("p");
+                p1.innerHTML = evt.getAttribute("aIssueType");
+                mypopup_ticket.appendChild(p1);
+
+
+            }
+
+            function hidePopup_ticket(evt) {
+                mypopup_ticket.style.display = "none";
+            }
+
+            function details_ticket(evt) {
+                var w = 1200;
+                var h = 900;
+                var left = window.screen.availLeft + (screen.width / 2) - (w / 2);
+                var top = window.screen.availTop + (screen.height / 2) - (h / 2);
+                var url = window.location.origin + "/Tickets/Portal/Details/" + evt.getAttribute("aAutoID");
+                window.open(url, "Details", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+                return false;
+            }
+
+        function GetTimeLineChart(req,inicio) {
+
+            $('#FullPlant').html("");
+
+            const c_width = 1089, c_height = 993;
+
+            @*var pardata = JSON.stringify({
+                'year': @Model.year,
+                'month': @Model.month,
+                'day': @Model.day,
+                'StationID': @row["StationID"].ToString(),'Width': c_width
+                });*@
+
+            var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            var div = document.getElementById('FullPlant');
+            svg.id = "FullPlant_map";
+            svg.setAttribute("width", c_width);
+            svg.setAttribute("height", c_height);
+            svg.setAttribute("zIndex", 8);
+            //svg.style.border = "1px solid #adadad";
+            //svg.style.background = "#13c707";
+
+            var svg0 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg0.setAttribute("width", c_width);
+            svg0.setAttribute("height", 14);
+            svg0.setAttribute("zIndex", 8);
+
+
+
+            // Add Pattern
+            var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+
+            var pattern_small = document.createElementNS("http://www.w3.org/2000/svg", "pattern");
+            pattern_small.id = "smallGrid";
+            pattern_small.setAttributeNS(null, "width", "8");
+            pattern_small.setAttributeNS(null, "height", "8");
+            pattern_small.setAttributeNS(null, "patternUnits", "userSpaceOnUse");
+
+            var path_small = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path_small.setAttributeNS(null, "d", "M 8 0 L 0 0 0 8");
+            path_small.setAttributeNS(null, "fill", "none");
+            path_small.setAttributeNS(null, "stroke", "gray");
+            path_small.setAttributeNS(null, "stroke-width", "0.5");
+
+            pattern_small.appendChild(path_small);
+
+            defs.appendChild(pattern_small);
+
+
+            var pattern_medium = document.createElementNS("http://www.w3.org/2000/svg", "pattern");
+            pattern_medium.id = "grid";
+            pattern_medium.setAttributeNS(null, "width", "32");
+            pattern_medium.setAttributeNS(null, "height", "32");
+            pattern_medium.setAttributeNS(null, "patternUnits", "userSpaceOnUse");
+
+            var rect_medium = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            rect_medium.setAttributeNS(null, "width", "32");
+            rect_medium.setAttributeNS(null, "height", "32");
+            rect_medium.setAttributeNS(null, "fill", "url(#smallGrid");
+
+            var path_medium = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path_medium.setAttributeNS(null, "d", "M 32 0 L 0 0 0 32");
+            path_medium.setAttributeNS(null, "fill", "none");
+            path_medium.setAttributeNS(null, "stroke", "gray");
+            path_medium.setAttributeNS(null, "stroke-width", "1");
+
+            pattern_medium.appendChild(rect_medium);
+            pattern_medium.appendChild(path_medium);
+
+            defs.appendChild(pattern_medium);
+
+            svg.appendChild(defs);
+
+
+            var rect_big = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            rect_big.setAttributeNS(null, "width", "100%");
+            rect_big.setAttributeNS(null, "height", "100%");
+            rect_big.setAttributeNS(null, "fill", "url(#grid");
+
+            svg.appendChild(rect_big);
+
+
+            $.ajax({
+                type: "POST",
+                url: "/Dashboards/FloorShop/FactoryFloor_Json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(req),
+                success: function (chData) {
+                    var aData = chData;
+                    var aBuildID = aData[0];
+                    var aPolygon = aData[1];
+
+                    const left_limit = 0;
+
+                    for (i = 0; i < aBuildID.length; i++) {
+
+                        var line01_back = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                        line01_back.setAttribute('points', aPolygon[i]);
+                        line01_back.setAttributeNS(null, "style", "fill:#ffffed;");
+
+                        svg.appendChild(line01_back);
+                    }
+                },
+                async: false
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Dashboards/FloorShop/FactoryWalls_Json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(req),
+                success: function (chData) {
+
+                    var aData = chData;
+                    var aBuildID = aData[0];
+                    var aRowID = aData[1];
+                    var aColID = aData[2];
+                    var aRowID2 = aData[3];
+                    var aColID2 = aData[4];
+
+                    const left_limit = 0;
+
+                    for (i = 0; i < aBuildID.length; i++) {
+
+                        var line01 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line01.setAttributeNS(null, "x1", aColID[i]);
+                        line01.setAttributeNS(null, "y1", aRowID[i]);
+                        line01.setAttributeNS(null, "x2", aColID2[i]);
+                        line01.setAttributeNS(null, "y2", aRowID2[i]);
+                        line01.setAttributeNS(null, "style", "stroke:rgb(0,0,0);stroke-width:2");
+
+                        svg.appendChild(line01);
+                    }
+                },
+                async: false
+            });
+
+
+            //DRAW LINES
+
+            div.appendChild(svg0);
+            div.appendChild(svg);
+
+
+          var items = document.getElementsByClassName('fst_i_checkbox');
+          var selectedItems = "";
+          for (var i = 0; i < items.length; i++) {
+            if (items[i].type == 'checkbox' && items[i].checked == true)
+              selectedItems += "\'" + items[i].value + "\',";
+          }
+
+          if (inicio == "1") {
+            selectedItems = "\'" + 1 + "\',"
+          }
+
+          var req2 = { Zones: req.Zones, Zones2: selectedItems, Search: "Si" };
+
+
+            $.ajax({
+                type: "POST",
+                url: "/Dashboards/FloorShop/BonusCellChart",
+                contentType: "application/json; charset=utf-8",
+              data: JSON.stringify(req2),
+                success: function (chData) {
+
+                    var aData = chData;
+                    var aAutoID = aData[0];
+                    var aStationID = aData[1];
+                    var aBuildID = aData[2];
+                    var aRowID = aData[3];
+                    var aColID = aData[4];
+                    var aStationName = aData[5];
+                    var aIsActive = aData[6];
+                    var aAreaID = aData[7];
+                    var aSize_Width= aData[8];
+                    var aSize_Height = aData[9];
+                    var aDowntime = aData[10];
+                    var aArea = aData[11];
+                    var aPartNumber = aData[12];
+                    var aLastSide = aData[13];
+                    var aLastJobText = aData[14];
+                    var aAlias = aData[15];
+                    var Workcenter_PLC_Name_1 = aData[16];
+                    var Workcenter_PLC_Name_2 = aData[17];
+                    var Workcenter_PLC_Name_Kanban_1 = aData[18];
+                    var Workcenter_PLC_Name_Kanban_2 = aData[19];
+                    var WK1 = aData[24];
+                    var WK2 = aData[25];
+                    var WKK1 = aData[26];
+                    var WKK2 = aData[27];
+                    var WK1Q = aData[28];
+                    var WK2Q = aData[29];
+                    var WKK1Q = aData[30];
+                    var WKK2Q = aData[31];
+                    var BonusStationID = aData[32];
+                    var peop = aData[33];
+
+                    const left_limit = 0;
+
+                    for (i = 0; i < aAutoID.length; i++) {
+
+                        let newElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+
+                        newElement.setAttribute('x', aColID[i] + left_limit + 1);
+                        newElement.setAttribute('y', aRowID[i] + 1);
+                        newElement.setAttribute('width', aSize_Width[i]);
+                        newElement.setAttribute('height', aSize_Height[i]);
+                        newElement.setAttribute('aStationName', aStationName[i]);
+                        newElement.setAttribute('aStationID', aStationID[i]);
+                        newElement.setAttribute('aPartNumber', aPartNumber[i]);
+                        newElement.setAttribute('aArea', aArea[i]);;
+                        newElement.setAttribute('aLastSide', aLastSide[i]);;
+                        newElement.setAttribute('aLastJobText', aLastJobText[i]);
+                        newElement.setAttribute('aColID', aColID[i]);
+                        newElement.setAttribute('aRowID', aRowID[i]);
+                        newElement.setAttribute('aAlias', aAlias[i]);
+
+
+                        var usersstrn = "";
+                        var qausersstrn = "";
+                        var techusersstrn = "";
+                        var leadusersstrn = "";
+
+
+                      if (BonusStationID[i] == "-1") {
+                        newElement.setAttribute('fill', '#cbcbcb');
+                      } else if (peop[i] == "-1") {
+                        newElement.setAttribute('fill', '#ffc300');
+                      } else {
+                        newElement.setAttribute('fill', '#13c707');
+
+                        try {
+                          var req3 = { station: aStationID[i], category_ID: selectedItems };
+                          $.ajax({
+                            type: "POST",
+                            url: "/Dashboards/FloorShop/BonusCellChartStation_People",
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(req3),
+                            success: function (chData2) {
+
+                              if (chData2.length > 0) {
+                                var aData2 = chData2;
+                                var Gafete = aData2[0];
+                                var Bonus_Cell_Name = aData2[1];
+                                var FirstName = aData2[2];
+                                var LastName = aData2[3];
+                                var Position = aData2[7];
+
+                                for (i2 = 0; i2 < Gafete.length; i2++) {
+                                  if (Position[i2] == 1) {
+                                    usersstrn += "-" + Gafete[i2] + " " + FirstName[i2] + " " + LastName[i2] + "<br/>";
+                                  } else if (Position[i2] == 2) {
+                                    techusersstrn += "-" + Gafete[i2] + " " + FirstName[i2] + " " + LastName[i2] + "<br/>";
+                                  } else if (Position[i2] == 3) {
+                                    leadusersstrn += "-" + Gafete[i2] + " " + FirstName[i2] + " " + LastName[i2] + "<br/>";
+                                  } else if (Position[i2] == 4) {
+                                    qausersstrn += "-" + Gafete[i2] + " " + FirstName[i2] + " " + LastName[i2] + "<br/>";
+                                  }
+                                }
+                              }
+
+                            },
+                            async: false
+                          });
+                        }
+                        catch(ex){
+
+                        }
+                      }
+
+
+
+                        newElement.setAttribute('aUsers', usersstrn);
+                        newElement.setAttribute('aUsersQA', qausersstrn);
+                        newElement.setAttribute('aUsersTECH', techusersstrn);
+                        newElement.setAttribute('aUsersLEAD', leadusersstrn);
+
+                        newElement.setAttribute('onmousemove', 'showPopup(this)');
+                        newElement.setAttribute('onmouseout', 'hidePopup(this)');
+                        newElement.setAttribute('onclick', 'details(this)');
+
+
+                        svg.appendChild(newElement);
+                    }
+                },
+                async: false
+            });
+
+
+        };
+
+
+
+          </script>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="uk-grid">
+  <div class="uk-width-1-1">
+    <div class="md-card">
+      <div class="md-card-content">
+        <div class="col-12 pb-2 pl-0">
+          <div id="FullPlant" class="col-12 pl-0"></div>
+        </div>
+
+        <div id="mypopup">
+
+        </div>
+
+        <div id="mypopup_ticket">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

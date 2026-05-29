@@ -1,0 +1,2933 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Firstronic.Framework.Entities;
+
+
+namespace Firstronic.Core.Entities.App.Engineering
+
+
+{
+  //===============================================================
+  // CLASS START : CS_idt_partnumbers
+  //===============================================================
+
+  [Table("CS_idt_partnumbers")]
+  public class tbl_CS_idt_partnumbers : BaseEntity
+  {
+    [Key]
+    [ScaffoldColumn(false)]
+    [Display(Name = "PartID")]
+    public int PartID { get; set; }
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+    [Display(Name = "PartDesc")]
+    public string PartDesc { get; set; }
+    [Display(Name = "IsActive")]
+    public bool IsActive { get; set; }
+
+    [Display(Name = "IsCritical")]
+    public bool IsCritical { get; set; }
+    [Display(Name = "CustomerID")]
+    public int? CustomerID { get; set; }
+    [Display(Name = "Price")]
+    public double Price { get; set; }
+    [Display(Name = "PartSerialFormat")]
+    public string PartSerialFormat { get; set; }
+    public string PartSerialFormat_OLD { get; set; }
+    [Display(Name = "BPlacements")]
+    public int BPlacements { get; set; }
+    [Display(Name = "APlacements")]
+    public int APlacements { get; set; }
+    [Display(Name = "PiecesByPanel")]
+    public int PiecesByPanel { get; set; }
+    [Display(Name = "IsSmtByPanel")]
+    public bool IsSmtByPanel { get; set; }
+    [Display(Name = "PartSerialPanelFormat")]
+    public string PartSerialPanelFormat { get; set; }
+    [Display(Name = "LastSerialCreated")]
+    public DateTime? LastSerialCreated { get; set; }
+    [Display(Name = "Counter")]
+    public int Counter { get; set; }
+    [Display(Name = "HavePVS")]
+    public bool HavePVS { get; set; }
+    [Display(Name = "ATH")]
+    public int ATH { get; set; }
+    [Display(Name = "BTH")]
+    public int BTH { get; set; }
+    [Display(Name = "Defects")]
+    public int Defects { get; set; }
+    [Display(Name = "Part_key")]
+    public int? Part_key { get; set; }
+    [Display(Name = "Merge serials")]
+    public bool IsSerializationByPanel { get; set; }
+    [Display(Name = "Generate Panel Master Automatically")]
+
+
+
+    public bool IsSerializationByPanelAuto { get; set; }
+    [Display(Name = "RowLabel")]
+    public string RowLabel { get; set; }
+    [Display(Name = "Extractor Counter ID")]
+    public int? ExtractorCounterId { get; set; }
+    [Display(Name = "BoxSize")]
+    public int BoxSize { get; set; }
+    [Display(Name = "Layers")]
+    public int Layers { get; set; }
+    [Display(Name = "Row Quantity")]
+    public int RowSize { get; set; }
+    [Display(Name = "Quantity Per Scan")]
+    public int PackTypeRowSize { get; set; }
+    [Display(Name = "PackType")]
+    public int PackType { get; set; }
+    [Display(Name = "PartSerialFormatEasy")]
+    public string PartSerialFormatEasy { get; set; }
+    [Display(Name = "PartSerialPanelFormatEasy")]
+    public string PartSerialPanelFormatEasy { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+    //variables para rabbits
+    [Display(Name = "SSN Good")]
+    public string SSN { get; set; }
+    [Display(Name = "SSN Bad")]
+    public string SSN2 { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Status")]
+    public bool? Status { get; set; }
+    [Display(Name = "ErrorNo")]
+    public string ErrorNo { get; set; }
+    [Display(Name = "Update all panel")]
+    public bool? AllPanel { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "Description")]
+    public string Description { get; set; }
+    [Display(Name = "ProcessID")]
+    public int? ProcessID { get; set; }
+
+    [Display (Name = "ProcessName")]
+    public string ProcessName {  get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "UploadDate")]
+    public DateTime UploadDate { get; set; }
+    [Display(Name = "UploadBy")]
+    public string UploadBy { get; set; }
+
+
+    [Display(Name = "IsGood")]
+    public string IsGood { get; set; }
+
+    [Display(Name = "Calibration_Date")]
+    public DateTime Calibration_Date { get; set; }
+
+    [Display(Name = "Calibration_Expiration")]
+    public DateTime Calibration_Expiration { get; set; }
+
+    [Display(Name = "Layers_Allow_Duplicate")]
+    public bool Layers_Allow_Duplicate { get; set; }
+    [Display(Name = "PackRowSize")]
+    public int PackRowSize { get; set; }
+
+    [Display(Name = "Fense required before packout")]
+    public int Fense { get; set; }
+
+
+
+    [Display(Name = "ImageURL")]
+    public string ImageURL { get; set; }
+    [Display(Name = "Part_Type_ID")]
+    public int? Part_Type_ID { get; set; }
+    [Display(Name = "Cost")]
+    public double? Cost { get; set; }
+  }
+
+  public class tbl_CS_idt_partnumbers_FULL : tbl_CS_idt_partnumbers
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "CustomerName")]
+    public string CustomerName { get; set; }
+    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+
+    public virtual IEnumerable<SelectListItem> IsCritical_List { get; set; }
+    public virtual IEnumerable<SelectListItem> IsSmtByPanel_List { get; set; }
+    public virtual IEnumerable<SelectListItem> HavePVS_List { get; set; }
+    public virtual IEnumerable<SelectListItem> IsSerializationByPanel_List { get; set; }
+    public virtual IEnumerable<SelectListItem> IsSerializationByPanelAuto_List { get; set; }
+    public virtual IEnumerable<SelectListItem> Status_List { get; set; }
+    public virtual IEnumerable<SelectListItem> Layers_Allow_Duplicate_List { get; set; }
+
+
+    [Display(Name = "Labels ID")]
+    public string LabelsCode { get; set; }
+
+    [Display(Name = "Laser")]
+    public bool IsLaser { get; set; }
+    [Display(Name = "LabelByPanel")]
+
+    public bool LabelByPanel { get; set; }
+
+    [Display(Name = "OOBA")]
+
+    public bool IsOOBA { get; set; }
+
+
+
+    public virtual IEnumerable<SelectListItem> IsLaser_List { get; set; }
+    public virtual IEnumerable<SelectListItem> LabelByPanel_List { get; set; }
+    public virtual IEnumerable<SelectListItem> IsOOBA_List { get; set; }
+
+
+    [Display(Name = "Include Bin in Serial")]
+    public bool IncludeBinInSerial { get; set; }
+    public virtual IEnumerable<SelectListItem> IncludeBinInSerial_List { get; set; }
+
+    [Display(Name = "Merge after SMT")]
+    public bool MergeAfterSMT { get; set; }
+    public virtual IEnumerable<SelectListItem> MergeAfterSMT_List { get; set; }
+
+    [Display(Name = "Row Label")]
+    public string RowLabelGR { get; set; }
+
+    [Display(Name = "PVA Label A - Arduino")]
+    public string PVALabelAArduino { get; set; }
+
+    [Display(Name = "PVA Label B - Arduino")]
+    public string PVALabelBArduino { get; set; }
+
+    [Display(Name = "Allow in New PVS")]
+    public bool NewPVS { get; set; }
+    public virtual IEnumerable<SelectListItem> NewPVS_List { get; set; }
+
+    [Display(Name = "Buffer Size")]
+    public string BufferSize { get; set; }
+
+    [Display(Name = "Part Type")]
+    public string Part_Type { get; set; }
+
+    [Display(Name = "Limit PVS")]
+    public DateTime? LimitPVS { get; set; }
+
+
+    [Display(Name = "Allow ignore Previous Plex")]
+    public bool PVSAllowIgnorePreviousPlex { get; set; }
+    public virtual IEnumerable<SelectListItem> PVSAllowIgnorePreviousPlex_List { get; set; }
+
+    [Display(Name = "Include Group in Serial")]
+    public bool IncludeGroupInSerial { get; set; }
+
+    public virtual IEnumerable<SelectListItem> IncludeGroupInSerial_List { get; set; }
+
+    [Display(Name = "Default Stock Location")]
+    public int Packout_Stock_location { get; set; }
+
+
+    [Display(Name = "LayersInicio")]
+    public int? LayersInicio { get; set; }
+    [Display(Name = "LayersFinal")]
+    public int? LayersFinal { get; set; }
+    [Display(Name = "LayerCode")]
+    public string LayerCode { get; set; }
+    [Display(Name = "LayersIniciotype")]
+    public int LayersIniciotype { get; set; }
+    [Display(Name = "LayersFinalType")]
+    public int LayersFinalType { get; set; }
+
+
+
+    [Display(Name = "NoFilters")]
+    public bool NoFilters { get; set; }
+
+    [Display(Name = "Validate Screws")]
+    public bool validatescrews { get; set; }
+
+    [Display(Name = "Validate Keyence Simple")]
+    public bool validateKeyence { get; set; }
+
+    [Display(Name = "Allow Mix Packout")]
+    public bool AllowMixPackout { get; set; }
+
+    [Display(Name = "Activate Scanner")]
+    public bool ActivateScanner { get; set; }
+
+    
+
+
+  }
+
+
+  //===============================================================
+  // CLASS START : PART_OPERATION_PACKOUT_TCPIP
+  //===============================================================
+
+  [Table("PART_OPERATION_PACKOUT_TCPIP")]
+  public class tbl_PART_OPERATION_PACKOUT_TCPIP : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "IP")]
+    public string IP { get; set; }
+    [Display(Name = "Port")]
+    public string Port { get; set; }
+    [Display(Name = "Timer")]
+    public int? Timer { get; set; }
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+
+    [Display(Name = "CLIENT_OR_SERVER")]
+    public string CLIENT_OR_SERVER { get; set; }
+    [Display (Name = "SLAVE")]
+    public int Slave { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_PACKOUT_TCPIP_FULL : tbl_PART_OPERATION_PACKOUT_TCPIP
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+  }
+
+  public class tbl_PART_OPERATION_PACKOUT_TCPIP_FULL_partial : tbl_PART_OPERATION_PACKOUT_TCPIP
+  {
+    public IQueryable<tbl_PART_OPERATION_PACKOUT_TCPIP_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+
+  //===============================================================
+  // CLASS START : PART_OPERATION_AREAS_TCP
+  //===============================================================
+
+  [Table("PART_OPERATION_AREAS_TCP")]
+  public class tbl_PART_OPERATION_AREAS_TCP : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int AreaID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "IP")]
+    public string IP { get; set; }
+    [Display(Name = "Port")]
+    public string Port { get; set; }
+    [Display(Name = "Timer")]
+    public int? Timer { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Part_Key")]
+    public int Part_Key { get; set; }
+    [Display(Name = "CLIENT_OR_SERVER")]
+    public string CLIENT_OR_SERVER { get; set; }
+    [Display(Name = "TCP_TYPE")]
+    public string TCP_TYPE { get; set; }
+    [Display(Name = "SLAVE")]
+    public int SLAVE { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_AREAS_TCP_FULL : tbl_PART_OPERATION_AREAS_TCP
+  {
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_AREAS_TCP_FULL_partial : tbl_PART_OPERATION_AREAS_TCP
+  {
+    public IQueryable<tbl_PART_OPERATION_AREAS_TCP_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : PART_OPERATION_AREAS_SMB
+  //===============================================================
+
+  [Table("PART_OPERATION_AREAS_SMB")]
+  public class tbl_PART_OPERATION_AREAS_SMB : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int AreaID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Part_Key")]
+    public int Part_Key { get; set; }
+    [Display(Name = "SMB Path")]
+    public string SMB_PATH { get; set; }
+    [Display(Name = "File Pattern")]
+    public string SMB_FILE_PATTERN { get; set; }
+    [Display(Name = "Read Interval (ms)")]
+    public int SMB_READ_INTERVAL { get; set; }
+    [Display(Name = "Enabled")]
+    public bool SMB_ENABLED { get; set; }
+    [Display(Name = "SMB Type")]
+    public string SMB_TYPE { get; set; }
+    [Display(Name = "Domain")]
+    public string SMB_DOMAIN { get; set; }
+    [Display(Name = "Username")]
+    public string SMB_USERNAME { get; set; }
+    [Display(Name = "Password (Encrypted)")]
+    public byte[] SMB_PASSWORD_ENCRYPTED { get; set; }
+    [Display(Name = "Move to Success")]
+    public bool MOVE_TO_SUCCESS { get; set; }
+    [Display(Name = "Move to Error")]
+    public bool MOVE_TO_ERROR { get; set; }
+    [Display(Name = "Delete After Process")]
+    public bool DELETE_AFTER_PROCESS { get; set; }
+    [Display(Name = "Created Date")]
+    public DateTime CreatedDate { get; set; }
+    [Display(Name = "Modified Date")]
+    public DateTime? ModifiedDate { get; set; }
+    [Display(Name = "Created By")]
+    public string CreatedBy { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_AREAS_SMB_FULL : tbl_PART_OPERATION_AREAS_SMB
+  {
+    [Display(Name = "Area")]
+    public string AreaName { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_AREAS_SMB_FULL_partial : tbl_PART_OPERATION_AREAS_SMB
+  {
+    public IQueryable<tbl_PART_OPERATION_AREAS_SMB_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : QUALITY_PART_REWORK_ALLOWED
+  //===============================================================
+
+  [Table("QUALITY_PART_REWORK_ALLOWED")]
+  public class QUALITY_PART_REWORK_ALLOWED
+  {
+    [Key]
+    [ScaffoldColumn(false)]
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "IsAllowed")]
+    public bool? IsAllowed { get; set; }
+    [Display(Name = "AddDate")]
+    public DateTime? AddDate { get; set; }
+    [Display(Name = "UserID")]
+    public string UserID { get; set; }
+    [Display(Name = "Comments")]
+    public string Comments { get; set; }
+
+  }
+
+  public class QUALITY_PART_REWORK_ALLOWED_FULL : QUALITY_PART_REWORK_ALLOWED
+  {
+
+    public virtual IEnumerable<SelectListItem> IsAllowed_List { get; set; }
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+    [Display(Name = "UserName")]
+    public string UserName { get; set; }
+  }
+
+  public class QUALITY_PART_REWORK_ALLOWED_FULL_partial : QUALITY_PART_REWORK_ALLOWED
+  {
+    public IQueryable<QUALITY_PART_REWORK_ALLOWED_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+
+  //===============================================================
+  // CLASS START : EN_idt_stencils
+  //===============================================================
+
+  [Table("EN_idt_stencils")]
+  public class tbl_EN_idt_stencils : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "StencilID")]
+    public int? StencilID { get; set; }
+    [Display(Name = "StencilName")]
+    public string StencilName { get; set; }
+    [Display(Name = "StencilCode")]
+    public string StencilCode { get; set; }
+    [Display(Name = "StencilStatus")]
+    public int StencilStatus { get; set; }
+    [Display(Name = "Location")]
+    public string Location { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "PastaID")]
+    public int PastaID { get; set; }
+    [Display(Name = "BinID")]
+    public int BinID { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_EN_idt_stencils_FULL : tbl_EN_idt_stencils
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "PastaName")]
+    public string PastaName { get; set; }
+
+  }
+
+  public class StencilsPaste
+  {
+    public IQueryable<tbl_EN_idt_stencils_FULL> Stencil_List { get; set; }
+
+    public int partid { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : PART_OPERATION_SERIALIZATION_MERGE_AUTO_AT_AOI
+  //===============================================================
+
+  [Table("PART_OPERATION_SERIALIZATION_MERGE_AUTO_AT_AOI")]
+  public class tbl_PART_OPERATION_SERIALIZATION_MERGE_AUTO_AT_AOI : BaseEntity
+  {
+    [Key]
+    [ScaffoldColumn(false)]
+    [Display(Name = "AUTOID")]
+    public int AUTOID { get; set; }
+    [Display(Name = "PARTID")]
+    public int? PARTID { get; set; }
+    [Display(Name = "AREAID")]
+    public int? AREAID { get; set; }
+    [Display(Name = "SIDE")]
+    public string SIDE { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_SERIALIZATION_MERGE_AUTO_AT_AOI_FULL : tbl_PART_OPERATION_SERIALIZATION_MERGE_AUTO_AT_AOI
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+  }
+
+  public class tbl_PART_OPERATION_SERIALIZATION_MERGE_AUTO_AT_AOI_FULL_partial : tbl_PART_OPERATION_SERIALIZATION_MERGE_AUTO_AT_AOI
+  {
+    public IQueryable<tbl_PART_OPERATION_SERIALIZATION_MERGE_AUTO_AT_AOI_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : PART_OPERATION_SERIALIZATION_LASER_SKIP
+  //===============================================================
+
+  [Table("PART_OPERATION_SERIALIZATION_LASER_SKIP")]
+  public class tbl_PART_OPERATION_SERIALIZATION_LASER_SKIP : BaseEntity
+  {
+    [Key]
+    [ScaffoldColumn(false)]
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int PartID { get; set; }
+    [Display(Name = "Add Date")]
+    public DateTime? Add_Date { get; set; }
+    [Display(Name = "Added By")]
+    public string Add_By { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_SERIALIZATION_LASER_SKIP_FULL : tbl_PART_OPERATION_SERIALIZATION_LASER_SKIP
+  {
+    [Display(Name = "Part Number")]
+    public string PartNumber { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_SERIALIZATION_LASER_SKIP_FULL_partial : tbl_PART_OPERATION_SERIALIZATION_LASER_SKIP
+  {
+    public IQueryable<tbl_PART_OPERATION_SERIALIZATION_LASER_SKIP_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : EN_idt_stencils
+  //===============================================================
+
+  public class ConfomalPartID 
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }    
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "ConformalID")]
+    public int ConformalID { get; set; }
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class ConfomalPartID_FULL : ConfomalPartID
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "Conformal")]
+    public string PastaName { get; set; }
+
+  }
+
+  public class ConfomalPartID_FULL_Partial
+  {
+    public IQueryable<ConfomalPartID_FULL> Items { get; set; }
+
+    public int partid { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : CS_tbl_partnumber_isbypanel
+  //===============================================================
+
+  [Table("CS_tbl_partnumber_isbypanel")]
+  public class tbl_CS_tbl_partnumber_isbypanel : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_CS_tbl_partnumber_isbypanel_FULL : tbl_CS_tbl_partnumber_isbypanel
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+  }
+
+  public class tbl_CS_tbl_partnumber_isbypanel_FULL_partial
+  {
+    public IQueryable<tbl_CS_tbl_partnumber_isbypanel_FULL> Modelo { get; set; }
+    public int id { get; set; }
+
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Review_Each_Two
+  //===============================================================
+
+  [Table("Part_Operation_Review_Each_Two")]
+  public class tbl_Part_Operation_Review_Each_Two : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Review_Each_Two_FULL : tbl_Part_Operation_Review_Each_Two
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_Review_Each_Two_FULL_partial
+  {
+    public IQueryable<tbl_Part_Operation_Review_Each_Two_FULL> Modelo { get; set; }
+    public int id { get; set; }
+
+  }
+
+  //===============================================================
+  // CLASS START : EN_tbl_gagelist
+  //===============================================================
+
+  [Table("EN_tbl_gagelist")]
+  public class tbl_EN_tbl_gagelist : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "GageName")]
+    public string GageName { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_EN_tbl_gagelist_FULL : tbl_EN_tbl_gagelist
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+  }
+
+  public class tbl_EN_tbl_gagelist_FULL_partial
+  {
+    public IQueryable<tbl_EN_tbl_gagelist_FULL> Modelo { get; set; }
+    public int id { get; set; }
+
+  }
+
+  //===============================================================
+  // CLASS START : CS_tbl_partnumber_pack
+  //===============================================================
+
+  [Table("CS_tbl_partnumber_pack")]
+  public class tbl_CS_tbl_partnumber_pack : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "PackFormat")]
+    public string PackFormat { get; set; }
+    [Display(Name = "PartSerialFormatEasy")]
+    public string PartSerialFormatEasy { get; set; }
+    [Display(Name = "Sub_Index")]
+    public int Sub_Index { get; set; }
+    [Display(Name = "Sub_Length")]
+    public int Sub_Length { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "AreaID")]
+    public int AreaID { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_CS_tbl_partnumber_pack_FULL : tbl_CS_tbl_partnumber_pack
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+  }
+
+  public class tbl_CS_tbl_partnumber_pack_FULL_partial : tbl_CS_tbl_partnumber_pack
+  {
+    public IQueryable<tbl_CS_tbl_partnumber_pack_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Review_Operation
+  //===============================================================
+
+  [Table("Part_Operation_Review_Operation")]
+  public class tbl_Part_Operation_Review_Operation : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "CurrentAreaID")]
+    public int? CurrentAreaID { get; set; }
+    [Display(Name = "PreviousAreaID")]
+    public int? PreviousAreaID { get; set; }
+    [Display(Name = "CurrentSide")]
+    public string CurrentSide { get; set; }
+    [Display(Name = "PreviousSide")]
+    public string PreviousSide { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Days First Scan")]
+    public int? DaysFromFirstRecord { get; set; }
+    [Display(Name = "Days Last Scan")]
+    public int? DaysFromLastRecord { get; set; }
+
+    [Display(Name = "Hours Last Scan")]
+    public int? HoursFromLastRecord { get; set; }
+
+    [Display(Name = "Deviation")]
+    public int? Deviation { get; set; }
+
+    
+
+
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Review_Operation_FULL : tbl_Part_Operation_Review_Operation
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+    [Display(Name = "To Check")]
+    public string AreaToCheck { get; set; }
+    [Display(Name = "After Date")]
+    public DateTime Previous_Date { get; set; }
+    [Display(Name = "Approved")]
+    public string Approved { get; set; }
+
+    [Display(Name = "LimitDate Quality")]
+    public DateTime LimitDate { get; set; }
+
+    [Display(Name = "LimitDate Engineering")]
+    public DateTime LimitDate_Deviation { get; set; }
+  }
+
+  public class tbl_Part_Operation_Review_Operation_FULL_partial
+  {
+    public IQueryable<tbl_Part_Operation_Review_Operation_FULL> Modelo { get; set; }
+    public int id { get; set; }
+
+  }
+
+
+  //===============================================================
+  // CLASS START : CS_TBL_PARTNUMBER_SKIPSTAGE
+  //===============================================================
+
+  [Table("CS_TBL_PARTNUMBER_SKIPSTAGE")]
+  public class tbl_CS_TBL_PARTNUMBER_SKIPSTAGE : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "StageID")]
+    public int? StageID { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "Description")]
+    public string Description { get; set; }
+
+    [Display(Name = "UserID")]
+    public string UserID { get; set; }
+
+    [Display(Name = "SkipsDueDate")]
+    public DateTime DueDate { get; set; }
+
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+
+    [Display(Name = "Deviation")]
+    public int? Deviation { get; set; }
+
+    [Display(Name = "Qa_By")]
+    public string Qa__By { get; set; }
+
+    [Display(Name = "Qa_Date")]
+    public DateTime? Qa_Date { get; set; }
+
+
+    [Display(Name = "Approved")]
+    public bool Approved { get; set; }
+
+   
+    //revisar view de de skips para comparar
+
+  }
+
+
+
+  public class tbl_CS_TBL_PARTNUMBER_SKIPSTAGE_FULL : tbl_CS_TBL_PARTNUMBER_SKIPSTAGE
+  {
+    
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+    [Display(Name = "Operation_Code")]
+    public string Operation_Code { get; set; }
+
+    [Display(Name = "ApprovedBy")]
+    public string Name { get; set; }
+
+    [Display(Name = "ApprovedQABy")]
+    public string NameQA { get; set; }
+
+
+
+  }
+
+
+  public class tbl_CS_TBL_PARTNUMBER_SKIPSTAGE_partial
+  {
+    public IQueryable<tbl_CS_TBL_PARTNUMBER_SKIPSTAGE_FULL> Modelo { get; set; }
+    public int id { get; set; }
+
+  }
+
+
+
+
+  //===============================================================
+  // CLASS START : Part_Station_Part_Parameters_Setup
+  //===============================================================
+
+  [Table("Part_Station_Part_Parameters_Setup")]
+  public class tbl_Part_Station_Part_Parameters_Setup : BaseEntity
+  {
+    [Display(Name = "SetupID")]
+    public int SetupID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "BinID")]
+    public int? BinID { get; set; }
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+    [Display(Name = "MachineID")]
+    public int? MachineID { get; set; }
+    [Display(Name = "Equipment_Key")]
+    public int? Equipment_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Station_Part_Parameters_Setup_FULL : tbl_Part_Station_Part_Parameters_Setup
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Station")]
+    public string StationName { get; set; }
+
+    [Display(Name = "Machine")]
+    public string MachineName { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Station_Part_Parameters_History
+  //===============================================================
+
+
+  [Table("Part_Station_Part_Parameters_History")]
+  public class tbl_Part_Station_Part_Parameters_History : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "BinID")]
+    public int? BinID { get; set; }
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+    [Display(Name = "MachineID")]
+    public int? MachineID { get; set; }
+    [Display(Name = "Parameter_ID")]
+    public int? Parameter_ID { get; set; }
+    [Display(Name = "Parameter_Value")]
+    public string Parameter_Value { get; set; }
+    [Display(Name = "Parameter_Tolerance")]
+    public double Parameter_Tolerance { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Station_Part_Parameters_History_FULL : tbl_Part_Station_Part_Parameters_History
+  {
+    [Display(Name = "Parameter")]
+    public string Parameter_Name { get; set; }
+
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+  }
+
+  public class tbl_Part_Station_Part_Parameters_History_FULL_partial
+  {
+    public IQueryable<tbl_Part_Station_Part_Parameters_History_FULL> Parameters { get; set; }
+    public int id { get; set; }
+
+  }
+
+  //===============================================================
+  // CLASS START : Part_Station_Part_Reprint_Validation
+  //===============================================================
+
+  [Table("Part_Station_Part_Reprint_Validation")]
+  public class tbl_Part_Station_Part_Reprint_Validation : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Format")]
+    public string Format { get; set; }
+    [Display(Name = "Quantity")]
+    public int Quantity { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Station_Part_Reprint_Validation_FULL : tbl_Part_Station_Part_Reprint_Validation
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+  }
+
+  public class tbl_Part_Station_Part_Reprint_Validation_FULL_partial : tbl_Part_Station_Part_Reprint_Validation
+  {
+    public IQueryable<tbl_Part_Station_Part_Reprint_Validation_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Shipping_Label_Validator
+  //===============================================================
+
+  [Table("Part_Operation_Shipping_Label_Validator")]
+  public class tbl_Part_Operation_Shipping_Label_Validator : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "BinID")]
+    public int? BinID { get; set; }
+    [Display(Name = "SortNo")]
+    public int? SortNo { get; set; }
+    [Display(Name = "PictURL")]
+    public string PictURL { get; set; }
+    [Display(Name = "FormatEasy")]
+    public string FormatEasy { get; set; }
+    [Display(Name = "FormatHard")]
+    public string FormatHard { get; set; }
+    [Display(Name = "Description")]
+    public string Description { get; set; }
+    [Display(Name = "ValidationType")]
+    public int? ValidationType { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+    //variables para rabbits
+    [Display(Name = "SSN")]
+    public string SSN { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+    [Display(Name = "Status")]
+    public bool Status { get; set; }
+    [Display(Name = "IsActive")]
+    public bool IsActive { get; set; }
+    [Display(Name = "UploadDate")]
+    public DateTime UploadDate { get; set; }
+    [Display(Name = "UploadBy")]
+    public string UploadBy { get; set; }
+    [Display(Name = "ErrorNo")]
+    public string ErrorNo { get; set; }
+    [Display(Name = "AreaID")]
+    public int AreaID { get; set; }
+    [Display(Name = "IsGood")]
+    public string IsGood { get; set; }
+
+    [Display(Name = "Calibration_Date")]
+    public DateTime Calibration_Date { get; set; }
+
+    [Display(Name = "Calibration_Expiration")]
+    public DateTime Calibration_Expiration { get; set; }
+    [Display (Name = "ProcessID")]
+    public int ProcessID { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_Shipping_Label_Validator_FULL : tbl_Part_Operation_Shipping_Label_Validator
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "Process")]
+    public string ProcessName { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_Shipping_Label_Validator_FULL_partial : tbl_Part_Operation_Shipping_Label_Validator
+  {
+    public IQueryable<tbl_Part_Operation_Shipping_Label_Validator_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+    [Display(Name = "Process")]
+    public string ProcessName { get; set; }
+
+
+  }
+
+
+  //===============================================================
+  // CLASS START : PART_OPERATION_PACKOUT_LABEL_VALIDATOR
+  //===============================================================
+
+  [Table("PART_OPERATION_PACKOUT_LABEL_VALIDATOR")]
+  public class tbl_PART_OPERATION_PACKOUT_LABEL_VALIDATOR : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "BinID")]
+    public int? BinID { get; set; }
+    [Display(Name = "SortNo")]
+    public int? SortNo { get; set; }
+    [Display(Name = "PictURL")]
+    public string PictURL { get; set; }
+    [Display(Name = "FormatEasy")]
+    public string FormatEasy { get; set; }
+    [Display(Name = "FormatHard")]
+    public string FormatHard { get; set; }
+    [Display(Name = "Description")]
+    public string Description { get; set; }
+    [Display(Name = "ValidationType")]
+    public int? ValidationType { get; set; }
+    [Display(Name = "ForceValidation")]
+    public bool ForceValidation { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_PACKOUT_LABEL_VALIDATOR_FULL : tbl_PART_OPERATION_PACKOUT_LABEL_VALIDATOR
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    public virtual IEnumerable<SelectListItem> ForceValidation_List { get; set; }
+
+  }
+
+  public class tbl_PART_OPERATION_PACKOUT_LABEL_VALIDATOR_FULL_partial : tbl_PART_OPERATION_PACKOUT_LABEL_VALIDATOR
+  {
+    public IQueryable<tbl_PART_OPERATION_PACKOUT_LABEL_VALIDATOR_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+
+  //===============================================================
+  // CLASS START : Part_Operation_Shipping_Label_Validator_Type
+  //===============================================================
+
+  [Table("Part_Operation_Shipping_Label_Validator_Type")]
+  public class tbl_Part_Operation_Shipping_Label_Validator_Type : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "Validation_TypeID")]
+    public int? Validation_TypeID { get; set; }
+    [Display(Name = "Validation_Type")]
+    public string Validation_Type { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Shipping_Label_Validator_Type_FULL : tbl_Part_Operation_Shipping_Label_Validator_Type
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_Shipping_Label_Validator_Type_FULL_partial : tbl_Part_Operation_Shipping_Label_Validator_Type
+  {
+    public IQueryable<tbl_Part_Operation_Shipping_Label_Validator_Type_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Review_Validations
+  //===============================================================
+
+  [Table("Part_Operation_Review_Validations")]
+  public class tbl_Part_Operation_Review_Validations : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "CustomID")]
+    public int? CustomID { get; set; }
+    [Display(Name = "Description")]
+    public string Description { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "ByPN")]
+    public bool ByPN { get; set; }
+    [Display(Name = "IsActive")]
+    public bool IsActive { get; set; }
+    [Display(Name = "CustomName")]
+    public string CustomName { get; set; }
+    [Display(Name = "TestMode")]
+    public bool TestMode { get; set; }
+    [Display(Name = "Hours")]
+    public int Hours { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Review_Validations_FULL : tbl_Part_Operation_Review_Validations
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    public virtual IEnumerable<SelectListItem> ByPN_List { get; set; }
+    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+    public virtual IEnumerable<SelectListItem> TestMode_List { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_Review_Validations_FULL_partial : tbl_Part_Operation_Review_Validations
+  {
+    public IQueryable<tbl_Part_Operation_Review_Validations_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : Part_Parent
+  //===============================================================
+
+  [Table("Part_Parent")]
+  public class tbl_Part_Parent
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "MiCN")]
+    public int? MiCN { get; set; }
+    [Display(Name = "Part_ID")]
+    public int? Part_ID { get; set; }
+    [Display(Name = "Group_ID")]
+    public int? Group_ID { get; set; }
+    [Display(Name = "Group_Name")]
+    public string Group_Name { get; set; }
+    [Display(Name = "Is_Enabled")]
+    public bool? Is_Enabled { get; set; }
+    [Display(Name = "Added_By")]
+    public int? Added_By { get; set; }
+    [Display(Name = "Added_Date")]
+    public DateTime? Added_Date { get; set; }
+    [Display(Name = "Updated_By")]
+    public int? Updated_By { get; set; }
+    [Display(Name = "Updated_Date")]
+    public DateTime? Updated_Date { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+  }
+
+  public class tbl_Part_Parent_FULL : tbl_Part_Parent
+  {
+
+    public virtual IEnumerable<SelectListItem> Is_Enabled_List { get; set; }
+
+  }
+
+  public class tbl_Part_Parent_FULL_partial : tbl_Part_Parent
+  {
+    public IQueryable<tbl_Part_Parent_FULL> Items { get; set; }
+
+    public int id { get; set; }
+    public IQueryable<tbl_Part_Parent_FULL> Modelo { get; internal set; }
+  }
+  //===============================================================
+  // CLASS START : Part_Bin
+  //===============================================================
+
+  [Table("Part_Bin")]
+  public class tbl_Part_Bin
+  {
+    [Key]
+    [ScaffoldColumn(false)]
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "MiCN")]
+    public int? MiCN { get; set; }
+    [Display(Name = "Part_ID")]
+    public int? Part_ID { get; set; }
+    [Display(Name = "Bin_ID")]
+    public int? Bin_ID { get; set; }
+    [Display(Name = "Bin_Name")]
+    public string Bin_Name { get; set; }
+    [Display(Name = "Is_Enabled")]
+    public bool? Is_Enabled { get; set; }
+    [Display(Name = "Added_By")]
+    public int? Added_By { get; set; }
+    [Display(Name = "Added_Date")]
+    public DateTime? Added_Date { get; set; }
+    [Display(Name = "Updated_By")]
+    public int? Updated_By { get; set; }
+    [Display(Name = "Updated_Date")]
+    public DateTime? Updated_Date { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Convertion")]
+    public string Convertion { get; set; }
+  }
+
+  public class tbl_Part_Bin_FULL : tbl_Part_Bin
+  {
+
+    public virtual IEnumerable<SelectListItem> Is_Enabled_List { get; set; }
+
+  }
+
+  public class tbl_Part_Bin_FULL_partial : tbl_Part_Bin
+  {
+    public IQueryable<tbl_Part_Bin_FULL> Items { get; set; }
+
+    public int id { get; set; }
+    public IQueryable<tbl_Part_Bin_FULL> Modelo { get; internal set; }
+
+  }
+
+  //===============================================================
+  // CLASS START : Part_Parent_Childs
+  //===============================================================
+
+  [Table("Part_Parent_Childs")]
+  public class tbl_Part_Parent_Childs
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "MiCN")]
+    public int? MiCN { get; set; }
+    [Display(Name = "Part_ID")]
+    public int? Part_ID { get; set; }
+    [Display(Name = "Group_ID")]
+    public int? Group_ID { get; set; }
+    [Display(Name = "Child_Part_ID")]
+    public int? Child_Part_ID { get; set; }
+    [Display(Name = "Child_Part_Bin_ID")]
+    public int? Child_Part_Bin_ID { get; set; }
+    [Display(Name = "Added_By")]
+    public int? Added_By { get; set; }
+    [Display(Name = "Added_Date")]
+    public DateTime? Added_Date { get; set; }
+    [Display(Name = "Updated_By")]
+    public int? Updated_By { get; set; }
+    [Display(Name = "Updated_Date")]
+    public DateTime? Updated_Date { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Sort_Order")]
+    public int? Sort_Order { get; set; }
+    [Display(Name = "Image_Url")]
+    public string Image_Url { get; set; }
+    [Display(Name = "UseAsParent")]
+    public bool UseAsParent { get; set; }
+    [Display(Name = "Child_Quantity")]
+    public int Child_Quantity { get; set; }
+  }
+
+  public class tbl_Part_Parent_Childs_FULL : tbl_Part_Parent_Childs
+  {
+    [Display(Name = "Group")]
+    public string Group_Name { get; set; }
+    [Display(Name = "Bin")]
+    public string Bin_Name { get; set; }
+    public string Child_PartNumber { get; set; }
+
+    public virtual IEnumerable<SelectListItem> UseAsParent_List { get; set; }
+
+  }
+
+  public class tbl_Part_Parent_Childs_FULL_partial : tbl_Part_Parent_Childs
+  {
+    public IQueryable<tbl_Part_Parent_Childs_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Packout_Print_SSN_List
+  //===============================================================
+
+  [Table("Part_Operation_Packout_Print_SSN_List")]
+  public class tbl_Part_Operation_Packout_Print_SSN_List
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "FormatID")]
+    public int? FormatID { get; set; }
+    [Display(Name = "PrinterIP")]
+    public string PrinterIP { get; set; }
+    [Display(Name = "PrinterName")]
+    public string PrinterName { get; set; }
+    [Display(Name = "ZPL_Code")]
+    public string ZPL_Code { get; set; }
+    [Display(Name = "UnitPerSheet")]
+    public int? UnitPerSheet { get; set; }
+  }
+
+  public class tbl_Part_Operation_Packout_Print_SSN_List_FULL : tbl_Part_Operation_Packout_Print_SSN_List
+  {
+
+
+  }
+
+  public class tbl_Part_Operation_Packout_Print_SSN_List_FULL_partial : tbl_Part_Operation_Packout_Print_SSN_List
+  {
+    public IQueryable<tbl_Part_Operation_Packout_Print_SSN_List_FULL> Items { get; set; }
+
+    public int id { get; set; }
+    public IQueryable<tbl_Part_Operation_Packout_Print_SSN_List_FULL> Modelo { get; internal set; }
+  }
+  //===============================================================
+  // CLASS START : Part_Operation_Review_Validations_ByPN
+  //===============================================================
+
+  [Table("Part_Operation_Review_Validations_ByPN")]
+  public class tbl_Part_Operation_Review_Validations_ByPN : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "CustomID")]
+    public int? CustomID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Review_Validations_ByPN_FULL : tbl_Part_Operation_Review_Validations_ByPN
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "CustomName")]
+    public string CustomName { get; set; }
+  }
+
+  public class tbl_Part_Operation_Review_Validations_ByPN_FULL_partial : tbl_Part_Operation_Review_Validations_ByPN
+  {
+    public IQueryable<tbl_Part_Operation_Review_Validations_ByPN_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+
+  //===============================================================
+  // CLASS START : Part_Operation_Areas_Substring
+  //===============================================================
+
+  [Table("Part_Operation_Areas_Substring")]
+  public class tbl_Part_Operation_Areas_Substring : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "SubString")]
+    public string SubString { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Areas_Substring_FULL : tbl_Part_Operation_Areas_Substring
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+  }
+
+  public class tbl_Part_Operation_Areas_Substring_FULL_partial : tbl_Part_Operation_Areas_Substring
+  {
+    public IQueryable<tbl_Part_Operation_Areas_Substring_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Areas_Supstring
+  //===============================================================
+
+  [Table("Part_Operation_Areas_Supstring")]
+  public class tbl_Part_Operation_Areas_Supstring : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "SupString")]
+    public string SupString { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Areas_Supstring_FULL : tbl_Part_Operation_Areas_Supstring
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+  }
+
+  public class tbl_Part_Operation_Areas_Supstring_FULL_partial : tbl_Part_Operation_Areas_Supstring
+  {
+    public IQueryable<tbl_Part_Operation_Areas_Supstring_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Areas_Pallets
+  //===============================================================
+
+  [Table("Part_Operation_Areas_Pallets")]
+  public class tbl_Part_Operation_Areas_Pallets : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Quantity")]
+    public int? Quantity { get; set; }
+    [Display(Name = "FormatTool")]
+    public string FormatTool { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Areas_Pallets_FULL : tbl_Part_Operation_Areas_Pallets
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_Areas_Pallets_FULL_partial : tbl_Part_Operation_Areas_Pallets
+  {
+    public IQueryable<tbl_Part_Operation_Areas_Pallets_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : Part_Operation_Packout_Alternate_PartNumber
+  //===============================================================
+
+  [Table("Part_Operation_Packout_Alternate_PartNumber")]
+  public class Part_Operation_Packout_Alternate_PartNumber : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Station")]
+    public string Station { get; set; }
+
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class Part_Operation_Packout_Alternate_PartNumber_FULL : Part_Operation_Packout_Alternate_PartNumber
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+  }
+
+  public class Part_Operation_Packout_Alternate_PartNumber_FULL_partial : Part_Operation_Packout_Alternate_PartNumber
+  {
+    public IQueryable<Part_Operation_Packout_Alternate_PartNumber_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Station_Part_Parameters_Sheet
+  //===============================================================
+
+  [Table("Part_Station_Part_Parameters_Sheet")]
+  public class tbl_Part_Station_Part_Parameters_Sheet : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "BinID")]
+    public int? BinID { get; set; }
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+    [Display(Name = "URL")]
+    public string URL { get; set; }
+    [Display(Name = "TrnDate")]
+    public DateTime? TrnDate { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Station_Part_Parameters_Sheet_FULL : tbl_Part_Station_Part_Parameters_Sheet
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+  }
+
+  public class tbl_Part_Station_Part_Parameters_Sheet_FULL_partial : tbl_Part_Station_Part_Parameters_Sheet
+  {
+    public IQueryable<tbl_Part_Station_Part_Parameters_Sheet_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Wave_SecondCode
+  //===============================================================
+
+  [Table("Part_Operation_Wave_SecondCode")]
+  public class tbl_Part_Operation_Wave_SecondCode : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Code")]
+    public string Code { get; set; }
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Wave_SecondCode_FULL : tbl_Part_Operation_Wave_SecondCode
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "StationName")]
+    public string StationName { get; set; }
+  }
+
+  public class tbl_Part_Operation_Wave_SecondCode_FULL_partial : tbl_Part_Operation_Wave_SecondCode
+  {
+    public IQueryable<tbl_Part_Operation_Wave_SecondCode_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Areas_PartNo_Exclusive
+  //===============================================================
+
+  [Table("Part_Operation_Areas_PartNo_Exclusive")]
+  public class Part_Operation_Areas_PartNo_Exclusive : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+
+
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class Part_Operation_Areas_PartNo_Exclusive_FULL : Part_Operation_Areas_PartNo_Exclusive
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Station")]
+    public string Station { get; set; }
+
+  }
+
+  public class Part_Operation_Areas_PartNo_Exclusive_FULL_partial : Part_Operation_Areas_PartNo_Exclusive
+  {
+    public IQueryable<Part_Operation_Areas_PartNo_Exclusive_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : PD_tbl_stations_rates100
+  //===============================================================
+
+  [Table("PD_tbl_stations_rates100")]
+  public class PD_tbl_stations_rates100 : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+
+    [Display(Name = "Rate")]
+    public int? Rate { get; set; }
+
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+
+    [Display(Name = "Crew")]
+    public int? Crew { get; set; }
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class PD_tbl_stations_rates100_FULL : PD_tbl_stations_rates100
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Station")]
+    public string Station { get; set; }
+
+    [Display(Name = "Customer")]
+    public string Customer { get; set; }
+
+    [Display(Name = "Placements A")]
+    public int? PlacementsA { get; set; }
+
+    [Display(Name = "Placements B")]
+    public int? PlacementsB { get; set; }
+
+  }
+
+  public class PD_tbl_stations_rates100_FULL_partial : PD_tbl_stations_rates100
+  {
+    public IQueryable<PD_tbl_stations_rates100_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : Part_Setup_Validation_Log
+  //===============================================================
+
+  [Table("Part_Setup_Validation_Log")]
+  public class tbl_Part_Setup_Validation_Log
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "ErrorID")]
+    public int ErrorID { get; set; }
+    [Display(Name = "ErrorCode")]
+    public string ErrorCode { get; set; }
+    [Display(Name = "ErorName")]
+    public string ErorName { get; set; }
+    [Display(Name = "ErorStatusID")]
+    public int ErorStatusID { get; set; }
+    [Display(Name = "PartID")]
+    public int PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Proceso")]
+    public string Proceso { get; set; }
+    [Display(Name = "ProcessID")]
+    public int? ProcessID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "solved")]
+    public bool? solved { get; set; }
+    [Display(Name = "ErrorSend")]
+    public bool? ErrorSend { get; set; }
+    [Display(Name = "TrnDate")]
+    public DateTime? TrnDate { get; set; }
+    [Display(Name = "Side")]
+    public string PartNumber { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+  }
+
+  public class tbl_Part_Setup_Validation_Log_FULL : tbl_Part_Setup_Validation_Log
+  {
+
+    public virtual IEnumerable<SelectListItem> solved_List { get; set; }
+    public virtual IEnumerable<SelectListItem> ErrorSend_List { get; set; }
+
+  }
+
+  public class tbl_Part_Setup_Validation_Log_FULL_partial : tbl_Part_Setup_Validation_Log
+  {
+    public IQueryable<tbl_Part_Setup_Validation_Log_FULL> Items { get; set; }
+    public IQueryable<tbl_Part_Setup_Validation_Log_FULL> Modelo { get; set; }
+
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Setup_Validations_TestsManuals
+  //===============================================================
+
+  [Table("Part_Setup_Validations_TestsManuals")]
+  public class Part_Setup_Validations_TestsManuals : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+
+    [Display(Name = "Name")]
+    public string Name { get; set; }
+
+    [Display(Name = "TrnDate")]
+    public DateTime? TrnDate { get; set; }
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class Part_Setup_Validations_TestsManuals_FULL : Part_Setup_Validations_TestsManuals
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+
+
+  }
+
+  public class Part_Setup_Validations_TestsManuals_FULL_partial : Part_Setup_Validations_TestsManuals
+  {
+    public IQueryable<Part_Setup_Validations_TestsManuals_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : QA_tbl_pack_certifications
+  //===============================================================
+
+  [Table("QA_tbl_pack_certifications")]
+  public class QA_tbl_pack_certifications : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+
+    [Display(Name = "TrnDate")]
+    public DateTime? TrnDate { get; set; }
+
+    [Display(Name = "TrnDue")]
+    public DateTime? TrnDue { get; set; }
+
+    [Display(Name = "Description")]
+    public string Description { get; set; }
+
+
+    [Display(Name = "Enable")]
+    public bool? Enable { get; set; }
+
+
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class QA_tbl_pack_certifications_FULL : QA_tbl_pack_certifications
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Station")]
+    public string Station { get; set; }
+
+  }
+
+  public class QA_tbl_pack_certifications_FULL_partial : QA_tbl_pack_certifications
+  {
+    public IQueryable<QA_tbl_pack_certifications_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : PART_OPERATION_MERGE_AT
+  //===============================================================
+
+  [Table("PART_OPERATION_MERGE_AT")]
+  public class tbl_PART_OPERATION_MERGE_AT : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int PartID { get; set; }
+    [Display(Name = "StageID")]
+    public int StageID { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_MERGE_AT_FULL : tbl_PART_OPERATION_MERGE_AT
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_MERGE_AT_FULL_partial : tbl_PART_OPERATION_MERGE_AT
+  {
+    public IQueryable<tbl_PART_OPERATION_MERGE_AT_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : PART_OPERATION_MAX_SCANS
+  //===============================================================
+
+  [Table("PART_OPERATION_MAX_SCANS")]
+  public class PART_OPERATION_MAX_SCANS : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "Quantity")]
+    public int? Quantity { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_MAX_SCANS_FULL : PART_OPERATION_MAX_SCANS
+  {
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_MAX_SCANS_FULL_partial : tbl_PART_OPERATION_MAX_SCANS_FULL
+  {
+    public IQueryable<tbl_PART_OPERATION_MAX_SCANS_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : QA_tbl_display_alerts_exceptions
+  //===============================================================
+
+  [Table("QA_tbl_display_alerts_exceptions")]
+  public class QA_tbl_display_alerts_exceptions : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+
+    [Display(Name = "Qty")]
+    public int? Qty { get; set; }
+
+    [Display(Name = "Material")]
+    public string Material { get; set; }
+
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class QA_tbl_display_alerts_exceptions_FULL : QA_tbl_display_alerts_exceptions
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Station")]
+    public string Station { get; set; }
+
+  }
+
+  public class QA_tbl_display_alerts_exceptions_FULL_partial : QA_tbl_display_alerts_exceptions
+  {
+    public IQueryable<QA_tbl_display_alerts_exceptions_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : RW_tbl_bom_lock
+  //===============================================================
+
+  [Table("RW_tbl_bom_lock")]
+  public class RW_tbl_bom_lock : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+
+    [Display(Name = "Component")]
+    public string Component { get; set; }
+
+    [Display(Name = "Location")]
+    public string Location { get; set; }
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class RW_tbl_bom_lock_FULL : RW_tbl_bom_lock
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Station")]
+    public string Station { get; set; }
+
+  }
+
+  public class RW_tbl_bom_lock_FULL_partial : RW_tbl_bom_lock
+  {
+    public IQueryable<RW_tbl_bom_lock_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : EN_tbl_efficency_stations
+  //===============================================================
+
+  [Table("EN_tbl_efficency_stations")]
+  public class EN_tbl_efficency_stations : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+
+    [Display(Name = "Efficence")]
+    public int? Efficence { get; set; }
+
+    [Display(Name = "TrnDate")]
+    public DateTime? TrnDate { get; set; }
+
+    [Display(Name = "StationName")]
+    public string StationName { get; set; }
+
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class EN_tbl_efficency_stations_FULL : EN_tbl_efficency_stations
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Station")]
+    public string Station { get; set; }
+
+  }
+
+  public class EN_tbl_efficency_stations_FULL_partial : EN_tbl_efficency_stations
+  {
+    public IQueryable<EN_tbl_efficency_stations_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : PD_tbl_unlock_station_users2
+  //===============================================================
+
+  [Table("PD_tbl_unlock_station_users")]
+  public class PD_tbl_unlock_station_users2 : BaseEntity
+  {
+
+    [Display(Name = "AreaID")]
+    public int AreaID { get; set; }
+
+
+
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "ControlID")]
+    public int ControlID { get; set; }
+
+    [Display(Name = "LevelID")]
+    public int LevelID { get; set; }
+
+    [Display(Name = "Facility_Key")]
+    public int Facility_Key { get; set; }
+
+    [Display(Name = "Name")]
+    public string Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Gafete")]
+    public string Gafete { get; set; }
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class PD_tbl_unlock_station_users2_FULL : PD_tbl_unlock_station_users2
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Station")]
+    public string Station { get; set; }
+
+  }
+
+  public class PD_tbl_unlock_station_users2_FULL_partial : PD_tbl_unlock_station_users2
+  {
+    public IQueryable<PD_tbl_unlock_station_users2_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+
+
+
+
+  }
+  //===============================================================
+  // CLASS START : EN_idt_defects_codes
+  //===============================================================
+
+  [Table("EN_idt_defects_codes")]
+  public class EN_idt_defects_codes : BaseEntity
+  {
+    [Display(Name = "DefectCodeID")]
+    public Int64 DefectCodeID { get; set; }
+
+    [Display(Name = "PrefijoScan")]
+    public string PrefijoScan { get; set; }
+
+    [Display(Name = "DefectCode")]
+    public string DefectCode { get; set; }
+
+    [Display(Name = "DefectCategory")]
+    public string DefectCategory { get; set; }
+
+    [Display(Name = "DefectDescription")]
+    public string DefectDescription { get; set; }
+
+    [Display(Name = "DefectSubCategory")]
+    public string DefectSubCategory { get; set; }
+
+    [Display(Name = "IsActive")]
+    public bool IsActive { get; set; }
+
+    [Display(Name = "DefectShowName")]
+    public string DefectShowName { get; set; }
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class EN_idt_defects_codes_FULL : EN_idt_defects_codes
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "Station")]
+    public string Station { get; set; }
+
+  }
+
+  public class EN_idt_defects_codes_FULL_partial : EN_idt_defects_codes
+  {
+    public IQueryable<EN_idt_defects_codes_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : CS_tbl_partnumber_pack_capacitors
+  //===============================================================
+
+  [Table("CS_tbl_partnumber_pack_capacitors")]
+  public class tbl_CS_tbl_partnumber_pack_capacitors : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "SerialFormat")]
+    public string SerialFormat { get; set; }
+    [Display(Name = "SerialFormatEasy")]
+    public string SerialFormatEasy { get; set; }
+
+    [Display(Name = "Title")]
+    public string Title { get; set; }
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_CS_tbl_partnumber_pack_capacitors_FULL : tbl_CS_tbl_partnumber_pack_capacitors
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+  }
+
+  public class tbl_CS_tbl_partnumber_pack_capacitors_FULL_partial : tbl_CS_tbl_partnumber_pack_capacitors
+  {
+    public IQueryable<tbl_CS_tbl_partnumber_pack_capacitors_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : Part_Operation_Packout_Boxes_Partials_ByPart
+  //===============================================================
+
+  [Table("Part_Operation_Packout_Boxes_Partials_ByPart")]
+  public class tbl_Part_Operation_Packout_Boxes_Partials_ByPart
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "PartialBoxesAllowed")]
+    public int? PartialBoxesAllowed { get; set; }
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_Packout_Boxes_Partials_ByPart_FULL : tbl_Part_Operation_Packout_Boxes_Partials_ByPart
+  {
+
+
+  }
+
+  public class tbl_Part_Operation_Packout_Boxes_Partials_ByPart_FULL_partial : tbl_Part_Operation_Packout_Boxes_Partials_ByPart
+  {
+    public IQueryable<tbl_Part_Operation_Packout_Boxes_Partials_ByPart_FULL> Items { get; set; }
+
+    public int id { get; set; }
+
+    public IQueryable<tbl_Part_Operation_Packout_Boxes_Partials_ByPart_FULL> Modelo { get; internal set; }
+  }
+  //===============================================================
+  // CLASS START : EN_tbl_defects_partnumber_sel
+  //===============================================================
+
+  [Table("EN_tbl_defects_partnumber_sel")]
+  public class tbl_EN_tbl_defects_partnumber_sel : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "DefectDepartmentID")]
+    public int? DefectDepartmentID { get; set; }
+    [Display(Name = "DefectCodeiD")]
+    public int? DefectCodeiD { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_EN_tbl_defects_partnumber_sel_FULL : tbl_EN_tbl_defects_partnumber_sel
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+    [Display(Name = "DefectCode")]
+    public string DefectCode { get; set; }
+  }
+
+  public class tbl_EN_tbl_defects_partnumber_sel_FULL_partial : tbl_EN_tbl_defects_partnumber_sel
+  {
+    public IQueryable<tbl_EN_tbl_defects_partnumber_sel_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : Part_Operation_Serialization_Array_Size
+  //===============================================================
+
+  [Table("Part_Operation_Serialization_Array_Size")]
+  public class tbl_Part_Operation_Serialization_Array_Size
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Rows")]
+    public int? Rows { get; set; }
+    [Display(Name = "Cols")]
+    public int? Cols { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+
+  }
+
+  public class tbl_Part_Operation_Serialization_Array_Size_FULL : tbl_Part_Operation_Serialization_Array_Size
+  {
+
+
+  }
+
+  public class tbl_Part_Operation_Serialization_Array_Size_FULL_partial : tbl_Part_Operation_Serialization_Array_Size
+  {
+    public IQueryable<tbl_Part_Operation_Serialization_Array_Size_FULL> Items { get; set; }
+
+    public int id { get; set; }
+    public IQueryable<tbl_Part_Operation_Serialization_Array_Size_FULL> Modelo { get; internal set; }
+  }
+  //===============================================================
+  // CLASS START : Part_Operation_Serialization_Array_Index
+  //===============================================================
+
+  [Table("Part_Operation_Serialization_Array_Index")]
+  public class tbl_Part_Operation_Serialization_Array_Index
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "MasterID")]
+    public string MasterID { get; set; }
+    [Display(Name = "PositionID")]
+    public string PositionID { get; set; }
+    [Display(Name = "Serialization Order")]
+    public int? ToIndex { get; set; }
+    [Display(Name = "Row")]
+    public int? Row { get; set; }
+    [Display(Name = "Col")]
+    public int? Col { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_Serialization_Array_Index_FULL : tbl_Part_Operation_Serialization_Array_Index
+  {
+
+
+  }
+
+  public class tbl_Part_Operation_Serialization_Array_Index_FULL_partial : tbl_Part_Operation_Serialization_Array_Index
+  {
+    public IQueryable<tbl_Part_Operation_Serialization_Array_Index_FULL> Items { get; set; }
+
+    public int id { get; set; }
+    public IQueryable<tbl_Part_Operation_Serialization_Array_Index_FULL> Modelo { get; internal set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Serialization_Array_Index_Remap
+  //===============================================================
+
+  [Table("PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP")]
+  public class tbl_Part_Operation_Serialization_Array_Index_Remap
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+
+    [Display(Name = "AreaID")]
+    public int AreaID { get; set; }
+
+    [Display(Name = "Side")]
+    [MaxLength(10)]
+    public string Side { get; set; }
+
+    [Display(Name = "Original Index")]
+    public int OriginalIndex { get; set; }
+
+    [Display(Name = "Remapped Index")]
+    public int RemappedIndex { get; set; }
+
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+
+    public DateTime? CreatedDate { get; set; }
+    public DateTime? ModifiedDate { get; set; }
+  }
+
+  public class tbl_Part_Operation_Serialization_Array_Index_Remap_FULL : tbl_Part_Operation_Serialization_Array_Index_Remap
+  {
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+    [Display(Name = "Area")]
+    public string AreaName { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_SearchAOI
+  //===============================================================
+
+  [Table("Part_Operation_SearchAOI")]
+  public class tbl_Part_Operation_SearchAOI
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+    [Display(Name = "SearchAreaID")]
+    public int? SearchAreaID { get; set; }
+    [Display(Name = "SearchSide")]
+    public string SearchSide { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+    [Display(Name = "SearchArea")]
+    public string SearchArea { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_SearchAOI_FULL : tbl_Part_Operation_SearchAOI
+  {
+    
+
+  }
+
+  public class tbl_Part_Operation_SearchAOI_FULL_partial : tbl_Part_Operation_SearchAOI
+  {
+    public IQueryable<tbl_Part_Operation_SearchAOI_FULL> Items { get; set; }
+
+    public int id { get; set; }
+    public IQueryable<tbl_Part_Operation_SearchAOI_FULL> Modelo { get; internal set; }
+  }
+
+  //===============================================================
+  // CLASS START : Part_Operation_Force_AOI
+  //===============================================================
+
+  [Table("Part_Operation_Force_AOI")]
+  public class tbl_Part_Operation_Force_AOI
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+    [Display(Name = "PartNumber")]
+    public string PartNumber { get; set; }
+
+  }
+
+  public class tbl_Part_Operation_Force_AOI_FULL : tbl_Part_Operation_Force_AOI
+  {
+
+
+  }
+
+  public class tbl_Part_Operation_Force_AOI_FULL_partial : tbl_Part_Operation_Force_AOI
+  {
+    public IQueryable<tbl_Part_Operation_Force_AOI_FULL> Items { get; set; }
+
+    public int id { get; set; }
+    public IQueryable<tbl_Part_Operation_Force_AOI_FULL> Modelo { get; internal set; }
+  }
+
+  //===============================================================
+  // CLASS START : PART_OPERATION_PACKOUT_PRINTPLEXLABEL
+  //===============================================================
+
+  [Table("PART_OPERATION_PACKOUT_PRINTPLEXLABEL")]
+  public class tbl_PART_OPERATION_PACKOUT_PRINTPLEXLABEL : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+    [Display(Name = "Printer_Name")]
+    public string Printer_Name { get; set; }
+    [Display(Name = "Printer_IP")]
+    public string Printer_IP { get; set; }
+    [Display(Name = "Copies")]
+    public int? Copies { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_PART_OPERATION_PACKOUT_PRINTPLEXLABEL_FULL : tbl_PART_OPERATION_PACKOUT_PRINTPLEXLABEL
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+  }
+
+  public class tbl_PART_OPERATION_PACKOUT_PRINTPLEXLABEL_FULL_partial : tbl_PART_OPERATION_PACKOUT_PRINTPLEXLABEL
+  {
+    public IQueryable<tbl_PART_OPERATION_PACKOUT_PRINTPLEXLABEL_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+
+  //===============================================================
+  // CLASS START : Part_Operation_Areas_PartNo_Printer
+  //===============================================================
+
+  [Table("Part_Operation_Areas_PartNo_Printer")]
+  public class tbl_Part_Operation_Areas_PartNo_Printer : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "PrinterType")]
+    public int? PrinterType { get; set; }
+    [Display(Name = "PrinterName")]
+    public string PrinterName { get; set; }
+    [Display(Name = "ForceValues")]
+    public string ForceValues { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_Part_Operation_Areas_PartNo_Printer_FULL : tbl_Part_Operation_Areas_PartNo_Printer
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+    [Display(Name = "StationName")]
+    public string StationName { get; set; }
+  }
+
+  public class tbl_Part_Operation_Areas_PartNo_Printer_FULL_partial : tbl_Part_Operation_Areas_PartNo_Printer
+  {
+    public IQueryable<tbl_Part_Operation_Areas_PartNo_Printer_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : PLEX_tbl_Part_v_BOM
+  //===============================================================
+
+  [Table("PLEX_tbl_Part_v_BOM")]
+  public class tbl_PLEX_tbl_Part_v_BOM : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "BOM_Key")]
+    public int? BOM_Key { get; set; }
+    [Display(Name = "Part_Key")]
+    public int? Part_Key { get; set; }
+    [Display(Name = "Part_Operation_Key")]
+    public int? Part_Operation_Key { get; set; }
+    [Display(Name = "Component_Part_Key")]
+    public int? Component_Part_Key { get; set; }
+    [Display(Name = "Note")]
+    public string Note { get; set; }
+    [Display(Name = "Flag")]
+    public bool Flag { get; set; }
+    [Display(Name = "Quantity")]
+    public double Quantity { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_PLEX_tbl_Part_v_BOM_FULL : tbl_PLEX_tbl_Part_v_BOM
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    public virtual IEnumerable<SelectListItem> Flag_List { get; set; }
+
+  }
+
+  public class tbl_PLEX_tbl_Part_v_BOM_FULL_partial : tbl_PLEX_tbl_Part_v_BOM
+  {
+    public IQueryable<tbl_PLEX_tbl_Part_v_BOM_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+
+  //[Table("Part_Bin")]
+  //public class tbl_Part_Bin : BaseEntity
+  //{
+  //  [Key]
+  //  [ScaffoldColumn(false)]
+  //  [Display(Name = "AutoID")]
+  //  public int AutoID { get; set; }
+  //  [Display(Name = "MiCN")]
+  //  public int? MiCN { get; set; }
+  //  [Display(Name = "Part_ID")]
+  //  public int? Part_ID { get; set; }
+  //  [Display(Name = "Bin_ID")]
+  //  public int? Bin_ID { get; set; }
+  //  [Display(Name = "Bin_Name")]
+  //  public string Bin_Name { get; set; }
+  //  [Display(Name = "Is_Enabled")]
+  //  public bool? Is_Enabled { get; set; }
+  //  [Display(Name = "Added_By")]
+  //  public int? Added_By { get; set; }
+  //  [Display(Name = "Added_Date")]
+  //  public DateTime? Added_Date { get; set; }
+  //  [Display(Name = "Updated_By")]
+  //  public int? Updated_By { get; set; }
+  //  [Display(Name = "Updated_Date")]
+  //  public DateTime? Updated_Date { get; set; }
+  //  public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  //}
+
+  //public class tbl_Part_Bin_FULL : tbl_Part_Bin
+  //{
+  //  [Display(Name = "Facility")]
+  //  public string Facility_Name { get; set; }
+  //  public virtual IEnumerable<SelectListItem> Is_Enabled_List { get; set; }
+
+  //}
+
+  //===============================================================
+  // CLASS START : PD_tbl_rutes
+  //===============================================================
+
+  [Table("PD_tbl_rutes")]
+  public class tbl_PD_tbl_rutes : BaseEntity
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "PartID")]
+    public int? PartID { get; set; }
+    [Display(Name = "Stage")]
+    public int? Stage { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Side")]
+    public string Side { get; set; }
+    [Display(Name = "Flag")]
+    public bool Flag { get; set; }
+    [Display(Name = "PackoutStage")]
+    public bool PackoutStage { get; set; }
+    [Display(Name = "Part_Operation_Key")]
+    public int Part_Operation_Key { get; set; }
+    [Display(Name = "Facility_Key")]
+    public int? Facility_Key { get; set; }
+    [Display(Name = "Optional")]
+    public bool Optional { get; set; }
+    [Display(Name = "NoPlex")]
+    public bool NoPlex { get; set; }
+    [Display(Name = "DisableWIP")]
+    public bool DisableWIP { get; set; }
+    [Display(Name = "Cost")]
+    public double Cost { get; set; }
+    [Display(Name = "Skips")]
+    public int? Skips { get; set; }
+    [Display(Name = "SkipsDueDate")]
+    public DateTime DueDate { get; set; }
+    [Display(Name = "IgnoreAtPackout")]
+    public bool IgnoreAtPackout { get; set; }
+    
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+
+    [Display(Name = "Deviation")]
+    public int? Deviation { get; set; }
+    [Display(Name = "Description")]
+    public string Description { get; set; }
+    [Display(Name = "ApprovedBy")]
+    public string Name { get; set; }
+  }
+
+  public class tbl_PD_tbl_rutes_FULL : tbl_PD_tbl_rutes
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+    [Display(Name = "Operation_Code")]
+    public string Operation_Code { get; set; }
+
+    [Display(Name = "ApprovedQABy")]
+    public string NameQA { get; set; }
+
+    [Display(Name = "Qa_By")]
+    public string Qa__By { get; set; }
+
+    [Display(Name = "Qa_Date")]
+    public DateTime? Qa_Date { get; set; }
+
+    [Display(Name = "Approved")]
+    public bool Approved { get; set; }
+
+    [Display(Name = "AutoIDSkip")]
+    public int? AutoIDSkip { get; set; }
+
+
+    public virtual IEnumerable<SelectListItem> Flag_List { get; set; }
+    public virtual IEnumerable<SelectListItem> PackoutStage_List { get; set; }
+    public virtual IEnumerable<SelectListItem> Optional_List { get; set; }
+    public virtual IEnumerable<SelectListItem> NoPlex_List { get; set; }
+    public virtual IEnumerable<SelectListItem> DisableWIP_List { get; set; }
+
+  }
+
+  public class tbl_PD_tbl_rutes_FULL_partial : tbl_PD_tbl_rutes
+  {
+    public IQueryable<tbl_PD_tbl_rutes_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+  //===============================================================
+  // CLASS START : Engineering_Tools_Nozzle_Selective
+  //===============================================================
+
+  [Table("Engineering_Tools_Nozzle_Selective")]
+  public class tbl_Engineering_Tools_Nozzle_Selective
+  {
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+    [Display(Name = "Nozzle")]
+    public int? ToolID { get; set; }
+    [Display(Name = "Serie")]
+    public string Serie { get; set; }
+    [Display(Name = "ToolTypeID")]
+    public int? ToolTypeID { get; set; }
+    [Display(Name = "StationID")]
+    public int? StationID { get; set; }
+    [Display(Name = "AreaID")]
+    public int? AreaID { get; set; }
+    [Display(Name = "Tools Consumed")]
+    public int? Tools_Consumed { get; set; }
+    [Display(Name = "ControlID")]
+    public int? ControlID { get; set; }
+    [Display(Name = "TrnDate")]
+    public DateTime? TrnDate { get; set; }
+    [Display(Name = "Status")]
+    public string Status { get; set; }
+    [Display(Name = "Station")]
+    public string StationName { get; set; }
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+    [Display(Name = "StatusID")]
+    public int StatusID { get; set; }
+  }
+
+  public class tbl_Engineering_Tools_Nozzle_Selective_FULL : tbl_Engineering_Tools_Nozzle_Selective
+  {
+
+
+  }
+
+  public class tbl_Engineering_Tools_Nozzle_Selective_FULL_partial : tbl_Engineering_Tools_Nozzle_Selective
+  {
+    public IQueryable<tbl_Engineering_Tools_Nozzle_Selective_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+  //===============================================================
+  // CLASS START : PART_INTERPLANT
+  //===============================================================
+
+  [Table("PART_INTERPLANT")]
+  public class tbl_PART_INTERPLANT : BaseEntity
+  {
+    [Key]
+    [ScaffoldColumn(false)]
+    [Display(Name = "Id")]
+    public int Id { get; set; }
+    [Display(Name = "PARTID")]
+    public int? PARTID { get; set; }
+    [Display(Name = "SITE")]
+    public string SITE { get; set; }
+    [Display(Name = "WRTDATE")]
+    public DateTime WRTDATE { get; set; }
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class tbl_PART_INTERPLANT_FULL : tbl_PART_INTERPLANT
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+  }
+
+  public class tbl_PART_INTERPLANT_FULL_partial : tbl_PART_INTERPLANT
+  {
+    public IQueryable<tbl_PART_INTERPLANT_FULL> Items { get; set; }
+
+    public int id { get; set; }
+  }
+
+}

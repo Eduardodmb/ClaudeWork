@@ -1,0 +1,236 @@
+using Firstronic.Core.Entities.App.Engineering;
+using Firstronic.Framework.Data;
+using Firstronic.Framework.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web.Mvc;
+using System.Data.SqlClient;
+namespace Firstronic.Areas.Engineering.Controllers
+{
+  public class CustomerController : BaseSecurityController
+  {
+    private readonly DataContext db;
+    public CustomerController()
+    {
+      db = new DataContext();
+      db.Configuration.UseDatabaseNullSemantics = true;
+    }
+    public ActionResult Index()
+    {
+      var model = db.Database.SqlQuery<tbl_COMMON_CUSTOMER_FULL>(@"
+        SELECT cc.*, cf.Facility_Name
+        FROM COMMON_CUSTOMER cc
+        LEFT OUTER JOIN Common_Facilities cf ON cc.Facility_Key = cf.Facility_Key
+        ORDER BY cc.Name
+      ").ToArray().ToList().AsQueryable();
+      return View(model);
+    }
+    [Authorize(Roles = "BF Administrator,BF Part Edit")]
+    public ActionResult Create()
+    {
+      var getNextIdResult = Firstronic.Framework.Queries.GetIntFromQuery(@"
+            SELECT ISNULL(MAX(Customer_No), 0) + 1 FROM COMMON_CUSTOMER
+          ", new SqlParameter[] { });
+
+      int nextCustomer_No = Convert.ToInt32(getNextIdResult);
+
+      var model = new tbl_COMMON_CUSTOMER_FULL();
+      model.FacilityList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      model.Customer_No = nextCustomer_No;
+
+      return View(model);
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "BF Administrator,BF Part Edit")]
+    [MultipleButtonAction(Name = "action", Argument = "Create")]
+    public ActionResult Create(tbl_COMMON_CUSTOMER_FULL model)
+    {
+      if (ModelState.IsValid)
+      {
+        try
+        {
+
+
+
+          SqlParameter[] parameters = new SqlParameter[]{
+            new SqlParameter("@Customer_No", SqlDbType.Int){ Value = model.Customer_No},
+            new SqlParameter("@Facility_Key", SqlDbType.Int){ Value = (object)model.Facility_Key ?? DBNull.Value },
+            new SqlParameter("@Customer_Code", SqlDbType.VarChar, 35){ Value = (object)model.Customer_Code ?? DBNull.Value },
+            new SqlParameter("@CustomerName", SqlDbType.VarChar, 35){ Value = (object)model.Customer_Code ?? DBNull.Value },
+            new SqlParameter("@Name", SqlDbType.VarChar, 150){ Value = model.Name },
+            new SqlParameter("@Customer_Status", SqlDbType.VarChar, 50){ Value = (object)model.Customer_Status ?? DBNull.Value },
+            new SqlParameter("@Customer_Type", SqlDbType.VarChar, 60){ Value = (object)model.Customer_Type ?? DBNull.Value },
+            new SqlParameter("@Contact_Note", SqlDbType.VarChar, 50){ Value = (object)model.Contact_Note ?? DBNull.Value },
+            new SqlParameter("@Phone", SqlDbType.VarChar, 50){ Value = (object)model.Phone ?? DBNull.Value },
+            new SqlParameter("@Fax", SqlDbType.VarChar, 50){ Value = (object)model.Fax ?? DBNull.Value },
+            new SqlParameter("@Email", SqlDbType.VarChar, 50){ Value = (object)model.Email ?? DBNull.Value },
+            new SqlParameter("@Web_Address", SqlDbType.VarChar, 100){ Value = (object)model.Web_Address ?? DBNull.Value },
+            new SqlParameter("@Assigned_To", SqlDbType.Int){ Value = (object)model.Assigned_To ?? DBNull.Value },
+            new SqlParameter("@Terms", SqlDbType.VarChar, 75){ Value = (object)model.Terms ?? DBNull.Value },
+            new SqlParameter("@Customer_Supplier_Code", SqlDbType.VarChar, 25){ Value = (object)model.Customer_Supplier_Code ?? DBNull.Value },
+            new SqlParameter("@Business_Type", SqlDbType.VarChar, 50){ Value = (object)model.Business_Type ?? DBNull.Value },
+            new SqlParameter("@Products_And_Markets", SqlDbType.VarChar, 500){ Value = (object)model.Products_And_Markets ?? DBNull.Value },
+            new SqlParameter("@Tax_ID_No", SqlDbType.VarChar, 50){ Value = (object)model.Tax_ID_No ?? DBNull.Value },
+            new SqlParameter("@Payment_Method", SqlDbType.VarChar, 50){ Value = (object)model.Payment_Method ?? DBNull.Value },
+            new SqlParameter("@Customer_Since", SqlDbType.SmallDateTime){ Value = (object)model.Customer_Since ?? DBNull.Value }
+          };
+          var result = Firstronic.Framework.Queries.ExecuteQuery(@"
+            INSERT INTO COMMON_CUSTOMER
+            (Customer_No,Facility_Key, Customer_Code, Name, Customer_Status, Customer_Type,
+             Contact_Note, Phone, Fax, Email, Web_Address, Assigned_To, Terms,
+             Customer_Supplier_Code, Business_Type, Products_And_Markets,
+             Tax_ID_No, Payment_Method, Customer_Since, Add_Date,CustomerName)
+            VALUES
+            (@Customer_No,@Facility_Key, @Customer_Code, @Name, @Customer_Status, @Customer_Type,
+             @Contact_Note, @Phone, @Fax, @Email, @Web_Address, @Assigned_To, @Terms,
+             @Customer_Supplier_Code, @Business_Type, @Products_And_Markets,
+             @Tax_ID_No, @Payment_Method, @Customer_Since, GETDATE(),@CustomerName)
+          ", parameters);
+          if (result > 0)
+          {
+            this.NotifySuccess("Customer created successfully.");
+            return RedirectToAction("Index");
+          }
+        }
+        catch (Exception ex)
+        {
+          this.NotifyError("Error: " + ex.Message);
+        }
+      }
+      model.FacilityList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      return View(model);
+    }
+    [Authorize(Roles = "BF Administrator,BF Part Edit")]
+    public ActionResult Edit(int id)
+    {
+      SqlParameter[] parameters = new SqlParameter[]{ new SqlParameter("@Id", SqlDbType.Int){ Value = id } };
+      var model = db.Database.SqlQuery<tbl_COMMON_CUSTOMER_FULL>(@"
+        SELECT cc.*, cf.Facility_Name
+        FROM COMMON_CUSTOMER cc
+        LEFT OUTER JOIN Common_Facilities cf ON cc.Facility_Key = cf.Facility_Key
+        WHERE cc.Customer_No = @Id
+      ", parameters).FirstOrDefault();
+      if (model == null)
+      {
+        this.NotifyError("Customer not found.");
+        return RedirectToAction("Index");
+      }
+      model.FacilityList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "BF Administrator,BF Part Edit")]
+    [MultipleButtonAction(Name = "action", Argument = "Edit")]
+    public ActionResult Edit(tbl_COMMON_CUSTOMER_FULL model)
+    {
+      if (ModelState.IsValid)
+      {
+        try
+        {
+          SqlParameter[] parameters = new SqlParameter[]{
+            new SqlParameter("@Id", SqlDbType.Int){ Value = model.Customer_No },
+            new SqlParameter("@Facility_Key", SqlDbType.Int){ Value = (object)model.Facility_Key ?? DBNull.Value },
+            new SqlParameter("@Customer_Code", SqlDbType.VarChar, 35){ Value = (object)model.Customer_Code ?? DBNull.Value },
+            new SqlParameter("@CustomerName", SqlDbType.VarChar, 35){ Value = (object)model.Customer_Code ?? DBNull.Value },
+            new SqlParameter("@Name", SqlDbType.VarChar, 150){ Value = model.Name },
+            new SqlParameter("@Customer_Status", SqlDbType.VarChar, 50){ Value = (object)model.Customer_Status ?? DBNull.Value },
+            new SqlParameter("@Customer_Type", SqlDbType.VarChar, 60){ Value = (object)model.Customer_Type ?? DBNull.Value },
+            new SqlParameter("@Contact_Note", SqlDbType.VarChar, 50){ Value = (object)model.Contact_Note ?? DBNull.Value },
+            new SqlParameter("@Phone", SqlDbType.VarChar, 50){ Value = (object)model.Phone ?? DBNull.Value },
+            new SqlParameter("@Fax", SqlDbType.VarChar, 50){ Value = (object)model.Fax ?? DBNull.Value },
+            new SqlParameter("@Email", SqlDbType.VarChar, 50){ Value = (object)model.Email ?? DBNull.Value },
+            new SqlParameter("@Web_Address", SqlDbType.VarChar, 100){ Value = (object)model.Web_Address ?? DBNull.Value },
+            new SqlParameter("@Assigned_To", SqlDbType.Int){ Value = (object)model.Assigned_To ?? DBNull.Value },
+            new SqlParameter("@Terms", SqlDbType.VarChar, 75){ Value = (object)model.Terms ?? DBNull.Value },
+            new SqlParameter("@Customer_Supplier_Code", SqlDbType.VarChar, 25){ Value = (object)model.Customer_Supplier_Code ?? DBNull.Value },
+            new SqlParameter("@Business_Type", SqlDbType.VarChar, 50){ Value = (object)model.Business_Type ?? DBNull.Value },
+            new SqlParameter("@Products_And_Markets", SqlDbType.VarChar, 500){ Value = (object)model.Products_And_Markets ?? DBNull.Value },
+            new SqlParameter("@Tax_ID_No", SqlDbType.VarChar, 50){ Value = (object)model.Tax_ID_No ?? DBNull.Value },
+            new SqlParameter("@Payment_Method", SqlDbType.VarChar, 50){ Value = (object)model.Payment_Method ?? DBNull.Value },
+            new SqlParameter("@Customer_Since", SqlDbType.SmallDateTime){ Value = (object)model.Customer_Since ?? DBNull.Value }
+          };
+          var result = Firstronic.Framework.Queries.ExecuteQuery(@"
+            UPDATE COMMON_CUSTOMER SET
+              Facility_Key = @Facility_Key,
+              Customer_Code = @Customer_Code,
+              Name = @Name,
+              Customer_Status = @Customer_Status,
+              Customer_Type = @Customer_Type,
+              Contact_Note = @Contact_Note,
+              Phone = @Phone,
+              Fax = @Fax,
+              Email = @Email,
+              Web_Address = @Web_Address,
+              Assigned_To = @Assigned_To,
+              Terms = @Terms,
+              Customer_Supplier_Code = @Customer_Supplier_Code,
+              Business_Type = @Business_Type,
+              Products_And_Markets = @Products_And_Markets,
+              Tax_ID_No = @Tax_ID_No,
+              Payment_Method = @Payment_Method,
+              Customer_Since = @Customer_Since,
+              Change_Date = GETDATE(),
+              CustomerName = @CustomerName
+            WHERE Customer_No = @Id
+          ", parameters);
+          if (result > 0)
+          {
+            this.NotifySuccess("Customer updated successfully.");
+            return RedirectToAction("Index");
+          }
+        }
+        catch (Exception ex)
+        {
+          this.NotifyError("Error: " + ex.Message);
+        }
+      }
+      model.FacilityList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "BF Administrator")]
+    [MultipleButtonAction(Name = "action", Argument = "Delete")]
+    public ActionResult Delete(tbl_COMMON_CUSTOMER_FULL model)
+    {
+      if (ModelState.IsValid)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@Id", SqlDbType.Int){ Value = model.Customer_No }
+        };
+
+        var record = db.Database.SqlQuery<tbl_COMMON_CUSTOMER>(@"
+          SELECT * FROM COMMON_CUSTOMER WHERE Customer_No = @Id
+        ", parameters).FirstOrDefault();
+
+        if (record == null)
+        {
+          this.NotifyError("Customer not found.");
+          return RedirectToAction("Index");
+        }
+
+        try
+        {
+          Firstronic.Framework.Queries.ExecuteQuery("DELETE FROM COMMON_CUSTOMER WHERE Customer_No = @Id", parameters);
+          this.NotifySuccess("Customer deleted successfully.");
+        }
+        catch (Exception ex)
+        {
+          this.NotifyError("Error: " + ex.Message);
+        }
+      }
+      return RedirectToAction("Index");
+    }
+    protected override void Dispose(bool disposing)
+    {
+      if (disposing) db.Dispose();
+      base.Dispose(disposing);
+    }
+  }
+}

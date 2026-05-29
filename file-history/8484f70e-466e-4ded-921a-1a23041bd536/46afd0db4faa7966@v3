@@ -1,0 +1,78 @@
+# ENVSelect - Environment Variable Switcher
+
+Quick environment variable switcher for development that automatically restarts Visual Studio to apply changes.
+
+## Features
+
+- Import environment variables from `.reg` files
+- Broadcast changes to running applications
+- **Auto-detect running Visual Studio instances**
+- **Automatically restart Visual Studio with new environment**
+- No more manual restarts or computer reboots needed!
+
+## Installation
+
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Ensure your `.reg` files are in the correct location:
+```
+D:\0 - Apps\LCX\4 - Repos\env_config\
+```
+
+## Usage
+
+1. Run the script:
+```bash
+python ENVSelect.py
+```
+
+2. Select your environment (by number or name)
+
+3. The script will:
+   - Import the registry file
+   - Broadcast environment changes
+   - Detect running Visual Studio instances
+   - **Ask if you want to restart VS (recommended)**
+
+4. If you choose to restart:
+   - Visual Studio will close gracefully
+   - Restart automatically with updated environment variables
+   - Continue working without manual intervention
+
+## How It Works
+
+**Why admin privileges are required:**
+- The .reg files modify `HKEY_LOCAL_MACHINE\SYSTEM\...\Environment`
+- This registry location contains system-wide environment variables
+- Modifying HKLM requires administrator privileges
+- The script automatically requests elevation if needed
+
+**Why restarting VS is necessary:**
+- Environment variables are inherited when a process starts
+- Visual Studio loads its environment at startup
+- Changing system environment variables doesn't affect running processes
+- Broadcasting `WM_SETTINGCHANGE` only works for applications that listen for it
+
+**This tool solves the problem by:**
+1. Auto-elevating to administrator (if needed)
+2. Updating registry (system environment variables)
+3. Verifying the changes were applied
+4. Broadcasting changes via `SendMessageTimeout` (for compatible apps)
+5. Automatically restarting Visual Studio (guaranteed to pick up changes)
+
+## Requirements
+
+- Python 3.7+
+- psutil (for process detection)
+- Windows (uses Windows API calls)
+- Admin rights (for registry modifications)
+
+## Notes
+
+- The script detects `devenv.exe` and `msbuild.exe` processes
+- Visual Studio instances restart with a clean environment
+- Open solutions are NOT automatically reopened (you'll need to reopen manually)
+- For safety, the script asks for confirmation before restarting

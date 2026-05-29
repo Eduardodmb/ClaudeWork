@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confluent POC Architecture</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            padding: 40px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .architecture {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .column-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+        .box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .box.source {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .box.confluent {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .box.target {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        .box-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .box-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        .connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+        .arrow {
+            color: #3498db;
+            font-size: 24px;
+            margin: 0 10px;
+        }
+        .middle-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .processing-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .topics-box {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #3498db;
+        }
+        .topic-item {
+            background: white;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #2c3e50;
+            font-family: 'Courier New', monospace;
+        }
+        .small-box {
+            padding: 12px;
+            font-size: 13px;
+            min-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 40px;">Confluent POC: Customer Master Data Streaming Architecture</h2>
+        
+        <div class="architecture">
+            <!-- Source Systems -->
+            <div class="column">
+                <div class="column-title">Source Systems</div>
+                
+                <div class="box source">
+                    <div class="box-title">Salesforce</div>
+                    <div class="box-subtitle">Customer CRM (SaaS)</div>
+                </div>
+                
+                <div class="connector">
+                    <span>CDC Connector</span>
+                    <span class="arrow">→</span>
+                </div>
+                
+                <div class="box source">
+                    <div class="box-title">FourthShift ERP</div>
+                    <div class="box-subtitle">SQL Server 2022</div>
+                </div>
+                
+                <div class="connector">
+                    <span>Debezium CDC</span>
+                    <span class="arrow">→</span>
+                </div>
+                
+                <div class="box source">
+                    <div class="box-title">Plex ERP</div>
+                    <div class="box-subtitle">REST API (PCN)</div>
+                </div>
+                
+                <div class="connector">
+                    <span>Polling Connector</span>
+                    <span class="arrow">→</span>
+                </div>
+            </div>
+            
+            <!-- Confluent Cloud -->
+            <div class="column">
+                <div class="column-title">Confluent Cloud</div>
+                
+                <div class="topics-box">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #2c3e50;">Kafka Topics</div>
+                    <div class="topic-item">sf-customers</div>
+                    <div class="topic-item">fs-customers</div>
+                    <div class="topic-item">plex-customers</div>
+                </div>
+                
+                <div class="processing-box">
+                    <div class="box-title">PyFlink Processing</div>
+                    <div class="box-subtitle">Stream Transformations<br>Type 6 SCD Logic<br>Change Detection</div>
+                </div>
+                
+                <div class="processing-box small-box">
+                    <div class="box-title">Schema Registry</div>
+                    <div class="box-subtitle">Avro Schemas</div>
+                </div>
+                
+                <div class="connector">
+                    <span class="arrow">→</span>
+                    <span>JDBC Sink</span>
+                </div>
+            </div>
+            
+            <!-- Target Database -->
+            <div class="column">
+                <div class="column-title">Target Database</div>
+                
+                <div style="background: #2c3e50; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div style="text-align: center; color: white; font-weight: bold; font-size: 18px; margin-bottom: 20px;">PostgreSQL 16</div>
+                    
+                    <div class="box target small-box" style="margin: 10px 0;">
+                        <div class="box-title">customer_current</div>
+                        <div class="box-subtitle">Current State (Upsert)</div>
+                    </div>
+                    
+                    <div class="box target small-box" style="margin: 10px 0;">
+                        <div class="box-title">customer_history</div>
+                        <div class="box-subtitle">Type 6 SCD (Append)</div>
+                    </div>
+                    
+                    <div class="box target small-box" style="margin: 10px 0;">
+                        <div class="box-title">customer_changes</div>
+                        <div class="box-subtitle">Change Events (Append)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 20px; background: #ecf0f1; border-radius: 8px; border-left: 4px solid #3498db;">
+            <h3 style="margin-top: 0; color: #2c3e50;">Data Flow</h3>
+            <ol style="color: #34495e; line-height: 1.8;">
+                <li><strong>Source Capture:</strong> Three connectors capture customer changes in real-time (CDC) or near real-time (polling)</li>
+                <li><strong>Topic Ingestion:</strong> Raw events published to separate Kafka topics with Avro schemas</li>
+                <li><strong>Stream Processing:</strong> PyFlink merges streams, detects changes, implements Type 6 SCD logic</li>
+                <li><strong>PostgreSQL Sink:</strong> Processed data written to three analytical tables optimized for different query patterns</li>
+            </ol>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center; color: #7f8c8d; font-size: 12px;">
+            <p><strong>Target Latency:</strong> &lt; 2 minutes end-to-end | <strong>POC Duration:</strong> 30 days | <strong>Entity:</strong> Customer master data only</p>
+        </div>
+    </div>
+</body>
+</html>

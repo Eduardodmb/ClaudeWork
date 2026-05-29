@@ -1,0 +1,252 @@
+using Firstronic.Core.Entities.App.First;
+using Firstronic.Framework.Data;
+using Firstronic.Framework.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace Firstronic.Areas.Manage.Controllers
+{
+  [Authorize(Roles = "BF Administrator")]
+  public class CustomersController : BaseSecurityController
+  {
+    #region Fields
+    private readonly DataContext db;
+    private readonly DataContext db2;
+    #endregion Fields
+    #region Ctor
+    public CustomersController()
+    {
+      db = new DataContext();
+      db2 = new DataContext();
+    }
+    #endregion Ctor
+
+    public ActionResult Index()
+    {
+      var model = db.Database.SqlQuery<tbl_CS_idt_external_customers>($@"SELECT [CustomerID] ,[CustomerName] ,[PVS_DB] ,[PVS_NAME] ,[Customer_No] ,[Packout_Validation] ,[CFT_ID] FROM  [CS_idt_external_customers]").ToArray().ToList().AsQueryable();
+
+      return View(model);
+    }
+
+
+    public ActionResult Create()
+    {
+      var model = new tbl_CS_idt_external_customers();
+      var FirstronicFacilitiesList = new List<SelectListItem>();
+      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      model.FacilityList = FirstronicFacilitiesList;
+      model.IsVisible_List = Framework.Functions.Dropdowns.GetBooleanList(true);
+
+      return View(model);
+    }
+
+    [HttpPost]
+    [ValidateInput(false)]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Create")]
+    public ActionResult Create(tbl_CS_idt_external_customers model)
+    {
+      if (ModelState.IsValid)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@CustomerName",SqlDbType.VarChar){Value =(model.CustomerName ?? "").ToString()},
+          new SqlParameter("@PVS_DB",SqlDbType.VarChar){Value =(model.PVS_DB ?? "").ToString()},
+          new SqlParameter("@PVS_NAME",SqlDbType.VarChar){Value =(model.PVS_NAME ?? "").ToString()},
+          new SqlParameter("@Customer_No",SqlDbType.Int){Value =model.Customer_No},
+          new SqlParameter("@Facility_Key",SqlDbType.Int){Value =model.Facility_Key},
+          new SqlParameter("@Packout_Validation",SqlDbType.Bit){Value =model.Packout_Validation},
+          new SqlParameter("@CFT_ID",SqlDbType.Int){Value =model.CFT_ID},
+          new SqlParameter("@IsVisible",SqlDbType.Bit){Value =model.IsVisible}
+        };
+
+        var result = Firstronic.Framework.Queries.InsertQuery($@"INSERT INTO [dbo].[CS_idt_external_customers]
+                   (CustomerName,
+					PVS_DB,
+					PVS_NAME,
+					Customer_No,
+					Facility_Key,
+					Packout_Validation,
+					CFT_ID,
+					IsVisible)
+					VALUES
+                   (@CustomerName,
+					@PVS_DB,
+					@PVS_NAME,
+					@Customer_No,
+					@Facility_Key,
+					@Packout_Validation,
+					@CFT_ID,
+					@IsVisible)", parameters );
+
+        if (result > 0)
+        {
+          this.NotifySuccess("Successfully saved.");
+          return RedirectToAction("Edit", new { Id = result });
+        }
+        else if (result == 0)
+        {
+          this.NotifyError("Record can not save!");
+          return RedirectToAction("Index");
+        }
+        else
+        {
+          this.NotifyError("Error in database.");
+          return RedirectToAction("Index");
+        }
+      }
+
+      // Repopulate dropdowns when validation fails
+      var FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      model.FacilityList = FirstronicFacilitiesList;
+      model.IsVisible_List = Framework.Functions.Dropdowns.GetBooleanList(model.IsVisible);
+
+      return View(model);
+    }
+
+    public ActionResult Edit(string id)
+    {
+
+      SqlParameter[] parameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id},
+      };
+
+      var model0 = Framework.Functions.Utilies.ConvertTo<tbl_CS_idt_external_customers>(Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT *   FROM CS_idt_external_customers WHERE CustomerID=@Id ", parameters)).FirstOrDefault();
+
+      if (model0 == null)
+      {
+        this.NotifyError("Not found.");
+        return RedirectToAction("Index");
+      }
+
+      var FirstronicFacilitiesList = new List<SelectListItem>();
+      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      var model = new tbl_CS_idt_external_customers
+      {
+
+        CustomerID = model0.CustomerID,
+        CustomerName = model0.CustomerName,
+        PVS_DB = model0.PVS_DB,
+        PVS_NAME = model0.PVS_NAME,
+        Customer_No = model0.Customer_No,
+        Packout_Validation = model0.Packout_Validation,
+        CFT_ID = model0.CFT_ID,
+        IsVisible = model0.IsVisible,
+        Facility_Key = model0.Facility_Key,
+        FacilityList = FirstronicFacilitiesList,
+        IsVisible_List = Framework.Functions.Dropdowns.GetBooleanList(model0.IsVisible)
+      };
+      return View(model);//
+    }
+
+
+    // POST EDIT
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Edit")]
+    public ActionResult Edit(tbl_CS_idt_external_customers model)
+    {
+      if (ModelState.IsValid)
+      {
+        var id = model.CustomerID;
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@Id",SqlDbType.Int){Value = model.CustomerID},
+        };
+
+        var record = Framework.Functions.Utilies.ConvertTo<tbl_CS_idt_external_customers>(Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT *   FROM CS_idt_external_customers WHERE CustomerID=@Id ", parameters)).FirstOrDefault();
+
+        if (record is null)
+        {
+          this.NotifyError("Record not found.");
+          return RedirectToAction("Index");
+        }
+
+        SqlParameter[] updateParameters = new SqlParameter[]{
+          new SqlParameter("@CustomerID",SqlDbType.Int){Value = model.CustomerID},
+          new SqlParameter("@CustomerName",SqlDbType.VarChar){Value =(model.CustomerName ?? "").ToString()},
+          new SqlParameter("@PVS_DB",SqlDbType.VarChar){Value =(model.PVS_DB ?? "").ToString()},
+          new SqlParameter("@PVS_NAME",SqlDbType.VarChar){Value =(model.PVS_NAME ?? "").ToString()},
+          new SqlParameter("@Customer_No",SqlDbType.Int){Value =model.Customer_No},
+          new SqlParameter("@Facility_Key",SqlDbType.Int){Value =model.Facility_Key},
+          new SqlParameter("@Packout_Validation",SqlDbType.Bit){Value =model.Packout_Validation},
+          new SqlParameter("@CFT_ID",SqlDbType.Int){Value =model.CFT_ID},
+          new SqlParameter("@IsVisible",SqlDbType.Bit){Value =model.IsVisible},
+        };
+
+        var result = Firstronic.Framework.Queries.ExecuteQuery("UPDATE CS_idt_external_customers SET " +
+                    "CustomerName = @CustomerName," +
+                    "PVS_DB = @PVS_DB," +
+                    "PVS_NAME = @PVS_NAME," +
+                    "Customer_No = @Customer_No," +
+                    "Facility_Key = @Facility_Key," +
+                    "Packout_Validation = @Packout_Validation," +
+                    "CFT_ID = @CFT_ID," +
+                    "IsVisible = @IsVisible WHERE CustomerID = @CustomerID", updateParameters);
+
+        if (result > 0)
+        {
+          this.NotifySuccess("Successfully saved.");
+        }
+        else if (result == 0)
+          this.NotifyError("Record can not save!");
+        else
+          this.NotifyError("Error in database.");
+
+        return RedirectToAction("Edit", new { id = record.CustomerID });
+      }
+
+      // Repopulate dropdowns when validation fails
+      var FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      model.FacilityList = FirstronicFacilitiesList;
+      model.IsVisible_List = Framework.Functions.Dropdowns.GetBooleanList(model.IsVisible);
+
+      return View(model);
+    }
+
+
+    // POST DELETE
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Delete")]
+    public ActionResult Delete(tbl_CS_idt_external_customers model)
+    {
+      if (ModelState.IsValid)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@Id",SqlDbType.Int){Value = model.CustomerID},
+        };
+
+        var record = Framework.Functions.Utilies.ConvertTo<tbl_CS_idt_external_customers>(Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT *   FROM CS_idt_external_customers WHERE CustomerID=@Id ", parameters)).FirstOrDefault();
+
+        if (record is null)
+        {
+          this.NotifyError("Record not found.");
+          return RedirectToAction("Index");
+        }
+
+        SqlParameter[] delParameters = new SqlParameter[]{
+          new SqlParameter("@Id",SqlDbType.Int){Value = model.CustomerID},
+        };
+
+        var result = Firstronic.Framework.Queries.ExecuteQuery("DELETE FROM CS_idt_external_customers " +
+           " WHERE CustomerID=@Id ", delParameters);
+
+        if (result > 0)
+          this.NotifySuccess("Successfully saved.");
+        else if (result == 0)
+          this.NotifyError("Record can not save!");
+        else
+          this.NotifyError("Error in database.");
+
+        return RedirectToAction("Index");
+      }
+
+      return View(model);
+    }
+
+  }
+}

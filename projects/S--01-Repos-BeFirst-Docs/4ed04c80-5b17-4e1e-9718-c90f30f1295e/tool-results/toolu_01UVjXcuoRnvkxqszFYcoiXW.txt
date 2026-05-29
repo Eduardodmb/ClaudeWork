@@ -1,0 +1,422 @@
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-483-- **Service accounts**: Dedicated accounts per service/component
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-484-- **Audit trails**: Database audit logging for sensitive operations
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-485-
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:486:**Portal Roles and Permissions:**
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-487-
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md:488:The BeFirst Portal uses ASP.NET Identity 2.0 with 100+ defined roles for granular access control across all functional areas. Roles follow the naming convention `BF [Area] [Function]` (e.g., `BF Quality Defects Edit`, `BF Production Supervisor`).
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-489-
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-490-For a complete list of roles and the role management process, see: [`knowledge-base/it-systems/befirst-portal-roles-permissions.md`](../knowledge-base/it-systems/befirst-portal-roles-permissions.md)
+S:\01_Repos\BeFirst_Docs\docs\02_ARCHITECTURE.md-491-
+--
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-55-- **Tables**: 49
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-56-- **Access Pattern**: ETL (write), SSRS (read), APIs (read), Services (read/write)
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-57-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:58:### Database Users
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-59-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:60:| User | Purpose | Permissions | Used By |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-61-|------|---------|-------------|---------|
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-62-| **PROD_DWH_USER** | Standard read/write access | SELECT, INSERT, UPDATE on all tables | ETL jobs, Services |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-63-| **PROD_DWH_ADMIN** | Administrative operations | Full DDL/DML permissions, schema changes | Database administrators, migrations |
+--
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-204-- **Tables**: 824
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-205-- **Access Pattern**: Services (read/write), Portal (read), APIs (read), Production app (read/write), Planning tool (read/write)
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-206-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:207:### Database Users
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-208-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:209:| User | Purpose | Permissions | Used By |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-210-|------|---------|-------------|---------|
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-211-| **PROD_MES_USER** | Standard read/write access | SELECT, INSERT, UPDATE on operational tables | Services, Production app, Planning tool |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-212-| **PROD_MES_ADMIN** | Administrative operations | Full DDL/DML permissions, schema changes | Database administrators, migrations |
+--
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-354-- **Tables**: 22
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-355-- **Access Pattern**: Services (write), Portal (read), APIs (read), Production app (read)
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-356-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:357:### Database Users
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-358-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:359:| User | Purpose | Permissions | Used By |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-360-|------|---------|-------------|---------|
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-361-| **PROD_MACHINES_RESULTS_USER** | Standard read/write access | SELECT, INSERT, UPDATE on all tables | Services (machine data capture) |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-362-| **PROD_MACHINES_RESULTS_ADMIN** | Administrative operations | Full DDL/DML permissions, schema changes | Database administrators, migrations |
+--
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-399-- **Tables**: 4
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-400-- **Access Pattern**: Services (write), Portal (read), APIs (read)
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-401-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:402:### Database Users
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-403-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:404:| User | Purpose | Permissions | Used By |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-405-|------|---------|-------------|---------|
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-406-| **PROD_TESTERS_RESULTS_USER** | Standard read/write access | SELECT, INSERT, UPDATE on all tables | Services (test equipment integration) |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-407-| **PROD_TESTERS_RESULTS_ADMIN** | Administrative operations | Full DDL/DML permissions, schema changes | Database administrators, migrations |
+--
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-561-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-562-All BeFirst databases follow a standardized user naming convention with three distinct roles:
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-563-
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md:564:| User Pattern | Purpose | Permissions | Examples |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-565-|--------------|---------|-------------|----------|
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-566-| **PROD_{DB}_USER** | Standard application access | SELECT, INSERT, UPDATE on operational tables | PROD_DWH_USER, PROD_MES_USER |
+S:\01_Repos\BeFirst_Docs\docs\04_DATABASE.md-567-| **PROD_{DB}_ADMIN** | Administrative operations | Full DDL/DML permissions, schema modifications | PROD_DWH_ADMIN, PROD_MES_ADMIN |
+--
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-112-### Authorization Patterns
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-113-
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-114-**Role-Based Access Control (RBAC):**
+S:\01_Repos\BeFirst_Docs\docs\05_API.md:115:- Roles defined in Azure AD groups
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-116-- Mapped to API permissions via claims
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-117-- Enforced at controller or action level
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-118-
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-119-**Example Role Enforcement:**
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-120-```csharp
+S:\01_Repos\BeFirst_Docs\docs\05_API.md:121:[Authorize(Roles = "BeFirst.Admin")]
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-122-[HttpDelete("inventory/{id}")]
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-123-public async Task<IActionResult> DeleteInventoryRecord(int id)
+S:\01_Repos\BeFirst_Docs\docs\05_API.md-124-{
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-772-5. **Pass/Fail Routing**:
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-773-   - **Pass**: PLC command 4101 (Board Out PASSED) → green tower light
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-774-   - **Fail**: PLC command 4103 (Board Out FAILED) → red tower light, rework bin
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:775:   - **Retest**: PLC command 4009 (Move Press to Retest Position)
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-776-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-777-**Integration Template Structure:**
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-778-
+--
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-988-   ↓
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-989-Emails report to distribution list
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-990-   ↓
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md:991:Users receive report in inbox
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-992-```
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-993-
+S:\01_Repos\BeFirst_Docs\docs\06_WORKFLOWS.md-994-### Common Report Categories
+--
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md-329-2. Right-click project → Publish
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md-330-3. Configure publish settings (InstallUrl, PublishUrl, ApplicationVersion)
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md-331-4. Publish to network share
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md:332:5. Users run `setup.exe` from share
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md-333-
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md-334-**Web Apps (Portal, APIs)**:
+S:\01_Repos\BeFirst_Docs\docs\08_SETUP.md-335-1. Build in Visual Studio (Release configuration)
+--
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md-64-**Solutions:**
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md-65-- Verify user is in correct Azure AD group
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md-66-- Check role claims in JWT token
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md:67:- Verify `[Authorize(Roles = "...")]` attributes in controllers
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md-68-- Check role mappings in Portal configuration
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md-69-
+S:\01_Repos\BeFirst_Docs\docs\09_TROUBLESHOOTING.md-70----
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-45-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-46-**User Experience:**
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-47-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:48:- Users no longer need to manually enter `PrefijoScan` values
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-49-- System ensures consistent formatting across all defect codes
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-50-- Dropdown prevents invalid category entries
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-51-- Read-only display of `PrefijoScan` in edit mode prevents accidental changes
+--
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-337-- **10_ORCHESTRATION.md**: Now marked as ETL-specific (not platform-wide)
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-338-
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-339-### Migration Guide
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md:340:- **Users of ETL documentation**: All ETL-specific content retained, but placed in broader platform context
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-341-- **New platform users**: Start with `docs/01_README.md` for platform overview, then navigate to component-specific docs
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-342-- **Developers**: See `docs/08_SETUP.md` for environment setup per repository type
+S:\01_Repos\BeFirst_Docs\docs\12_CHANGELOG.md-343-
+--
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-346-│  - Application Files/       (Versioned app files)               │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-347-└────────────────────┬───────────────────────────────────────────┘
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-348-                     │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:349:                     │ Users install/update from here
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-350-                     ▼
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-351-┌────────────────────────────────────────────────────────────────┐
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-352-│  End-User Workstations (GRA1 facility)                         │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-353-│  ────────────────────────────────────────────────────────────  │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-354-│  - Initial install: Run setup.exe from network share            │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-355-│  - Auto-updates: App checks PublishUrl on launch                │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:356:│  - ClickOnce cache: C:\Users\[user]\AppData\Local\Apps\...     │
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-357-└────────────────────────────────────────────────────────────────┘
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-358-```
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-359-
+--
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-670-Get-Process | Where-Object { $_.MainModule.FileName -like "X:\MES_Software\Production\*" }
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-671-```
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-672-
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:673:#### 4. ClickOnce Update Fails for Users
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:674:**Symptom**: Users report "Application update failed" error
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-675-
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-676-**Causes**:
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-677-- Manifest signature mismatch
+--
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-748-- ⚠️ HTTPS recommended over HTTP for InstallUrl (current: `https://192.168.0.38`)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-749-- ⚠️ FTPS for PublishUrl prevents MITM attacks (current: `ftps://192.168.0.38`)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-750-
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:751:**Application Permissions**:
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-752-- ClickOnce trust level: Full Trust (runs with user's permissions)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-753-- Application does not request elevation (no UAC prompt)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-754-- Database credentials stored in app.config (encrypted via DPAPI or Azure Key Vault)
+--
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-946-- **Build**: MSBuild (Release configuration)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-947-- **Publish**: ClickOnce publish to network share
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-948-- **Versioning**: Timestamp-based (same as BeFirst_Production)
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md:949:- **Auto-updates**: Users get updates on next launch
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-950-
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-951-**Runner Requirements**:
+S:\01_Repos\BeFirst_Docs\docs\13_CICD.md-952-- Self-hosted Windows runner
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md-192-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md-193-**Query**:
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md-194-```sql
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md:195:SELECT Common_CFT_Users.AutoID, Common_CFT_Users.UserID, ..., AspNetUsers.Email, ...
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md:196:FROM Common_CFT_Users
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md:197:INNER JOIN AspNetUsers ON Common_CFT_Users.UserID = AspNetUsers.Id
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md:198:INNER JOIN CS_idt_external_customers ON Common_CFT_Users.CFT_ID = CS_idt_external_customers.CFT_ID
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md-199-WHERE CustomerID = @CustomerID
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md-200-```
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-aoi-service-refactoring-status.md-201-
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-40-        <mxCell id="aCMWKLT9MVyAkjW9QEmp-112" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3c800;fontColor=#FFFFFF;strokeColor=#B09500;arcSize=5;align=center;verticalAlign=middle;" value="&lt;b style=&quot;font-size:22px;&quot;&gt;BI Reporting&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:13px;&quot;&gt;Finances - Operations - Materials - Sales&lt;/span&gt;" vertex="1">
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-41-          <mxGeometry height="160" width="190" x="1560" y="-560" as="geometry" />
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-42-        </mxCell>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio:43:[Omitted long matching line]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-44-          <mxGeometry height="132" width="30" x="280" y="-540" as="geometry" />
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-45-        </mxCell>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio-46-        <mxCell id="aCMWKLT9MVyAkjW9QEmp-115" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D4731E;fontColor=#ffffff;strokeColor=none;arcSize=5;align=center;verticalAlign=middle;" value="&lt;b style=&quot;font-size:22px;&quot;&gt;BeFirst Apps&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:13px;&quot;&gt;Production App  •  Planning Tool&lt;/span&gt;" vertex="1">
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-planning-timeline-view.md-36-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-planning-timeline-view.md-37-- **Color Coding**: Jobs are color-coded with gradient backgrounds for visual distinction
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-planning-timeline-view.md-38-- **Job Duration**: Bar width represents job duration (calculated from TiempoMin)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-planning-timeline-view.md:39:- **Job Position**: Bar position represents scheduled start time (Entra field)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-planning-timeline-view.md-40-- **Job Information**: Each bar displays job number and part number
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-planning-timeline-view.md-41-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-planning-timeline-view.md-42-## Access
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg-1-<?xml version="1.0" encoding="UTF-8"?>
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg-2-<!-- Do not edit this file with editors other than draw.io -->
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg-3-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+S:\01_Repos\BeFirst_Docs\docs\diagrams\befirst-systems-communications.drawio.svg:4:[Omitted long matching line]
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-45-    TESTERS -->|Query| API
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-46-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-47-    API -->|REST/JSON<br/>JWT Auth| PORTAL
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md:48:    SSRS -->|Reports| Users[End Users]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-49-    MES -->|Direct| PROD
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-50-    MES -->|Direct| PLAN
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-51-    MACHINES -->|Direct| PROD
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-52-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md:53:    PORTAL -->|HTTPS| Users
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md:54:    PROD -->|ClickOnce| Users
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md:55:    PLAN -->|ClickOnce| Users
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-56-```
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-57-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-58-## ETL-Specific Data Flow
+--
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-181-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-182-    USER -->|HTTPS + JWT| PORTAL[Portal/APIs]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-183-    PORTAL -->|Validate Token| AAD
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md:184:    PORTAL -->|Check Roles| AAD
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-185-    PORTAL -->|Authorized| DATA[Databases]
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-186-
+S:\01_Repos\BeFirst_Docs\docs\diagrams\data-flow.md-187-    subgraph Access ["Access Pattern"]
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-126-| AutoID | INT | Primary key |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-127-| PartID | INT | Part number ID |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-128-| MasterID | NVARCHAR(10) | Scanner ID |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:129:| PositionID | NVARCHAR(10) | Position on scanner |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-130-| ToIndex | INT | **Original scanning order** |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-131-| Row | INT | Grid row position |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-132-| Col | INT | Grid column position |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-133-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-134-**Example Data:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-135-```sql
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:136:PartID | MasterID  | PositionID | ToIndex | Row | Col
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-137--------|-----------|------------|---------|-----|----
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-138-12345  | SCANNER1  | POS1       | 1       | 1   | 1
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-139-12345  | SCANNER1  | POS2       | 2       | 1   | 2
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-431-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-432-#### 2. Production Merge Service (VB.NET)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-433-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:434:**File:** `BeFirst_Production/Produccion/frm_MergeLabels_MergeKeyence_Positions.vb`
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-435-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-436-```vb
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-437-Public Sub loadEmptyTable()
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-443-            IDX.[AutoID],
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-444-            IDX.[PartID],
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-445-            IDX.[MasterID],
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:446:            IDX.[PositionID],
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-447-            ISNULL(REMAP.RemappedIndex, IDX.ToIndex) AS ToIndex,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-448-            '' AS SSN,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-449-            IDX.[Col],
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-524-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-525-**Base Configuration:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-526-```
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:527:Position 1: Scanner1, POS1 → ToIndex: 1
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:528:Position 2: Scanner1, POS2 → ToIndex: 2
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:529:Position 3: Scanner1, POS3 → ToIndex: 3
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:530:Position 4: Scanner2, POS1 → ToIndex: 4
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:531:Position 5: Scanner2, POS2 → ToIndex: 5
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-532-```
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-533-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-534-**AOI Remapping (AreaID=5, Side=A):**
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-562-**Response:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-563-```json
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-564-[
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:565:  { "Parent": "PANEL12345", "Child": "UNIT001", "ArrayPosition": 1 },
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:566:  { "Parent": "PANEL12345", "Child": "UNIT002", "ArrayPosition": 2 },
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:567:  { "Parent": "PANEL12345", "Child": "UNIT003", "ArrayPosition": 3 }
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-568-]
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-569-```
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-570-
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-583-**Response:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-584-```json
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-585-[
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:586:  { "Parent": "PANEL12345", "Child": "UNIT003", "ArrayPosition": 1 },
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:587:  { "Parent": "PANEL12345", "Child": "UNIT002", "ArrayPosition": 2 },
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:588:  { "Parent": "PANEL12345", "Child": "UNIT001", "ArrayPosition": 3 }
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-589-]
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-590-```
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-591-
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-603-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-604-' Children are automatically in correct order for current area/side
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-605-For Each child In children
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:606:    ProcessUnit(child.Child, child.ArrayPosition)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-607-Next
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-608-```
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-609-
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-645-2. Review remapping grid for duplicate numbers
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-646-3. Reassign indexes to be sequential (1, 2, 3...)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-647-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:648:### Issue: Missing Positions
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-649-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-650-**Symptoms:** Some positions not showing in remapped order
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-651-
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-715-    IDX.ToIndex AS OriginalIndex,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-716-    ISNULL(REMAP.RemappedIndex, IDX.ToIndex) AS EffectiveIndex,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-717-    IDX.MasterID AS Scanner,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:718:    IDX.PositionID AS Position,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-719-    IDX.Row,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-720-    IDX.Col,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-721-    CASE
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-740-    R.AreaID,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-741-    PA.Area AS AreaName,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-742-    R.Side,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:743:    COUNT(*) AS RemappedPositions,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-744-    MIN(R.ModifiedDate) AS LastModified
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-745-FROM PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP R
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-746-LEFT JOIN PD_idt_areas PA ON R.AreaID = PA.AreaID
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-852-### Services
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-853-- `S:\01_Repos\BeFirst_Services\ExtractorAOIs\Framework\API\Units.vb` (API wrapper)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-854-- `S:\01_Repos\BeFirst_Services\ExtractorAOIs\ExService.vb` (AOI service usage)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md:855:- `S:\01_Repos\BeFirst_Production\BeFirst\Produccion\frm_MergeLabels_MergeKeyence_Positions.vb` (Production merge)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-856-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-857----
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-index-remapping.md-858-
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-196-      <th>Row</th>
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-197-      <th>Col</th>
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-198-      <th>Scanner</th>
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md:199:      <th>Position</th>
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-200-      <th>Original Index</th>
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-201-      <th>Remapped Index</th>
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-202-    </tr>
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-241-**Status:** Implemented
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-242-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-243-**Files Modified:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md:244:- `S:\01_Repos\BeFirst_Production\BeFirst\Produccion\frm_MergeLabels_MergeKeyence_Positions.vb`
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-245-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-246-**Changes:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-247-- Updated `loadEmptyTable()` method (line 393)
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-352-### Modified Files
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-353-- `S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs` (added entity classes)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-354-- `S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs` (updated method + added methods)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md:355:- `S:\01_Repos\BeFirst_Production\BeFirst\Produccion\frm_MergeLabels_MergeKeyence_Positions.vb` (updated query)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-356-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-357-### Pending Files
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping-status.md-358-- `S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml` (UI implementation)
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-80-    IDX.AutoID,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-81-    IDX.PartID,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-82-    IDX.MasterID,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md:83:    IDX.PositionID,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-84-    ISNULL(REMAP.RemappedIndex, IDX.ToIndex) AS ToIndex,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-85-    IDX.Col,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-86-    IDX.Row
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-125-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-126-## Service Integration
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-127-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md:128:**File:** `BeFirst_Production\BeFirst\Produccion\frm_MergeLabels_MergeKeyence_Positions.vb`
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-129-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-130-**Updated Method:** `loadEmptyTable()`
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-131-
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-246-### 3. Service (15 minutes)
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-247-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-248-1. Stop BeFirst Production service
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md:249:2. Deploy updated `frm_MergeLabels_MergeKeyence_Positions.vb`
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-250-3. Restart BeFirst Production service
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-251-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-252-### 4. Validation (10 minutes)
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-309-| BeFirst_Portal | Areas\Engineering\Models\PartNumber.cs | ADD entity classes |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-310-| BeFirst_Portal | Areas\Engineering\Controllers\PartNumberController.cs | UPDATE method + ADD methods |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-311-| BeFirst_Portal | Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml | ADD UI section |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md:312:| BeFirst_Production | Produccion\frm_MergeLabels_MergeKeyence_Positions.vb | UPDATE query |
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-313-
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-314-### Performance Impact
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-315-
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-354-    IDX.ToIndex AS OriginalIndex,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-355-    ISNULL(REMAP.RemappedIndex, IDX.ToIndex) AS EffectiveIndex,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-356-    IDX.MasterID,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md:357:    IDX.PositionID
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-358-FROM PART_OPERATION_SERIALIZATION_ARRAY_INDEX IDX
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-359-LEFT JOIN PART_OPERATION_SERIALIZATION_ARRAY_INDEX_REMAP REMAP
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-serialization-array-remapping.md-360-    ON IDX.PartID = REMAP.PartID
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-units-api-integration.md-330-            "ssnPanel": "1000709896SR0520111600426",
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-units-api-integration.md-331-            "checkIn": true,
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-units-api-integration.md-332-            "message": "",
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-units-api-integration.md:333:            "arrayPosition": 1
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-units-api-integration.md-334-        }
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-units-api-integration.md-335-    ]
+S:\01_Repos\BeFirst_Docs\docs\integrations\befirst-units-api-integration.md-336-}
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-26-    PROD["Production App"]
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-27-    PLANNING["Planning Tool"]
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-28-
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:29:    %% End Users
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:30:    USERS["End Users<br/>- Management (dashboards, reports)<br/>- Operations (Portal, Desktop apps)<br/>- Engineering (Portal, Planning tool)<br/>- Quality (Portal, test data)<br/>- Shop Floor (Production app)"]
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-31-
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-32-    %% Data Flow
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-33-    DATABASES --> SSRS
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-153-17. Shipping (shipments, deliveries)
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-154-18. Suppliers (supplier performance, bond data)
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-155-
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:156:**Users:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-157-- Management (executive dashboards)
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-158-- Operations (work order management)
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-159-- Engineering (BOM, ECOs)
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-185-- Downtime event capture
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-186-- Material issue/return
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-187-
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:188:**Users:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-189-- Shop floor operators
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-190-- Production supervisors
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-191-
+--
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-211-- Material availability checking
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-212-- Resource allocation
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-213-
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md:214:**Users:**
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-215-- Production planners
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-216-- Manufacturing engineers
+S:\01_Repos\BeFirst_Docs\docs\integrations\downstream-consumers.md-217-

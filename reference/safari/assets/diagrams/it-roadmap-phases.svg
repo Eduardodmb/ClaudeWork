@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="1000" viewBox="0 0 1400 1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9B1C1C"/>
+      <stop offset="100%" style="stop-color:#7f1d1d"/>
+    </linearGradient>
+    <linearGradient id="darkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="1000" fill="#0f172a"/>
+
+  <!-- Header -->
+  <rect x="0" y="0" width="1400" height="80" fill="url(#headerGrad)"/>
+  <text x="700" y="45" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">
+    Safari Platform IT Roadmap
+  </text>
+  <text x="700" y="68" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#fecaca" text-anchor="middle">
+    Agentic Enterprise Operating System | 6 Phases | Highest Leverage First
+  </text>
+
+  <!-- Core Thesis Banner -->
+  <rect x="400" y="95" width="600" height="35" rx="17" fill="#1e3a5f" stroke="#60a5fa" stroke-width="1"/>
+  <text x="700" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#60a5fa" text-anchor="middle">
+    Context Engineering + Agentic Workflows + Streaming Data = Organizational Intelligence
+  </text>
+
+  <!-- Timeline Base -->
+  <rect x="50" y="150" width="1300" height="4" rx="2" fill="#334155"/>
+
+  <!-- Timeline markers -->
+  <g fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="11">
+    <text x="100" y="175" text-anchor="middle">Q1 2026</text>
+    <text x="350" y="175" text-anchor="middle">Q2 2026</text>
+    <text x="650" y="175" text-anchor="middle">Q3 2026</text>
+    <text x="1000" y="175" text-anchor="middle">Q4 2026</text>
+    <text x="1250" y="175" text-anchor="middle">Ongoing</text>
+  </g>
+
+  <!-- Phase 1: Claude Code Enhancement -->
+  <g transform="translate(50, 195)">
+    <rect x="0" y="0" width="200" height="120" rx="8" fill="url(#darkGrad)" stroke="#60a5fa" stroke-width="3"/>
+    <rect x="0" y="0" width="200" height="30" rx="8" fill="#60a5fa"/>
+    <rect x="0" y="15" width="200" height="15" fill="#60a5fa"/>
+    <text x="100" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">
+      PHASE 1
+    </text>
+    <text x="100" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#60a5fa" text-anchor="middle">
+      Claude Code
+    </text>
+    <text x="100" y="72" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#60a5fa" text-anchor="middle">
+      Enhancement
+    </text>
+    <text x="15" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">
+      <tspan x="15" dy="0">Skill formalization</tspan>
+      <tspan x="15" dy="14">Context registry</tspan>
+    </text>
+    <circle cx="190" cy="110" r="12" fill="#22c55e"/>
+    <text x="190" y="114" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="white" text-anchor="middle">2-3w</text>
+  </g>
+
+  <!-- Phase 2: DevOps Batch Analytics -->
+  <g transform="translate(270, 195)">
+    <rect x="0" y="0" width="200" height="120" rx="8" fill="url(#darkGrad)" stroke="#34d399" stroke-width="3"/>
+    <rect x="0" y="0" width="200" height="30" rx="8" fill="#34d399"/>
+    <rect x="0" y="15" width="200" height="15" fill="#34d399"/>
+    <text x="100" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">
+      PHASE 2
+    </text>
+    <text x="100" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#34d399" text-anchor="middle">
+      DevOps Batch
+    </text>
+    <text x="100" y="72" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#34d399" text-anchor="middle">
+      Analytics
+    </text>
+    <text x="15" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">
+      <tspan x="15" dy="0">PostgreSQL + ETL</tspan>
+      <tspan x="15" dy="14">Velocity dashboards</tspan>
+    </text>
+    <circle cx="190" cy="110" r="12" fill="#f59e0b"/>
+    <text x="190" y="114" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="white" text-anchor="middle">3-4w</text>
+  </g>
+
+  <!-- Phase 3: Safari MCP -->
+  <g transform="translate(490, 195)">
+    <rect x="0" y="0" width="200" height="120" rx="8" fill="url(#darkGrad)" stroke="#9B1C1C" stroke-width="3"/>
+    <rect x="0" y="0" width="200" height="30" rx="8" fill="#9B1C1C"/>
+    <rect x="0" y="15" width="200" height="15" fill="#9B1C1C"/>
+    <text x="100" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">
+      PHASE 3
+    </text>
+    <text x="100" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#9B1C1C" text-anchor="middle">
+      Safari MCP +
+    </text>
+    <text x="100" y="72" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#9B1C1C" text-anchor="middle">
+      Context Router
+    </text>
+    <text x="15" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">
+      <tspan x="15" dy="0">SCL operations</tspan>
+      <tspan x="15" dy="14">MDL routing</tspan>
+    </text>
+    <circle cx="190" cy="110" r="12" fill="#f59e0b"/>
+    <text x="190" y="114" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="white" text-anchor="middle">4-6w</text>
+  </g>
+
+  <!-- Phase 4: Streaming Infrastructure -->
+  <g transform="translate(710, 195)">
+    <rect x="0" y="0" width="200" height="120" rx="8" fill="url(#darkGrad)" stroke="#f59e0b" stroke-width="3"/>
+    <rect x="0" y="0" width="200" height="30" rx="8" fill="#f59e0b"/>
+    <rect x="0" y="15" width="200" height="15" fill="#f59e0b"/>
+    <text x="100" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">
+      PHASE 4
+    </text>
+    <text x="100" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#f59e0b" text-anchor="middle">
+      Streaming
+    </text>
+    <text x="100" y="72" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#f59e0b" text-anchor="middle">
+      Infrastructure
+    </text>
+    <text x="15" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">
+      <tspan x="15" dy="0">Kafka + Flink</tspan>
+      <tspan x="15" dy="14">+ Knowledge Graph</tspan>
+    </text>
+    <circle cx="190" cy="110" r="12" fill="#f59e0b"/>
+    <text x="190" y="114" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="white" text-anchor="middle">4-6w</text>
+  </g>
+
+  <!-- Phase 5: Safari Trace Platform -->
+  <g transform="translate(930, 195)">
+    <rect x="0" y="0" width="200" height="120" rx="8" fill="url(#darkGrad)" stroke="#a78bfa" stroke-width="3"/>
+    <rect x="0" y="0" width="200" height="30" rx="8" fill="#a78bfa"/>
+    <rect x="0" y="15" width="200" height="15" fill="#a78bfa"/>
+    <text x="100" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">
+      PHASE 5
+    </text>
+    <text x="100" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#a78bfa" text-anchor="middle">
+      Safari Trace
+    </text>
+    <text x="100" y="72" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#a78bfa" text-anchor="middle">
+      Platform
+    </text>
+    <text x="15" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">
+      <tspan x="15" dy="0">Hub, Studio, Assist</tspan>
+      <tspan x="15" dy="14">Analyze, SSO</tspan>
+    </text>
+    <circle cx="190" cy="110" r="12" fill="#ef4444"/>
+    <text x="190" y="114" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="white" text-anchor="middle">6-8w</text>
+  </g>
+
+  <!-- Phase 6: Manufacturing & Finance -->
+  <g transform="translate(1150, 195)">
+    <rect x="0" y="0" width="200" height="120" rx="8" fill="url(#darkGrad)" stroke="#ec4899" stroke-width="3"/>
+    <rect x="0" y="0" width="200" height="30" rx="8" fill="#ec4899"/>
+    <rect x="0" y="15" width="200" height="15" fill="#ec4899"/>
+    <text x="100" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">
+      PHASE 6
+    </text>
+    <text x="100" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#ec4899" text-anchor="middle">
+      Mfg &amp; Finance
+    </text>
+    <text x="100" y="72" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="bold" fill="#ec4899" text-anchor="middle">
+      Expansion
+    </text>
+    <text x="15" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">
+      <tspan x="15" dy="0">Plex, BeFirst, Planful</tspan>
+      <tspan x="15" dy="14">OEE dashboards</tspan>
+    </text>
+    <circle cx="190" cy="110" r="12" fill="#ef4444"/>
+    <text x="190" y="114" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="white" text-anchor="middle">6-8w</text>
+  </g>
+
+  <!-- Dependency arrows -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <path d="M 255 255 L 275 255" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 475 255 L 495 255" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 695 255 L 715 255" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 915 255 L 935 255" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 1135 255 L 1155 255" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Architecture Stack Section -->
+  <text x="700" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="bold" fill="#e2e8f0" text-anchor="middle">
+    TARGET STATE ARCHITECTURE
+  </text>
+
+  <!-- Architecture Layers -->
+  <!-- User Layer -->
+  <rect x="100" y="385" width="1200" height="80" rx="8" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+  <text x="130" y="420" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#60a5fa">USER LAYER</text>
+
+  <g transform="translate(300, 400)">
+    <rect x="0" y="0" width="180" height="50" rx="6" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
+    <text x="90" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#60a5fa" text-anchor="middle">Business Users</text>
+    <text x="90" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Safari Assist (Q&amp;A)</text>
+  </g>
+
+  <g transform="translate(520, 400)">
+    <rect x="0" y="0" width="180" height="50" rx="6" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
+    <text x="90" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#60a5fa" text-anchor="middle">IT Team</text>
+    <text x="90" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Claude Code + MCP</text>
+  </g>
+
+  <g transform="translate(740, 400)">
+    <rect x="0" y="0" width="180" height="50" rx="6" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
+    <text x="90" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#60a5fa" text-anchor="middle">Leadership</text>
+    <text x="90" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Safari Analyze (BI)</text>
+  </g>
+
+  <g transform="translate(960, 400)">
+    <rect x="0" y="0" width="180" height="50" rx="6" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
+    <text x="90" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="#60a5fa" text-anchor="middle">Content Creators</text>
+    <text x="90" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Safari Studio (Gen)</text>
+  </g>
+
+  <!-- Safari Trace Platform -->
+  <rect x="100" y="480" width="1200" height="70" rx="8" fill="#1e293b" stroke="#a78bfa" stroke-width="2"/>
+  <text x="130" y="510" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#a78bfa">SAFARI TRACE</text>
+
+  <g transform="translate(300, 495)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#a78bfa"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">HUB</text>
+  </g>
+  <g transform="translate(420, 495)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#a78bfa"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">STUDIO</text>
+  </g>
+  <g transform="translate(540, 495)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#a78bfa"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">ASSIST</text>
+  </g>
+  <g transform="translate(660, 495)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#a78bfa"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">ANALYZE</text>
+  </g>
+
+  <!-- Context Governance Layer -->
+  <rect x="100" y="565" width="1200" height="70" rx="8" fill="#1e293b" stroke="#9B1C1C" stroke-width="2"/>
+  <text x="130" y="595" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#9B1C1C">CONTEXT GOVERNANCE</text>
+
+  <g transform="translate(300, 580)">
+    <rect x="0" y="0" width="130" height="40" rx="4" fill="#9B1C1C"/>
+    <text x="65" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Safari MCP</text>
+  </g>
+  <g transform="translate(450, 580)">
+    <rect x="0" y="0" width="130" height="40" rx="4" fill="#9B1C1C"/>
+    <text x="65" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Context Registry</text>
+  </g>
+  <g transform="translate(600, 580)">
+    <rect x="0" y="0" width="130" height="40" rx="4" fill="#9B1C1C"/>
+    <text x="65" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Embedding Index</text>
+  </g>
+  <g transform="translate(750, 580)">
+    <rect x="0" y="0" width="130" height="40" rx="4" fill="#9B1C1C"/>
+    <text x="65" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">OpenMetadata</text>
+  </g>
+  <g transform="translate(900, 580)">
+    <rect x="0" y="0" width="130" height="40" rx="4" fill="#9B1C1C"/>
+    <text x="65" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Knowledge Graph</text>
+  </g>
+
+  <!-- Streaming Layer -->
+  <rect x="100" y="650" width="1200" height="70" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+  <text x="130" y="680" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#f59e0b">DATA STREAMING</text>
+
+  <g transform="translate(300, 665)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#f59e0b"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Kafka</text>
+  </g>
+  <g transform="translate(420, 665)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#f59e0b"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Flink</text>
+  </g>
+  <g transform="translate(540, 665)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#f59e0b"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Iceberg</text>
+  </g>
+  <g transform="translate(660, 665)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#f59e0b"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">PostgreSQL</text>
+  </g>
+  <g transform="translate(780, 665)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#f59e0b"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Trino</text>
+  </g>
+  <g transform="translate(900, 665)">
+    <rect x="0" y="0" width="100" height="40" rx="4" fill="#f59e0b"/>
+    <text x="50" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Neo4j</text>
+  </g>
+
+  <!-- Data Sources Layer -->
+  <rect x="100" y="735" width="1200" height="70" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="2"/>
+  <text x="130" y="765" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#34d399">DATA SOURCES</text>
+
+  <g transform="translate(300, 750)">
+    <rect x="0" y="0" width="110" height="40" rx="4" fill="#34d399"/>
+    <text x="55" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Azure DevOps</text>
+  </g>
+  <g transform="translate(430, 750)">
+    <rect x="0" y="0" width="110" height="40" rx="4" fill="#34d399"/>
+    <text x="55" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Plex ERP</text>
+  </g>
+  <g transform="translate(560, 750)">
+    <rect x="0" y="0" width="110" height="40" rx="4" fill="#34d399"/>
+    <text x="55" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">BeFirst MES</text>
+  </g>
+  <g transform="translate(690, 750)">
+    <rect x="0" y="0" width="110" height="40" rx="4" fill="#34d399"/>
+    <text x="55" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">FourthShift</text>
+  </g>
+  <g transform="translate(820, 750)">
+    <rect x="0" y="0" width="110" height="40" rx="4" fill="#34d399"/>
+    <text x="55" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Planful</text>
+  </g>
+  <g transform="translate(950, 750)">
+    <rect x="0" y="0" width="110" height="40" rx="4" fill="#34d399"/>
+    <text x="55" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Power BI/SSRS</text>
+  </g>
+
+  <!-- Success Metrics Footer -->
+  <rect x="100" y="830" width="580" height="130" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="1"/>
+  <text x="390" y="860" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#22c55e" text-anchor="middle">
+    SUCCESS METRICS (HumanLayer Benchmark)
+  </text>
+  <text x="120" y="890" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#e2e8f0">
+    <tspan x="120" dy="0">Context auto-load: 100% of sessions</tspan>
+    <tspan x="120" dy="18">Output quality: &lt;20% human correction</tspan>
+    <tspan x="120" dy="18">Work tracking: &gt;90% auto-captured</tspan>
+    <tspan x="120" dy="18">Documentation: 100% auto-updated</tspan>
+  </text>
+  <text x="400" y="890" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#e2e8f0">
+    <tspan x="400" dy="0">Sprint velocity: Real-time visible</tspan>
+    <tspan x="400" dy="18">Build health: Daily trends tracked</tspan>
+    <tspan x="400" dy="18">Safari Trace MAU: &gt;80% of IT team</tspan>
+    <tspan x="400" dy="18">Assist queries: &gt;50/week</tspan>
+  </text>
+
+  <!-- Team Model -->
+  <rect x="720" y="830" width="580" height="130" rx="8" fill="#1e293b" stroke="#60a5fa" stroke-width="1"/>
+  <text x="1010" y="860" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#60a5fa" text-anchor="middle">
+    RESOURCE MODEL (2-3 People)
+  </text>
+  <text x="740" y="890" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#e2e8f0">
+    <tspan x="740" dy="0">Lead Developer: Architecture, Safari MCP</tspan>
+    <tspan x="740" dy="18">Data Engineer: PostgreSQL, Kafka, ETL</tspan>
+    <tspan x="740" dy="18">Full Stack: Dashboards, Safari Trace UI</tspan>
+  </text>
+  <text x="1020" y="890" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">
+    <tspan x="1020" dy="0">P1 + P2 run in parallel</tspan>
+    <tspan x="1020" dy="18">P3 depends on P1</tspan>
+    <tspan x="1020" dy="18">P4 depends on P2</tspan>
+    <tspan x="1020" dy="18">P5 depends on P3</tspan>
+  </text>
+
+  <!-- Safari logo placeholder -->
+  <text x="1350" y="980" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#475569" text-anchor="end">
+    Safari Circuits | 2026
+  </text>
+</svg>

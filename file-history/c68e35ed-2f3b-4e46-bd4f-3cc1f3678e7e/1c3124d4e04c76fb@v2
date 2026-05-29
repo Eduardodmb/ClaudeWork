@@ -1,0 +1,121 @@
+# IT Documentation Control System
+
+**Created:** 2026-05-11
+**Owner:** IT Department
+
+---
+
+## Quick Reference
+
+### Document ID Format
+
+```
+IT-XXX          → General IT documents (policies, procedures)
+IT-XXX W1       → Work instructions/manuals (BeFirst, Plex)
+IT-XXX W1 FN    → Multiple topics under same procedure (F1, F2, F3...)
+```
+
+### Filename Convention
+
+```
+ID_AppName_Description.md
+```
+
+**Examples:**
+- `IT-030_W1_BeFirst_Part_Number_Configuration.md`
+- `IT-030_W1_F1_BeFirst_General_Settings.md`
+- `IT-005_IT_Network_Security_Policy.md`
+
+---
+
+## Directory Structure
+
+```
+S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\
+│
+├── Enterprise Solution Architecture\
+│   └── Enterprise Systems\
+│       ├── BeFirst\
+│       │   ├── 01_User_Manuals\              ← Legacy DOCX files
+│       │   └── 01_User_Manuals_MD\           ← New MD files ✓
+│       │       └── assets\                   ← Screenshots/images
+│       │
+│       └── Plex\
+│           ├── 01_User_Manuals\              ← Legacy DOCX files
+│           └── 01_User_Manuals_MD\           ← New MD files ✓
+│               └── assets\                   ← Screenshots/images
+│
+└── Grand Rapids IT Hub\
+    ├── 01_Policies\                          ← IT policies (IT-XXX)
+    ├── 02_Procedures\                        ← IT procedures (IT-XXX)
+    ├── DOCUMENT-ID-CONTROL.md                ← Main registry ✓
+    └── README-DOCUMENT-CONTROL.md            ← This file ✓
+```
+
+---
+
+## How to Use
+
+### Creating New Documents
+
+1. Check **DOCUMENT-ID-CONTROL.md** for next available ID
+2. Create MD file with naming convention: `ID_AppName_Description.md`
+3. Save screenshots to `assets/` subfolder
+4. Update **DOCUMENT-ID-CONTROL.md** with new entry
+5. Set **Status** to "New (MD)" or "Draft"
+
+### Converting Existing DOCX Documents
+
+1. Assign new ID from control file
+2. Use conversion script or manual conversion
+3. Save as `ID_AppName_Description.md`
+4. Extract images to `assets/` folder
+5. Update control file with **Status: "Migrated"**
+
+### Document Status Values
+
+- **New (MD)** - New Markdown document
+- **Migrated** - Converted from DOCX to MD
+- **Legacy (DOCX)** - Still in old location
+- **Draft** - Work in progress
+- **Archived** - Superseded by newer version
+
+---
+
+## Example: IT-030 W1
+
+**First BeFirst manual created:**
+
+| Field | Value |
+|-------|-------|
+| **ID** | IT-030 W1 |
+| **Title** | Part Number Configuration |
+| **App** | BeFirst |
+| **Owner** | IT |
+| **Status** | New (MD) |
+| **Filename** | `IT-030_W1_BeFirst_Part_Number_Configuration.md` |
+| **Path** | BeFirst\01_User_Manuals_MD |
+| **Images** | 36 screenshots in assets/ folder |
+
+---
+
+## Next Available IDs
+
+- **BeFirst:** IT-031 W1
+- **Plex:** IT-030 W1
+- **IT General:** IT-030
+
+---
+
+## Tools
+
+- **Markdown Editor:** Typora, VS Code, Obsidian
+- **Conversion Script:** `BeFirst_Docs\scripts\extract_docx_to_md.py`
+- **Version Control:** OneDrive (automatic)
+
+---
+
+## Contact
+
+**IT Department**
+Email: GR_IT@safaricircuits.com

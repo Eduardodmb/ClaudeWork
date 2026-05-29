@@ -1,0 +1,598 @@
+2026-05-14 02:48:33,781 42 INFO ? odoo: Odoo version 18.0-20260305 
+2026-05-14 02:48:33,789 42 INFO ? odoo: Using configuration file at /etc/odoo/odoo.conf 
+2026-05-14 02:48:33,789 42 INFO ? odoo: addons paths: ['/usr/lib/python3/dist-packages/odoo/addons', '/var/lib/odoo/addons/18.0', '/mnt/extra-addons'] 
+2026-05-14 02:48:33,789 42 INFO ? odoo: database: odoo@db:5432 
+Warn: Can't find .pfb for face 'Courier'
+2026-05-14 02:48:33,905 42 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /usr/local/bin/wkhtmltopdf 
+2026-05-14 02:48:33,909 42 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltoimage binary at /usr/local/bin/wkhtmltoimage 
+2026-05-14 02:48:34,081 42 INFO odoo18 odoo.modules.loading: loading 1 modules... 
+2026-05-14 02:48:34,085 42 INFO odoo18 odoo.modules.loading: 1 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-05-14 02:48:34,107 42 INFO odoo18 odoo.modules.loading: updating modules list 
+2026-05-14 02:48:34,126 42 INFO odoo18 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2026-05-14 02:48:38,592 42 INFO odoo18 odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['Employee Department Custom Fields'] to user __system__ #1 via n/a 
+2026-05-14 02:48:38,592 42 INFO odoo18 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['Employee Department Custom Fields'] to user __system__ #1 via n/a 
+2026-05-14 02:48:39,289 42 INFO odoo18 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user __system__ #1 via n/a 
+2026-05-14 02:48:39,622 42 INFO odoo18 odoo.modules.loading: loading 228 modules... 
+2026-05-14 02:48:50,385 42 INFO odoo18 odoo.modules.loading: Loading module employees_department_custom_fields (142/228) 
+2026-05-14 02:48:51,097 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:48:51,131 42 INFO odoo18 odoo.modules.registry: module employees_department_custom_fields: creating or updating database tables 
+2026-05-14 02:48:51,329 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/security/ir.model.access.csv 
+2026-05-14 02:48:51,357 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/data/cron_job.xml 
+2026-05-14 02:48:51,392 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/views/hr_department_form_anchor.xml 
+2026-05-14 02:48:51,461 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/views/hr_dept_activities_views.xml 
+2026-05-14 02:48:51,501 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/views/hr_dept_notes_view.xml 
+2026-05-14 02:48:51,560 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/views/hr_dept_menu.xml 
+2026-05-14 02:48:51,590 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/views/hr_dept_project_view.xml 
+2026-05-14 02:48:51,646 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/views/hr_dept_main_activities_view.xml 
+2026-05-14 02:48:51,692 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: 'kanban-box' is deprecated, define a 'card' template instead 
+2026-05-14 02:48:51,693 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: A <i> with fa class (fa fa-user) must have title in its tag, parents, descendants or have text
+View error context:
+{'file': '/mnt/extra-addons/employees_department_custom_fields/views/hr_dept_main_activities_view.xml',
+ 'line': 23,
+ 'name': 'department.main.activity.kanban',
+ 'view': ir.ui.view(3500,),
+ 'view.model': 'department.main.activity',
+ 'view.parent': ir.ui.view(),
+ 'xmlid': 'view_department_main_activity_kanban'} 
+2026-05-14 02:48:51,693 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: A <i> with fa class (fa fa-calendar) must have title in its tag, parents, descendants or have text
+View error context:
+{'file': '/mnt/extra-addons/employees_department_custom_fields/views/hr_dept_main_activities_view.xml',
+ 'line': 26,
+ 'name': 'department.main.activity.kanban',
+ 'view': ir.ui.view(3500,),
+ 'view.model': 'department.main.activity',
+ 'view.parent': ir.ui.view(),
+ 'xmlid': 'view_department_main_activity_kanban'} 
+2026-05-14 02:48:51,733 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/views/meeting.xml 
+2026-05-14 02:48:51,827 42 INFO odoo18 odoo.modules.loading: loading employees_department_custom_fields/views/hr_dept_process_view.xml 
+2026-05-14 02:48:51,905 42 INFO odoo18 odoo.modules.loading: Module employees_department_custom_fields loaded in 1.52s, 427 queries (+427 other) 
+2026-05-14 02:48:54,843 42 INFO odoo18 odoo.modules.loading: Loading module hr_employee_certifications (164/228) 
+2026-05-14 02:48:54,973 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:48:55,722 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:48:55,761 42 INFO odoo18 odoo.modules.registry: module hr_employee_certifications: creating or updating database tables 
+2026-05-14 02:48:56,047 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/security/security.xml 
+2026-05-14 02:48:56,113 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/security/ir.model.access.csv 
+2026-05-14 02:48:56,183 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/views/templates.xml 
+2026-05-14 02:48:56,266 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/views/view_certification_name_tab.xml 
+2026-05-14 02:48:56,347 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/views/certification_by_company_view.xml 
+2026-05-14 02:48:56,421 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/views/fed_cert_view.xml 
+2026-05-14 02:48:56,486 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/views/company_cert_view.xml 
+2026-05-14 02:48:56,551 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/views/hr_view.xml 
+2026-05-14 02:48:56,686 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: <b>Access Rights Inconsistency</b><br/>This view may not work for all users: some users may have a combination of groups where the elements <b><tt>&lt;button&gt;</tt></b> are displayed, but they depend on the field <b><tt>has_timesheet</tt></b> that is not accessible. You might fix this by modifying user groups to make sure that all users who have access to those elements also have access to the field, typically via group implications. Alternatively, you could adjust the “<i>groups</i>” or “<i>invisible</i>” attributes for these fields, to make sure they are always available together.<br/>Debugging information:<br/>- field “has_timesheet” is accessible for groups: &#39;base.group_system&#39; | &#39;hr.group_hr_user&#39;<br/>- element “&lt;button invisible=&#34;not has_timesheet&#34; class=&#34;oe_stat_button&#34; type=&#34;object&#34; name=&#34;action_timesheet_from_employee&#34; icon=&#34;fa-calendar&#34; groups=&#34;hr_timesheet.group_hr_timesheet_user&#34;/&gt;” is shown in the view for groups: &#39;hr_timesheet.group_hr_timesheet_user&#39;
+View error context:
+{'file': '/mnt/extra-addons/hr_employee_certifications/views/hr_view.xml',
+ 'line': 1,
+ 'name': 'hr.employee.form.inherit.cert.compliance',
+ 'view': ir.ui.view(3520,),
+ 'view.model': 'hr.employee',
+ 'view.parent': ir.ui.view(1087,),
+ 'xmlid': 'view_employee_form_inherit_cert_compliance'} 
+2026-05-14 02:48:56,686 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: <b>Access Rights Inconsistency</b><br/>This view may not work for all users: some users may have a combination of groups where the elements <b><tt>&lt;widget&gt;</tt></b> are displayed, but they depend on the field <b><tt>calendar_mismatch</tt></b> that is not accessible. You might fix this by modifying user groups to make sure that all users who have access to those elements also have access to the field, typically via group implications. Alternatively, you could adjust the “<i>groups</i>” or “<i>invisible</i>” attributes for these fields, to make sure they are always available together.<br/>Debugging information:<br/>- field “calendar_mismatch” is accessible for groups: &#39;base.group_system&#39; | &#39;hr.group_hr_user&#39;<br/>- element “&lt;widget name=&#34;contract_warning_tooltip&#34; invisible=&#34;not calendar_mismatch&#34;/&gt;” is shown in the view for groups: &#39;base.group_user&#39;
+View error context:
+{'file': '/mnt/extra-addons/hr_employee_certifications/views/hr_view.xml',
+ 'line': 1,
+ 'name': 'hr.employee.form.inherit.cert.compliance',
+ 'view': ir.ui.view(3520,),
+ 'view.model': 'hr.employee',
+ 'view.parent': ir.ui.view(1087,),
+ 'xmlid': 'view_employee_form_inherit_cert_compliance'} 
+2026-05-14 02:48:56,689 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/views/res_config_settings_views.xml 
+2026-05-14 02:48:56,794 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/views/certification_config_menu.xml 
+2026-05-14 02:48:56,900 42 INFO odoo18 odoo.modules.loading: loading hr_employee_certifications/data/ir_cron_certification.xml 
+2026-05-14 02:48:57,079 42 INFO odoo18 odoo.modules.loading: Module hr_employee_certifications loaded in 2.24s, 660 queries (+660 other) 
+2026-05-14 02:48:57,079 42 INFO odoo18 odoo.modules.loading: Loading module hr_employee_growth (165/228) 
+2026-05-14 02:48:57,209 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:48:57,758 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:48:57,799 42 INFO odoo18 odoo.modules.registry: module hr_employee_growth: creating or updating database tables 
+2026-05-14 02:48:57,974 42 INFO odoo18 odoo.modules.loading: loading hr_employee_growth/security/security.xml 
+2026-05-14 02:48:58,104 42 INFO odoo18 odoo.modules.loading: loading hr_employee_growth/security/ir.model.access.csv 
+2026-05-14 02:48:58,199 42 INFO odoo18 odoo.modules.loading: loading hr_employee_growth/views/hr_employee_growth_views.xml 
+2026-05-14 02:48:58,321 42 INFO odoo18 odoo.modules.loading: loading hr_employee_growth/views/hr_employee.xml 
+2026-05-14 02:48:58,469 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: <b>Access Rights Inconsistency</b><br/>This view may not work for all users: some users may have a combination of groups where the elements <b><tt>&lt;button&gt;</tt></b> are displayed, but they depend on the field <b><tt>has_timesheet</tt></b> that is not accessible. You might fix this by modifying user groups to make sure that all users who have access to those elements also have access to the field, typically via group implications. Alternatively, you could adjust the “<i>groups</i>” or “<i>invisible</i>” attributes for these fields, to make sure they are always available together.<br/>Debugging information:<br/>- field “has_timesheet” is accessible for groups: &#39;base.group_system&#39; | &#39;hr.group_hr_user&#39;<br/>- element “&lt;button invisible=&#34;not has_timesheet&#34; class=&#34;oe_stat_button&#34; type=&#34;object&#34; name=&#34;action_timesheet_from_employee&#34; icon=&#34;fa-calendar&#34; groups=&#34;hr_timesheet.group_hr_timesheet_user&#34;/&gt;” is shown in the view for groups: &#39;hr_timesheet.group_hr_timesheet_user&#39;
+View error context:
+{'file': '/mnt/extra-addons/hr_employee_growth/views/hr_employee.xml',
+ 'line': 1,
+ 'name': 'hr.employee.form.growth.plans.tab',
+ 'view': ir.ui.view(3526,),
+ 'view.model': 'hr.employee',
+ 'view.parent': ir.ui.view(1087,),
+ 'xmlid': 'hr_employee_form_inherit_growth_plans_tab'} 
+2026-05-14 02:48:58,469 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: <b>Access Rights Inconsistency</b><br/>This view may not work for all users: some users may have a combination of groups where the elements <b><tt>&lt;widget&gt;</tt></b> are displayed, but they depend on the field <b><tt>calendar_mismatch</tt></b> that is not accessible. You might fix this by modifying user groups to make sure that all users who have access to those elements also have access to the field, typically via group implications. Alternatively, you could adjust the “<i>groups</i>” or “<i>invisible</i>” attributes for these fields, to make sure they are always available together.<br/>Debugging information:<br/>- field “calendar_mismatch” is accessible for groups: &#39;base.group_system&#39; | &#39;hr.group_hr_user&#39;<br/>- element “&lt;widget name=&#34;contract_warning_tooltip&#34; invisible=&#34;not calendar_mismatch&#34;/&gt;” is shown in the view for groups: &#39;base.group_user&#39;
+View error context:
+{'file': '/mnt/extra-addons/hr_employee_growth/views/hr_employee.xml',
+ 'line': 1,
+ 'name': 'hr.employee.form.growth.plans.tab',
+ 'view': ir.ui.view(3526,),
+ 'view.model': 'hr.employee',
+ 'view.parent': ir.ui.view(1087,),
+ 'xmlid': 'hr_employee_form_inherit_growth_plans_tab'} 
+2026-05-14 02:48:58,476 42 INFO odoo18 odoo.modules.loading: loading hr_employee_growth/security/hr_employee_growth_rule.xml 
+2026-05-14 02:48:58,620 42 INFO odoo18 odoo.modules.loading: Module hr_employee_growth loaded in 1.54s, 301 queries (+301 other) 
+2026-05-14 02:49:00,758 42 INFO odoo18 odoo.modules.loading: Loading module hr_internal_trainings (187/228) 
+2026-05-14 02:49:00,903 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:01,725 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:01,771 42 INFO odoo18 odoo.modules.registry: module hr_internal_trainings: creating or updating database tables 
+2026-05-14 02:49:01,975 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/security/training_security.xml 
+2026-05-14 02:49:02,037 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/security/ir.model.access.csv 
+2026-05-14 02:49:02,147 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/views/training_assignment_wizard_views.xml 
+2026-05-14 02:49:02,242 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/views/training_bulk_deadline_wizard_views.xml 
+2026-05-14 02:49:02,292 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/views/training_actions_early.xml 
+2026-05-14 02:49:02,350 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/views/training_course_views.xml 
+2026-05-14 02:49:02,431 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/views/training_assignment_views.xml 
+2026-05-14 02:49:02,514 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/views/training_completion_views.xml 
+2026-05-14 02:49:02,608 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/views/training_actions.xml 
+2026-05-14 02:49:02,699 42 INFO odoo18 odoo.models.unlink: User #1 deleted ir.actions.act_window.view records with IDs: [1150, 1151] 
+2026-05-14 02:49:02,708 42 INFO odoo18 odoo.models.unlink: User #1 deleted ir.actions.act_window.view records with IDs: [1152, 1153] 
+2026-05-14 02:49:02,715 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/views/training_menu.xml 
+2026-05-14 02:49:02,818 42 INFO odoo18 odoo.modules.loading: loading hr_internal_trainings/data/training_cron.xml 
+2026-05-14 02:49:02,893 42 INFO odoo18 odoo.modules.loading: Module hr_internal_trainings loaded in 2.13s, 419 queries (+419 other) 
+2026-05-14 02:49:02,915 42 INFO odoo18 odoo.modules.loading: Loading module ticket_system (196/228) 
+2026-05-14 02:49:03,048 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:03,953 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:04,000 42 INFO odoo18 odoo.modules.registry: module ticket_system: creating or updating database tables 
+2026-05-14 02:49:04,212 42 INFO odoo18 odoo.modules.loading: loading ticket_system/security/department_ticket_groups.xml 
+2026-05-14 02:49:04,256 42 INFO odoo18 odoo.modules.loading: loading ticket_system/security/ir.model.access.csv 
+2026-05-14 02:49:04,328 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/ticket_view.xml 
+2026-05-14 02:49:04,405 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/ticket_wizard_view.xml 
+2026-05-14 02:49:04,460 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/ticket_update_view.xml 
+2026-05-14 02:49:04,615 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/activity_plan_template.xml 
+2026-05-14 02:49:04,704 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/activity_bulk_edit_view.xml 
+2026-05-14 02:49:04,763 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/hr_department_anchor_ticket_columns.xml 
+2026-05-14 02:49:04,849 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/hr_department_project.xml 
+2026-05-14 02:49:04,902 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/hr_employee.xml 
+2026-05-14 02:49:04,998 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: <b>Access Rights Inconsistency</b><br/>This view may not work for all users: some users may have a combination of groups where the elements <b><tt>&lt;button&gt;</tt></b> are displayed, but they depend on the field <b><tt>has_timesheet</tt></b> that is not accessible. You might fix this by modifying user groups to make sure that all users who have access to those elements also have access to the field, typically via group implications. Alternatively, you could adjust the “<i>groups</i>” or “<i>invisible</i>” attributes for these fields, to make sure they are always available together.<br/>Debugging information:<br/>- field “has_timesheet” is accessible for groups: &#39;base.group_system&#39; | &#39;hr.group_hr_user&#39;<br/>- element “&lt;button invisible=&#34;not has_timesheet&#34; class=&#34;oe_stat_button&#34; type=&#34;object&#34; name=&#34;action_timesheet_from_employee&#34; icon=&#34;fa-calendar&#34; groups=&#34;hr_timesheet.group_hr_timesheet_user&#34;/&gt;” is shown in the view for groups: &#39;hr_timesheet.group_hr_timesheet_user&#39;
+View error context:
+{'file': '/mnt/extra-addons/ticket_system/views/hr_employee.xml',
+ 'line': 1,
+ 'name': 'hr.employee.form.activities.tab',
+ 'view': ir.ui.view(3571,),
+ 'view.model': 'hr.employee',
+ 'view.parent': ir.ui.view(1087,),
+ 'xmlid': 'hr_employee_form_inherit_growthplan_activities_tab'} 
+2026-05-14 02:49:04,998 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: <b>Access Rights Inconsistency</b><br/>This view may not work for all users: some users may have a combination of groups where the elements <b><tt>&lt;button&gt;</tt></b> are displayed, but they depend on the field <b><tt>has_subscribed_courses</tt></b> that is not accessible. You might fix this by modifying user groups to make sure that all users who have access to those elements also have access to the field, typically via group implications. Alternatively, you could adjust the “<i>groups</i>” or “<i>invisible</i>” attributes for these fields, to make sure they are always available together.<br/>Debugging information:<br/>- field “has_subscribed_courses” is accessible for groups: &#39;base.group_system&#39; | &#39;hr.group_hr_user&#39;<br/>- element “&lt;button name=&#34;action_open_courses&#34; class=&#34;oe_stat_button&#34; groups=&#34;website_slides.group_website_slides_officer&#34; icon=&#34;fa-graduation-cap&#34; type=&#34;object&#34; invisible=&#34;not user_id or not has_subscribed_courses&#34;/&gt;” is shown in the view for groups: &#39;base.group_user&#39; &amp; &#39;website_slides.group_website_slides_officer&#39;
+View error context:
+{'file': '/mnt/extra-addons/ticket_system/views/hr_employee.xml',
+ 'line': 1,
+ 'name': 'hr.employee.form.activities.tab',
+ 'view': ir.ui.view(3571,),
+ 'view.model': 'hr.employee',
+ 'view.parent': ir.ui.view(1087,),
+ 'xmlid': 'hr_employee_form_inherit_growthplan_activities_tab'} 
+2026-05-14 02:49:04,999 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: <b>Access Rights Inconsistency</b><br/>This view may not work for all users: some users may have a combination of groups where the elements <b><tt>&lt;widget&gt;</tt></b> are displayed, but they depend on the field <b><tt>calendar_mismatch</tt></b> that is not accessible. You might fix this by modifying user groups to make sure that all users who have access to those elements also have access to the field, typically via group implications. Alternatively, you could adjust the “<i>groups</i>” or “<i>invisible</i>” attributes for these fields, to make sure they are always available together.<br/>Debugging information:<br/>- field “calendar_mismatch” is accessible for groups: &#39;base.group_system&#39; | &#39;hr.group_hr_user&#39;<br/>- element “&lt;widget name=&#34;contract_warning_tooltip&#34; invisible=&#34;not calendar_mismatch&#34;/&gt;” is shown in the view for groups: &#39;base.group_user&#39;
+View error context:
+{'file': '/mnt/extra-addons/ticket_system/views/hr_employee.xml',
+ 'line': 1,
+ 'name': 'hr.employee.form.activities.tab',
+ 'view': ir.ui.view(3571,),
+ 'view.model': 'hr.employee',
+ 'view.parent': ir.ui.view(1087,),
+ 'xmlid': 'hr_employee_form_inherit_growthplan_activities_tab'} 
+2026-05-14 02:49:05,001 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/hr_employee_growth_views.xml 
+2026-05-14 02:49:05,039 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/hr_applicant_views.xml 
+2026-05-14 02:49:05,113 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/activity_view_tree.xml 
+2026-05-14 02:49:05,192 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/activity_view_kanban.xml 
+2026-05-14 02:49:05,231 42 WARNING odoo18 odoo.addons.base.models.ir_ui_view: A <i> with fa class (fa fa-file-text-o me-1) must have title in its tag, parents, descendants or have text
+View error context:
+{'file': '/mnt/extra-addons/ticket_system/views/activity_view_kanban.xml',
+ 'line': 37,
+ 'name': 'mail.activity.view.kanban.inherit.tickets',
+ 'view': ir.ui.view(3575,),
+ 'view.model': 'mail.activity',
+ 'view.parent': ir.ui.view(364,),
+ 'xmlid': 'mail_activity_view_kanban_inherit_tickets'} 
+2026-05-14 02:49:05,236 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/res_users_view.xml 
+2026-05-14 02:49:05,332 42 INFO odoo18 odoo.modules.loading: loading ticket_system/views/ticket_bulk_upload_wizard_view.xml 
+2026-05-14 02:49:05,404 42 INFO odoo18 odoo.modules.loading: Module ticket_system loaded in 2.49s, 660 queries (+660 other) 
+2026-05-14 02:49:05,404 42 INFO odoo18 odoo.modules.loading: Loading module crm_custom_fields (197/228) 
+2026-05-14 02:49:05,612 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:05,764 42 INFO odoo18 odoo.modules.migration: module crm_custom_fields: Running migration [>18.0.1.0.26] pre-migrate 
+2026-05-14 02:49:07,837 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:07,887 42 INFO odoo18 odoo.modules.registry: module crm_custom_fields: creating or updating database tables 
+2026-05-14 02:49:08,326 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/security/crm_security.xml 
+2026-05-14 02:49:08,358 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/security/ir.model.access.csv 
+2026-05-14 02:49:08,435 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_stage_views.xml 
+2026-05-14 02:49:08,496 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_lead_estimating_pipeline_view.xml 
+2026-05-14 02:49:08,567 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/data/checklist_base_tasks_db.xml 
+2026-05-14 02:49:08,712 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/menu_rename.xml 
+2026-05-14 02:49:08,755 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/res_config_settings_views.xml 
+2026-05-14 02:49:08,837 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_bd_email_config_menu.xml 
+2026-05-14 02:49:08,884 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/views.xml 
+2026-05-14 02:49:08,939 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_lead_opportunity_tree_dates.xml 
+2026-05-14 02:49:09,040 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_lead_estimator_assignment_views.xml 
+2026-05-14 02:49:09,180 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_lead_opportunity_tree_hide_contact_actions.xml 
+2026-05-14 02:49:09,266 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_lead_delete_restriction_views.xml 
+2026-05-14 02:49:09,388 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/templates.xml 
+2026-05-14 02:49:09,457 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/secondary_notebook.xml 
+2026-05-14 02:49:09,524 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_lead_post_proposal_lock.xml 
+2026-05-14 02:49:09,591 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_lead_report_tab.xml 
+2026-05-14 02:49:09,655 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/wizard/crm_lead_proposal_sent_wizard_views.xml 
+2026-05-14 02:49:09,710 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/appointment_view.xml 
+2026-05-14 02:49:09,872 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/crm_cert_view.xml 
+2026-05-14 02:49:09,951 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/checklist_view.xml 
+2026-05-14 02:49:10,070 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/disclaimer_views.xml 
+2026-05-14 02:49:10,207 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/partner_rel_views.xml 
+2026-05-14 02:49:10,236 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/contacts_views.xml 
+2026-05-14 02:49:10,330 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/bom_division_config.xml 
+2026-05-14 02:49:10,380 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/product_views.xml 
+2026-05-14 02:49:10,440 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/bom_division_view.xml 
+2026-05-14 02:49:10,538 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/item_bom_view.xml 
+2026-05-14 02:49:10,617 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/labor_title_bom.xml 
+2026-05-14 02:49:10,689 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/labor_type_bom_view.xml 
+2026-05-14 02:49:10,764 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/labor_bom_view.xml 
+2026-05-14 02:49:10,835 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/irs_mile_view.xml 
+2026-05-14 02:49:10,901 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/travel_expense_view.xml 
+2026-05-14 02:49:10,981 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/checklist_menu_view.xml 
+2026-05-14 02:49:11,038 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/data/crm_certification_cron.xml 
+2026-05-14 02:49:11,086 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/hide_stages.xml 
+2026-05-14 02:49:11,117 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/activity_view.xml 
+2026-05-14 02:49:11,205 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/bom_summary_view.xml 
+2026-05-14 02:49:11,307 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/bom_summary_adjustment.xml 
+2026-05-14 02:49:11,411 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/stage.xml 
+2026-05-14 02:49:11,450 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/data/crm_appointment_type_data.xml 
+2026-05-14 02:49:11,498 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/division_view.xml 
+2026-05-14 02:49:11,559 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/division_menu_view.xml 
+2026-05-14 02:49:11,596 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/setaside.xml 
+2026-05-14 02:49:11,674 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/notes.xml 
+2026-05-14 02:49:11,739 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/lead_subcontractor.xml 
+2026-05-14 02:49:11,826 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/job_category_config.xml 
+2026-05-14 02:49:11,871 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/search.xml 
+2026-05-14 02:49:11,945 42 INFO odoo18 odoo.modules.loading: loading crm_custom_fields/views/kanban_view.xml 
+2026-05-14 02:49:12,066 42 INFO odoo18 odoo.modules.loading: Module crm_custom_fields loaded in 6.66s, 1920 queries (+1920 other) 
+2026-05-14 02:49:12,066 42 INFO odoo18 odoo.modules.loading: Loading module hr_training_kpi_dashboard (198/228) 
+2026-05-14 02:49:12,210 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:12,726 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:12,775 42 INFO odoo18 odoo.modules.registry: module hr_training_kpi_dashboard: creating or updating database tables 
+2026-05-14 02:49:12,950 42 INFO odoo18 odoo.modules.loading: loading hr_training_kpi_dashboard/security/ir.model.access.csv 
+2026-05-14 02:49:12,996 42 INFO odoo18 odoo.modules.loading: loading hr_training_kpi_dashboard/views/training_kpi_dashboard_views.xml 
+2026-05-14 02:49:13,078 42 INFO odoo18 odoo.modules.loading: loading hr_training_kpi_dashboard/views/training_department_kpi_views.xml 
+2026-05-14 02:49:13,165 42 INFO odoo18 odoo.modules.loading: loading hr_training_kpi_dashboard/views/training_employee_kpi_views.xml 
+2026-05-14 02:49:13,245 42 INFO odoo18 odoo.modules.loading: loading hr_training_kpi_dashboard/views/training_course_kpi_views.xml 
+2026-05-14 02:49:13,396 42 INFO odoo18 odoo.modules.loading: Module hr_training_kpi_dashboard loaded in 1.33s, 335 queries (+335 other) 
+2026-05-14 02:49:13,396 42 INFO odoo18 odoo.modules.loading: Loading module project_custom_fields (199/228) 
+2026-05-14 02:49:13,543 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:14,582 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:14,632 42 INFO odoo18 odoo.modules.registry: module project_custom_fields: creating or updating database tables 
+2026-05-14 02:49:14,967 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/security/ir.model.access.csv 
+2026-05-14 02:49:15,035 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/data/partner_employment_type_data.xml 
+2026-05-14 02:49:15,086 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/data/project_deliverable_template_data.xml 
+2026-05-14 02:49:15,147 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/menu_buttons.xml 
+2026-05-14 02:49:15,230 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/project_type_view.xml 
+2026-05-14 02:49:15,281 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/project_award_type_view.xml 
+2026-05-14 02:49:15,336 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/templates.xml 
+2026-05-14 02:49:15,422 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/project_partner_rel_view.xml 
+2026-05-14 02:49:15,467 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/project_contacts_view.xml 
+2026-05-14 02:49:15,527 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/project_asana_view.xml 
+2026-05-14 02:49:15,589 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/search.xml 
+2026-05-14 02:49:15,659 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/project_delete_restriction_views.xml 
+2026-05-14 02:49:15,800 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/views.xml 
+2026-05-14 02:49:15,853 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/appointment_view.xml 
+2026-05-14 02:49:15,961 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/proj_cert_view.xml 
+2026-05-14 02:49:16,041 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/data/ir_cron_certification.xml 
+2026-05-14 02:49:16,067 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/data/ir_config_parameter.xml 
+2026-05-14 02:49:16,102 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/activity_view.xml 
+2026-05-14 02:49:16,190 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/project_subcontractor.xml 
+2026-05-14 02:49:16,279 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/meeting.xml 
+2026-05-14 02:49:16,390 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/project_deliverable_view.xml 
+2026-05-14 02:49:16,521 42 INFO odoo18 odoo.modules.loading: loading project_custom_fields/views/project_tab_ordering.xml 
+2026-05-14 02:49:16,652 42 INFO odoo18 odoo.modules.loading: Module project_custom_fields loaded in 3.26s, 938 queries (+938 other) 
+2026-05-14 02:49:16,664 42 INFO odoo18 odoo.modules.loading: Loading module contacts_subcontractor_requirements (202/228) 
+2026-05-14 02:49:16,807 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:17,494 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:17,546 42 INFO odoo18 odoo.modules.registry: module contacts_subcontractor_requirements: creating or updating database tables 
+2026-05-14 02:49:17,775 42 INFO odoo18 odoo.modules.loading: loading contacts_subcontractor_requirements/security/ir.model.access.csv 
+2026-05-14 02:49:17,816 42 INFO odoo18 odoo.modules.loading: loading contacts_subcontractor_requirements/views/subcontractor_requirement_template_views.xml 
+2026-05-14 02:49:17,912 42 INFO odoo18 odoo.modules.loading: loading contacts_subcontractor_requirements/views/res_partner_views.xml 
+2026-05-14 02:49:18,011 42 INFO odoo18 odoo.modules.loading: loading contacts_subcontractor_requirements/views/project_subcontractor_views.xml 
+2026-05-14 02:49:18,108 42 INFO odoo18 odoo.modules.loading: loading contacts_subcontractor_requirements/views/crm_lead_subcontractor_views.xml 
+2026-05-14 02:49:18,247 42 INFO odoo18 odoo.modules.loading: Module contacts_subcontractor_requirements loaded in 1.58s, 408 queries (+408 other) 
+2026-05-14 02:49:18,247 42 INFO odoo18 odoo.modules.loading: Loading module crm_business_dev (203/228) 
+2026-05-14 02:49:18,443 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:19,098 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:19,150 42 INFO odoo18 odoo.modules.registry: module crm_business_dev: creating or updating database tables 
+2026-05-14 02:49:19,443 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/security/security.xml 
+2026-05-14 02:49:19,550 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/security/ir.model.access.csv 
+2026-05-14 02:49:19,636 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/views/bdo_view.xml 
+2026-05-14 02:49:19,711 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/views/event_view.xml 
+2026-05-14 02:49:19,791 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/views/event_meeting_view.xml 
+2026-05-14 02:49:19,859 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/views/crm_leads_view.xml 
+2026-05-14 02:49:19,911 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/views/track_calendar_view.xml 
+2026-05-14 02:49:19,976 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/data/ir_cron.xml 
+2026-05-14 02:49:20,011 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/views/associated_follow_up.xml 
+2026-05-14 02:49:20,061 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/views/contact_tab.xml 
+2026-05-14 02:49:20,138 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/views/crm_lead_followups_tab.xml 
+2026-05-14 02:49:20,232 42 INFO odoo18 odoo.modules.loading: loading crm_business_dev/views/activity.xml 
+2026-05-14 02:49:20,292 42 INFO odoo18 odoo.modules.loading: Module crm_business_dev loaded in 2.05s, 600 queries (+600 other) 
+2026-05-14 02:49:20,293 42 INFO odoo18 odoo.modules.loading: Loading module crm_dashboard (204/228) 
+2026-05-14 02:49:20,433 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:20,822 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:20,875 42 INFO odoo18 odoo.modules.registry: module crm_dashboard: creating or updating database tables 
+2026-05-14 02:49:21,048 42 INFO odoo18 odoo.modules.loading: loading crm_dashboard/security/ir.model.access.csv 
+2026-05-14 02:49:21,092 42 INFO odoo18 odoo.modules.loading: loading crm_dashboard/views/crm_dashboard_list_view.xml 
+2026-05-14 02:49:21,158 42 INFO odoo18 odoo.modules.loading: loading crm_dashboard/views/crm_kpi_dashboard_views.xml 
+2026-05-14 02:49:21,224 42 INFO odoo18 odoo.modules.loading: loading crm_dashboard/views/crm_kpi_dashboard_menu.xml 
+2026-05-14 02:49:21,287 42 INFO odoo18 odoo.modules.loading: Module crm_dashboard loaded in 0.99s, 170 queries (+170 other) 
+2026-05-14 02:49:21,287 42 INFO odoo18 odoo.modules.loading: Loading module crm_fields_style (205/228) 
+2026-05-14 02:49:21,433 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:21,808 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:21,860 42 INFO odoo18 odoo.modules.registry: module crm_fields_style: creating or updating database tables 
+2026-05-14 02:49:21,949 42 INFO odoo18 odoo.modules.loading: loading crm_fields_style/views/fields_style.xml 
+2026-05-14 02:49:22,150 42 INFO odoo18 odoo.modules.loading: loading crm_fields_style/views/crm_lead_kanban_view.xml 
+2026-05-14 02:49:22,217 42 INFO odoo18 odoo.modules.loading: loading crm_fields_style/views/crm_lead_list_view.xml 
+2026-05-14 02:49:22,309 42 INFO odoo18 odoo.modules.loading: Module crm_fields_style loaded in 1.02s, 166 queries (+166 other) 
+2026-05-14 02:49:22,309 42 INFO odoo18 odoo.modules.loading: Loading module crm_notes (206/228) 
+2026-05-14 02:49:22,459 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:22,887 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:22,939 42 INFO odoo18 odoo.modules.registry: module crm_notes: creating or updating database tables 
+2026-05-14 02:49:23,037 42 INFO odoo18 odoo.modules.loading: loading crm_notes/security/security.xml 
+2026-05-14 02:49:23,079 42 INFO odoo18 odoo.modules.loading: loading crm_notes/security/ir.model.access.csv 
+2026-05-14 02:49:23,136 42 INFO odoo18 odoo.modules.loading: loading crm_notes/views/crm_view.xml 
+2026-05-14 02:49:23,262 42 INFO odoo18 odoo.modules.loading: Module crm_notes loaded in 0.95s, 156 queries (+156 other) 
+2026-05-14 02:49:23,262 42 INFO odoo18 odoo.modules.loading: Loading module employee_custom_fields (207/228) 
+2026-05-14 02:49:23,496 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:24,023 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:24,077 42 INFO odoo18 odoo.modules.registry: module employee_custom_fields: creating or updating database tables 
+2026-05-14 02:49:24,265 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/security/ir.model.access.csv 
+2026-05-14 02:49:24,303 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/data/employee_trade_data.xml 
+2026-05-14 02:49:24,408 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/data/employee_region_data.xml 
+2026-05-14 02:49:24,464 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/data/setaside_data.xml 
+2026-05-14 02:49:24,519 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/views/views.xml 
+2026-05-14 02:49:24,630 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/views/contacts_config_menu.xml 
+2026-05-14 02:49:24,716 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/views/insurance_view.xml 
+2026-05-14 02:49:24,808 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/views/Associated_estimating.xml 
+2026-05-14 02:49:24,898 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/views/employee_certification_view.xml 
+2026-05-14 02:49:25,014 42 INFO odoo18 odoo.modules.loading: loading employee_custom_fields/views/employee_fields.xml 
+2026-05-14 02:49:25,129 42 INFO odoo18 odoo.modules.loading: Module employee_custom_fields loaded in 1.87s, 861 queries (+861 other) 
+2026-05-14 02:49:25,130 42 INFO odoo18 odoo.modules.loading: Loading module project_bom (208/228) 
+2026-05-14 02:49:25,359 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:26,259 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:26,314 42 INFO odoo18 odoo.modules.registry: module project_bom: creating or updating database tables 
+2026-05-14 02:49:26,468 42 INFO odoo18 odoo.modules.loading: loading project_bom/security/ir.model.access.csv 
+2026-05-14 02:49:26,523 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/bom_summary_report.xml 
+2026-05-14 02:49:26,629 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/project_secondary_tabs.xml 
+2026-05-14 02:49:26,711 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/project_project_views.xml 
+2026-05-14 02:49:26,777 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/division_view.xml 
+2026-05-14 02:49:26,871 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/item_bom_view.xml 
+2026-05-14 02:49:27,059 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/labor_title_view.xml 
+2026-05-14 02:49:27,127 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/labor_type_bom_view.xml 
+2026-05-14 02:49:27,191 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/labor_bom_view.xml 
+2026-05-14 02:49:27,259 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/irs_mile_view.xml 
+2026-05-14 02:49:27,328 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/travel_expense.xml 
+2026-05-14 02:49:27,414 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/bom_summary.xml 
+2026-05-14 02:49:27,568 42 INFO odoo18 odoo.modules.loading: loading project_bom/views/bom_balance_audit_views.xml 
+2026-05-14 02:49:27,649 42 INFO odoo18 odoo.modules.loading: Module project_bom loaded in 2.52s, 393 queries (+393 other) 
+2026-05-14 02:49:27,649 42 INFO odoo18 odoo.modules.loading: Loading module project_daily_report (209/228) 
+2026-05-14 02:49:27,797 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:28,335 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:28,392 42 INFO odoo18 odoo.modules.registry: module project_daily_report: creating or updating database tables 
+<string>:94: (ERROR/3) Unexpected indentation.
+<string>:112: (WARNING/2) Line block ends without a blank line.
+<string>:135: (ERROR/3) Unexpected indentation.
+<string>:133: (WARNING/2) Inline literal start-string without end-string.
+<string>:136: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:138: (ERROR/3) Unexpected indentation.
+<string>:139: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:141: (WARNING/2) Definition list ends without a blank line; unexpected unindent.
+<string>:141: (WARNING/2) Inline literal start-string without end-string.
+<string>:141: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:149: (ERROR/3) Unexpected indentation.
+<string>:147: (WARNING/2) Inline literal start-string without end-string.
+<string>:150: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:152: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:154: (ERROR/3) Unexpected indentation.
+<string>:155: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:157: (ERROR/3) Unexpected indentation.
+<string>:158: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:163: (ERROR/3) Unexpected indentation.
+<string>:164: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:166: (WARNING/2) Definition list ends without a blank line; unexpected unindent.
+<string>:166: (WARNING/2) Inline literal start-string without end-string.
+<string>:166: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:220: (ERROR/3) Unexpected indentation.
+<string>:197: (WARNING/2) Inline literal start-string without end-string.
+<string>:222: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:222: (WARNING/2) Inline literal start-string without end-string.
+<string>:222: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:266: (WARNING/2) Line block ends without a blank line.
+<string>:295: (ERROR/3) Unexpected indentation.
+<string>:291: (WARNING/2) Inline literal start-string without end-string.
+<string>:291: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:297: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:297: (WARNING/2) Inline literal start-string without end-string.
+<string>:297: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:309: (ERROR/3) Unexpected indentation.
+<string>:306: (WARNING/2) Inline literal start-string without end-string.
+<string>:306: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:311: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:311: (WARNING/2) Inline literal start-string without end-string.
+<string>:311: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:319: (ERROR/3) Unexpected indentation.
+<string>:317: (WARNING/2) Inline literal start-string without end-string.
+<string>:317: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:329: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:362: (ERROR/3) Unexpected indentation.
+<string>:359: (WARNING/2) Inline literal start-string without end-string.
+<string>:359: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:363: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:363: (WARNING/2) Inline literal start-string without end-string.
+<string>:363: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+<string>:112: (ERROR/3) Undefined substitution referenced: "-----".
+<string>:112: (ERROR/3) Undefined substitution referenced: "-------------".
+<string>:266: (ERROR/3) Undefined substitution referenced: "-------".
+<string>:266: (ERROR/3) Undefined substitution referenced: "-------------".
+2026-05-14 02:49:28,652 42 INFO odoo18 odoo.modules.loading: loading project_daily_report/security/ir.model.access.csv 
+2026-05-14 02:49:28,697 42 INFO odoo18 odoo.modules.loading: loading project_daily_report/data/cron.xml 
+2026-05-14 02:49:28,731 42 INFO odoo18 odoo.modules.loading: loading project_daily_report/views/report_view.xml 
+2026-05-14 02:49:28,776 42 INFO odoo18 odoo.modules.loading: loading project_daily_report/views/wizard_view.xml 
+2026-05-14 02:49:28,851 42 INFO odoo18 odoo.modules.loading: Module project_daily_report loaded in 1.20s, 98 queries (+98 other) 
+2026-05-14 02:49:28,852 42 INFO odoo18 odoo.modules.loading: Loading module project_kickoff_checklist (210/228) 
+2026-05-14 02:49:29,000 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:29,414 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:29,477 42 INFO odoo18 odoo.modules.registry: module project_kickoff_checklist: creating or updating database tables 
+2026-05-14 02:49:29,506 42 WARNING odoo18 odoo.addons.base.models.ir_model: Two fields (acg_txt, acg_id) of project.kickoff.item() have the same label: ACG. [Modules: project_kickoff_checklist and project_kickoff_checklist] 
+2026-05-14 02:49:29,506 42 WARNING odoo18 odoo.addons.base.models.ir_model: Two fields (customer_txt, customer_id) of project.kickoff.item() have the same label: Customer. [Modules: project_kickoff_checklist and project_kickoff_checklist] 
+2026-05-14 02:49:29,506 42 WARNING odoo18 odoo.addons.base.models.ir_model: Two fields (subcontractor_txt, subcontractor_id) of project.kickoff.item() have the same label: Subcontractor. [Modules: project_kickoff_checklist and project_kickoff_checklist] 
+2026-05-14 02:49:29,759 42 INFO odoo18 odoo.modules.loading: loading project_kickoff_checklist/security/security.xml 
+2026-05-14 02:49:29,823 42 INFO odoo18 odoo.modules.loading: loading project_kickoff_checklist/security/ir.model.access.csv 
+2026-05-14 02:49:29,868 42 INFO odoo18 odoo.modules.loading: loading project_kickoff_checklist/data/checklist_items.xml 
+2026-05-14 02:49:29,938 42 INFO odoo18 odoo.modules.loading: loading project_kickoff_checklist/data/fed_class_data.xml 
+2026-05-14 02:49:29,979 42 INFO odoo18 odoo.modules.loading: loading project_kickoff_checklist/data/socio_status_data.xml 
+2026-05-14 02:49:30,015 42 INFO odoo18 odoo.modules.loading: loading project_kickoff_checklist/views/checklist_view.xml 
+2026-05-14 02:49:30,136 42 INFO odoo18 odoo.modules.loading: loading project_kickoff_checklist/views/contract_info.xml 
+2026-05-14 02:49:30,209 42 INFO odoo18 odoo.modules.loading: loading project_kickoff_checklist/views/budget.xml 
+2026-05-14 02:49:30,281 42 INFO odoo18 odoo.modules.loading: loading project_kickoff_checklist/reports/kickoff_checklist_report.xml 
+2026-05-14 02:49:30,357 42 INFO odoo18 odoo.modules.loading: Module project_kickoff_checklist loaded in 1.51s, 547 queries (+547 other) 
+2026-05-14 02:49:30,357 42 INFO odoo18 odoo.modules.loading: Loading module project_mail_history (211/228) 
+2026-05-14 02:49:30,505 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:31,264 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:31,319 42 INFO odoo18 odoo.modules.registry: module project_mail_history: creating or updating database tables 
+2026-05-14 02:49:31,534 42 INFO odoo18 odoo.modules.loading: loading project_mail_history/security/ir.model.access.csv 
+2026-05-14 02:49:31,569 42 INFO odoo18 odoo.modules.loading: loading project_mail_history/data/mail_summary_cron.xml 
+2026-05-14 02:49:31,610 42 INFO odoo18 odoo.modules.loading: loading project_mail_history/views/project_task_mail_history.xml 
+2026-05-14 02:49:31,748 42 INFO odoo18 odoo.modules.loading: Module project_mail_history loaded in 1.39s, 172 queries (+172 other) 
+2026-05-14 02:49:31,748 42 INFO odoo18 odoo.modules.loading: Loading module project_notes (212/228) 
+2026-05-14 02:49:31,899 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:32,242 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:32,297 42 INFO odoo18 odoo.modules.registry: module project_notes: creating or updating database tables 
+2026-05-14 02:49:32,405 42 INFO odoo18 odoo.modules.loading: loading project_notes/security/security.xml 
+2026-05-14 02:49:32,455 42 INFO odoo18 odoo.modules.loading: loading project_notes/security/ir.model.access.csv 
+2026-05-14 02:49:32,552 42 INFO odoo18 odoo.modules.loading: loading project_notes/views/project_view.xml 
+2026-05-14 02:49:32,682 42 INFO odoo18 odoo.modules.loading: Module project_notes loaded in 0.93s, 172 queries (+172 other) 
+2026-05-14 02:49:32,682 42 INFO odoo18 odoo.modules.loading: Loading module project_past_performance (213/228) 
+2026-05-14 02:49:32,918 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:33,621 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:33,677 42 INFO odoo18 odoo.modules.registry: module project_past_performance: creating or updating database tables 
+2026-05-14 02:49:33,912 42 INFO odoo18 odoo.modules.loading: loading project_past_performance/security/security.xml 
+2026-05-14 02:49:34,014 42 INFO odoo18 odoo.modules.loading: loading project_past_performance/security/ir.model.access.csv 
+2026-05-14 02:49:34,062 42 INFO odoo18 odoo.modules.loading: loading project_past_performance/security/customer_feedback_rules.xml 
+2026-05-14 02:49:34,119 42 INFO odoo18 odoo.modules.loading: loading project_past_performance/data/marketing_photo_source_data.xml 
+2026-05-14 02:49:34,174 42 INFO odoo18 odoo.modules.loading: loading project_past_performance/views/past_perf_view.xml 
+2026-05-14 02:49:34,241 42 INFO odoo18 odoo.modules.loading: loading project_past_performance/views/marketing_gallery_views.xml 
+2026-05-14 02:49:34,330 42 INFO odoo18 odoo.models.unlink: User #1 deleted ir.actions.act_window.view records with IDs: [1154, 1155] 
+2026-05-14 02:49:34,336 42 INFO odoo18 odoo.modules.loading: loading project_past_performance/views/customer_feedback_views.xml 
+2026-05-14 02:49:34,389 42 INFO odoo18 odoo.modules.loading: loading project_past_performance/views/project_project_marketing_views.xml 
+2026-05-14 02:49:34,545 42 INFO odoo18 odoo.modules.loading: Module project_past_performance loaded in 1.86s, 607 queries (+607 other) 
+2026-05-14 02:49:34,545 42 INFO odoo18 odoo.modules.loading: Loading module project_stage_activity_plans (214/228) 
+2026-05-14 02:49:34,777 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:35,276 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:35,333 42 INFO odoo18 odoo.modules.registry: module project_stage_activity_plans: creating or updating database tables 
+2026-05-14 02:49:35,562 42 INFO odoo18 odoo.modules.loading: loading project_stage_activity_plans/views/project_project_stage_views.xml 
+2026-05-14 02:49:35,638 42 INFO odoo18 odoo.modules.loading: loading project_stage_activity_plans/views/project_project_views.xml 
+2026-05-14 02:49:35,778 42 INFO odoo18 odoo.modules.loading: loading project_stage_activity_plans/views/project_stage_activity_plan_menus.xml 
+2026-05-14 02:49:35,838 42 INFO odoo18 odoo.modules.loading: Module project_stage_activity_plans loaded in 1.29s, 227 queries (+227 other) 
+2026-05-14 02:49:35,838 42 INFO odoo18 odoo.modules.loading: Loading module quality_assurance (215/228) 
+2026-05-14 02:49:36,066 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:36,488 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:36,550 42 INFO odoo18 odoo.modules.registry: module quality_assurance: creating or updating database tables 
+<string>:65: (ERROR/3) Unexpected indentation.
+<string>:52: (WARNING/2) Inline literal start-string without end-string.
+<string>:67: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+<string>:67: (WARNING/2) Inline literal start-string without end-string.
+<string>:67: (WARNING/2) Inline interpreted text or phrase reference start-string without end-string.
+2026-05-14 02:49:36,696 42 INFO odoo18 odoo.modules.loading: loading quality_assurance/security/ir.model.access.csv 
+2026-05-14 02:49:36,754 42 INFO odoo18 odoo.modules.loading: loading quality_assurance/views/quality_assurance_views.xml 
+2026-05-14 02:49:36,834 42 INFO odoo18 odoo.modules.loading: loading quality_assurance/views/project_project_views.xml 
+2026-05-14 02:49:37,067 42 INFO odoo18 odoo.modules.loading: Module quality_assurance loaded in 1.23s, 228 queries (+228 other) 
+2026-05-14 02:49:37,089 42 INFO odoo18 odoo.modules.loading: Loading module crm_bdo_kpi_dashboard (220/228) 
+2026-05-14 02:49:37,329 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:37,929 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:37,987 42 INFO odoo18 odoo.modules.registry: module crm_bdo_kpi_dashboard: creating or updating database tables 
+2026-05-14 02:49:38,094 42 INFO odoo18 odoo.modules.loading: loading crm_bdo_kpi_dashboard/security/ir.model.access.csv 
+2026-05-14 02:49:38,142 42 INFO odoo18 odoo.modules.loading: loading crm_bdo_kpi_dashboard/views/bdo_kpi_dashboard_views.xml 
+2026-05-14 02:49:38,199 42 INFO odoo18 odoo.modules.loading: loading crm_bdo_kpi_dashboard/views/bdo_employee_kpi_views.xml 
+2026-05-14 02:49:38,295 42 INFO odoo18 odoo.modules.loading: loading crm_bdo_kpi_dashboard/views/bdo_pipeline_kpi_views.xml 
+2026-05-14 02:49:38,362 42 INFO odoo18 odoo.modules.loading: loading crm_bdo_kpi_dashboard/views/bdo_engagement_kpi_views.xml 
+2026-05-14 02:49:38,440 42 INFO odoo18 odoo.modules.loading: Module crm_bdo_kpi_dashboard loaded in 1.35s, 298 queries (+298 other) 
+2026-05-14 02:49:38,440 42 INFO odoo18 odoo.modules.loading: Loading module hr_Employee_notifications (221/228) 
+2026-05-14 02:49:38,677 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:39,059 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:39,117 42 INFO odoo18 odoo.modules.registry: module hr_Employee_notifications: creating or updating database tables 
+2026-05-14 02:49:39,224 42 INFO odoo18 odoo.modules.loading: loading hr_Employee_notifications/data/cron_jobs.xml 
+2026-05-14 02:49:39,296 42 INFO odoo18 odoo.modules.loading: Module hr_Employee_notifications loaded in 0.86s, 66 queries (+66 other) 
+2026-05-14 02:49:39,296 42 INFO odoo18 odoo.modules.loading: Loading module hr_employee_fields_style (222/228) 
+2026-05-14 02:49:39,448 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:39,913 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:39,972 42 INFO odoo18 odoo.modules.registry: module hr_employee_fields_style: creating or updating database tables 
+2026-05-14 02:49:40,075 42 INFO odoo18 odoo.modules.loading: loading hr_employee_fields_style/views/views.xml 
+2026-05-14 02:49:40,194 42 INFO odoo18 odoo.modules.loading: Module hr_employee_fields_style loaded in 0.90s, 135 queries (+135 other) 
+2026-05-14 02:49:40,194 42 INFO odoo18 odoo.modules.loading: Loading module opportunity_project_port (223/228) 
+2026-05-14 02:49:40,343 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:40,933 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:40,992 42 INFO odoo18 odoo.modules.registry: module opportunity_project_port: creating or updating database tables 
+2026-05-14 02:49:41,142 42 INFO odoo18 odoo.modules.loading: loading opportunity_project_port/security/ir.model.access.csv 
+2026-05-14 02:49:41,192 42 INFO odoo18 odoo.modules.loading: loading opportunity_project_port/wizards/crm_lead_project_port_wizard_views.xml 
+2026-05-14 02:49:41,251 42 INFO odoo18 odoo.modules.loading: loading opportunity_project_port/views/crm_lead_views.xml 
+2026-05-14 02:49:41,374 42 INFO odoo18 odoo.modules.loading: Module opportunity_project_port loaded in 1.18s, 194 queries (+194 other) 
+2026-05-14 02:49:41,374 42 INFO odoo18 odoo.modules.loading: Loading module project_change_order (224/228) 
+2026-05-14 02:49:41,524 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:42,162 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:42,220 42 INFO odoo18 odoo.modules.registry: module project_change_order: creating or updating database tables 
+2026-05-14 02:49:42,395 42 INFO odoo18 odoo.modules.loading: loading project_change_order/data/sequence.xml 
+2026-05-14 02:49:42,423 42 INFO odoo18 odoo.modules.loading: loading project_change_order/security/security.xml 
+2026-05-14 02:49:42,465 42 INFO odoo18 odoo.modules.loading: loading project_change_order/security/ir.model.access.csv 
+2026-05-14 02:49:42,548 42 INFO odoo18 odoo.modules.loading: loading project_change_order/views/change_order_view.xml 
+2026-05-14 02:49:42,643 42 INFO odoo18 odoo.modules.loading: loading project_change_order/views/project_view.xml 
+2026-05-14 02:49:42,761 42 INFO odoo18 odoo.modules.loading: loading project_change_order/views/lead_view.xml 
+2026-05-14 02:49:42,868 42 INFO odoo18 odoo.modules.loading: loading project_change_order/views/change_order_kpi_dashboard_views.xml 
+2026-05-14 02:49:42,932 42 INFO odoo18 odoo.modules.loading: loading project_change_order/views/change_order_bom_balance_views.xml 
+2026-05-14 02:49:43,074 42 INFO odoo18 odoo.modules.loading: Module project_change_order loaded in 1.70s, 516 queries (+516 other) 
+2026-05-14 02:49:43,074 42 INFO odoo18 odoo.modules.loading: Loading module project_expenses (225/228) 
+2026-05-14 02:49:43,226 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:43,899 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:43,959 42 INFO odoo18 odoo.modules.registry: module project_expenses: creating or updating database tables 
+2026-05-14 02:49:44,070 42 INFO odoo18 odoo.modules.loading: loading project_expenses/security/ir.model.access.csv 
+2026-05-14 02:49:44,143 42 INFO odoo18 odoo.modules.loading: loading project_expenses/wizard/import_expenses_wizard_views.xml 
+2026-05-14 02:49:44,210 42 INFO odoo18 odoo.modules.loading: Module project_expenses loaded in 1.14s, 117 queries (+117 other) 
+2026-05-14 02:49:44,210 42 INFO odoo18 odoo.modules.loading: Loading module project_fields_style (226/228) 
+2026-05-14 02:49:44,361 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:44,785 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:44,927 42 INFO odoo18 odoo.modules.registry: module project_fields_style: creating or updating database tables 
+2026-05-14 02:49:45,031 42 INFO odoo18 odoo.modules.loading: loading project_fields_style/views/fields_style.xml 
+2026-05-14 02:49:45,199 42 INFO odoo18 odoo.modules.loading: Module project_fields_style loaded in 0.99s, 159 queries (+159 other) 
+2026-05-14 02:49:45,199 42 INFO odoo18 odoo.modules.loading: Loading module project_dashboard (227/228) 
+2026-05-14 02:49:45,349 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:45,773 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:45,832 42 INFO odoo18 odoo.modules.registry: module project_dashboard: creating or updating database tables 
+2026-05-14 02:49:46,030 42 INFO odoo18 odoo.modules.loading: loading project_dashboard/security/ir.model.access.csv 
+2026-05-14 02:49:46,110 42 INFO odoo18 odoo.modules.loading: loading project_dashboard/views/project_dashboard_views.xml 
+2026-05-14 02:49:46,881 42 INFO odoo18 odoo.modules.loading: loading project_dashboard/views/project_kpi_dashboard_views.xml 
+2026-05-14 02:49:46,961 42 INFO odoo18 odoo.modules.loading: Module project_dashboard loaded in 1.76s, 249 queries (+249 other) 
+2026-05-14 02:49:46,961 42 INFO odoo18 odoo.modules.loading: Loading module search_leads (228/228) 
+2026-05-14 02:49:47,114 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:48,917 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:48,976 42 INFO odoo18 odoo.modules.registry: module search_leads: creating or updating database tables 
+2026-05-14 02:49:49,320 42 INFO odoo18 odoo.modules.loading: loading search_leads/security/security.xml 
+2026-05-14 02:49:49,381 42 INFO odoo18 odoo.modules.loading: loading search_leads/security/ir.model.access.csv 
+2026-05-14 02:49:49,465 42 INFO odoo18 odoo.modules.loading: loading search_leads/data/company_area_types_data.xml 
+2026-05-14 02:49:49,512 42 INFO odoo18 odoo.modules.loading: loading search_leads/data/company_area_assignment_data.xml 
+2026-05-14 02:49:49,566 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/company_area_type_views.xml 
+2026-05-14 02:49:49,634 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/company_area_assignment_views.xml 
+2026-05-14 02:49:49,692 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/daily_checklist.xml 
+2026-05-14 02:49:49,751 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/lead_view.xml 
+2026-05-14 02:49:49,849 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/res_config_settings_views.xml 
+2026-05-14 02:49:49,930 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/lead_document_wizard_view.xml 
+2026-05-14 02:49:49,972 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/website_view.xml 
+2026-05-14 02:49:50,060 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/no_bid_wizard_view.xml 
+2026-05-14 02:49:50,099 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/menus.xml 
+2026-05-14 02:49:50,162 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/manual_ss_wizard_views.xml 
+2026-05-14 02:49:50,198 42 INFO odoo18 odoo.modules.loading: loading search_leads/data/cron_reset_check.xml 
+2026-05-14 02:49:50,235 42 INFO odoo18 odoo.modules.loading: loading search_leads/data/cron_highergov_enrichment.xml 
+2026-05-14 02:49:50,258 42 INFO odoo18 odoo.modules.loading: loading search_leads/data/cron_highergov_documents.xml 
+2026-05-14 02:49:50,281 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/email_bid_mail_column_template_views.xml 
+2026-05-14 02:49:50,329 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/email_lead_view.xml 
+2026-05-14 02:49:50,386 42 INFO odoo18 odoo.modules.loading: loading search_leads/views/crm_view.xml 
+2026-05-14 02:49:50,574 42 INFO odoo18 odoo.modules.migration: module search_leads: Running migration [18.0.1.0.48>] post-migrate 
+2026-05-14 02:49:50,599 42 INFO odoo18 odoo.models.unlink: User #1 deleted daily.search.nogo.reason records with IDs: [3] 
+2026-05-14 02:49:50,600 42 INFO odoo18 post-migrate: search_leads 18.0.1.0.48 post: synced No-Bid reason catalog 
+2026-05-14 02:49:50,684 42 INFO odoo18 odoo.modules.migration: module search_leads: Running migration [18.0.1.0.50>] post-migrate 
+2026-05-14 02:49:50,691 42 INFO odoo18 post-migrate: search_leads 18.0.1.0.50 post: synced No-Bid reason catalog (added 'Too Large') 
+2026-05-14 02:49:50,714 42 INFO odoo18 odoo.modules.loading: Module search_leads loaded in 3.75s, 1010 queries (+1010 other) 
+2026-05-14 02:49:50,714 42 INFO odoo18 odoo.modules.loading: 228 modules loaded in 71.09s, 13209 queries (+13209 extra) 
+2026-05-14 02:49:50,868 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:51,074 42 WARNING odoo18 odoo.fields: Field hr.department.process.parent_path: unknown parameter 'unaccent', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-05-14 02:49:51,675 42 INFO odoo18 odoo.modules.registry: verifying fields for every extended model 
+2026-05-14 02:49:52,509 42 INFO odoo18 odoo.modules.loading: Modules loaded. 
+2026-05-14 02:49:52,515 42 INFO odoo18 odoo.modules.registry: Registry changed, signaling through the database 
+2026-05-14 02:49:52,515 42 INFO odoo18 odoo.modules.registry: Registry loaded in 78.498s 
+2026-05-14 02:49:52,515 42 INFO odoo18 odoo.service.server: Initiating shutdown 
+2026-05-14 02:49:52,515 42 INFO odoo18 odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-05-14 02:49:52,516 42 INFO odoo18 odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 1 connections  

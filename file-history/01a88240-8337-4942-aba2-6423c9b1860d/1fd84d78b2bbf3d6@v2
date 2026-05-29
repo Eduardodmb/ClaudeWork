@@ -1,0 +1,114 @@
+@using System.Data
+@model DataTable
+
+@if (Model == null || Model.Rows.Count == 0)
+{
+  <div class="alert alert-success">
+    <i class="fa fa-check-circle"></i> <strong>Good news!</strong> All users with role assignments have positions assigned.
+  </div>
+}
+else
+{
+  <div class="warning-section">
+    <h5><i class="fa fa-exclamation-triangle"></i> Attention Required</h5>
+    <p>
+      The following users have role assignments but no position assigned.
+      This may indicate incomplete user setup or potential security/HR compliance issues.
+    </p>
+  </div>
+
+  <div class="table-responsive">
+    <table class="role-members-table">
+      <thead>
+        <tr>
+          <th style="width: 50px;">#</th>
+          <th>Name</th>
+          <th style="width: 120px;">Badge</th>
+          <th>Username</th>
+          <th>Assigned Roles</th>
+          <th style="width: 100px; text-align: center;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @{
+          int rowIndex = 1;
+          foreach (DataRow row in Model.Rows)
+          {
+            string userId = row["Id"].ToString();
+            string name = row["Name"].ToString();
+            string surname = row["Surname"].ToString();
+            string badge = row["Badge"] != DBNull.Value ? row["Badge"].ToString() : "N/A";
+            string userName = row["UserName"].ToString();
+            string roleNames = row["RoleNames"] != DBNull.Value ? row["RoleNames"].ToString() : "No roles";
+            bool isActive = row["IsActive"] != DBNull.Value ? Convert.ToBoolean(row["IsActive"]) : false;
+
+            string fullName = (name + " " + surname).Trim();
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+              fullName = userName;
+            }
+
+            <tr style="@(isActive ? "" : "opacity: 0.6;")">
+              <td>@rowIndex</td>
+              <td>
+                <strong>@fullName</strong>
+              </td>
+              <td>@badge</td>
+              <td>@userName</td>
+              <td>
+                @if (!string.IsNullOrWhiteSpace(roleNames) && roleNames != "No roles")
+                {
+                  var roles = roleNames.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                  foreach (var role in roles)
+                  {
+                    <span class="badge badge-info mr-1">@role</span>
+                  }
+                }
+                else
+                {
+                  <span class="text-muted"><em>No roles</em></span>
+                }
+              </td>
+              <td style="text-align: center;">
+                @if (isActive)
+                {
+                  <span class="badge-active">Active</span>
+                }
+                else
+                {
+                  <span class="badge-inactive">Inactive</span>
+                }
+              </td>
+            </tr>
+
+            rowIndex++;
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-3">
+    <p class="text-muted">
+      <strong>Total Users Without Positions:</strong> @Model.Rows.Count
+      @if (ViewBag.ActiveOnly)
+      {
+        <span> | <em>Showing active users only</em></span>
+      }
+      else
+      {
+        <span> | <em>Showing all users (active and inactive)</em></span>
+      }
+    </p>
+  </div>
+
+  <div class="alert alert-warning mt-3">
+    <h6><strong>Recommended Actions:</strong></h6>
+    <ul class="mb-0">
+      <li>Review each user and assign appropriate positions</li>
+      <li>Remove role assignments for users who should not have system access</li>
+      <li>For inactive users, consider whether role assignments should be removed</li>
+      <li>Coordinate with HR to verify employment status for users without positions</li>
+    </ul>
+  </div>
+}

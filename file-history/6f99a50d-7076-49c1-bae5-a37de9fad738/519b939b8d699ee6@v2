@@ -1,0 +1,212 @@
+#!/usr/bin/env python3
+"""
+Document Renaming Helper
+Assists with bulk renaming documents based on compliance check CSV
+"""
+
+import csv
+import os
+from pathlib import Path
+from typing import List, Dict
+import shutil
+from datetime import datetime
+
+
+class DocumentRenamer:
+    """Helper for renaming documents based on compliance report"""
+
+    def __init__(self, csv_path: str):
+        """
+        Initialize renamer with CSV report
+
+        Args:
+            csv_path: Path to compliance report CSV
+        """
+        self.csv_path = Path(csv_path)
+        self.rename_plan = self._load_csv()
+        self.dry_run = True
+
+    def _load_csv(self) -> List[Dict]:
+        """Load rename plan from CSV"""
+        plan = []
+
+        with open(self.csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row['Status'] == 'NON-COMPLIANT' and row['Suggested_Filename']:
+                    plan.append({
+                        'old_path': Path(row['Full_Path']),
+                        'old_filename': row['Current_Filename'],
+                        'new_filename': row['Suggested_Filename'],
+                        'folder': row['Folder'],
+                        'suggested_id': row['Suggested_ID_Only']
+                    })
+
+        return plan
+
+    def preview_changes(self):
+        """Show what changes would be made"""
+        print("=" * 80)
+        print("RENAME PREVIEW (DRY RUN)")
+        print("=" * 80)
+        print(f"\nTotal files to rename: {len(self.rename_plan)}\n")
+
+        for idx, item in enumerate(self.rename_plan, 1):
+            print(f"{idx}. {item['folder']}")
+            print(f"   OLD: {item['old_filename']}")
+            print(f"   NEW: {item['new_filename']}")
+            print(f"   ID:  {item['suggested_id']}")
+            print()
+
+        print("=" * 80)
+        print("\nTo execute renames:")
+        print("  1. Review suggested names above")
+        print("  2. Edit CSV file if needed to customize names")
+        print("  3. Run: python rename_documents.py --execute <csv_file>")
+        print("\nIMPORTANT: Backup files before executing!")
+        print("=" * 80)
+
+    def execute_renames(self, backup_dir: Path = None):
+        """
+        Execute the renames
+
+        Args:
+            backup_dir: Optional directory to backup files to
+        """
+        if not backup_dir:
+            backup_dir = self.csv_path.parent / f"backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+
+        backup_dir.mkdir(exist_ok=True)
+
+        print("=" * 80)
+        print("EXECUTING RENAMES")
+        print("=" * 80)
+        print(f"\nBackup directory: {backup_dir}\n")
+
+        success_count = 0
+        error_count = 0
+        errors = []
+
+        for idx, item in enumerate(self.rename_plan, 1):
+            old_path = item['old_path']
+            new_filename = item['new_filename']
+
+            if not old_path.exists():
+                errors.append(f"File not found: {old_path}")
+                error_count += 1
+                continue
+
+            # New path in same directory
+            new_path = old_path.parent / new_filename
+
+            try:
+                # Backup original
+                backup_file = backup_dir / item['folder'].replace('/', '_') / old_path.name
+                backup_file.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(old_path, backup_file)
+
+                # Rename
+                old_path.rename(new_path)
+
+                print(f"[{idx}/{len(self.rename_plan)}] OK: {item['old_filename']} -> {new_filename}")
+                success_count += 1
+
+            except Exception as e:
+                error_msg = f"Error renaming {old_path.name}: {e}"
+                errors.append(error_msg)
+                print(f"[{idx}/{len(self.rename_plan)}] ERROR: {error_msg}")
+                error_count += 1
+
+        print("\n" + "=" * 80)
+        print("SUMMARY")
+        print("=" * 80)
+        print(f"Successful renames: {success_count}")
+        print(f"Errors:             {error_count}")
+
+        if errors:
+            print("\nERROR DETAILS:")
+            for err in errors:
+                print(f"  - {err}")
+
+        print(f"\nBackups saved to: {backup_dir}")
+        print("=" * 80)
+
+    def generate_custom_csv(self, output_path: Path):
+        """
+        Generate an editable CSV for customizing renames
+
+        Args:
+            output_path: Where to save the editable CSV
+        """
+        with open(output_path, 'w', newline='', encoding='utf-8') as f:
+            fieldnames = [
+                'Action',  # RENAME, SKIP, or DELETE
+                'Folder',
+                'Current_Filename',
+                'Suggested_Filename',
+                'Custom_Filename',  # User can edit this
+                'Suggested_ID',
+                'Notes'
+            ]
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+
+            for item in self.rename_plan:
+                writer.writerow({
+                    'Action': 'RENAME',
+                    'Folder': item['folder'],
+                    'Current_Filename': item['old_filename'],
+                    'Suggested_Filename': item['new_filename'],
+                    'Custom_Filename': '',  # User fills this in
+                    'Suggested_ID': item['suggested_id'],
+                    'Notes': 'Edit Custom_Filename column to override suggestion'
+                })
+
+        print(f"Editable CSV created: {output_path}")
+        print("\nInstructions:")
+        print("  1. Open the CSV in Excel or text editor")
+        print("  2. Fill in 'Custom_Filename' column for files you want to rename differently")
+        print("  3. Change 'Action' to 'SKIP' for files to leave unchanged")
+        print("  4. Save the CSV")
+        print("  5. Run with --custom flag to use custom names")
+
+
+def main():
+    """Main execution"""
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage:")
+        print("  Preview:  python rename_documents.py <compliance_report.csv>")
+        print("  Execute:  python rename_documents.py --execute <compliance_report.csv>")
+        print("  Custom:   python rename_documents.py --custom <compliance_report.csv>")
+        return
+
+    if sys.argv[1] == "--execute" and len(sys.argv) >= 3:
+        csv_file = sys.argv[2]
+        renamer = DocumentRenamer(csv_file)
+
+        print("\n" + "!" * 80)
+        print("WARNING: This will rename files!")
+        print("!" * 80)
+        response = input("\nType 'YES' to proceed with renaming: ")
+
+        if response == "YES":
+            renamer.execute_renames()
+        else:
+            print("Aborted.")
+
+    elif sys.argv[1] == "--custom" and len(sys.argv) >= 3:
+        csv_file = sys.argv[2]
+        renamer = DocumentRenamer(csv_file)
+        output_file = Path(csv_file).parent / "rename_plan_custom.csv"
+        renamer.generate_custom_csv(output_file)
+
+    else:
+        csv_file = sys.argv[1]
+        renamer = DocumentRenamer(csv_file)
+        renamer.preview_changes()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,236 @@
+"""
+SAT Invoice Parser - CFDI v4.0
+Reads all XML files in current directory and generates Excel summary with tax breakdown
+"""
+import os
+import xml.etree.ElementTree as ET
+from pathlib import Path
+from decimal import Decimal
+from datetime import datetime
+import pandas as pd
+
+
+# CFDI namespaces
+NAMESPACES = {
+    'cfdi': 'http://www.sat.gob.mx/cfd/4',
+    'tfd': 'http://www.sat.gob.mx/TimbreFiscalDigital'
+}
+
+
+def parse_invoice(xml_file: Path) -> dict:
+    """Parse a single CFDI XML file and extract relevant tax information."""
+    try:
+        tree = ET.parse(xml_file)
+        root = tree.getroot()
+
+        # Basic invoice data
+        uuid_elem = root.find('.//tfd:TimbreFiscalDigital', NAMESPACES)
+        uuid = uuid_elem.get('UUID') if uuid_elem is not None else 'N/A'
+
+        fecha = root.get('Fecha', '')
+        serie = root.get('Serie', '')
+        folio = root.get('Folio', '')
+
+        emisor = root.find('cfdi:Emisor', NAMESPACES)
+        emisor_nombre = emisor.get('Nombre', '') if emisor is not None else ''
+        emisor_rfc = emisor.get('Rfc', '') if emisor is not None else ''
+
+        subtotal = Decimal(root.get('SubTotal', '0'))
+        total = Decimal(root.get('Total', '0'))
+
+        # Tax breakdown by rate
+        tax_data = {
+            'base_0': Decimal('0'),
+            'iva_0': Decimal('0'),
+            'base_8': Decimal('0'),
+            'iva_8': Decimal('0'),
+            'base_16': Decimal('0'),
+            'iva_16': Decimal('0'),
+        }
+
+        # Extract taxes from Traslados
+        impuestos = root.find('cfdi:Impuestos', NAMESPACES)
+        if impuestos is not None:
+            traslados = impuestos.find('cfdi:Traslados', NAMESPACES)
+            if traslados is not None:
+                for traslado in traslados.findall('cfdi:Traslado', NAMESPACES):
+                    impuesto = traslado.get('Impuesto')
+                    # 002 = IVA
+                    if impuesto == '002':
+                        tasa = Decimal(traslado.get('TasaOCuota', '0'))
+                        base = Decimal(traslado.get('Base', '0'))
+                        importe = Decimal(traslado.get('Importe', '0'))
+
+                        # Classify by tax rate
+                        if tasa == Decimal('0'):
+                            tax_data['base_0'] += base
+                            tax_data['iva_0'] += importe
+                        elif abs(tasa - Decimal('0.08')) < Decimal('0.001'):
+                            tax_data['base_8'] += base
+                            tax_data['iva_8'] += importe
+                        elif abs(tasa - Decimal('0.16')) < Decimal('0.001'):
+                            tax_data['base_16'] += base
+                            tax_data['iva_16'] += importe
+
+        return {
+            'UUID': uuid,
+            'Fecha': fecha[:10] if fecha else '',  # YYYY-MM-DD only
+            'Serie-Folio': f"{serie}-{folio}" if serie and folio else folio or serie,
+            'Emisor': emisor_nombre,
+            'RFC Emisor': emisor_rfc,
+            'SubTotal': float(subtotal),
+            'Total': float(total),
+            'Base IVA 0%': float(tax_data['base_0']),
+            'IVA 0%': float(tax_data['iva_0']),
+            'Base IVA 8%': float(tax_data['base_8']),
+            'IVA 8%': float(tax_data['iva_8']),
+            'Base IVA 16%': float(tax_data['base_16']),
+            'IVA 16%': float(tax_data['iva_16']),
+            'Archivo': xml_file.name
+        }
+
+    except Exception as e:
+        print(f"Error parsing {xml_file.name}: {e}")
+        return None
+
+
+def process_directory(directory: Path = None) -> pd.DataFrame:
+    """Process all XML files in the specified directory (or current directory)."""
+    if directory is None:
+        directory = Path.cwd()
+
+    xml_files = list(directory.glob('*.xml'))
+
+    if not xml_files:
+        print(f"No XML files found in {directory}")
+        return pd.DataFrame()
+
+    print(f"Found {len(xml_files)} XML files in {directory}")
+
+    invoices = []
+    for xml_file in xml_files:
+        print(f"Processing {xml_file.name}...")
+        invoice_data = parse_invoice(xml_file)
+        if invoice_data:
+            invoices.append(invoice_data)
+
+    return pd.DataFrame(invoices)
+
+
+def create_summary_excel(df: pd.DataFrame, output_file: str = 'resumen_facturas.xlsx'):
+    """Create Excel file with invoice details and summary."""
+    if df.empty:
+        print("No data to export")
+        return
+
+    # Sort by date
+    df['Fecha'] = pd.to_datetime(df['Fecha'], errors='coerce')
+    df = df.sort_values('Fecha')
+
+    # Create Excel writer
+    with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+        # Sheet 1: Detailed invoices
+        df_export = df.copy()
+        df_export['Fecha'] = df_export['Fecha'].dt.strftime('%Y-%m-%d')
+        df_export.to_excel(writer, sheet_name='Detalle', index=False)
+
+        # Sheet 2: Summary by tax rate
+        summary_data = {
+            'Concepto': [
+                'Subtotal Total',
+                'Total Facturas',
+                '',
+                'Base IVA 0%',
+                'IVA 0%',
+                '',
+                'Base IVA 8%',
+                'IVA 8%',
+                '',
+                'Base IVA 16%',
+                'IVA 16%',
+                '',
+                'Total IVA Trasladado',
+            ],
+            'Importe': [
+                df['SubTotal'].sum(),
+                df['Total'].sum(),
+                '',
+                df['Base IVA 0%'].sum(),
+                df['IVA 0%'].sum(),
+                '',
+                df['Base IVA 8%'].sum(),
+                df['IVA 8%'].sum(),
+                '',
+                df['Base IVA 16%'].sum(),
+                df['IVA 16%'].sum(),
+                '',
+                df['IVA 0%'].sum() + df['IVA 8%'].sum() + df['IVA 16%'].sum(),
+            ]
+        }
+        summary_df = pd.DataFrame(summary_data)
+        summary_df.to_excel(writer, sheet_name='Resumen', index=False)
+
+        # Sheet 3: Monthly summary by provider
+        df_provider = df.copy()
+        df_provider['Mes'] = df_provider['Fecha'].dt.to_period('M')
+        provider_summary = df_provider.groupby(['Mes', 'Emisor', 'RFC Emisor']).agg({
+            'SubTotal': 'sum',
+            'IVA 0%': 'sum',
+            'IVA 8%': 'sum',
+            'IVA 16%': 'sum',
+            'Total': 'sum',
+            'UUID': 'count'
+        }).rename(columns={'UUID': 'Num Facturas'}).reset_index()
+        provider_summary['Mes'] = provider_summary['Mes'].astype(str)
+        provider_summary.to_excel(writer, sheet_name='Por Proveedor', index=False)
+
+        # Format columns
+        workbook = writer.book
+        for sheet_name in ['Detalle', 'Resumen', 'Por Proveedor']:
+            worksheet = writer.sheets[sheet_name]
+
+            # Auto-adjust column widths
+            for column in worksheet.columns:
+                max_length = 0
+                column_letter = column[0].column_letter
+                for cell in column:
+                    try:
+                        if cell.value:
+                            max_length = max(max_length, len(str(cell.value)))
+                    except:
+                        pass
+                adjusted_width = min(max_length + 2, 50)
+                worksheet.column_dimensions[column_letter].width = adjusted_width
+
+    print(f"\nExcel file created: {output_file}")
+    print(f"Total invoices: {len(df)}")
+    print(f"Total amount: ${df['Total'].sum():,.2f}")
+
+
+def main():
+    """Main execution function."""
+    print("SAT Invoice Parser - CFDI v4.0")
+    print("=" * 50)
+
+    # Process current directory
+    df = process_directory()
+
+    if not df.empty:
+        # Generate output filename with timestamp
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        output_file = f'resumen_facturas_{timestamp}.xlsx'
+
+        create_summary_excel(df, output_file)
+
+        print("\n" + "=" * 50)
+        print("Summary by Tax Rate:")
+        print(f"Base IVA 0%:  ${df['Base IVA 0%'].sum():>12,.2f} | IVA: ${df['IVA 0%'].sum():>10,.2f}")
+        print(f"Base IVA 8%:  ${df['Base IVA 8%'].sum():>12,.2f} | IVA: ${df['IVA 8%'].sum():>10,.2f}")
+        print(f"Base IVA 16%: ${df['Base IVA 16%'].sum():>12,.2f} | IVA: ${df['IVA 16%'].sum():>10,.2f}")
+        print("=" * 50)
+    else:
+        print("No invoices processed.")
+
+
+if __name__ == '__main__':
+    main()

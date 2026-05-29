@@ -1,0 +1,1040 @@
+{
+  "numStartups": 101,
+  "installMethod": "global",
+  "autoUpdates": false,
+  "tipsHistory": {
+    "new-user-warmup": 9,
+    "plan-mode-for-complex-tasks": 98,
+    "terminal-setup": 94,
+    "memory-command": 92,
+    "theme-command": 83,
+    "status-line": 78,
+    "prompt-queue": 58,
+    "enter-to-steer-in-relatime": 83,
+    "todo-list": 83,
+    "install-github-app": 94,
+    "install-slack-app": 96,
+    "drag-and-drop-images": 97,
+    "double-esc-code-restore": 100,
+    "continue": 92,
+    "shift-tab": 93,
+    "image-paste": 87,
+    "custom-agents": 98,
+    "agent-flag": 98,
+    "desktop-app": 101,
+    "web-app": 101,
+    "mobile-app": 101,
+    "default-permission-mode-config": 92,
+    "permissions": 94,
+    "rename-conversation": 101,
+    "custom-commands": 88,
+    "frontend-design-plugin": 43,
+    "ide-upsell-external-terminal": 23,
+    "git-worktrees": 93
+  },
+  "promptQueueUseCount": 4,
+  "cachedGrowthBookFeatures": {
+    "tengu_amber_sentinel": true,
+    "tengu_slate_wren": false,
+    "tengu_vscode_onboarding": false,
+    "tengu_noreread_q7m_velvet": false,
+    "tengu_gouda_loop": true,
+    "tengu_copper_fox": false,
+    "tengu_surreal_dali": true,
+    "tengu_max_version_config": {},
+    "tengu_bad_survey_transcript_ask_config": {
+      "probability": 0
+    },
+    "tengu_startup_notice": "",
+    "tengu_slate_siskin": {
+      "enabled": false,
+      "timeoutMs": 8000,
+      "throttleMs": 30000,
+      "summaryLineThreshold": 5
+    },
+    "tengu_sotto_voce": true,
+    "tengu_keybinding_customization_release": true,
+    "tengu_satin_quoll": {},
+    "tengu_idle_amber_finch": false,
+    "tengu_crimson_vector": true,
+    "tengu_ember_latch": false,
+    "tengu_amber_lattice": {
+      "plugins": [
+        "security-guidance",
+        "code-review",
+        "commit-commands",
+        "code-simplifier",
+        "hookify",
+        "feature-dev",
+        "frontend-design",
+        "pr-review-toolkit",
+        "skill-creator",
+        "plugin-dev",
+        "agent-sdk-dev",
+        "mcp-server-dev",
+        "claude-code-setup",
+        "claude-md-management",
+        "playground",
+        "ralph-loop",
+        "explanatory-output-style",
+        "learning-output-style",
+        "clangd-lsp",
+        "csharp-lsp",
+        "gopls-lsp",
+        "jdtls-lsp",
+        "kotlin-lsp",
+        "lua-lsp",
+        "php-lsp",
+        "pyright-lsp",
+        "ruby-lsp",
+        "rust-analyzer-lsp",
+        "swift-lsp",
+        "typescript-lsp"
+      ]
+    },
+    "tengu_ccr_bundle_seed_enabled": true,
+    "tengu_slate_meadow": true,
+    "claude_code_skills_dashboard_enabled_cli": false,
+    "tengu-off-switch": {
+      "activated": false
+    },
+    "tengu_willow_sentinel_ttl_hours": 1,
+    "tengu_cobalt_raccoon": true,
+    "tengu_tern_alloy": "copy_a",
+    "tengu_harbor_ledger": [
+      {
+        "marketplace": "claude-plugins-official",
+        "plugin": "discord"
+      },
+      {
+        "marketplace": "claude-plugins-official",
+        "plugin": "telegram"
+      },
+      {
+        "marketplace": "claude-plugins-official",
+        "plugin": "fakechat"
+      },
+      {
+        "marketplace": "claude-plugins-official",
+        "plugin": "imessage"
+      }
+    ],
+    "tengu_good_survey_transcript_ask_config": {
+      "probability": 0
+    },
+    "tengu_marble_anvil": true,
+    "tengu_session_memory": false,
+    "tengu_ultraplan_timeout_seconds": 5400,
+    "tengu_scratch": false,
+    "tengu_amber_prism": false,
+    "tengu_prism_ledger": false,
+    "tengu_classifier_summary_llm_emit": false,
+    "tengu_copper_wren": false,
+    "tengu_walrus_canteen": false,
+    "tengu_immediate_model_command": false,
+    "tengu_pewter_brook": false,
+    "tengu_billiard_aviary": false,
+    "tengu_slate_harbor_experiment": false,
+    "tengu_red_coaster": false,
+    "tengu_sparrow_ledger": false,
+    "tengu_vellum_lantern": false,
+    "tengu_flint_harbor_share": false,
+    "tengu_sessions_elevated_auth_enforcement": false,
+    "tengu_relay_chain_v1": false,
+    "tengu_agent_list_attach": false,
+    "tengu_bridge_repl_v2_config": {
+      "init_retry_max_attempts": 3,
+      "init_retry_base_delay_ms": 500,
+      "init_retry_jitter_fraction": 0.25,
+      "init_retry_max_delay_ms": 4000,
+      "http_timeout_ms": 10000,
+      "uuid_dedup_buffer_size": 2000,
+      "heartbeat_interval_ms": 20000,
+      "heartbeat_jitter_fraction": 0.1,
+      "token_refresh_buffer_ms": 600000,
+      "teardown_archive_timeout_ms": 1500,
+      "connect_timeout_ms": 15000,
+      "min_version": "2.1.70",
+      "should_show_app_upgrade_message": false
+    },
+    "tengu_prompt_cache_1h_config": {
+      "allowlist": [
+        "repl_main_thread*",
+        "sdk",
+        "auto_mode",
+        "rolling_compact",
+        "memdir_relevance",
+        "agent_classifier"
+      ]
+    },
+    "tengu_fennel_kite": false,
+    "tengu_c4w_usage_limit_notifications_enabled": true,
+    "tengu_code_diff_cli": true,
+    "tengu_auto_mode_config": {
+      "enabled": "enabled",
+      "twoStageClassifier": true
+    },
+    "tengu_gha_plugin_code_review": false,
+    "tengu_pewter_lark": "off",
+    "tengu_permission_friction": true,
+    "tengu_orchid_mantis_v2": false,
+    "tengu_desktop_upsell": {
+      "enable_shortcut_tip": true,
+      "enable_startup_dialog": false
+    },
+    "tengu_umber_petrel": false,
+    "tengu_cobalt_compass": true,
+    "tengu_bridge_min_version": {
+      "minVersion": "2.1.70"
+    },
+    "tengu_streaming_tool_execution2": true,
+    "tengu_otk_slot_v1": false,
+    "tengu_amber_flint": true,
+    "tengu_coral_beacon": false,
+    "tengu_harbor": true,
+    "tengu_ccr_bridge_multi_session": true,
+    "tengu_malort_pedway": {
+      "enabled": false,
+      "pixelValidation": false,
+      "clipboardPasteMultiline": true,
+      "screenshotFilter": true,
+      "mouseAnimation": true,
+      "hideBeforeAction": true,
+      "autoTargetDisplay": true,
+      "coordinateMode": "pixels"
+    },
+    "tengu_orchid_trellis": false,
+    "tengu_tussock_oriole": false,
+    "tengu_crimson_echo": {},
+    "tengu_event_sampling_config": {},
+    "tengu_kestrel_arch": "on",
+    "tengu_marble_sandcastle": false,
+    "tengu_auto_mode_default_on": false,
+    "tengu_herring_clock": false,
+    "tengu_moth_copse": false,
+    "tengu_mcp_retry_failed_remote": false,
+    "tengu_read_dedup_killswitch": true,
+    "tengu_cobalt_wren": false,
+    "tengu_swann_brevity": "focused",
+    "tengu_dunwich_bell": false,
+    "tengu_cinder_almanac": true,
+    "tengu_plank_river_frost": "user_intent",
+    "tengu_log_datadog_events": true,
+    "tengu_nimble_amber_prose": false,
+    "tengu_amber_redwood2": "",
+    "tengu-top-of-feed-tip": {
+      "tip": "",
+      "color": ""
+    },
+    "tengu_slate_ribbon": true,
+    "tengu_orchid_mantis": false,
+    "tengu_timber_lark": "copy_a",
+    "tengu_hazel_osprey_floor": 75000,
+    "tengu_kairos_input_needed_push": true,
+    "tengu_passport_quail": false,
+    "tengu_porch_bell_9f": "",
+    "tengu_team_discovery": false,
+    "tengu_miraculo_the_bard": false,
+    "tengu_classifier_disabled_surfaces": "",
+    "tengu_dune_wren": false,
+    "tengu_ember_trail": "1",
+    "tengu_tool_pear": false,
+    "tengu_chair_sermon": false,
+    "tengu_basalt_spur": false,
+    "tengu_onyx_plover": {
+      "enabled": false,
+      "minHours": 24,
+      "minSessions": 3
+    },
+    "tengu_grey_step2": {
+      "enabled": true,
+      "dialogTitle": "We recommend medium effort for Opus",
+      "dialogDescription": "Effort determines how long Claude thinks for when completing your task. We recommend medium effort for most tasks to balance speed and intelligence and maximize rate limits. Use ultrathink to trigger high effort when needed."
+    },
+    "tengu_willow_mode": "hint_v2",
+    "tengu_version_config": {
+      "minVersion": "1.0.24"
+    },
+    "tengu_marble_whisper": true,
+    "tengu_crystal_beam": {
+      "budgetTokens": 0
+    },
+    "tengu_loud_sugary_rock": false,
+    "tengu_bg_attach_stall_ms": 5000,
+    "tengu_workout2": true,
+    "tengu_snippet_save": false,
+    "tengu_penguins_enabled": true,
+    "tengu_sage_compass": {},
+    "tengu_blue_coaster": false,
+    "tengu_olive_hinge": "",
+    "tengu_marble_whisper2": true,
+    "tengu_lapis_finch": true,
+    "tengu_bridge_poll_interval_config": {
+      "poll_interval_ms_not_at_capacity": 2000,
+      "poll_interval_ms_at_capacity": 600000,
+      "heartbeat_interval_ms": 0,
+      "multisession_poll_interval_ms_not_at_capacity": 5000,
+      "multisession_poll_interval_ms_at_capacity": 60000,
+      "multisession_poll_interval_ms_partial_capacity": 5000,
+      "non_exclusive_heartbeat_interval_ms": 180000,
+      "session_keepalive_interval_ms": 0,
+      "session_keepalive_interval_v2_ms": 0
+    },
+    "tengu_bridge_repl_v2": true,
+    "tengu_slate_nexus": true,
+    "tengu_review_bughunter_config": {
+      "fleet_size": 5,
+      "max_duration_minutes": 10,
+      "agent_timeout_seconds": 600,
+      "total_wallclock_minutes": 22,
+      "model": "claude-opus-4-7",
+      "cost_note": "$5-$20",
+      "duration_note": "~5-10 min",
+      "enabled": true
+    },
+    "tengu_fg_left_arrow_agents": false,
+    "tengu_slate_finch": false,
+    "tengu_slim_subagent_claudemd": true,
+    "tengu_react_vulnerability_warning": false,
+    "tengu_pewter_ledger": "OFF",
+    "tengu_steady_lantern": false,
+    "tengu_birthday_hat": false,
+    "tengu_birch_compass": false,
+    "tengu_drift_lantern": false,
+    "tengu_maple_tide": false,
+    "tengu_kairos_push_notifications": true,
+    "tengu_ccr_post_turn_summary": false,
+    "tengu_velvet_ibis": {},
+    "tengu_negative_interaction_transcript_ask_config": {
+      "probability": 0
+    },
+    "tengu_file_write_optimization": false,
+    "tengu_velvet_moth": 0.2,
+    "tengu_scarf_coffee": false,
+    "tengu_quiet_harbor": false,
+    "tengu_cobalt_heron": false,
+    "tengu_ashen_kelp": true,
+    "tengu_turtle_carbon": true,
+    "tengu_1p_event_batch_config": {
+      "scheduledDelayMillis": 10000,
+      "maxExportBatchSize": 400,
+      "maxQueueSize": 8192,
+      "path": "/api/event_logging/v2/batch"
+    },
+    "tengu_pewter_lantern": false,
+    "tengu_quiet_slate_wren": false,
+    "tengu_classifier_summary_heuristic_emit": true,
+    "tengu_flint_harbor_prompt": {
+      "prompt": "You are helping a power user generate an onboarding guide for teammates who are new to Claude Code. The guide will live in the team's onboarding docs and can be pasted into Claude for an interactive walkthrough.\n\nYou're co-authoring this with them — collaborative and helpful, like a teammate who's done this before and is happy to share.\n\n## Usage data (last {{WINDOW_DAYS}} days)\n\nThis was scanned from the guide creator's local Claude Code transcripts:\n\n```json\n{{USAGE_DATA}}\n```\n\n## Your task\n\nBefore anything else — including before thinking through the classification — output exactly this line as your first visible text:\n\n> Looking at how you've used Claude over the last {{WINDOW_DAYS}} days to put together an onboarding guide for teammates new to Claude Code.\n\nThis must come before any extended thinking about session descriptors. The guide creator is staring at a blank screen until you do. Classification is step 2, not step 1.\n\nGenerate the guide immediately, then ask for revisions. Don't wait for answers first — it's easier for the guide creator to edit a concrete draft than answer abstract questions.\n\n1. **Output the acknowledgment line above.** No thinking, no classification, no tool calls before this. One line, then move on.\n\n2. **Derive the work-type breakdown.** Read the `sessionDescriptors` array — each entry describes one session via its title, any linked code reviews (`prNumbers`), and first user message. Classify each session into one of these task types:\n\n   - **build_feature** — new functionality, scripts, tools, config/CI/env setup\n   - **debug_fix** — investigating and fixing bugs\n   - **improve_quality** — refactoring, tests, cleanup, code review\n   - **analyze_data** — queries, metrics, number crunching\n   - **plan_design** — architecture, approach, strategy, understanding unfamiliar code, design review\n   - **prototype** — spikes, POCs, throwaway exploration\n   - **write_docs** — PRDs, RFCs, READMEs, design docs, copy/doc review\n\n   Categories describe the *type of task*, not the project or domain — a teammate on any project should recognize them. Review sessions belong with whatever's being reviewed: code review is improve_quality, doc review is write_docs, design review is plan_design. Most sessions fit the list; only invent a new category if it's genuinely a different type of task. Pick the top 3-5 with rough percentages. First messages alone are usually enough; titles and code-review links are enrichment. If first messages are uninformative, use tool and MCP counts as a weak hint. If there are ~0 sessions, leave the breakdown as a TODO.\n\n   In the rendered guide, display categories with spaces and title case (e.g. \"Build Feature\" not \"build_feature\").\n\n3. **Gather the remaining pieces.** For repos, start with `currentRepo` and check the workspace for sibling repo directories. For MCP server setup, use each entry's `name` (and `urlOrigin` where present) to infer what the server does and how a teammate would get access. Leave the Team Tips and Get Started sections as TODO placeholders — you'll ask for these in Review and fill them in after.\n\n4. **Write the guide to `ONBOARDING.md`** following this template:\n\n```\n{{GUIDE_TEMPLATE}}\n```\n\n   Fill in real numbers from the usage data (not placeholders). Use `generatedBy` for the name; if it's missing, omit the name. Ascii bar charts: `█` for filled, `░` for empty, 20 chars wide. Keep the HTML comment instruction at the bottom exactly as shown.\n\n5. **Render the guide in a code block, then close out the first turn.** You're co-authoring this guide with the guide creator — frame the follow-up as collaboration, not corrections.\n\n   After the code block, add a `---` horizontal rule and a `**Review**` heading so the guide is visually separated from your questions. Under the heading, number these three questions:\n\n   1. \"I went with '[X]' for the team name — let me know if that sounds right.\" (or if you couldn't tell: \"What's the team name? I'll add it in.\")\n   2. Is there a starter task for someone new to Claude Code? (ticket or doc link — optional)\n   3. Any team tips you'd tell a new teammate that aren't already in CLAUDE.md?\n\n   After they answer, update `ONBOARDING.md` with their team name, tips, and starter task. Then close with this exact line (not numbered, not paraphrased):\n\n   Saved to `ONBOARDING.md`. Drop it in your team docs and channels — when a new teammate pastes it into Claude Code, they get a guided onboarding tour from there.\n\n   Apply any edits they come back with to the file.",
+      "guideTemplate": "# Welcome to [Team Name]\n\n## How We Use Claude\n\nBased on [name]'s usage over the last [N] days:\n\nWork Type Breakdown:\n  [Category 1]  [ascii bar]  [N]%\n  [Category 2]  [ascii bar]  [N]%\n  [Category 3]  [ascii bar]  [N]%\n  ...\n\nTop Skills & Commands:\n  [/command]  [ascii bar]  [N]x/month\n  ...\n\nTop MCP Servers:\n  [Server]  [ascii bar]  [N] calls\n  ...\n\n## Your Setup Checklist\n\n### Codebases\n- [ ] [repo-name] — [repo url]\n...\n\n### MCP Servers to Activate\n- [ ] [Server] — [what it's for]. [How to get access]\n...\n\n### Skills to Know About\n- [/command] — [what it does, when the team uses it]\n...\n\n## Team Tips\n\n_TODO_\n\n## Get Started\n\n_TODO_\n\n<!-- INSTRUCTION FOR CLAUDE: A new teammate just pasted this guide for how the\nteam uses Claude Code. You're their onboarding buddy — warm, conversational,\nnot lecture-y.\n\nOpen with a warm welcome — include the team name from the title. Then: \"Your\nteammate uses Claude Code for [list all the work types]. Let's get you started.\"\n\nCheck what's already in place against everything under Setup Checklist\n(including skills), using markdown checkboxes — [x] done, [ ] not yet. Lead\nwith what they already have. One sentence per item, all in one message.\n\nTell them you'll help with setup, cover the actionable team tips, then the\nstarter task (if there is one). Offer to start with the first unchecked item,\nget their go-ahead, then work through the rest one by one.\n\nAfter setup, walk them through the remaining sections — offer to help where you\ncan (e.g. link to channels), and just surface the purely informational bits.\n\nDon't invent sections or summaries that aren't in the guide. The stats are the\nguide creator's personal usage data — don't extrapolate them into a \"team\nworkflow\" narrative. -->",
+      "windowDays": 30
+    },
+    "tengu_sub_nomdrep_q7k": true,
+    "tengu_slate_moth": false,
+    "tengu_prompt_cache_diagnostics": true,
+    "tengu_slate_kestrel": false,
+    "tengu_jade_anvil_4": false,
+    "tengu_claudeai_mcp_connectors": true,
+    "tengu_ccr_bridge": true,
+    "tengu_kairos_cron_durable": false,
+    "tengu_tool_search_unsupported_models": [
+      "haiku"
+    ],
+    "tengu_frond_boric": {},
+    "tengu_osprey_lantern": false,
+    "tengu_penguin_mode_promo": {
+      "discountPercent": 0,
+      "endDate": "Feb 16"
+    },
+    "tengu_cedar_inlet": "off",
+    "tengu_fennel_kite_model": "",
+    "tengu_amber_lynx": false,
+    "tengu_willow_census_ttl_hours": 24,
+    "tengu_cork_m4q": false,
+    "tengu_sage_compass2": {
+      "enabled": true
+    },
+    "tengu_feedback_survey_config": {
+      "minTimeBeforeFeedbackMs": 600000,
+      "minTimeBetweenFeedbackMs": 43200000,
+      "minTimeBetweenGlobalFeedbackMs": 43200000,
+      "minUserTurnsBeforeFeedback": 5,
+      "minUserTurnsBetweenFeedback": 25,
+      "hideThanksAfterMs": 3000,
+      "onForModels": [
+        "*"
+      ],
+      "probability": 0.01
+    },
+    "tengu_ochre_hollow": false,
+    "tengu_cobalt_lantern": true,
+    "tengu_trace_lantern": false,
+    "tengu_flint_harbor": true,
+    "tengu_post_compact_survey": false,
+    "tengu_vscode_review_upsell": false,
+    "tengu_tide_elm": "off",
+    "tengu_ladder_mq7": false,
+    "tengu_amber_wren": {
+      "targetedRangeNudge": true,
+      "maxTokens": 25000
+    },
+    "tengu_prompt_suggestion": true,
+    "tengu_compact_cache_prefix": true,
+    "tengu_sedge_lantern_holdback": false,
+    "tengu_mocha_barista": true,
+    "tengu_cobalt_ridge": true,
+    "tengu_doorbell_agave": false,
+    "tengu_amber_lark": false,
+    "tengu_ultraplan_prompt_identifier": "visual_plan",
+    "tengu_sedge_lantern": true,
+    "tengu_tangerine_ladder_boost": true,
+    "tengu_coral_fern": false,
+    "tengu_sepia_moth": false,
+    "tengu_harbor_prism": false,
+    "tengu_garnet_finch": false,
+    "tengu_kairos_loop_dynamic": true,
+    "tengu_slate_harrier": "off",
+    "tengu_hawthorn_window": 200000,
+    "tengu_plugin_official_mkt_git_fallback": true,
+    "tengu_copper_bridge": true,
+    "tengu_feature_template": false,
+    "tengu_amber_rokovoko": 0.2,
+    "tengu_shale_finch": false,
+    "tengu_slate_thimble": false,
+    "tengu_willow_refresh_ttl_hours": 0,
+    "tengu_cedar_halo": false,
+    "tengu_bridge_requires_action_details": true,
+    "tengu_mcp_elicitation": true,
+    "tengu_bramble_lintel": 7,
+    "tengu_lichen_compass": false,
+    "tengu_hazel_osprey": false,
+    "tengu_harbor_permissions": true,
+    "tengu_cork_lantern": false,
+    "tengu_hawthorn_steeple": false,
+    "tengu_brick_follow": false,
+    "tengu_auto_notice_once": true,
+    "tengu_mcp_subagent_prompt": true,
+    "tengu_amber_anchor": false,
+    "tengu_skills_dashboard_enabled": false,
+    "tengu_desktop_upsell_v2": {
+      "enabled": false
+    },
+    "tengu_bridge_poll_interval_ms": 0,
+    "tengu_sepia_cormorant": [],
+    "tengu_worktree_mode": true,
+    "tengu_canary": {},
+    "tengu_disable_bypass_permissions_mode": false,
+    "tengu_destructive_command_warning": false,
+    "tengu_silk_hinge": false,
+    "tengu_fgts": false,
+    "tengu_bridge_attestation_enforce": false,
+    "tengu_gypsum_kite": false,
+    "tengu_system_prompt_global_cache": true,
+    "tengu_vellum_siding": false,
+    "tengu_ultraplan_config": {
+      "enabled": true
+    },
+    "tengu_sm_config": {
+      "minimumMessageTokensToInit": 150000,
+      "minimumTokensBetweenUpdate": 40000,
+      "toolCallsBetweenUpdates": 10
+    },
+    "tengu_pewter_kestrel": {
+      "global": 50000,
+      "Bash": 30000,
+      "PowerShell": 30000,
+      "Grep": 20000,
+      "Snip": 1000,
+      "StrReplaceBasedEditTool": 30000,
+      "BashSearchTool": 20000
+    },
+    "tengu_quiet_basalt_echo": false,
+    "tengu_kairos_cron": true,
+    "tengu_mcp_singleton_unwrap": true,
+    "tengu_collage_kaleidoscope": true,
+    "tengu_plum_vx3": true,
+    "tengu_orford_ness": false,
+    "tengu_gleaming_fair": false,
+    "tengu_chomp_inflection": true,
+    "tengu_ccr_bundle_max_bytes": 104857600,
+    "tengu_tab_read_sep": false,
+    "tengu_basalt_tern": false,
+    "tengu_feature_claudified_template": false,
+    "tengu_loud_sugary_rock2": false,
+    "tengu_velvet_static": true,
+    "tengu_mcp_tool_search": true,
+    "tengu_log_segment_events": false,
+    "tengu_thinkback": false,
+    "tengu_oboe": false,
+    "tengu_silver_lantern": false,
+    "tengu_pr_status_cli": false,
+    "tengu_copper_lantern": false,
+    "tengu_plan_mode_interview_phase": false,
+    "tengu_tst_names_in_messages": false,
+    "enhanced_telemetry_beta": false,
+    "tengu_vinteuil_phrase": false,
+    "tengu_attribution_header": true,
+    "tengu_cache_plum_violet": false,
+    "tengu_pid_based_version_locking": false,
+    "tengu_tst_kx7": false,
+    "tengu_permission_explainer": false,
+    "tengu_disable_streaming_to_non_streaming_fallback": false
+  },
+  "firstStartTime": "2026-02-10T20:49:07.865Z",
+  "userID": "fc4faa00308a064926ea42448dffdd400ca98aaf0000e996ff558365069d8592",
+  "opusProMigrationComplete": true,
+  "cachedChromeExtensionInstalled": false,
+  "changelogLastFetched": 1773341897111,
+  "autoUpdatesProtectedForNative": true,
+  "claudeCodeFirstTokenDate": "2026-02-10T21:20:41.010264Z",
+  "hasCompletedOnboarding": true,
+  "lastOnboardingVersion": "2.1.39",
+  "projects": {
+    "S:/1 - Repos/BeFirst_ETL": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true
+    },
+    "S:/01_Repos/BeFirst_ETL": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "lastCost": 0,
+      "lastAPIDuration": 0,
+      "lastAPIDurationWithoutRetries": 0,
+      "lastToolDuration": 0,
+      "lastDuration": 58859,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 0,
+      "lastTotalOutputTokens": 0,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalWebSearchRequests": 0,
+      "lastFpsAverage": 0.38,
+      "lastFpsLow1Pct": 111.9,
+      "lastModelUsage": {},
+      "lastSessionId": "ceb86431-1101-47f5-8790-e9d19a32997b",
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 22,
+        "frame_duration_ms_min": 0.07750000000010004,
+        "frame_duration_ms_max": 8.936400000000049,
+        "frame_duration_ms_avg": 1.3641454545456626,
+        "frame_duration_ms_p50": 0.534999999999286,
+        "frame_duration_ms_p95": 3.1741699999991395,
+        "frame_duration_ms_p99": 7.730075999999844
+      }
+    },
+    "S:/01_Repos/BeFirst_SSRS": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "S:/01_Repos/BeFirst_Docs": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "lastCost": 0,
+      "lastAPIDuration": 0,
+      "lastAPIDurationWithoutRetries": 0,
+      "lastToolDuration": 0,
+      "lastDuration": 45347,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 0,
+      "lastTotalOutputTokens": 0,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalWebSearchRequests": 0,
+      "lastFpsAverage": 0.63,
+      "lastFpsLow1Pct": 58.01,
+      "lastModelUsage": {},
+      "lastSessionId": "6c20b44b-fec4-4600-9a02-abdf2db72836",
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 28,
+        "frame_duration_ms_min": 0.0375000000003638,
+        "frame_duration_ms_max": 17.23739999999998,
+        "frame_duration_ms_avg": 2.332007142856688,
+        "frame_duration_ms_p50": 0.9909000000006927,
+        "frame_duration_ms_p95": 13.425940000000134,
+        "frame_duration_ms_p99": 16.56510000000004
+      }
+    },
+    "S:/01_Repos/organizational-docs": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "C:/Users/emarquez/organizational-docs": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "S:/02_DevOps": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true
+    },
+    "S:/01_Repos/BeFirst_Production": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 2,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastCost": 0.18274025,
+      "lastAPIDuration": 30968,
+      "lastAPIDurationWithoutRetries": 30900,
+      "lastToolDuration": 5701,
+      "lastDuration": 264443,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 6066,
+      "lastTotalOutputTokens": 1096,
+      "lastTotalCacheCreationInputTokens": 13045,
+      "lastTotalCacheReadInputTokens": 138790,
+      "lastTotalWebSearchRequests": 0,
+      "lastFpsAverage": 3.53,
+      "lastFpsLow1Pct": 110.22,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 6059,
+          "outputTokens": 84,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.006479
+        },
+        "claude-opus-4-6": {
+          "inputTokens": 7,
+          "outputTokens": 1012,
+          "cacheReadInputTokens": 138790,
+          "cacheCreationInputTokens": 13045,
+          "webSearchRequests": 0,
+          "costUSD": 0.17626125
+        }
+      },
+      "lastSessionId": "fac799a2-9ad5-4ec9-bade-a87492203672",
+      "hasCompletedProjectOnboarding": true
+    },
+    "S:/01_Repos/BeFirst_Portal": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true,
+      "lastCost": 0.11508975,
+      "lastAPIDuration": 10635,
+      "lastAPIDurationWithoutRetries": 10629,
+      "lastToolDuration": 0,
+      "lastDuration": 21263,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 296,
+      "lastTotalOutputTokens": 280,
+      "lastTotalCacheCreationInputTokens": 13377,
+      "lastTotalCacheReadInputTokens": 48967,
+      "lastTotalWebSearchRequests": 0,
+      "lastFpsAverage": 5.72,
+      "lastFpsLow1Pct": 197.08,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 290,
+          "outputTokens": 16,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.00037
+        },
+        "claude-opus-4-6": {
+          "inputTokens": 6,
+          "outputTokens": 264,
+          "cacheReadInputTokens": 48967,
+          "cacheCreationInputTokens": 13377,
+          "webSearchRequests": 0,
+          "costUSD": 0.11471975000000001
+        }
+      },
+      "lastSessionId": "01854e69-fd76-465b-8b41-81f048c17300",
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 115,
+        "frame_duration_ms_min": 0.035200000000259024,
+        "frame_duration_ms_max": 5.3653000000000475,
+        "frame_duration_ms_avg": 0.942360000000001,
+        "frame_duration_ms_p50": 0.8840000000000146,
+        "frame_duration_ms_p95": 1.8482100000001078,
+        "frame_duration_ms_p99": 4.95421999999924
+      }
+    },
+    "S:/01_Repos/BeFirst_Database_MES_Database": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "S:/03_Others/01_Transcripts": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "S:/04_ACG/Odoo_Docs": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "S:/04_ACG/Odoo_Docker": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "S:/OneDrive - Safari Circuits, LLC/Information Technology - Documents/Grand Rapids IT Hub": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "S:/01_Repos/BeFirst_APIs": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true
+    },
+    "S:/01_Repos/BeFirst_Services": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastCost": 0,
+      "lastAPIDuration": 0,
+      "lastAPIDurationWithoutRetries": 0,
+      "lastToolDuration": 0,
+      "lastDuration": 29511,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 0,
+      "lastTotalOutputTokens": 0,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalWebSearchRequests": 0,
+      "lastFpsAverage": 0.49,
+      "lastFpsLow1Pct": 99.48,
+      "lastModelUsage": {},
+      "lastSessionId": "b5db50a1-96af-4dbd-ade3-487e8a8f627d",
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 14,
+        "frame_duration_ms_min": 0.06279999999969732,
+        "frame_duration_ms_max": 10.05210000000011,
+        "frame_duration_ms_avg": 1.4522285714286585,
+        "frame_duration_ms_p50": 0.529500000000553,
+        "frame_duration_ms_p95": 5.515359999999882,
+        "frame_duration_ms_p99": 9.144752000000059
+      },
+      "hasCompletedProjectOnboarding": true
+    },
+    "C:/Users/emarquez/.claude": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true
+    },
+    "C:/Users/emarquez": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "exampleFiles": [],
+      "lastCost": 0,
+      "lastAPIDuration": 0,
+      "lastAPIDurationWithoutRetries": 0,
+      "lastToolDuration": 0,
+      "lastDuration": 5642,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 0,
+      "lastTotalOutputTokens": 0,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalWebSearchRequests": 0,
+      "lastFpsAverage": 4.27,
+      "lastFpsLow1Pct": 95.97,
+      "lastModelUsage": {},
+      "lastSessionId": "f0be5ca6-dd41-4254-9737-e8456ad6cd1e",
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 20,
+        "frame_duration_ms_min": 0.03849999999965803,
+        "frame_duration_ms_max": 10.420299999999997,
+        "frame_duration_ms_avg": 1.322320000000002,
+        "frame_duration_ms_p50": 0.11960000000021864,
+        "frame_duration_ms_p95": 8.005210000000343,
+        "frame_duration_ms_p99": 9.937282000000064
+      }
+    },
+    "C:/Users/emarquez/personal-claude-docs": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true
+    },
+    "C:/Users/emarquez/OneDrive/0 - Documents/5 - Facturas/2026/03/SAT": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    }
+  },
+  "lastReleaseNotesSeen": "2.1.41",
+  "hasShownOpus46Notice": {
+    "96cb10be-71d7-4f18-944c-be5c5fbe65ab": true
+  },
+  "githubRepoPaths": {
+    "safaricircuitsllc/befirst_etl": [
+      "S:\\01_Repos\\BeFirst_ETL",
+      "S:\\1 - Repos\\BeFirst_ETL"
+    ],
+    "safaricircuitsllc/befirst_ssrs": [
+      "S:\\01_Repos\\BeFirst_SSRS"
+    ],
+    "safaricircuitsllc/befirst_docs": [
+      "S:\\01_Repos\\BeFirst_Docs"
+    ],
+    "safaricircuitsllc/organizational-docs": [
+      "S:\\01_Repos\\organizational-docs\\scripts",
+      "C:\\Users\\emarquez\\organizational-docs",
+      "S:\\01_Repos\\organizational-docs"
+    ],
+    "safaricircuitsllc/befirst_lacroix_production": [
+      "S:\\01_Repos\\BeFirst_Production\\BeFirst"
+    ],
+    "safaricircuitsllc/befirst_lacroix_portal": [
+      "S:\\01_Repos\\BeFirst_Portal"
+    ],
+    "safaricircuitsllc/befirst_lacroix_mes_database": [
+      "S:\\01_Repos\\BeFirst_Database_MES_Database\\MES"
+    ],
+    "safaricircuitsllc/befirst_lacroix_apis": [
+      "S:\\01_Repos\\BeFirst_APIs"
+    ],
+    "safaricircuitsllc/befirst_lacroix_services": [
+      "S:\\01_Repos\\BeFirst_Services"
+    ],
+    "eduardodmb/claudework": [
+      "C:\\Users\\emarquez\\.claude"
+    ],
+    "eduardodmb/claudedocs": [
+      "C:\\Users\\emarquez\\personal-claude-docs"
+    ]
+  },
+  "s1mAccessCache": {
+    "96cb10be-71d7-4f18-944c-be5c5fbe65ab": {
+      "hasAccess": false,
+      "hasAccessNotAsDefault": false,
+      "timestamp": 1778860687585
+    }
+  },
+  "penguinModeOrgEnabled": false,
+  "officialMarketplaceAutoInstallAttempted": true,
+  "officialMarketplaceAutoInstalled": true,
+  "clientDataCache": {
+    "data": null,
+    "timestamp": 1778861441346
+  },
+  "skillUsage": {
+    "init": {
+      "usageCount": 6,
+      "lastUsedAt": 1778557190819
+    },
+    "list-skills": {
+      "usageCount": 1,
+      "lastUsedAt": 1771007238924
+    },
+    "end-work": {
+      "usageCount": 3,
+      "lastUsedAt": 1773426149364
+    },
+    "devops-sync": {
+      "usageCount": 1,
+      "lastUsedAt": 1771009843840
+    },
+    "status": {
+      "usageCount": 1,
+      "lastUsedAt": 1775664326561
+    },
+    "learn": {
+      "usageCount": 3,
+      "lastUsedAt": 1778676394430
+    }
+  },
+  "opus46FeedSeenCount": 4,
+  "hasShownS1MWelcomeV2": {
+    "96cb10be-71d7-4f18-944c-be5c5fbe65ab": true
+  },
+  "lastPlanModeUse": 1775652908420,
+  "showSpinnerTree": false,
+  "sonnet45MigrationComplete": true,
+  "opus45MigrationComplete": true,
+  "thinkingMigrationComplete": true,
+  "sonnet1m45MigrationComplete": true,
+  "cachedExtraUsageDisabledReason": "out_of_credits",
+  "toolUsage": {
+    "Read": {
+      "usageCount": 7,
+      "lastUsedAt": 1771951423218
+    },
+    "Bash": {
+      "usageCount": 6,
+      "lastUsedAt": 1771951498997
+    },
+    "Edit": {
+      "usageCount": 4,
+      "lastUsedAt": 1771951561570
+    }
+  },
+  "feedbackSurveyState": {
+    "lastShownTime": 1778683191616
+  },
+  "metricsStatusCache": {
+    "enabled": true,
+    "timestamp": 1777683959767
+  },
+  "oauthAccount": {
+    "accountUuid": "4b6bc440-01ad-492f-8b72-b6ff836610d8",
+    "emailAddress": "e.marquez@safaricircuits.com",
+    "organizationUuid": "96cb10be-71d7-4f18-944c-be5c5fbe65ab",
+    "hasExtraUsageEnabled": true,
+    "billingType": "stripe_subscription",
+    "accountCreatedAt": "2026-02-09T06:02:29.052941Z",
+    "subscriptionCreatedAt": "2025-06-26T15:12:33.447085Z",
+    "displayName": "Eduardo D. Marquez"
+  },
+  "anonymousId": "claudecode.v1.87a4ca27-e1d1-409b-8e5f-b70d64ef6122",
+  "hasUsedBackslashReturn": true,
+  "migrationVersion": 13,
+  "hasResetAutoModeOptInForDefaultOffer": true,
+  "cachedExperimentFeatures": [
+    "tengu_agent_list_attach",
+    "tengu_amber_prism",
+    "tengu_ember_trail",
+    "tengu_flint_harbor_share",
+    "tengu_kestrel_arch",
+    "tengu_mcp_subagent_prompt",
+    "tengu_orchid_mantis_v2",
+    "tengu_plank_river_frost",
+    "tengu_read_dedup_killswitch"
+  ],
+  "seenNotifications": {}
+}

@@ -1,0 +1,52 @@
+@{
+  ViewBag.Title = "Management Reports";
+}
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text">Management Reports</h3>
+  </div>
+  <div class="md-card-content">
+    <p class="text-muted">
+      Select a report from the list below to view management and audit information.
+    </p>
+
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="md-card">
+          <div class="md-card-content">
+            <h4>
+              <i class="fa fa-users"></i> User Memberships & Position Audit
+            </h4>
+            <p class="text-muted">
+              View all roles with their assigned members and identify users who have role assignments
+              but no position assigned. Useful for access control audits and HR compliance reviews.
+            </p>
+            <a href="@Url.Action("UserMemberships", "Reports", new { area = "Manage" })" class="md-btn md-btn-primary">
+              <i class="fa fa-file-text-o"></i> View Report
+            </a>
+          </div>
+        </div>
+      </div>
+
+      @* Future reports can be added here *@
+      @*
+      <div class="col-md-6">
+        <div class="md-card">
+          <div class="md-card-content">
+            <h4>
+              <i class="fa fa-bar-chart"></i> Another Report
+            </h4>
+            <p class="text-muted">
+              Description of another report.
+            </p>
+            <a href="@Url.Action("AnotherReport", "Reports", new { area = "Manage" })" class="md-btn md-btn-primary">
+              <i class="fa fa-file-text-o"></i> View Report
+            </a>
+          </div>
+        </div>
+      </div>
+      *@
+    </div>
+  </div>
+</div>

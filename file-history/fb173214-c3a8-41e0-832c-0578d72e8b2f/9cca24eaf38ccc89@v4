@@ -1,0 +1,2969 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{95063299-FA24-4388-B0FE-8E4C38FA0280}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Production.My.MyApplication</StartupObject>
+    <RootNamespace>Production</RootNamespace>
+    <AssemblyName>Production</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <PublishUrl>ftps://192.168.0.38/Mes_Software/Production/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>1</UpdateInterval>
+    <UpdateIntervalUnits>Hours</UpdateIntervalUnits>
+    <UpdatePeriodically>true</UpdatePeriodically>
+    <UpdateRequired>true</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>https://192.168.0.38/Installers/Production/</InstallUrl>
+    <ProductName>Produccion</ProductName>
+    <PublisherName>BeFirst</PublisherName>
+    <MinimumRequiredVersion>2.0.1.128</MinimumRequiredVersion>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>1437</ApplicationRevision>
+    <ApplicationVersion>2.0.26100.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup>
+    <UseWinFormsOutOfProcDesigner>True</UseWinFormsOutOfProcDesigner>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Production.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Production.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>170D96E72D721CF86750B924074A964783A324A9</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon20w.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DocumentationFile>Production.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DocumentationFile>Production.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DocumentationFile>Production.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DocumentationFile>Production.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>BeFirst.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.2.2.5\lib\AForge.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AForge.Controls, Version=2.2.5.0, Culture=neutral, PublicKeyToken=a8ac264d1dc6b9d9, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Controls.2.2.5\lib\AForge.Controls.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AForge.Imaging, Version=2.2.5.0, Culture=neutral, PublicKeyToken=ba8ddea9676ca48b, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Imaging.2.2.5\lib\AForge.Imaging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AForge.Math, Version=2.2.5.0, Culture=neutral, PublicKeyToken=abba2e25397ee8c9, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Math.2.2.5\lib\AForge.Math.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AForge.Video, Version=2.2.5.0, Culture=neutral, PublicKeyToken=cbfb6e07d173c401, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Video.2.2.5\lib\AForge.Video.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AForge.Video.DirectShow, Version=2.2.5.0, Culture=neutral, PublicKeyToken=61ea4348d43881b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Video.DirectShow.2.2.5\lib\AForge.Video.DirectShow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.5.0\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="CameraControlLib">
+      <HintPath>..\Library\CameraControlLib\obj\Debug\CameraControlLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Cognex.DataMan.CogNamer.PC, Version=5.6.0.83, Culture=neutral, PublicKeyToken=9f98866f2a3a2e78, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\Cognex\Cognex.DataMan.CogNamer.PC.dll</HintPath>
+    </Reference>
+    <Reference Include="Cognex.DataMan.SDK.Discovery.PC, Version=5.6.0.83, Culture=neutral, PublicKeyToken=9f98866f2a3a2e78, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\Cognex\Cognex.DataMan.SDK.Discovery.PC.dll</HintPath>
+    </Reference>
+    <Reference Include="Cognex.DataMan.SDK.PC, Version=5.6.0.83, Culture=neutral, PublicKeyToken=9f98866f2a3a2e78, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\Cognex\Cognex.DataMan.SDK.PC.dll</HintPath>
+    </Reference>
+    <Reference Include="Cognex.DataMan.SDK.Utils.PC, Version=5.6.0.83, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\Cognex\Cognex.DataMan.SDK.Utils.PC.dll</HintPath>
+    </Reference>
+    <Reference Include="Communication, Version=6.17.921.1422, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\Keyence\x86\Communication.dll</HintPath>
+    </Reference>
+    <Reference Include="DirectShowLib, Version=2.1.0.1599, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DirectShowLib.1.0.0\lib\DirectShowLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Keyence.AutoID.SDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\Keyence\x86\Keyence.AutoID.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="MessagingToolkit.QRCode, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MessagingToolkit.QRCode.1.3.0\lib\MessagingToolkit.QRCode.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MetroFramework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\MetroFramework\MetroFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Design, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\MetroFramework\MetroFramework.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Fonts, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\MetroFramework\MetroFramework.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Connections.Abstractions, Version=2.1.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Connections.Abstractions.2.1.3\lib\netstandard2.0\Microsoft.AspNetCore.Connections.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Hosting.2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Hosting.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Hosting.Server.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http, Version=2.1.34.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.2.1.34\lib\netstandard2.0\Microsoft.AspNetCore.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Extensions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Extensions.2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Features.2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Server.Kestrel, Version=2.1.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Server.Kestrel.2.1.3\lib\netstandard2.0\Microsoft.AspNetCore.Server.Kestrel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Server.Kestrel.Core, Version=2.1.25.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Server.Kestrel.Core.2.1.25\lib\netstandard2.0\Microsoft.AspNetCore.Server.Kestrel.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Server.Kestrel.Https, Version=2.1.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Server.Kestrel.Https.2.1.3\lib\netstandard2.0\Microsoft.AspNetCore.Server.Kestrel.Https.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions, Version=2.1.3.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions.2.1.3\lib\netstandard2.0\Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets, Version=2.1.40.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.2.1.40\lib\netstandard2.0\Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.WebUtilities, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.WebUtilities.2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.6.0.0\lib\net462\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.1.10.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.2.1.10\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.EnvironmentVariables, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.EnvironmentVariables.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.EnvironmentVariables.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.FileExtensions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.FileExtensions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.2.1.1\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.FileProviders.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileProviders.Physical, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.FileProviders.Physical.2.1.1\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Physical.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileSystemGlobbing, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.FileSystemGlobbing.2.1.1\lib\netstandard2.0\Microsoft.Extensions.FileSystemGlobbing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Hosting.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Hosting.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=6.0.0.4, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.6.0.4\lib\net461\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.ObjectPool, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.ObjectPool.2.1.1\lib\netstandard2.0\Microsoft.Extensions.ObjectPool.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Net.Http.Headers, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.Headers.2.1.1\lib\netstandard2.0\Microsoft.Net.Http.Headers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\QuickOPC.1.0.0.5\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\QuickOPC.1.0.0.5\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\QuickOPC.1.0.0.5\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Opc.Ua.Bindings.Https, Version=1.4.372.0, Culture=neutral, PublicKeyToken=bfa7a73c5cf4b6e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\OPCFoundation.NetStandard.Opc.Ua.Bindings.Https.1.4.372.76\lib\net48\Opc.Ua.Bindings.Https.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Opc.Ua.Client, Version=1.5.374.0, Culture=neutral, PublicKeyToken=bfa7a73c5cf4b6e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\OPCFoundation.NetStandard.Opc.Ua.Client.1.5.374.158\lib\net48\Opc.Ua.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Configuration, Version=1.5.374.0, Culture=neutral, PublicKeyToken=bfa7a73c5cf4b6e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\OPCFoundation.NetStandard.Opc.Ua.Configuration.1.5.374.158\lib\net48\Opc.Ua.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Core, Version=1.5.374.0, Culture=neutral, PublicKeyToken=bfa7a73c5cf4b6e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\OPCFoundation.NetStandard.Opc.Ua.Core.1.5.374.158\lib\net48\Opc.Ua.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Gds.Client.Common, Version=1.5.374.0, Culture=neutral, PublicKeyToken=bfa7a73c5cf4b6e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\OPCFoundation.NetStandard.Opc.Ua.Gds.Client.Common.1.5.374.158\lib\net48\Opc.Ua.Gds.Client.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Gds.Server.Common, Version=1.5.374.0, Culture=neutral, PublicKeyToken=bfa7a73c5cf4b6e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\OPCFoundation.NetStandard.Opc.Ua.Gds.Server.Common.1.5.374.158\lib\net48\Opc.Ua.Gds.Server.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Security.Certificates, Version=1.5.374.0, Culture=neutral, PublicKeyToken=bfa7a73c5cf4b6e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\OPCFoundation.NetStandard.Opc.Ua.Security.Certificates.1.5.374.158\lib\net48\Opc.Ua.Security.Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Server, Version=1.5.374.0, Culture=neutral, PublicKeyToken=bfa7a73c5cf4b6e8, processorArchitecture=MSIL">
+      <HintPath>..\packages\OPCFoundation.NetStandard.Opc.Ua.Server.1.5.374.158\lib\net48\Opc.Ua.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickOPC, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QuickOPC.1.0.0.5\lib\net40\QuickOPC.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=112.1.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.112.1.0\lib\net48\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.9.0.0\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Formats.Asn1, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Formats.Asn1.9.0.0\lib\net462\System.Formats.Asn1.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Pipelines, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.9.0.0\lib\net462\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata, Version=1.4.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.6.0\lib\netstandard2.0\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.1\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Cng, Version=4.3.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Cng.4.5.2\lib\net47\System.Security.Cryptography.Cng.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.9.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.9.0.0\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks, Version=2.6.8.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\QuickOPC.1.0.0.5\lib\net40\System.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Tesseract, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Tesseract.3.3.0\lib\net45\Tesseract.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="VncClientControlCommon, Version=6.17.921.1422, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\Keyence\x86\VncClientControlCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="VncClientControlCommonLib, Version=6.17.921.1422, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Includes\Keyence\x86\VncClientControlCommonLib.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.9\lib\net48\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXing.Net.Mobile.Core, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.Mobile.2.4.1\lib\netstandard1.0\ZXing.Net.Mobile.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.portable, Version=0.16.2.0, Culture=neutral, PublicKeyToken=830ae994e36ac27d, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.Mobile.2.4.1\lib\netstandard1.0\zxing.portable.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.9\lib\net48\zxing.presentation.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXingNetMobile, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.Mobile.2.4.1\lib\netstandard1.0\ZXingNetMobile.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Framework\API\Account.vb" />
+    <Compile Include="Framework\API\BeApi.vb" />
+    <Compile Include="Framework\API\Labels.vb" />
+    <Compile Include="Framework\API\Others.vb" />
+    <Compile Include="Framework\API\Parts.vb" />
+    <Compile Include="Framework\API\Stations.vb" />
+    <Compile Include="Framework\API\Units.vb" />
+    <Compile Include="Framework\Cameras\CameraSettings.vb" />
+    <Compile Include="Framework\DialogBoxes\InputDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Framework\OPC\OPCUAClass.vb" />
+    <Compile Include="Framework\Printers\Winsock.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Framework\Printers\BeSatoLan.vb" />
+    <Compile Include="Framework\Queries\BeConn_OLD.vb" />
+    <Compile Include="Framework\Security\BeSecurity.vb" />
+    <Compile Include="Framework\Config\BeSettings.vb" />
+    <Compile Include="Framework\API\Containers.vb" />
+    <Compile Include="Framework\Queries\BeConnMachines.vb" />
+    <Compile Include="frm_Admin_InvLabels.Designer.vb">
+      <DependentUpon>frm_Admin_InvLabels.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Admin_InvLabels.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_b_facility.Designer.vb">
+      <DependentUpon>frm_a_b_facility.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_b_facility.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_keyence_usb.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_keyence_usb.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_keyence_usb.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgAlternates.Designer.vb">
+      <DependentUpon>frm_a_d_msgAlternates.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgAlternates.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgCleanliness.Designer.vb">
+      <DependentUpon>frm_a_d_msgCleanliness.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgCleanliness.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_partSearch.Designer.vb">
+      <DependentUpon>frm_a_d_partSearch.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_partSearch.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_picture_add_simple.Designer.vb">
+      <DependentUpon>frm_a_d_picture_add_simple.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_picture_add_simple.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_plexChecksheetsStatus.Designer.vb">
+      <DependentUpon>frm_a_d_plexChecksheetsStatus.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_plexChecksheetsStatus.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgLoadingBF.Designer.vb">
+      <DependentUpon>frm_a_d_msgLoadingBF.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgLoadingBF.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnitsScanDetails.Designer.vb">
+      <DependentUpon>frm_a_d_defectsUnitsScanDetails.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnitsScanDetails.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_materialAvailable.Designer.vb">
+      <DependentUpon>frm_a_d_materialAvailable.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_materialAvailable.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_plexControlPanel.Designer.vb">
+      <DependentUpon>frm_a_d_plexControlPanel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_plexControlPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_casillaGroupSelect.Designer.vb">
+      <DependentUpon>frm_a_d_casillaGroupSelect.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_casillaGroupSelect.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_bomIgnore.Designer.vb">
+      <DependentUpon>frm_a_d_bomIgnore.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_bomIgnore.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_plex_Support.Designer.vb">
+      <DependentUpon>frm_a_d_plex_Support.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_plex_Support.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_setupid.Designer.vb">
+      <DependentUpon>frm_a_d_setupid.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_setupid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_setupid_validations.Designer.vb">
+      <DependentUpon>frm_a_d_setupid_validations.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_setupid_validations.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unitSegregateLocked.Designer.vb">
+      <DependentUpon>frm_a_d_unitSegregateLocked.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unitSegregateLocked.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockCFT.Designer.vb">
+      <DependentUpon>frm_a_d_unlockCFT.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockCFT.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_keyence_wave_values.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_keyence_wave_values.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_keyence_wave_values.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_keyence_wave.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_keyence_wave.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_keyence_wave.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_sensor_in_values.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_sensor_in_values.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_sensor_in_values.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_sensor_in.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_sensor_in.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_sensor_in.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockProduction.Designer.vb">
+      <DependentUpon>frm_a_d_unlockProduction.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockProduction.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockQAInspector.Designer.vb">
+      <DependentUpon>frm_a_d_unlockQAInspector.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockQAInspector.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockRole.Designer.vb">
+      <DependentUpon>frm_a_d_unlockRole.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockRole.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockSerial.Designer.vb">
+      <DependentUpon>frm_a_d_unlockSerial.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockSerial.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgMissingNetwork.Designer.vb">
+      <DependentUpon>frm_a_d_msgMissingNetwork.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgMissingNetwork.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_TCPIP.Designer.vb">
+      <DependentUpon>frm_a_d_configure_TCPIP.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_TCPIP.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_TCPIPClient.Designer.vb">
+      <DependentUpon>frm_a_d_configure_TCPIPClient.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_TCPIPClient.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockDesviations.Designer.vb">
+      <DependentUpon>frm_a_d_unlockDesviations.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockDesviations.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_validation_quality.Designer.vb">
+      <DependentUpon>frm_a_d_validation_quality.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_validation_quality.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_validator_each.Designer.vb">
+      <DependentUpon>frm_a_d_validator_each.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_validator_each.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_zplPreview.Designer.vb">
+      <DependentUpon>frm_a_d_zplPreview.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_zplPreview.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_bonus.Designer.vb">
+      <DependentUpon>frm_a_d_bonus.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_bonus.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_bonusAdd.Designer.vb">
+      <DependentUpon>frm_a_d_bonusAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_bonusAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Framework\Config\BeAgent.vb" />
+    <Compile Include="Framework\Queries\BeConn.vb" />
+    <Compile Include="Framework\Functions\ExFunctions.vb" />
+    <Compile Include="frm_a_d_msgLoadingPlex.Designer.vb">
+      <DependentUpon>frm_a_d_msgLoadingPlex.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgLoadingPlex.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Framework\Functions\BeAsemblyInstructions.vb" />
+    <Compile Include="Framework\Config\BeConfig.vb" />
+    <Compile Include="Framework\Plex\BePlex.vb" />
+    <Compile Include="Connected Services\PlexSOAP\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgWaiting.Designer.vb">
+      <DependentUpon>frm_a_d_msgWaiting.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgWaiting.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_in_values.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_arduino_in_values.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_in_values.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_in.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_arduino_in.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_in.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_out.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_arduino_out.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_out.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_selector.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_selector.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_selector.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnitsRemplace.Designer.vb">
+      <DependentUpon>frm_a_d_defectsUnitsRemplace.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnitsRemplace.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnits.Designer.vb">
+      <DependentUpon>frm_a_d_defectsUnits.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnits.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockTwoDefects.Designer.vb">
+      <DependentUpon>frm_a_d_unlockTwoDefects.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockTwoDefects.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgNotification.Designer.vb">
+      <DependentUpon>frm_a_d_msgNotification.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgNotification.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgNextJob.Designer.vb">
+      <DependentUpon>frm_a_d_msgNextJob.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgNextJob.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_casillaPositionSelect.Designer.vb">
+      <DependentUpon>frm_a_d_casillaPositionSelect.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_casillaPositionSelect.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_ticketsResponse.Designer.vb">
+      <DependentUpon>frm_a_d_ticketsResponse.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_ticketsResponse.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unitTracking.Designer.vb">
+      <DependentUpon>frm_a_d_unitTracking.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unitTracking.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_validator.Designer.vb">
+      <DependentUpon>frm_a_d_validator.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_validator.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_bonusAddLaser.Designer.vb">
+      <DependentUpon>frm_a_d_bonusAddLaser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_bonusAddLaser.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_plexChecksheetQuestion.Designer.vb">
+      <DependentUpon>frm_a_d_plexChecksheetQuestion.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_plexChecksheetQuestion.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_plexChecksheets.Designer.vb">
+      <DependentUpon>frm_a_d_plexChecksheets.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_plexChecksheets.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_ideasSuggestion.Designer.vb">
+      <DependentUpon>frm_a_d_ideasSuggestion.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_ideasSuggestion.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgMissingInline.Designer.vb">
+      <DependentUpon>frm_a_d_msgMissingInline.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgMissingInline.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_materialRequest2.Designer.vb">
+      <DependentUpon>frm_a_d_materialRequest2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_materialRequest2.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_userResetPassword.Designer.vb">
+      <DependentUpon>frm_a_d_userResetPassword.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_userResetPassword.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_materialRequest.Designer.vb">
+      <DependentUpon>frm_a_d_materialRequest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_materialRequest.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_settingsVariables.Designer.vb">
+      <DependentUpon>frm_a_d_settingsVariables.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_settingsVariables.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_settingsVersion.Designer.vb">
+      <DependentUpon>frm_a_d_settingsVersion.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_settingsVersion.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Conversion.Designer.vb">
+      <DependentUpon>frm_Conversion.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Conversion.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_GP12_unitRemove.Designer.vb">
+      <DependentUpon>frm_GP12_unitRemove.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_GP12_unitRemove.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_GP12_partValidation.Designer.vb">
+      <DependentUpon>frm_GP12_partValidation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_GP12_partValidation.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_HGTech_unitValidation.Designer.vb">
+      <DependentUpon>frm_HGTech_unitValidation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_HGTech_unitValidation.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_HGTech.Designer.vb">
+      <DependentUpon>frm_HGTech.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_HGTech.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_ICCounter_msgSendWarehouse.Designer.vb">
+      <DependentUpon>frm_ICCounter_msgSendWarehouse.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_ICCounter_msgSendWarehouse.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_ICsXRay.Designer.vb">
+      <DependentUpon>frm_ICsXRay.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_ICsXRay.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Incoming.Designer.vb">
+      <DependentUpon>frm_Incoming.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Incoming.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Incoming_partSelection.Designer.vb">
+      <DependentUpon>frm_Incoming_partSelection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Incoming_partSelection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Incoming_containerReprint.Designer.vb">
+      <DependentUpon>frm_Incoming_containerReprint.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Incoming_containerReprint.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_labelCopy_Others.Designer.vb">
+      <DependentUpon>frm_Labels_labelCopy_Others.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_labelCopy_Others.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_labelValidation.Designer.vb">
+      <DependentUpon>frm_Labels_labelValidation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_labelValidation.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_layouts.Designer.vb">
+      <DependentUpon>frm_Labels_layouts.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_layouts.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_layoutsCopy.Designer.vb">
+      <DependentUpon>frm_Labels_layoutsCopy.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_layoutsCopy.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_binSelection.Designer.vb">
+      <DependentUpon>frm_a_d_binSelection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_binSelection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_remplace.Designer.vb">
+      <DependentUpon>frm_Labels_remplace.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_remplace.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_labelReprint.Designer.vb">
+      <DependentUpon>frm_Labels_labelReprint.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_labelReprint.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_labelReprint2.Designer.vb">
+      <DependentUpon>frm_Labels_labelReprint2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_labelReprint2.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_MergeLabels_MergeKeyence_Positions.Designer.vb">
+      <DependentUpon>frm_MergeLabels_MergeKeyence_Positions.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_MergeLabels_MergeKeyence_Positions.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_MergeUnits.Designer.vb">
+      <DependentUpon>frm_MergeUnits.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_MergeUnits.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_MergeUnits_unmerge.Designer.vb">
+      <DependentUpon>frm_MergeUnits_unmerge.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_MergeUnits_unmerge.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_cameraLayers.Designer.vb">
+      <DependentUpon>frm_PVS_cameraLayers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_cameraLayers.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_serialAdd.Designer.vb">
+      <DependentUpon>frm_PVS_serialAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_serialAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_InlinBox_Packing.Designer.vb">
+      <DependentUpon>frm_PVS_InlinBox_Packing.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_InlinBox_Packing.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_InlineBox_Selection.Designer.vb">
+      <DependentUpon>frm_PVS_InlineBox_Selection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_InlineBox_Selection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_containerInTransit.Designer.vb">
+      <DependentUpon>frm_Receive_containerInTransit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_containerInTransit.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_Containers_Size.Designer.vb">
+      <DependentUpon>frm_Receive_Containers_Size.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_Containers_Size.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_Location_Prints.Designer.vb">
+      <DependentUpon>frm_Receive_Location_Prints.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_Location_Prints.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_Masters_Inventory.Designer.vb">
+      <DependentUpon>frm_Receive_Masters_Inventory.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_Masters_Inventory.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_MROLabel.Designer.vb">
+      <DependentUpon>frm_Receive_MROLabel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_MROLabel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_SplitContainers.Designer.vb">
+      <DependentUpon>frm_Receive_SplitContainers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_SplitContainers.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Rework_Material_Confirm.Designer.vb">
+      <DependentUpon>frm_Rework_Material_Confirm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Rework_Material_Confirm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Languages\Packout.Designer.vb">
+      <DependentUpon>Packout.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Languages\Packout.es.Designer.vb">
+      <DependentUpon>Packout.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="frm_a_d_msgCognexLoad.Designer.vb">
+      <DependentUpon>frm_a_d_msgCognexLoad.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgCognexLoad.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockCertifications.Designer.vb">
+      <DependentUpon>frm_a_d_unlockCertifications.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockCertifications.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_GP12_boxSelection.designer.vb">
+      <DependentUpon>frm_GP12_boxSelection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_GP12_boxSelection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_labelPanelPrint.Designer.vb">
+      <DependentUpon>frm_Labels_labelPanelPrint.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_labelPanelPrint.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_msgAlternateMPN.Designer.vb">
+      <DependentUpon>frm_PVS_msgAlternateMPN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_msgAlternateMPN.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_capacitorAdd.Designer.vb">
+      <DependentUpon>frm_PVS_capacitorAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_capacitorAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_boxCompleteRMA.Designer.vb">
+      <DependentUpon>frm_PVS_boxCompleteRMA.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_boxCompleteRMA.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS.designer.vb">
+      <DependentUpon>frm_PVS.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_layerAlert.Designer.vb">
+      <DependentUpon>frm_PVS_layerAlert.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_layerAlert.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_msgLayerComplete.Designer.vb">
+      <DependentUpon>frm_PVS_msgLayerComplete.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_msgLayerComplete.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_unitPartialValidation.Designer.vb">
+      <DependentUpon>frm_PVS_unitPartialValidation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_unitPartialValidation.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_labelReprintSerials.Designer.vb">
+      <DependentUpon>frm_PVS_labelReprintSerials.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_labelReprintSerials.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_rabbits.Designer.vb">
+      <DependentUpon>frm_PVS_rabbits.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_rabbits.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_plexSetManual.Designer.vb">
+      <DependentUpon>frm_PVS_plexSetManual.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_plexSetManual.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive.Designer.vb">
+      <DependentUpon>frm_Receive.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_kanbanCard.Designer.vb">
+      <DependentUpon>frm_Receive_kanbanCard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_kanbanCard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_cameraScanDocument.designer.vb">
+      <DependentUpon>frm_Receive_cameraScanDocument.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_cameraScanDocument.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_labelReprint.Designer.vb">
+      <DependentUpon>frm_Receive_labelReprint.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_labelReprint.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_labelsMerge.Designer.vb">
+      <DependentUpon>frm_Receive_labelsMerge.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_labelsMerge.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_labelsQuantity.Designer.vb">
+      <DependentUpon>frm_Receive_labelsQuantity.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_labelsQuantity.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_Masters.Designer.vb">
+      <DependentUpon>frm_Receive_Masters.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_Masters.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_materialMove.Designer.vb">
+      <DependentUpon>frm_Receive_materialMove.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_materialMove.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Receive_supplierSelection.Designer.vb">
+      <DependentUpon>frm_Receive_supplierSelection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Receive_supplierSelection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgQualityAlerts.Designer.vb">
+      <DependentUpon>frm_a_d_msgQualityAlerts.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgQualityAlerts.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Rework_addadjustment.Designer.vb">
+      <DependentUpon>frm_Rework_addadjustment.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Rework_addadjustment.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_SMT_aoiResultSelect.Designer.vb">
+      <DependentUpon>frm_SMT_aoiResultSelect.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_SMT_aoiResultSelect.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockSupervisor.Designer.vb">
+      <DependentUpon>frm_a_d_unlockSupervisor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockSupervisor.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_SMT_untiBadBoard.Designer.vb">
+      <DependentUpon>frm_SMT_untiBadBoard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_SMT_untiBadBoard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unitMergeChilds.Designer.vb">
+      <DependentUpon>frm_a_d_unitMergeChilds.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unitMergeChilds.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_GP12_boxDelete.Designer.vb">
+      <DependentUpon>frm_GP12_boxDelete.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_GP12_boxDelete.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_GP12.Designer.vb">
+      <DependentUpon>frm_GP12.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_GP12.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_elementAdd.Designer.vb">
+      <DependentUpon>frm_Labels_elementAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_elementAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_plexAdd.Designer.vb">
+      <DependentUpon>frm_Labels_plexAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_plexAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_sizeCalculator.Designer.vb">
+      <DependentUpon>frm_Labels_sizeCalculator.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_sizeCalculator.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_labelCopy.Designer.vb">
+      <DependentUpon>frm_Labels_labelCopy.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_labelCopy.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_jobDetails.Designer.vb">
+      <DependentUpon>frm_Labels_jobDetails.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_jobDetails.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels.Designer.vb">
+      <DependentUpon>frm_Labels.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Labels_rabbits.Designer.vb">
+      <DependentUpon>frm_Labels_rabbits.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Labels_rabbits.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockQAEngineering.Designer.vb">
+      <DependentUpon>frm_a_d_unlockQAEngineering.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockQAEngineering.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgPrinting.Designer.vb">
+      <DependentUpon>frm_a_d_msgPrinting.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgPrinting.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_MergeLabels.Designer.vb">
+      <DependentUpon>frm_MergeLabels.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_MergeLabels.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_MergeLabels_MergeKeyence.Designer.vb">
+      <DependentUpon>frm_MergeLabels_MergeKeyence.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_MergeLabels_MergeKeyence.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_MergeLabels_Merge.Designer.vb">
+      <DependentUpon>frm_MergeLabels_Merge.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_MergeLabels_Merge.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_MergeLabels_Unmerge.Designer.vb">
+      <DependentUpon>frm_MergeLabels_Unmerge.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_MergeLabels_Unmerge.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgChangeModel.Designer.vb">
+      <DependentUpon>frm_a_d_msgChangeModel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgChangeModel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_OOBA_alerts.Designer.vb">
+      <DependentUpon>frm_OOBA_alerts.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_OOBA_alerts.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_OOBA_boxSelection.Designer.vb">
+      <DependentUpon>frm_OOBA_boxSelection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_OOBA_boxSelection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_OOBA_layerAdd.Designer.vb">
+      <DependentUpon>frm_OOBA_layerAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_OOBA_layerAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_OOBA.Designer.vb">
+      <DependentUpon>frm_OOBA.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_OOBA.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_layerAdd.Designer.vb">
+      <DependentUpon>frm_PVS_layerAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_layerAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_boxDelete.Designer.vb">
+      <DependentUpon>frm_PVS_boxDelete.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_boxDelete.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_unitDelete.Designer.vb">
+      <DependentUpon>frm_PVS_unitDelete.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_unitDelete.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_msgChecking.Designer.vb">
+      <DependentUpon>frm_PVS_msgChecking.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_msgChecking.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_boxComplete.Designer.vb">
+      <DependentUpon>frm_PVS_boxComplete.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_boxComplete.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_boxSelection.Designer.vb">
+      <DependentUpon>frm_PVS_boxSelection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_boxSelection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_containerRequired.Designer.vb">
+      <DependentUpon>frm_PVS_containerRequired.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_containerRequired.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_PVS_labelReprints.Designer.vb">
+      <DependentUpon>frm_PVS_labelReprints.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_PVS_labelReprints.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockArea.Designer.vb">
+      <DependentUpon>frm_a_d_unlockArea.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockArea.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Rework_addmaterial.Designer.vb">
+      <DependentUpon>frm_Rework_addmaterial.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Rework_addmaterial.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Rework_alertas.Designer.vb">
+      <DependentUpon>frm_Rework_alertas.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Rework_alertas.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Rework.Designer.vb">
+      <DependentUpon>frm_Rework.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Rework.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Rework_mls.Designer.vb">
+      <DependentUpon>frm_Rework_mls.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Rework_mls.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Rework_MuliplesSN.Designer.vb">
+      <DependentUpon>frm_Rework_MuliplesSN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Rework_MuliplesSN.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Rework_unitsWithoutLabel.Designer.vb">
+      <DependentUpon>frm_Rework_unitsWithoutLabel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Rework_unitsWithoutLabel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_SMT_msgMaterialMissing.Designer.vb">
+      <DependentUpon>frm_SMT_msgMaterialMissing.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_SMT_msgMaterialMissing.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_SMT_msgSpliceBad.Designer.vb">
+      <DependentUpon>frm_SMT_msgSpliceBad.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_SMT_msgSpliceBad.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_WAVE_aoirework.Designer.vb">
+      <DependentUpon>frm_WAVE_aoirework.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_WAVE_aoirework.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_WAVE_cameraCognex.Designer.vb">
+      <DependentUpon>frm_WAVE_cameraCognex.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_WAVE_cameraCognex.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_out_values.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_arduino_out_values.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_out_values.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_out_aoi.Designer.vb">
+      <DependentUpon>frm_a_d_configure_com_arduino_out_aoi.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_configure_com_arduino_out_aoi.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unitConvertPartTo.Designer.vb">
+      <DependentUpon>frm_a_d_unitConvertPartTo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unitConvertPartTo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Framework\GlobalVariables\ExData.vb" />
+    <Compile Include="frm_a_d_defects.Designer.vb">
+      <DependentUpon>frm_a_d_defects.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_defects.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_downtimesOptions.Designer.vb">
+      <DependentUpon>frm_a_d_downtimesOptions.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_downtimesOptions.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnitsQuantity.Designer.vb">
+      <DependentUpon>frm_a_d_defectsUnitsQuantity.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnitsQuantity.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_downtime.Designer.vb">
+      <DependentUpon>frm_a_d_downtime.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_downtime.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_WAVE_plexCorrections.Designer.vb">
+      <DependentUpon>frm_WAVE_plexCorrections.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_WAVE_plexCorrections.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_WAVE.Designer.vb">
+      <DependentUpon>frm_WAVE.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_WAVE.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_b_Login.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_b_Login.Designer.vb">
+      <DependentUpon>frm_a_b_Login.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_SMT.Designer.vb">
+      <DependentUpon>frm_SMT.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_SMT.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unlockFiveDefects.Designer.vb">
+      <DependentUpon>frm_a_d_unlockFiveDefects.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unlockFiveDefects.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnitsScan.Designer.vb">
+      <DependentUpon>frm_a_d_defectsUnitsScan.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_defectsUnitsScan.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgError.Designer.vb">
+      <DependentUpon>frm_a_d_msgError.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgError.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgIncompleteJob.Designer.vb">
+      <DependentUpon>frm_a_d_msgIncompleteJob.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgIncompleteJob.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_cameraCapture.Designer.vb">
+      <DependentUpon>frm_a_d_cameraCapture.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_cameraCapture.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_a_prelog.Designer.vb">
+      <DependentUpon>frm_a_a_prelog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_a_prelog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_unitRecover.Designer.vb">
+      <DependentUpon>frm_a_d_unitRecover.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_unitRecover.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_WAVE_palletScan.Designer.vb">
+      <DependentUpon>frm_WAVE_palletScan.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_WAVE_palletScan.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_HandAssembly.Designer.vb">
+      <DependentUpon>frm_HandAssembly.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_HandAssembly.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_WAVE_reprint_labels.Designer.vb">
+      <DependentUpon>frm_WAVE_reprint_labels.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_WAVE_reprint_labels.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_WAVE_jobSelection.Designer.vb">
+      <DependentUpon>frm_WAVE_jobSelection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_WAVE_jobSelection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_tickets.Designer.vb">
+      <DependentUpon>frm_a_d_tickets.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_tickets.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgUpdating.Designer.vb">
+      <DependentUpon>frm_a_d_msgUpdating.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgUpdating.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_msgUpdatingImages.Designer.vb">
+      <DependentUpon>frm_a_d_msgUpdatingImages.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_msgUpdatingImages.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_a_d_userChange.Designer.vb">
+      <DependentUpon>frm_a_d_userChange.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_a_d_userChange.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_OOBA_cameraLayerAdd.designer.vb">
+      <DependentUpon>frm_OOBA_cameraLayerAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_OOBA_cameraLayerAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Languages\Messages.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Languages\Messages.es.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Languages\Receiving.es.Designer.vb">
+      <DependentUpon>Receiving.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Languages\Receiving.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Receiving.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="frm_Admin.Designer.vb">
+      <DependentUpon>frm_Admin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Admin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Admin_ExcelReading.Designer.vb">
+      <DependentUpon>frm_Admin_ExcelReading.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Admin_ExcelReading.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Admin_LabelsPlexEdit.Designer.vb">
+      <DependentUpon>frm_Admin_LabelsPlexEdit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Admin_LabelsPlexEdit.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Framework\IO\BePin.vb" />
+    <Compile Include="Framework\Printers\BeZebraPrint.vb" />
+    <Compile Include="Validation_17_FirstPiece.Designer.vb">
+      <DependentUpon>Validation_17_FirstPiece.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Validation_17_FirstPiece.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Validation_29_TechnicalBadge.Designer.vb">
+      <DependentUpon>Validation_29_TechnicalBadge.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Validation_29_TechnicalBadge.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Validation_31_Rabbits.Designer.vb">
+      <DependentUpon>Validation_31_Rabbits.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Validation_31_Rabbits.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Validation_32_Gage.Designer.vb">
+      <DependentUpon>Validation_32_Gage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Validation_32_Gage.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Validation_36_ParametersSheer.Designer.vb">
+      <DependentUpon>Validation_36_ParametersSheer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Validation_36_ParametersSheer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Validation_38_Parameters.Designer.vb">
+      <DependentUpon>Validation_38_Parameters.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Validation_38_Parameters.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Validation_39_ConformalCoating.Designer.vb">
+      <DependentUpon>Validation_39_ConformalCoating.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Validation_39_ConformalCoating.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Validation_40_FirstPiece_Inspector.Designer.vb">
+      <DependentUpon>Validation_40_FirstPiece_Inspector.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Validation_40_FirstPiece_Inspector.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Validation_7_Fixture.Designer.vb">
+      <DependentUpon>Validation_7_Fixture.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Validation_7_Fixture.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Framework\DialogBoxes\InputDialog.resx">
+      <DependentUpon>InputDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Admin.en-US.resx">
+      <DependentUpon>frm_Admin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Admin_InvLabels.resx">
+      <DependentUpon>frm_Admin_InvLabels.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_b_facility.resx">
+      <DependentUpon>frm_a_b_facility.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_keyence_usb.resx">
+      <DependentUpon>frm_a_d_configure_com_keyence_usb.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgAlternates.resx">
+      <DependentUpon>frm_a_d_msgAlternates.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgCleanliness.resx">
+      <DependentUpon>frm_a_d_msgCleanliness.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_partSearch.resx">
+      <DependentUpon>frm_a_d_partSearch.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_picture_add_simple.resx">
+      <DependentUpon>frm_a_d_picture_add_simple.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_plexChecksheetsStatus.resx">
+      <DependentUpon>frm_a_d_plexChecksheetsStatus.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgLoadingBF.resx">
+      <DependentUpon>frm_a_d_msgLoadingBF.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defectsUnitsScanDetails.resx">
+      <DependentUpon>frm_a_d_defectsUnitsScanDetails.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_materialAvailable.resx">
+      <DependentUpon>frm_a_d_materialAvailable.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_plexControlPanel.resx">
+      <DependentUpon>frm_a_d_plexControlPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_casillaGroupSelect.resx">
+      <DependentUpon>frm_a_d_casillaGroupSelect.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_bomIgnore.resx">
+      <DependentUpon>frm_a_d_bomIgnore.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_PLEX_Support.resx">
+      <DependentUpon>frm_a_d_plex_Support.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_setupid.resx">
+      <DependentUpon>frm_a_d_setupid.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_setupid_validations.resx">
+      <DependentUpon>frm_a_d_setupid_validations.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_tickets.en-US.resx">
+      <DependentUpon>frm_a_d_tickets.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unitSegregateLocked.resx">
+      <DependentUpon>frm_a_d_unitSegregateLocked.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockCFT.resx">
+      <DependentUpon>frm_a_d_unlockCFT.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_keyence_wave_values.resx">
+      <DependentUpon>frm_a_d_configure_com_keyence_wave_values.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_keyence_wave.resx">
+      <DependentUpon>frm_a_d_configure_com_keyence_wave.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_sensor_in_values.resx">
+      <DependentUpon>frm_a_d_configure_com_sensor_in_values.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_sensor_in.resx">
+      <DependentUpon>frm_a_d_configure_com_sensor_in.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockProduction.resx">
+      <DependentUpon>frm_a_d_unlockProduction.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockQAInspector.resx">
+      <DependentUpon>frm_a_d_unlockQAInspector.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockRole.resx">
+      <DependentUpon>frm_a_d_unlockRole.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockSerial.en-US.resx">
+      <DependentUpon>frm_a_d_unlockSerial.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockSerial.resx">
+      <DependentUpon>frm_a_d_unlockSerial.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgMissingNetwork.resx">
+      <DependentUpon>frm_a_d_msgMissingNetwork.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_TCPIP.resx">
+      <DependentUpon>frm_a_d_configure_TCPIP.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_TCPIPClient.resx">
+      <DependentUpon>frm_a_d_configure_TCPIPClient.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockDesviations.resx">
+      <DependentUpon>frm_a_d_unlockDesviations.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_validation_quality.resx">
+      <DependentUpon>frm_a_d_validation_quality.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_validator.en-US.resx">
+      <DependentUpon>frm_a_d_validator.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_validator_each.resx">
+      <DependentUpon>frm_a_d_validator_each.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_zplPreview.resx">
+      <DependentUpon>frm_a_d_zplPreview.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_bonus.resx">
+      <DependentUpon>frm_a_d_bonus.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_bonusAdd.en-US.resx">
+      <DependentUpon>frm_a_d_bonusAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_bonusAdd.resx">
+      <DependentUpon>frm_a_d_bonusAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_a_prelog.en-US.resx">
+      <DependentUpon>frm_a_a_prelog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgLoadingPlex.resx">
+      <DependentUpon>frm_a_d_msgLoadingPlex.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgWaiting.en-US.resx">
+      <DependentUpon>frm_a_d_msgWaiting.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgWaiting.resx">
+      <DependentUpon>frm_a_d_msgWaiting.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_arduino_in_values.resx">
+      <DependentUpon>frm_a_d_configure_com_arduino_in_values.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_arduino_in.resx">
+      <DependentUpon>frm_a_d_configure_com_arduino_in.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_arduino_out.resx">
+      <DependentUpon>frm_a_d_configure_com_arduino_out.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_selector.resx">
+      <DependentUpon>frm_a_d_configure_com_selector.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defectsUnitsRemplace.en-US.resx">
+      <DependentUpon>frm_a_d_defectsUnitsRemplace.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defectsUnitsRemplace.resx">
+      <DependentUpon>frm_a_d_defectsUnitsRemplace.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defectsUnits.resx">
+      <DependentUpon>frm_a_d_defectsUnits.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockTwoDefects.resx">
+      <DependentUpon>frm_a_d_unlockTwoDefects.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgNotification.resx">
+      <DependentUpon>frm_a_d_msgNotification.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgNextJob.resx">
+      <DependentUpon>frm_a_d_msgNextJob.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_casillaPositionSelect.resx">
+      <DependentUpon>frm_a_d_casillaPositionSelect.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_ticketsResponse.resx">
+      <DependentUpon>frm_a_d_ticketsResponse.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unitTracking.resx">
+      <DependentUpon>frm_a_d_unitTracking.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_validator.resx">
+      <DependentUpon>frm_a_d_validator.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_bonusAddLaser.resx">
+      <DependentUpon>frm_a_d_bonusAddLaser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_plexChecksheetQuestion.resx">
+      <DependentUpon>frm_a_d_plexChecksheetQuestion.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_plexChecksheets.resx">
+      <DependentUpon>frm_a_d_plexChecksheets.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_ideasSuggestion.resx">
+      <DependentUpon>frm_a_d_ideasSuggestion.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgMissingInline.resx">
+      <DependentUpon>frm_a_d_msgMissingInline.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_materialRequest2.resx">
+      <DependentUpon>frm_a_d_materialRequest2.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_userResetPassword.resx">
+      <DependentUpon>frm_a_d_userResetPassword.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_materialRequest.resx">
+      <DependentUpon>frm_a_d_materialRequest.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_settingsVariables.resx">
+      <DependentUpon>frm_a_d_settingsVariables.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_settingsVersion.resx">
+      <DependentUpon>frm_a_d_settingsVersion.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Conversion.resx">
+      <DependentUpon>frm_Conversion.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_GP12_unitRemove.resx">
+      <DependentUpon>frm_GP12_unitRemove.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_GP12_partValidation.resx">
+      <DependentUpon>frm_GP12_partValidation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_HGTech_unitValidation.resx">
+      <DependentUpon>frm_HGTech_unitValidation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_HGTech.en-US.resx">
+      <DependentUpon>frm_HGTech.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_HGTech.resx">
+      <DependentUpon>frm_HGTech.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_ICCounter_msgSendWarehouse.resx">
+      <DependentUpon>frm_ICCounter_msgSendWarehouse.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_ICsXRay.resx">
+      <DependentUpon>frm_ICsXRay.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Incoming.resx">
+      <DependentUpon>frm_Incoming.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Incoming_partSelection.resx">
+      <DependentUpon>frm_Incoming_partSelection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Incoming_containerReprint.resx">
+      <DependentUpon>frm_Incoming_containerReprint.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels.en-US.resx">
+      <DependentUpon>frm_Labels.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_labelCopy_Others.resx">
+      <DependentUpon>frm_Labels_labelCopy_Others.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_labelValidation.resx">
+      <DependentUpon>frm_Labels_labelValidation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_layouts.resx">
+      <DependentUpon>frm_Labels_layouts.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_layoutsCopy.resx">
+      <DependentUpon>frm_Labels_layoutsCopy.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_binSelection.resx">
+      <DependentUpon>frm_a_d_binSelection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_remplace.en-US.resx">
+      <DependentUpon>frm_Labels_remplace.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_remplace.resx">
+      <DependentUpon>frm_Labels_remplace.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_labelReprint.resx">
+      <DependentUpon>frm_Labels_labelReprint.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_labelReprint2.resx">
+      <DependentUpon>frm_Labels_labelReprint2.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeLabels_MergeKeyence_Positions.resx">
+      <DependentUpon>frm_MergeLabels_MergeKeyence_Positions.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeUnits.resx">
+      <DependentUpon>frm_MergeUnits.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeUnits_unmerge.resx">
+      <DependentUpon>frm_MergeUnits_unmerge.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_cameraLayers.resx">
+      <DependentUpon>frm_PVS_cameraLayers.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_serialAdd.resx">
+      <DependentUpon>frm_PVS_serialAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_InlinBox_Packing.resx">
+      <DependentUpon>frm_PVS_InlinBox_Packing.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_InlineBox_Selection.resx">
+      <DependentUpon>frm_PVS_InlineBox_Selection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_containerInTransit.resx">
+      <DependentUpon>frm_Receive_containerInTransit.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_Containers_Size.resx">
+      <DependentUpon>frm_Receive_Containers_Size.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_Location_Prints.resx">
+      <DependentUpon>frm_Receive_Location_Prints.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_Masters_Inventory.resx">
+      <DependentUpon>frm_Receive_Masters_Inventory.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_MROLabel.resx">
+      <DependentUpon>frm_Receive_MROLabel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_SplitContainers.resx">
+      <DependentUpon>frm_Receive_SplitContainers.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_Material_Confirm.resx">
+      <DependentUpon>frm_Rework_Material_Confirm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\Packout.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Packout.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\Packout.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Packout.es.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgCognexLoad.resx">
+      <DependentUpon>frm_a_d_msgCognexLoad.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockCertifications.resx">
+      <DependentUpon>frm_a_d_unlockCertifications.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_GP12_boxSelection.en-US.resx">
+      <DependentUpon>frm_GP12_boxSelection.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_GP12_boxSelection.resx">
+      <DependentUpon>frm_GP12_boxSelection.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_labelPanelPrint.resx">
+      <DependentUpon>frm_Labels_labelPanelPrint.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_msgAlternateMPN.resx">
+      <DependentUpon>frm_PVS_msgAlternateMPN.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_capacitorAdd.resx">
+      <DependentUpon>frm_PVS_capacitorAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_msgChecking.en-US.resx">
+      <DependentUpon>frm_PVS_msgChecking.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_boxCompleteRMA.resx">
+      <DependentUpon>frm_PVS_boxCompleteRMA.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS.en-US.resx">
+      <DependentUpon>frm_PVS.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS.resx">
+      <DependentUpon>frm_PVS.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_layerAlert.resx">
+      <DependentUpon>frm_PVS_layerAlert.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_msgLayerComplete.en-US.resx">
+      <DependentUpon>frm_PVS_msgLayerComplete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_msgLayerComplete.resx">
+      <DependentUpon>frm_PVS_msgLayerComplete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_unitPartialValidation.en-US.resx">
+      <DependentUpon>frm_PVS_unitPartialValidation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_unitPartialValidation.resx">
+      <DependentUpon>frm_PVS_unitPartialValidation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_labelReprintSerials.resx">
+      <DependentUpon>frm_PVS_labelReprintSerials.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_rabbits.resx">
+      <DependentUpon>frm_PVS_rabbits.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_plexSetManual.resx">
+      <DependentUpon>frm_PVS_plexSetManual.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive.en-US.resx">
+      <DependentUpon>frm_Receive.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive.resx">
+      <DependentUpon>frm_Receive.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_kanbanCard.resx">
+      <DependentUpon>frm_Receive_kanbanCard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_cameraScanDocument.resx">
+      <DependentUpon>frm_Receive_cameraScanDocument.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_labelReprint.resx">
+      <DependentUpon>frm_Receive_labelReprint.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_labelsMerge.resx">
+      <DependentUpon>frm_Receive_labelsMerge.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_labelsQuantity.resx">
+      <DependentUpon>frm_Receive_labelsQuantity.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_Masters.resx">
+      <DependentUpon>frm_Receive_Masters.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_materialMove.resx">
+      <DependentUpon>frm_Receive_materialMove.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Receive_supplierSelection.resx">
+      <DependentUpon>frm_Receive_supplierSelection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgQualityAlerts.en-US.resx">
+      <DependentUpon>frm_a_d_msgQualityAlerts.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgQualityAlerts.resx">
+      <DependentUpon>frm_a_d_msgQualityAlerts.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_addadjustment.resx">
+      <DependentUpon>frm_Rework_addadjustment.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_SMT_aoiResultSelect.en-US.resx">
+      <DependentUpon>frm_SMT_aoiResultSelect.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_SMT_aoiResultSelect.resx">
+      <DependentUpon>frm_SMT_aoiResultSelect.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockSupervisor.en-US.resx">
+      <DependentUpon>frm_a_d_unlockSupervisor.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockSupervisor.resx">
+      <DependentUpon>frm_a_d_unlockSupervisor.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_SMT_untiBadBoard.en-US.resx">
+      <DependentUpon>frm_SMT_untiBadBoard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_SMT_untiBadBoard.resx">
+      <DependentUpon>frm_SMT_untiBadBoard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unitMergeChilds.en-US.resx">
+      <DependentUpon>frm_a_d_unitMergeChilds.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unitMergeChilds.resx">
+      <DependentUpon>frm_a_d_unitMergeChilds.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_GP12_boxDelete.en-US.resx">
+      <DependentUpon>frm_GP12_boxDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_GP12_boxDelete.resx">
+      <DependentUpon>frm_GP12_boxDelete.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_GP12.en-US.resx">
+      <DependentUpon>frm_GP12.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_GP12.resx">
+      <DependentUpon>frm_GP12.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_elementAdd.resx">
+      <DependentUpon>frm_Labels_elementAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_plexAdd.resx">
+      <DependentUpon>frm_Labels_plexAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_sizeCalculator.resx">
+      <DependentUpon>frm_Labels_sizeCalculator.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_labelCopy.resx">
+      <DependentUpon>frm_Labels_labelCopy.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_jobDetails.en-US.resx">
+      <DependentUpon>frm_Labels_jobDetails.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_jobDetails.resx">
+      <DependentUpon>frm_Labels_jobDetails.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels.resx">
+      <DependentUpon>frm_Labels.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Labels_rabbits.resx">
+      <DependentUpon>frm_Labels_rabbits.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockQAEngineering.en-US.resx">
+      <DependentUpon>frm_a_d_unlockQAEngineering.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockQAEngineering.resx">
+      <DependentUpon>frm_a_d_unlockQAEngineering.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgPrinting.resx">
+      <DependentUpon>frm_a_d_msgPrinting.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeLabels.en-US.resx">
+      <DependentUpon>frm_MergeLabels.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeLabels.resx">
+      <DependentUpon>frm_MergeLabels.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeLabels_MergeKeyence.en-US.resx">
+      <DependentUpon>frm_MergeLabels_MergeKeyence.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeLabels_MergeKeyence.resx">
+      <DependentUpon>frm_MergeLabels_MergeKeyence.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeLabels_Merge.resx">
+      <DependentUpon>frm_MergeLabels_Merge.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeLabels_Unmerge.en-US.resx">
+      <DependentUpon>frm_MergeLabels_Unmerge.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_MergeLabels_Unmerge.resx">
+      <DependentUpon>frm_MergeLabels_Unmerge.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgChangeModel.resx">
+      <DependentUpon>frm_a_d_msgChangeModel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_OOBA_alerts.resx">
+      <DependentUpon>frm_OOBA_alerts.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_OOBA_boxSelection.resx">
+      <DependentUpon>frm_OOBA_boxSelection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_OOBA_layerAdd.en-US.resx">
+      <DependentUpon>frm_OOBA_layerAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_OOBA_layerAdd.resx">
+      <DependentUpon>frm_OOBA_layerAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_OOBA.resx">
+      <DependentUpon>frm_OOBA.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_layerAdd.en-US.resx">
+      <DependentUpon>frm_PVS_layerAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_layerAdd.resx">
+      <DependentUpon>frm_PVS_layerAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_boxDelete.en-US.resx">
+      <DependentUpon>frm_PVS_boxDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_boxDelete.resx">
+      <DependentUpon>frm_PVS_boxDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_unitDelete.en-US.resx">
+      <DependentUpon>frm_PVS_unitDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_unitDelete.resx">
+      <DependentUpon>frm_PVS_unitDelete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_msgChecking.resx">
+      <DependentUpon>frm_PVS_msgChecking.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_boxComplete.en-US.resx">
+      <DependentUpon>frm_PVS_boxComplete.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_boxComplete.resx">
+      <DependentUpon>frm_PVS_boxComplete.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_boxSelection.en-US.resx">
+      <DependentUpon>frm_PVS_boxSelection.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_boxSelection.resx">
+      <DependentUpon>frm_PVS_boxSelection.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_containerRequired.en-US.resx">
+      <DependentUpon>frm_PVS_containerRequired.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_containerRequired.resx">
+      <DependentUpon>frm_PVS_containerRequired.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_PVS_labelReprints.resx">
+      <DependentUpon>frm_PVS_labelReprints.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockArea.en-US.resx">
+      <DependentUpon>frm_a_d_unlockArea.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockArea.resx">
+      <DependentUpon>frm_a_d_unlockArea.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_addmaterial.resx">
+      <DependentUpon>frm_Rework_addmaterial.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_alertas.en-US.resx">
+      <DependentUpon>frm_Rework_alertas.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_alertas.resx">
+      <DependentUpon>frm_Rework_alertas.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework.en-US.resx">
+      <DependentUpon>frm_Rework.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework.resx">
+      <DependentUpon>frm_Rework.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_mls.en-US.resx">
+      <DependentUpon>frm_Rework_mls.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_mls.resx">
+      <DependentUpon>frm_Rework_mls.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_MuliplesSN.en-US.resx">
+      <DependentUpon>frm_Rework_MuliplesSN.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_MuliplesSN.resx">
+      <DependentUpon>frm_Rework_MuliplesSN.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_unitsWithoutLabel.en-US.resx">
+      <DependentUpon>frm_Rework_unitsWithoutLabel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Rework_unitsWithoutLabel.resx">
+      <DependentUpon>frm_Rework_unitsWithoutLabel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_SMT_msgMaterialMissing.resx">
+      <DependentUpon>frm_SMT_msgMaterialMissing.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_SMT_msgSpliceBad.resx">
+      <DependentUpon>frm_SMT_msgSpliceBad.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_WAVE_aoirework.resx">
+      <DependentUpon>frm_WAVE_aoirework.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_WAVE_cameraCognex.resx">
+      <DependentUpon>frm_WAVE_cameraCognex.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_arduino_out_values.resx">
+      <DependentUpon>frm_a_d_configure_com_arduino_out_values.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_configure_com_arduino_out_aoi.resx">
+      <DependentUpon>frm_a_d_configure_com_arduino_out_aoi.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unitConvertPartTo.resx">
+      <DependentUpon>frm_a_d_unitConvertPartTo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defects.en-US.resx">
+      <DependentUpon>frm_a_d_defects.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defects.resx">
+      <DependentUpon>frm_a_d_defects.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_downtimesOptions.resx">
+      <DependentUpon>frm_a_d_downtimesOptions.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defectsUnitsQuantity.en-US.resx">
+      <DependentUpon>frm_a_d_defectsUnitsQuantity.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defectsUnitsQuantity.resx">
+      <DependentUpon>frm_a_d_defectsUnitsQuantity.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_downtime.resx">
+      <DependentUpon>frm_a_d_downtime.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_SMT.en-US.resx">
+      <DependentUpon>frm_SMT.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_WAVE_plexCorrections.resx">
+      <DependentUpon>frm_WAVE_plexCorrections.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_WAVE.en-US.resx">
+      <DependentUpon>frm_WAVE.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_WAVE.resx">
+      <DependentUpon>frm_WAVE.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockFiveDefects.en-US.resx">
+      <DependentUpon>frm_a_d_unlockFiveDefects.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_b_Login.en-US.resx">
+      <DependentUpon>frm_a_b_Login.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_b_Login.resx">
+      <DependentUpon>frm_a_b_Login.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_SMT.resx">
+      <DependentUpon>frm_SMT.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unlockFiveDefects.resx">
+      <DependentUpon>frm_a_d_unlockFiveDefects.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defectsUnitsScan.en-US.resx">
+      <DependentUpon>frm_a_d_defectsUnitsScan.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_defectsUnitsScan.resx">
+      <DependentUpon>frm_a_d_defectsUnitsScan.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgError.resx">
+      <DependentUpon>frm_a_d_msgError.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgIncompleteJob.en-US.resx">
+      <DependentUpon>frm_a_d_msgIncompleteJob.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgIncompleteJob.resx">
+      <DependentUpon>frm_a_d_msgIncompleteJob.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_cameraCapture.en-US.resx">
+      <DependentUpon>frm_a_d_cameraCapture.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_cameraCapture.resx">
+      <DependentUpon>frm_a_d_cameraCapture.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_a_prelog.resx">
+      <DependentUpon>frm_a_a_prelog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unitRecover.en-US.resx">
+      <DependentUpon>frm_a_d_unitRecover.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_unitRecover.resx">
+      <DependentUpon>frm_a_d_unitRecover.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_WAVE_palletScan.resx">
+      <DependentUpon>frm_WAVE_palletScan.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_HandAssembly.resx">
+      <DependentUpon>frm_HandAssembly.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_WAVE_reprint_labels.resx">
+      <DependentUpon>frm_WAVE_reprint_labels.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_WAVE_jobSelection.en-US.resx">
+      <DependentUpon>frm_WAVE_jobSelection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_WAVE_jobSelection.resx">
+      <DependentUpon>frm_WAVE_jobSelection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_tickets.resx">
+      <DependentUpon>frm_a_d_tickets.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgUpdating.resx">
+      <DependentUpon>frm_a_d_msgUpdating.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_msgUpdatingImages.resx">
+      <DependentUpon>frm_a_d_msgUpdatingImages.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_userChange.en-US.resx">
+      <DependentUpon>frm_a_d_userChange.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_a_d_userChange.resx">
+      <DependentUpon>frm_a_d_userChange.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_OOBA_cameraLayerAdd.resx">
+      <DependentUpon>frm_OOBA_cameraLayerAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\Messages.es.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.es.Designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\Messages.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\Receiving.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Receiving.es.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\Receiving.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Receiving.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Admin.resx">
+      <DependentUpon>frm_Admin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Admin_ExcelReading.resx">
+      <DependentUpon>frm_Admin_ExcelReading.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Admin_LabelsPlexEdit.resx">
+      <DependentUpon>frm_Admin_LabelsPlexEdit.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation_17_FirstPiece.resx">
+      <DependentUpon>Validation_17_FirstPiece.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation_29_TechnicalBadge.resx">
+      <DependentUpon>Validation_29_TechnicalBadge.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation_31_Rabbits.resx">
+      <DependentUpon>Validation_31_Rabbits.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation_32_Gage.resx">
+      <DependentUpon>Validation_32_Gage.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation_36_ParametersSheer.resx">
+      <DependentUpon>Validation_36_ParametersSheer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation_38_Parameters.resx">
+      <DependentUpon>Validation_38_Parameters.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation_39_ConformalCoating.resx">
+      <DependentUpon>Validation_39_ConformalCoating.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation_40_FirstPiece_Inspector.resx">
+      <DependentUpon>Validation_40_FirstPiece_Inspector.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation_7_Fixture.resx">
+      <DependentUpon>Validation_7_Fixture.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BeFirst.pfx" />
+    <None Include="Connected Services\PlexSOAP\Plex_SOAP_prod.wsdl" />
+    <None Include="Connected Services\PlexSOAP\Production.PlexSOAP.ExecuteDataSourceByDataSourceKeyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\PlexSOAP\Production.PlexSOAP.ExecuteDataSourcePostResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\PlexSOAP\Production.PlexSOAP.ExecuteDataSourceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\PlexSOAP\Production.PlexSOAP.ExecuteDataSourceResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\PlexSOAP\Production.PlexSOAP.GetDataSourceRequestTemplateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\PlexSOAP\Production.PlexSOAP.GetTemplateResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Produccion_1_TemporaryKey.pfx" />
+    <None Include="tessdata\eng.cube.bigrams">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="tessdata\eng.cube.fold">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="tessdata\eng.cube.lm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="tessdata\eng.cube.nn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="tessdata\eng.cube.params">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="tessdata\eng.cube.size">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="tessdata\eng.cube.word-freq">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="tessdata\eng.tesseract_cube.nn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="tessdata\eng.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default_pictures\default_user150.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default_pictures\firstronic_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default_pictures\alertqlty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default_pictures\default2676.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default_pictures\selectmodel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default_pictures\noalerts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\linesmticon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\test.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon20w.ico" />
+    <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
+    <Content Include="Resources\Safari-Circuits-Logo-220-50.png" />
+    <Content Include="Resources\Safari-Circuits-Logo-White.png" />
+    <None Include="Resources\ticketok.png" />
+    <None Include="Resources\settings.png" />
+    <None Include="Resources\2021_Lacroix_White.png" />
+    <None Include="Resources\2021_LACROIX_logo_white_nomargins.png" />
+    <None Include="Resources\2021_Lacroix_Blue.png" />
+    <None Include="Resources\led-red.png" />
+    <None Include="Resources\led-green.png" />
+    <None Include="Resources\spareparts.png" />
+    <None Include="Resources\dberror.png" />
+    <None Include="Resources\loading.gif" />
+    <None Include="Resources\searching.gif" />
+    <None Include="Resources\ew.gif" />
+    <None Include="Resources\loglog.wav" />
+    <None Include="Resources\right_16.png" />
+    <None Include="Resources\tablillavacia.png" />
+    <None Include="Resources\tablilla.png" />
+    <None Include="Resources\Sensor.png" />
+    <None Include="Resources\okbeep.wav" />
+    <None Include="Resources\okunit.wav" />
+    <None Include="Resources\logosmall.png" />
+    <None Include="Resources\upload161.png" />
+    <None Include="Resources\upload16.png" />
+    <None Include="Resources\layers-icon.png" />
+    <None Include="Resources\ankudi151100150.jpg" />
+    <None Include="Resources\bonus1.png" />
+    <None Include="Resources\bonus.png" />
+    <None Include="Resources\Preloader_4.gif" />
+    <None Include="Resources\ticket.png" />
+    <None Include="Resources\ig16.png" />
+    <None Include="Resources\clipart7643972.png" />
+    <None Include="Resources\img_fixture.jpg" />
+    <None Include="Resources\_ori2.png" />
+    <None Include="Resources\printer.png" />
+    <None Include="Resources\print-131964753156480777.png" />
+    <None Include="Resources\updating.png" />
+    <None Include="Resources\toprod.png" />
+    <None Include="Resources\toser.png" />
+    <None Include="Resources\cargados.png" />
+    <None Include="Resources\email-open.png" />
+    <None Include="Resources\login_header.gif" />
+    <None Include="Resources\plexonline.png" />
+    <None Include="Resources\cartolines.png" />
+    <None Include="Resources\linestocar1.png" />
+    <None Include="Resources\linestocar.png" />
+    <None Include="Resources\cartowar.png" />
+    <None Include="Resources\wartocar.png" />
+    <None Include="Resources\down.png" />
+    <None Include="Resources\left.png" />
+    <None Include="Resources\right.png" />
+    <None Include="Resources\tapa.jpg" />
+    <None Include="Resources\scanning.png" />
+    <None Include="Resources\tx.jpg" />
+    <None Include="Resources\dm.jpg" />
+    <None Include="Resources\br.jpg" />
+    <None Include="Resources\camera2.png" />
+    <None Include="Resources\char.jpg" />
+    <None Include="Resources\PP4T01L01.png" />
+    <None Include="Resources\PP4T01.png" />
+    <None Include="Resources\PP2TYAMAHA01.png" />
+    <None Include="Resources\PP2TPANASONIC.png" />
+    <None Include="Resources\PP2T01.png" />
+    <None Include="Resources\boss.png" />
+    <None Include="Resources\deleteicon16.png" />
+    <None Include="Resources\addicon161.png" />
+    <None Include="Resources\historywrite16.png" />
+    <None Include="Resources\forward_icon16.png" />
+    <None Include="Resources\edit-icon16.png" />
+    <None Include="Resources\cclogo2.jpg" />
+    <None Include="Resources\fcc.png" />
+    <None Include="Resources\cclogo.jpg" />
+    <None Include="Resources\Gear-icon16.png" />
+    <None Include="Connected Services\PlexSOAP\configuration91.svcinfo" />
+    <None Include="Connected Services\PlexSOAP\configuration.svcinfo" />
+    <None Include="Connected Services\PlexSOAP\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </None>
+    <Content Include="favicon.ico" />
+    <Content Include="GuiLogger.cs" />
+    <None Include="Resources\wargify.png" />
+    <None Include="Resources\wargif.png" />
+    <None Include="Resources\wargif.gif" />
+    <None Include="Resources\wargifg.png" />
+    <None Include="Resources\shel1.png" />
+    <None Include="Resources\shel.png" />
+    <None Include="Resources\lay_top_hole_v.png" />
+    <None Include="Resources\lay_top_hole_b.png" />
+    <None Include="Resources\lay_m_nhole_vv.png" />
+    <None Include="Resources\lay_m_nhole_vb.png" />
+    <None Include="Resources\lay_m_nhole_bb.png" />
+    <None Include="Resources\lay_m_hole_vv.png" />
+    <None Include="Resources\lay_m_hole_vb.png" />
+    <None Include="Resources\lay_m_hole_bb.png" />
+    <None Include="Resources\lay_dwn_nhole_v.png" />
+    <None Include="Resources\lay_dwn_nhole_b.png" />
+    <None Include="Resources\lay_dwn_hole_v.png" />
+    <None Include="Resources\lay_dwn_hole_b.png" />
+    <None Include="Resources\user2.jpg" />
+    <None Include="Resources\update_pic.jpg" />
+    <None Include="Resources\sin_imagen.jpg" />
+    <None Include="Resources\sin_alertas.jpg" />
+    <None Include="Resources\select_model.jpg" />
+    <None Include="Resources\mx.png" />
+    <None Include="Resources\us.png" />
+    <None Include="Resources\user.jpg" />
+    <None Include="Resources\delete-icongray.png" />
+    <None Include="Resources\delete-icon.png" />
+    <None Include="Resources\icon20.png" />
+    <None Include="Resources\White.png" />
+    <None Include="Resources\logof.png" />
+    <None Include="Resources\Refresh-icon16.png" />
+    <None Include="Resources\letter-xb.png" />
+    <None Include="Resources\faviconbf.ico" />
+    <None Include="Resources\logo2b.png" />
+    <None Include="Resources\icon.png" />
+    <None Include="Resources\bad.png" />
+    <None Include="Resources\good.png" />
+    <None Include="Resources\neutral.png" />
+    <None Include="Resources\lock.png" />
+    <None Include="Resources\alert.png" />
+    <None Include="Resources\reel.png" />
+    <None Include="Resources\IMG_20181123_082605.jpg" />
+    <None Include="Resources\title.png" />
+    <None Include="Resources\timer20.png" />
+    <None Include="Resources\timer2.png" />
+    <None Include="Resources\timer16.png" />
+    <None Include="Resources\8bit.wav" />
+    <None Include="Resources\8bitOri.wav" />
+    <None Include="Resources\Beep.wav" />
+    <None Include="Resources\pastas.jpg" />
+    <None Include="Resources\pasta.jpg" />
+    <None Include="Resources\updatepic.png" />
+    <None Include="Resources\pasta2.png" />
+    <None Include="Resources\pasta1.png" />
+    <None Include="Resources\pasta.png" />
+    <None Include="Resources\userlogin.png" />
+    <None Include="Resources\tite1.png" />
+    <None Include="Resources\56.jpg" />
+    <None Include="Resources\circuit2.jpg" />
+    <None Include="Resources\add-icon16.png" />
+    <None Include="Resources\test5.png" />
+    <None Include="Resources\test4.jpg" />
+    <None Include="Resources\test3.jpg" />
+    <None Include="Resources\gray-backgorund.jpg" />
+    <None Include="Resources\tite.png" />
+    <None Include="Resources\logo21.png" />
+    <None Include="Resources\delete-icon16.png" />
+    <None Include="Resources\machine11.png" />
+    <None Include="Resources\machine1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\PlexSOAP\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+    <Folder Include="Framework\Data\" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+    </PropertyGroup>
+  </Target>
+</Project>

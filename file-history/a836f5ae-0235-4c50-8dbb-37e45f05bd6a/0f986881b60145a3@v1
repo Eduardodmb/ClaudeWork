@@ -1,0 +1,758 @@
+@using NonFactors.Mvc.Grid;
+@using System.Data;
+@using System.Data.SqlClient;
+@using System.Globalization;
+@using Firstronic.Framework.Charts;
+
+
+@model Firstronic.Areas.Production.Models.Reports.ProductionSummary
+
+
+
+@{
+  var FirstronicFacilitiesList = new List<SelectListItem>();
+  FirstronicFacilitiesList = Firstronic.Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+
+  var listParts = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [PartID],[PartNumber] FROM [CS_IDT_PARTNUMBERS] WHERE 1=1 ORDER BY PartNumber ASC");
+
+  var listCustomer = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [CustomerID],[CustomerName] FROM [CS_idt_external_customers] WHERE CustomerID in (Select CustomerID From CS_idt_partnumbers) Order by CustomerName");
+
+  var arealist = Firstronic.Framework.Functions.Dropdowns.GetAreasList(null, " WHERE [ActiveReport]=1 ", true);
+
+  var sublist2 = Firstronic.Framework.Functions.Dropdowns.GetStationsList(null, "", true);
+}
+
+@section head{
+  <script src="~/Content/vendor/d3/d3.v4.min.js"></script>
+  <script src="~/Content/vendor/chartjs/Chart.min.js"></script>
+  <script src="~/Content/vendor/xlsx/xlsx.full.min.js"></script>
+}
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text"> Production Summary </h3>
+  </div>
+
+  <div class="md-card-content">
+
+    <div class="uk-grid">
+      <div class="uk-width-1-1">
+        <p class="request-info">The maximum period is a month, if date are bigger, the end date will be removed.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("Prepare Download (Time will increase)", new { @class = "m-0 fs-14" })
+          @Html.CheckBox("End", false, new { @class = "md-input", @id = "chDownloadData", @Value = Model.prepareDownload })
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("Start", new { @class = "m-0 fs-14" })
+          @Html.Editor("Start", "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "md-input", id = "ddlDateStart", @Value = Model.dateStart.GetValueOrDefault().ToString("MM/dd/yy") } })
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("End", new { @class = "m-0 fs-14" })
+          @Html.Editor("End", "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "md-input", id = "ddlDateEnd", @Value = Model.dateEnd.GetValueOrDefault().ToString("MM/dd/yy") } })
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("Area", new { @class = "m-0 fs-14" })
+          @Html.DropDownList("AreaID", (IEnumerable<SelectListItem>)arealist, new { @class = "md-input FillStations", @id = "ddlareaid" })
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("Substation", new { @class = "m-0 fs-14" })
+          @Html.DropDownList("Substation", (IEnumerable<SelectListItem>)sublist2, new { @class = "md-input", id = "ddlsubstation" })
+        </div>
+      </div>
+
+      <div class="col-3 ">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("Customers", new { @class = "m-0 fs-14" })
+          @Html.DropDownListFor(model => model.selectedCustomers, (IEnumerable<SelectListItem>)listCustomer, new { @class = "md-input", id = "ddlCustomers", multiple = "multiple" })
+        </div>
+      </div>
+      <div class="col-3 ">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          <input id="btnSearchCustoemrs" type="button" value="Search By Customers" class="md-btn md-btn-primary md-btn-small" />
+        </div>
+      </div>
+      <div class="col-3 ">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          @Html.Label("PartNo", new { @class = "m-0 fs-14" })
+          @Html.DropDownListFor(model => model.selectedPartID, (IEnumerable<SelectListItem>)listParts, new { @class = "md-input", id = "ddlParts", multiple = "multiple" })
+        </div>
+      </div>
+      <div class="col-3 ">
+        <div class="p-0 input-group mb-3 mn-r-10">
+          <input id="btnSearchParts" type="button" value="Search By Parts" class="md-btn md-btn-primary md-btn-small" />
+        </div>
+      </div>
+
+      <script type="text/javascript" nonce="@Html.ScriptNonce()">
+        $('#btnSearchCustoemrs').click(function (e) {
+          e.preventDefault();
+
+          var v_Date_Start = $("#ddlDateStart").val();
+          var v_Date_End = $("#ddlDateEnd").val();
+          var v_Customers = $("#ddlCustomers").val();
+          const v_Customers_String = v_Customers.join(',');
+          var v_AreaID = $("#ddlareaid").val();
+          var v_StationID = $("#ddlsubstation").val();
+          var v_Parts = $("#ddlParts").val();
+          const v_Parts_String = '';
+          var checkdownload = false;
+          var v_prepareDownload = $("#chDownloadData");
+          if (v_prepareDownload[0].checked) {
+            checkdownload = true;
+          }
+          var checkdefects = false;
+          //var v_DefectsDownload = $("#chDefectsOnly");
+          //if (v_DefectsDownload[0].checked) {
+          //  checkdefects = true;
+          //}
+
+          var ids = { dateStart: v_Date_Start, dateEnd: v_Date_End, selectedCustomers: v_Customers_String, selectedPartID: v_Parts_String, AreaID: v_AreaID, StationID: v_StationID, execute: true, prepareDownload: checkdownload, defectsDownload: checkdefects };
+
+          WaitingForm_Start()
+
+          $("body").addClass("loading");
+
+          window.location.replace('/Production/Reports/ProductionSummary?' + $.param(ids));
+
+        });
+
+        $('#btnSearchParts').click(function (e) {
+          e.preventDefault();
+
+          var v_Date_Start = $("#ddlDateStart").val();
+          var v_Date_End = $("#ddlDateEnd").val();
+          var v_Customers = $("#ddlCustomers").val();
+          const v_Customers_String = '';
+          var v_AreaID = $("#ddlareaid").val();
+          var v_StationID = $("#ddlsubstation").val();
+          var v_Parts = $("#ddlParts").val();
+          const v_Parts_String = v_Parts.join(',');
+          var v_prepareDownload = $("#chDownloadData");
+          var checkdownload = false;
+
+          if (v_prepareDownload[0].checked) {
+            checkdownload = true;
+          }
+
+          var ids = { dateStart: v_Date_Start, dateEnd: v_Date_End, selectedCustomers: v_Customers_String, selectedPartID: v_Parts_String, AreaID: v_AreaID, StationID: v_StationID, execute: true, prepareDownload: checkdownload };
+
+          WaitingForm_Start()
+
+          $("body").addClass("loading");
+
+          window.location.replace('/Production/Reports/ProductionSummary?' + $.param(ids));
+
+        });
+      </script>
+    </div>
+
+    @if (Model.execute == true)
+    {
+      <script type="text/javascript" nonce="@Html.ScriptNonce()">
+          var items = "@Model.selectedCustomers.ToString()";
+          var nameArr = items.split(',');
+          $('#ddlCustomers').val(nameArr).trigger('change');
+      </script>
+
+      ViewBag.Title = Model.Part_No;
+
+      var dateStart = Model.dateStart.GetValueOrDefault().AddHours(+6);
+
+      var dateEnd = Model.dateEnd.GetValueOrDefault().AddHours(+6).AddDays(+1);
+
+      if (dateStart.AddMonths(+1) < dateEnd)
+      {
+        dateEnd = dateStart.AddMonths(+1).AddDays(+1);
+      }
+
+      DataTable dtResult = new DataTable();
+
+      if (Model.selectedCustomers == "" && Model.selectedPartID == "")
+      {
+        Model.selectedCustomers = ",0,";
+        Model.selectedPartID = "";
+      }
+
+      var Customers = Model.selectedCustomers.ToString().Split(',');
+
+      var PartIDS = Model.selectedPartID.ToString().Split(',');
+
+      foreach (var PartID in PartIDS)
+      {
+        if (PartID != "")
+        {
+          Customers = ",,".Split(',');
+        }
+      }
+
+      DataTable dtSerials = new DataTable();
+
+      foreach (var customerID in Customers)
+      {
+        if (customerID != "")
+        {
+
+          SqlParameter[] parameters = new SqlParameter[]
+          {
+              new SqlParameter("@AreaID",SqlDbType.Int){Value = Model.AreaID},
+              new SqlParameter("@StationID",SqlDbType.Int){Value = Model.StationID},
+              new SqlParameter("@customerID",SqlDbType.NVarChar){Value = customerID},
+              new SqlParameter("@dateStart",SqlDbType.DateTime){Value =dateStart.ToString("MM/dd/yyyy HH:mm:ss")},
+              new SqlParameter("@dateEnd",SqlDbType.DateTime){Value =dateEnd.ToString("MM/dd/yyyy HH:mm:ss")}
+                                                          };
+
+          DataTable dtAreaSTATIONPART = Firstronic.Framework.Queries.GetDatatableFromQuery(@"WITH w AS (
+                            SELECT
+                            ut.SSN AS UnitID,
+                            ut.TrnDate,
+                            pn.PartNumber,
+                            a.Area,
+                            ec.CustomerName,
+                            ut.JobSide,
+                            ISNULL(pb.Bin_Name, '') AS Bin_Name,
+                            ut.IsGood AS Status,
+                            ut.SSNIndex AS RN
+                            FROM PD_tbl_units_tracking ut WITH (NOLOCK)
+                            INNER JOIN CS_idt_partnumbers pn ON ut.PartID = pn.PartID
+                            INNER JOIN CS_idt_external_customers ec ON pn.CustomerID = ec.CustomerID
+                            INNER JOIN PD_idt_areas a ON ut.AreaID = a.AreaID
+                            INNER JOIN PD_idt_stations s ON ut.StationID = s.StationID
+                            LEFT JOIN PART_BIN pb ON ut.PartID = pb.Part_ID AND ut.GroupMLS = pb.Bin_ID
+                            WHERE ut.TrnDate BETWEEN @dateStart AND @dateEnd
+                            AND (ut.AreaID = @AreaID OR @AreaID = 0)
+                            AND (pn.CustomerID = @customerID OR @customerID = 0)
+                            ),
+                            FPY AS (
+                            SELECT
+                            Area, CustomerName, PartNumber, JobSide, Bin_Name,
+                            SUM(CASE WHEN Status = '1' THEN 1 ELSE 0 END) AS Good,
+                            SUM(CASE WHEN Status = '0' THEN 1 ELSE 0 END) AS Bad,
+                            '1' AS RN
+                            FROM w
+                            WHERE RN = 1
+                            GROUP BY Area, CustomerName, PartNumber, JobSide, Bin_Name
+                            ),
+                            SPY AS (
+                            SELECT
+                            b.Area, b.CustomerName, b.PartNumber, b.JobSide, b.Bin_Name,
+                            SUM(CASE WHEN b.Status = '1' THEN 1 ELSE 0 END) AS Good,
+                            SUM(CASE WHEN b.Status = '0' THEN 1 ELSE 0 END) AS Bad,
+                            '1' AS RN
+                            FROM w b
+                            INNER JOIN w a ON b.UnitID = a.UnitID
+                            AND b.Area = a.Area
+                            AND b.CustomerName = a.CustomerName
+                            AND b.PartNumber = a.PartNumber
+                            AND b.JobSide = a.JobSide
+                            AND b.Bin_Name = a.Bin_Name
+                            WHERE b.RN = 2 AND a.RN = 1 AND a.Status = '0'
+                            GROUP BY b.Area, b.CustomerName, b.PartNumber, b.JobSide, b.Bin_Name
+                            ),
+                            SGood AS (
+                            SELECT
+                            b.Area, b.CustomerName, b.PartNumber, b.JobSide, b.Bin_Name,
+                            COUNT(*) AS GoodRepair,
+                            '1' AS RN
+                            FROM w b
+                            INNER JOIN w a ON b.UnitID = a.UnitID
+                            AND b.Area = a.Area
+                            AND b.CustomerName = a.CustomerName
+                            AND b.PartNumber = a.PartNumber
+                            AND b.JobSide = a.JobSide
+                            AND b.Bin_Name = a.Bin_Name
+                            INNER JOIN Rework_Units_Steps rw ON b.UnitID = rw.SN
+                            AND (CASE WHEN rw.RepairDate IS NULL THEN rw.diagdate ELSE rw.RepairDate END) > a.TrnDate
+                            AND (CASE WHEN rw.RepairDate IS NULL THEN rw.diagdate ELSE rw.RepairDate END) < b.TrnDate
+                            WHERE b.RN = 2 AND b.Status = '1' AND a.RN = 1 AND a.Status = '0'
+                            GROUP BY b.Area, b.CustomerName, b.PartNumber, b.JobSide, b.Bin_Name
+                            ),
+                            total AS (
+                            SELECT
+                            Area, CustomerName, PartNumber, JobSide, Bin_Name,
+                            SUM(CASE WHEN Status = '1' THEN 1 ELSE 0 END) AS Good,
+                            SUM(CASE WHEN Status = '0' THEN 1 ELSE 0 END) AS Bad,
+                            '1' AS RN
+                            FROM w
+                            GROUP BY Area, CustomerName, PartNumber, JobSide, Bin_Name
+                            )
+                            SELECT
+                            FPY.Area,
+                            FPY.CustomerName,
+                            FPY.PartNumber,
+                            FPY.JobSide,
+                            FPY.Bin_Name,
+                            (FPY.Good + FPY.Bad) AS Total,
+                            FPY.Good AS Good,
+                            FPY.Bad AS Bad,
+                            FORMAT(CASE WHEN (FPY.Good + FPY.Bad) > 0 THEN CAST(FPY.Good AS DECIMAL) / (FPY.Good + FPY.Bad) ELSE 0 END, 'P') AS FPY,
+                            ISNULL(SPY.Good, 0) AS '2ndGood',
+                            ISNULL(SPY.Bad, 0) AS '2ndBad',
+                            FORMAT(CASE WHEN (SPY.Good + SPY.Bad) > 0 THEN CAST(SPY.Good AS DECIMAL) / (SPY.Good + SPY.Bad) ELSE 0 END, 'P') AS '2ndPY',
+                            FPY.Good + ISNULL(SPY.Good, 0) AS AccumGood,
+                            FPY.Bad - isnull(SPY.Good,0) AS AccumBad
+                            ,FORMAT(CASE WHEN (FPY.Good + FPY.Bad)>0 THEN CAST(FPY.Good + isnull(SPY.Good,0) AS DECIMAL) /(FPY.Good + FPY.Bad) ELSE 0 END,'P') AS AccumPY,
+                            ISNULL(SGood.GoodRepair, 0) AS GoodRepair,
+                            total.Good AS 'Tgood',
+                            total.Bad AS 'Tbad'
+                            FROM FPY
+                            LEFT JOIN SPY ON FPY.RN = SPY.RN
+                            AND FPY.Area = SPY.Area
+                            AND FPY.CustomerName = SPY.CustomerName
+                            AND FPY.PartNumber = SPY.PartNumber
+                            AND FPY.JobSide = SPY.JobSide
+                            AND FPY.Bin_Name = SPY.Bin_Name
+                            LEFT JOIN SGood ON FPY.RN = SGood.RN
+                            AND FPY.Area = SGood.Area
+                            AND FPY.CustomerName = SGood.CustomerName
+                            AND FPY.PartNumber = SGood.PartNumber
+                            AND FPY.JobSide = SGood.JobSide
+                            AND FPY.Bin_Name = SGood.Bin_Name
+                            LEFT JOIN total ON FPY.RN = total.RN
+                            AND FPY.Area = total.Area
+                            AND FPY.CustomerName = total.CustomerName
+                            AND FPY.PartNumber = total.PartNumber
+                            AND FPY.JobSide = total.JobSide
+                            AND FPY.Bin_Name = total.Bin_Name;", parameters, "BeFirst:ConnectionString", 240);
+
+
+          dtResult.Merge(dtAreaSTATIONPART);
+
+          if (Model.prepareDownload)
+          {
+            DataTable dtSerialsCustomer = Firstronic.Framework.Queries.GetDatatableFromQuery(@"WITH BaseData AS (
+                SELECT ut.PartID, ut.AreaID, ut.StationID, ut.JobSide, ut.IsGood, ut.SSN,
+                   ut.TrnDate, ut.SSNIndex, ut.GroupMLS,ut.DefectCodeID,ut.Comments
+                FROM PD_TBL_UNITS_TRACKING ut WITH (NOLOCK)
+                WHERE ut.TrnDate BETWEEN @dateStart AND @dateEnd
+                AND (ut.AreaID = @AreaID OR @AreaID = 0)
+                AND (ut.StationID = @StationID OR @StationID = 0)
+                )
+                SELECT pn.PartNumber
+                , a.Area
+                , ec.CustomerName
+                , bd.JobSide
+                , ISNULL(pb.Bin_Name, '') AS Bin_Name
+                , bd.IsGood
+                , bd.SSN
+                , bd.TrnDate
+                , bd.SSNIndex
+                , pup.BoxID
+                ,Case WHEN (bd.IsGood=0 AND bd.DefectCodeID<=0) THEN bd.Comments WHEN bd.IsGood=0 THEN isnull(dc.defectcode,'') ELSE '' END as FailureDesc
+                FROM BaseData bd
+                INNER JOIN CS_IDT_PARTNUMBERS pn ON bd.PartID = pn.PartID
+                INNER JOIN CS_IDT_EXTERNAL_CUSTOMERS ec ON pn.CustomerID = ec.CustomerID
+                INNER JOIN PD_idt_areas a ON bd.AreaID = a.AreaID
+                INNER JOIN PD_idt_stations s ON bd.StationID = s.StationID
+                LEFT JOIN PART_UNITS_PACKED pup ON bd.SSN = pup.SSN
+                LEFT JOIN PART_BIN pb ON bd.PartID = pb.Part_ID AND bd.GroupMLS = pb.Bin_ID
+                LEFT JOIN EN_idt_defects_codes dc On bd.defectcodeid=dc.defectcodeid
+                WHERE (pn.CustomerID = @customerID OR @customerID = 0);", parameters, "BeFirst:ConnectionString", 240);
+
+            dtSerials.Merge(dtSerialsCustomer);
+          }
+
+        }
+      }
+
+      foreach (var PartID in PartIDS)
+      {
+        if (PartID != "")
+        {
+          SqlParameter[] parameters = new SqlParameter[]
+          {
+            new SqlParameter("@AreaID",SqlDbType.Int){Value = Model.AreaID},
+            new SqlParameter("@StationID",SqlDbType.Int){Value = Model.StationID},
+            new SqlParameter("@PartID",SqlDbType.Int){Value = PartID},
+            new SqlParameter("@dateStart",SqlDbType.DateTime){Value =dateStart.ToString("MM/dd/yyyy HH:mm:ss")},
+            new SqlParameter("@dateEnd",SqlDbType.DateTime){Value =dateEnd.ToString("MM/dd/yyyy HH:mm:ss")},
+            new SqlParameter("@onlyDefects",SqlDbType.Bit){Value =Model.defectsDownload}
+          };
+
+          DataTable dtAreaSTATIONPART = Firstronic.Framework.Queries.GetDatatableFromQuery(@"WITH w AS (
+                            SELECT
+                            ut.SSN AS UnitID,
+                            ut.TrnDate,
+                            pn.PartNumber,
+                            a.Area,
+                            ec.CustomerName,
+                            ut.JobSide,
+                            ISNULL(pb.Bin_Name, '') AS Bin_Name,
+                            ut.IsGood AS Status,
+                            ut.SSNIndex AS RN
+                            FROM PD_tbl_units_tracking ut WITH (NOLOCK)
+                            INNER JOIN CS_idt_partnumbers pn ON ut.PartID = pn.PartID
+                            INNER JOIN CS_idt_external_customers ec ON pn.CustomerID = ec.CustomerID
+                            INNER JOIN PD_idt_areas a ON ut.AreaID = a.AreaID
+                            INNER JOIN PD_idt_stations s ON ut.StationID = s.StationID
+                            LEFT JOIN PART_BIN pb ON ut.PartID = pb.Part_ID AND ut.GroupMLS = pb.Bin_ID
+                            WHERE ut.TrnDate BETWEEN @dateStart AND @dateEnd
+                            AND (pn.PartID = @PartID OR @PartID=0)
+                            AND (ut.AreaID = @AreaID OR @AreaID=0)
+                            AND (ut.StationID = @StationID OR @StationID=0)
+                            ),
+                            FPY AS (
+                            SELECT
+                            Area, CustomerName, PartNumber, JobSide, Bin_Name,
+                            SUM(CASE WHEN Status = '1' THEN 1 ELSE 0 END) AS Good,
+                            SUM(CASE WHEN Status = '0' THEN 1 ELSE 0 END) AS Bad,
+                            '1' AS RN
+                            FROM w
+                            WHERE RN = 1
+                            GROUP BY Area, CustomerName, PartNumber, JobSide, Bin_Name
+                            ),
+                            SPY AS (
+                            SELECT
+                            b.Area, b.CustomerName, b.PartNumber, b.JobSide, b.Bin_Name,
+                            SUM(CASE WHEN b.Status = '1' THEN 1 ELSE 0 END) AS Good,
+                            SUM(CASE WHEN b.Status = '0' THEN 1 ELSE 0 END) AS Bad,
+                            '1' AS RN
+                            FROM w b
+                            INNER JOIN w a ON b.UnitID = a.UnitID
+                            AND b.Area = a.Area
+                            AND b.CustomerName = a.CustomerName
+                            AND b.PartNumber = a.PartNumber
+                            AND b.JobSide = a.JobSide
+                            AND b.Bin_Name = a.Bin_Name
+                            WHERE b.RN = 2 AND a.RN = 1 AND a.Status = '0'
+                            GROUP BY b.Area, b.CustomerName, b.PartNumber, b.JobSide, b.Bin_Name
+                            ),
+                            SGood AS (
+                            SELECT
+                            b.Area, b.CustomerName, b.PartNumber, b.JobSide, b.Bin_Name,
+                            COUNT(*) AS GoodRepair,
+                            '1' AS RN
+                            FROM w b
+                            INNER JOIN w a ON b.UnitID = a.UnitID
+                            AND b.Area = a.Area
+                            AND b.CustomerName = a.CustomerName
+                            AND b.PartNumber = a.PartNumber
+                            AND b.JobSide = a.JobSide
+                            AND b.Bin_Name = a.Bin_Name
+                            INNER JOIN Rework_Units_Steps rw ON b.UnitID = rw.SN
+                            AND (CASE WHEN rw.RepairDate IS NULL THEN rw.diagdate ELSE rw.RepairDate END) > a.TrnDate
+                            AND (CASE WHEN rw.RepairDate IS NULL THEN rw.diagdate ELSE rw.RepairDate END) < b.TrnDate
+                            WHERE b.RN = 2 AND b.Status = '1' AND a.RN = 1 AND a.Status = '0'
+                            GROUP BY b.Area, b.CustomerName, b.PartNumber, b.JobSide, b.Bin_Name
+                            ),
+                            total AS (
+                            SELECT
+                            Area, CustomerName, PartNumber, JobSide, Bin_Name,
+                            SUM(CASE WHEN Status = '1' THEN 1 ELSE 0 END) AS Good,
+                            SUM(CASE WHEN Status = '0' THEN 1 ELSE 0 END) AS Bad,
+                            '1' AS RN
+                            FROM w
+                            GROUP BY Area, CustomerName, PartNumber, JobSide, Bin_Name
+                            )
+                            SELECT
+                            FPY.Area,
+                            FPY.CustomerName,
+                            FPY.PartNumber,
+                            FPY.JobSide,
+                            FPY.Bin_Name,
+                            (FPY.Good + FPY.Bad) AS Total,
+                            FPY.Good AS Good,
+                            FPY.Bad AS Bad,
+                            FORMAT(CASE WHEN (FPY.Good + FPY.Bad) > 0 THEN CAST(FPY.Good AS DECIMAL) / (FPY.Good + FPY.Bad) ELSE 0 END, 'P') AS FPY,
+                            ISNULL(SPY.Good, 0) AS '2ndGood',
+                            ISNULL(SPY.Bad, 0) AS '2ndBad',
+                            FORMAT(CASE WHEN (SPY.Good + SPY.Bad) > 0 THEN CAST(SPY.Good AS DECIMAL) / (SPY.Good + SPY.Bad) ELSE 0 END, 'P') AS '2ndPY',
+                            FPY.Good + ISNULL(SPY.Good, 0) AS AccumGood,
+                            FPY.Bad - isnull(SPY.Good,0) AS AccumBad
+                            ,FORMAT(CASE WHEN (FPY.Good + FPY.Bad)>0 THEN CAST(FPY.Good + isnull(SPY.Good,0) AS DECIMAL) /(FPY.Good + FPY.Bad) ELSE 0 END,'P') AS AccumPY,
+                            ISNULL(SGood.GoodRepair, 0) AS GoodRepair,
+                            total.Good AS 'Tgood',
+                            total.Bad AS 'Tbad'
+                            FROM FPY
+                            LEFT JOIN SPY ON FPY.RN = SPY.RN
+                            AND FPY.Area = SPY.Area
+                            AND FPY.CustomerName = SPY.CustomerName
+                            AND FPY.PartNumber = SPY.PartNumber
+                            AND FPY.JobSide = SPY.JobSide
+                            AND FPY.Bin_Name = SPY.Bin_Name
+                            LEFT JOIN SGood ON FPY.RN = SGood.RN
+                            AND FPY.Area = SGood.Area
+                            AND FPY.CustomerName = SGood.CustomerName
+                            AND FPY.PartNumber = SGood.PartNumber
+                            AND FPY.JobSide = SGood.JobSide
+                            AND FPY.Bin_Name = SGood.Bin_Name
+                            LEFT JOIN total ON FPY.RN = total.RN
+                            AND FPY.Area = total.Area
+                            AND FPY.CustomerName = total.CustomerName
+                            AND FPY.PartNumber = total.PartNumber
+                            AND FPY.JobSide = total.JobSide
+                            AND FPY.Bin_Name = total.Bin_Name;
+                            ", parameters, "BeFirst:ConnectionString", 240);
+
+          dtResult.Merge(dtAreaSTATIONPART);
+
+          if (Model.prepareDownload)
+          {
+            DataTable dtSerialsCustomer = Firstronic.Framework.Queries.GetDatatableFromQuery(@"WITH BaseData AS (
+                                    SELECT ut.PartID, ut.AreaID, ut.StationID, ut.JobSide, ut.IsGood, ut.SSN,
+                                       ut.TrnDate, ut.SSNIndex, ut.GroupMLS,ut.DefectCodeID,ut.Comments
+                                    FROM PD_TBL_UNITS_TRACKING ut WITH (NOLOCK)
+                                    WHERE ut.TrnDate BETWEEN @dateStart AND @dateEnd
+                                    AND (ut.AreaID = @AreaID OR @AreaID = 0)
+                                    AND (ut.StationID = @StationID OR @StationID = 0)
+                                    AND (ut.PartID = @PartID OR @PartID = 0)
+                                    )
+                                    SELECT pn.PartNumber
+                                    , a.Area
+                                    , ec.CustomerName
+                                    , bd.JobSide
+                                    , ISNULL(pb.Bin_Name, '') AS Bin_Name
+                                    , bd.IsGood
+                                    , bd.SSN
+                                    , bd.TrnDate
+                                    , bd.SSNIndex
+                                    , pup.BoxID
+                                    ,Case WHEN (bd.IsGood=0 AND bd.DefectCodeID<=0) THEN bd.Comments WHEN bd.IsGood=0 THEN isnull(dc.defectcode,'') ELSE '' END as FailureDesc
+                                    FROM BaseData bd
+                                    INNER JOIN CS_IDT_PARTNUMBERS pn ON bd.PartID = pn.PartID
+                                    INNER JOIN CS_IDT_EXTERNAL_CUSTOMERS ec ON pn.CustomerID = ec.CustomerID
+                                    INNER JOIN PD_idt_areas a ON bd.AreaID = a.AreaID
+                                    INNER JOIN PD_idt_stations s ON bd.StationID = s.StationID
+                                    LEFT JOIN PART_UNITS_PACKED pup ON bd.SSN = pup.SSN
+                                    LEFT JOIN PART_BIN pb ON bd.PartID = pb.Part_ID AND bd.GroupMLS = pb.Bin_ID
+                                    LEFT JOIN EN_idt_defects_codes dc On bd.defectcodeid=dc.defectcodeid
+                                    WHERE (bd.Isgood = 0 or @onlyDefects=0);
+                                    ", parameters, "BeFirst:ConnectionString", 240);
+
+            dtSerials.Merge(dtSerialsCustomer);
+          }
+        }
+      }
+
+      if (dtResult.Rows.Count > 0)
+      {
+
+        <div class="mvc-grid">
+          <h3 class="md-card-toolbar-heading-text"> Summary by Part/Operation (@dateStart - @dateEnd)</h3>
+          <table border="1">
+            <thead>
+              <tr>
+                @{
+                  int colin = 0;
+                }
+                @foreach (System.Data.DataColumn col in dtResult.Columns)
+                {
+                  <th>@col.Caption</th>
+                  colin++;
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (System.Data.DataRow rowstation in dtResult.Rows)
+              {
+                <tr>
+                  @{
+                    int varcell1 = 1;
+                    foreach (var cell in rowstation.ItemArray)
+                    {
+
+                      if (varcell1 == 7)
+                      {
+                        <td><a href="@Url.Action("SuccessesSummary","Reports", new { Area = "Production", dateStart = Model.dateStart, dateEnd = Model.dateEnd, selectedCustomers = "", selectedPartNo = rowstation["PartNumber"].ToString(),StationId=Model.StationID,AreaID=Model.AreaID,ssnindex=1,execute=true,prepareDownload=Model.prepareDownload,AreaName =rowstation["Area"].ToString() })">@cell.ToString()</a></td>
+                      }
+                      else if (varcell1 == 8)
+                      {
+                        <td><a href="@Url.Action("FailuresSummary","Reports", new { Area = "Production", dateStart = Model.dateStart, dateEnd = Model.dateEnd, selectedCustomers = "", selectedPartNo = rowstation["PartNumber"].ToString(),StationId=Model.StationID,AreaID=Model.AreaID,ssnindex=1,execute=true,prepareDownload=Model.prepareDownload,AreaName =rowstation["Area"].ToString() })">@cell.ToString()</a></td>
+                      }
+                      else
+                      {
+                        <td> @cell.ToString() </td>
+                      }
+                      varcell1++;
+                    }
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        int ii = 0;
+        <div class="uk-grid mn-t-15" uk-grid>
+          @foreach (System.Data.DataRow rowstation in dtResult.Rows)
+          {
+            <div class="uk-width-1-6@s">
+              <div class="text-center">
+                @rowstation["Area"] @rowstation["PartNumber"]
+              </div>
+              <canvas id="chartFalsesTOP10_@ii" width="300" height="200"></canvas>
+
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                  const labels_@ii = ['FPY @rowstation["FPY"].ToString()', '2ndPY @rowstation["2ndPY"].ToString()', 'AccumPY @rowstation["AccumPY"].ToString()'];
+                    const data_@ii = {
+                      labels: labels_@ii,
+                      datasets: [
+                        {
+                          label: 'Good',
+                          data: [@rowstation["Good"].ToString(),@rowstation["2ndGood"].ToString(),@rowstation["AccumGood"].ToString()],
+                          backgroundColor: 'rgb(68,206,27,0.3)',
+                          borderColor: 'rgba(68,206,27, 1)',
+                        },
+                        {
+                          label: 'Bad',
+                          data: [@rowstation["Bad"].ToString(),@rowstation["2ndBad"].ToString(),@rowstation["AccumBad"].ToString()],
+                          backgroundColor: 'rgb(229, 31, 31,0.3)',
+                          borderColor: 'rgba(229, 31, 31, 1)',
+                        }
+                      ]
+                    };
+
+                    var ctFalsesTOP10_@ii = document.getElementById("chartFalsesTOP10_@ii").getContext("2d");
+                    var myFalsesTOP10_@ii = new Chart(ctFalsesTOP10_@ii, {
+                      type: 'bar',
+                      data: data_@ii,
+                      options: {
+                        scales: {
+                          xAxes: [{
+                            stacked: true
+                          }],
+                          yAxes: [{
+                            stacked: true
+                          }]
+                        },
+                        legend: {
+                          display: false,
+                        },
+                        maintainAspectRatio: true,
+                      }
+                     });
+              </script>
+            </div>
+
+            ii = ii + 1;
+          }
+        </div>
+
+        <div class="mvc-grid hide">
+          <table id="ExportDetails" border="1">
+            <thead>
+              <tr>
+                @{
+                  colin = 0;
+                }
+                @foreach (System.Data.DataColumn col in dtSerials.Columns)
+                {
+                  <th>@col.Caption</th>
+                  colin++;
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (System.Data.DataRow rowstation in dtSerials.Rows)
+              {
+                <tr>
+                  @{
+                    int varcell1 = 1;
+                    foreach (var cell in rowstation.ItemArray)
+                    {
+                      <td> @cell.ToString() </td>
+                      varcell1++;
+                    }
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <input id="btnExport" type="button" value="Export" class="md-btn md-btn-primary md-btn-mini uk-align-right mn-t-10 mn-b-0 @(Model.prepareDownload?"":"hide")" />
+      }
+    }
+
+  </div>
+</div>
+
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $("#ddlCustomers").select2();
+</script>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $("#ddlParts").select2();
+</script>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $("#ddlDateStart").datepicker({
+    dateFormat: "mm/dd/y",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-5:+1"
+  });
+
+  $("#ddlDateEnd").datepicker({
+    dateFormat: "mm/dd/y",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-5:+1"
+  });
+</script>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $(document).ready(function () {
+    FillStations()
+  });
+</script>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  function FillStations() {
+    var AreaID = $('#ddlareaid').val();
+    var req2 = { AreaID: AreaID, All: 'ALL' };
+    $.ajax({
+      type: "POST",
+      url: "/Manage/Areas/FillStations",
+      async: false,
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify(req2),
+      success: function (response) {
+        //console.log(response);
+        $("#ddlsubstation").html("");
+        $.each(response, function (index, value) {
+          $("#ddlsubstation").append(
+            $('<option></option>').val(value.Value).html(value.Text));
+        });
+      },
+      error: function () {
+        $("#ddlsubstation").html("");
+        $("#ddlsubstation").append(
+          $('<option></option>').val(0).html("NA"));
+      }
+    });
+  }
+</script>
+
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  document.getElementById("btnExport").addEventListener('click', function () {
+
+    $("body").addClass("loading");
+
+    /* Create worksheet from HTML DOM TABLE */
+    var wb = XLSX.utils.table_to_book(document.getElementById("ExportDetails"));
+    /* Export to file (start a download) */
+    const d = new Date();
+    let text = moment(d).format('YYYYMMDDHHMMSS');
+
+    XLSX.writeFile(wb, "Serials" + text + ".xlsx");
+
+    $("body").removeClass("loading");
+  });
+</script>

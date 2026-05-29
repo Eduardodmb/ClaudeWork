@@ -3261,3 +3261,1287 @@ cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude\.s
 2026-05-08T18:53:39.454Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
 2026-05-08T18:53:39.454Z [DEBUG] Forked agent [prompt_suggestion] finished: 2 messages, types=[assistant, assistant], totalUsage: input=10 output=660 cacheRead=118613 cacheCreate=1550
 2026-05-08T18:53:39.456Z [DEBUG] [Speculation] enabled=false
+2026-05-08T18:57:55.225Z [DEBUG] BigQuery metrics exported successfully
+2026-05-08T18:57:55.225Z [DEBUG] BigQuery API Response: {
+  "accepted_count": 9,
+  "rejected_count": 0
+}
+2026-05-08T19:07:05.384Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:07:05.384Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:07:05.384Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:07:05.384Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:07:05.388Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-05-08T19:07:05.388Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:07:05.388Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-08T19:07:05.388Z [DEBUG] FileHistory: Making snapshot for message 52141bc7-9051-4512-8e56-396777654b99
+2026-05-08T19:07:05.389Z [DEBUG] FileHistory: Missing tracked file: C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude\.setup\SETUP-INSTRUCTIONS.md
+2026-05-08T19:07:05.401Z [DEBUG] FileHistory: Missing tracked file: C:\Users\emarquez\Desktop\CLAUDE-CONTEXT-SETUP-SUMMARY.md
+2026-05-08T19:07:05.403Z [DEBUG] FileHistory: Added snapshot for 52141bc7-9051-4512-8e56-396777654b99, tracking 24 files
+2026-05-08T19:07:05.404Z [DEBUG] [useDeferredValue] Messages deferred by 1 (314→315)
+2026-05-08T19:07:05.419Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:07:05.422Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267225422
+2026-05-08T19:07:05.422Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:07:05.423Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:07:05.423Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:07:05.423Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267225422 to C:\Users\emarquez\.claude.json
+2026-05-08T19:07:05.427Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:07:05.428Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.94b; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:07:05.429Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:07:05.429Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:07:05.430Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:07:05.434Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267225434
+2026-05-08T19:07:05.434Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:07:05.434Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:07:05.434Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:07:05.434Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267225434 to C:\Users\emarquez\.claude.json
+2026-05-08T19:07:05.438Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:07:05.440Z [DEBUG] autocompact: tokens=119958 threshold=167000 effectiveWindow=180000
+2026-05-08T19:07:05.442Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:07:05.447Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267225447
+2026-05-08T19:07:05.447Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:07:05.448Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:07:05.448Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:07:05.448Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267225447 to C:\Users\emarquez\.claude.json
+2026-05-08T19:07:05.452Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:07:05.457Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:07:05.457Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:07:05.457Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:07:05.458Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:07:05.463Z [DEBUG] [useDeferredValue] Messages deferred by 1 (314→315)
+2026-05-08T19:07:06.332Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:07:08.031Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:07:13.677Z [DEBUG] [useDeferredValue] Messages deferred by 1 (315→316)
+2026-05-08T19:07:15.037Z [DEBUG] [useDeferredValue] Messages deferred by 1 (316→317)
+2026-05-08T19:07:15.042Z [DEBUG] [useDeferredValue] Messages deferred by 1 (316→317)
+2026-05-08T19:07:15.049Z [DEBUG] [useDeferredValue] Messages deferred by 1 (316→317)
+2026-05-08T19:07:15.838Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:07:15.840Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:07:15.840Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:07:15.840Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:07:15.843Z [DEBUG] Permission suggestions for Bash: []
+2026-05-08T19:07:15.843Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:07:15.845Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:07:15.845Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:07:15.845Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:07:15.845Z [DEBUG] [useDeferredValue] Messages deferred by 1 (317→318)
+2026-05-08T19:07:15.931Z [DEBUG] High write ratio: blit=0, write=106638 (100.0% writes), screen=2295x102
+2026-05-08T19:07:15.935Z [DEBUG] [useDeferredValue] Messages deferred by 1 (317→318)
+2026-05-08T19:07:21.945Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:07:21.945Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:07:21.945Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:07:55.201Z [DEBUG] BigQuery metrics exported successfully
+2026-05-08T19:07:55.201Z [DEBUG] BigQuery API Response: {
+  "accepted_count": 12,
+  "rejected_count": 0
+}
+2026-05-08T19:08:52.051Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:08:52.073Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:08:54.062Z [DEBUG] [useDeferredValue] Messages deferred by 1 (318→319)
+2026-05-08T19:08:55.069Z [DEBUG] [useDeferredValue] Messages deferred by 1 (319→320)
+2026-05-08T19:08:56.073Z [DEBUG] [useDeferredValue] Messages deferred by 1 (320→321)
+2026-05-08T19:08:57.076Z [DEBUG] [useDeferredValue] Messages deferred by 1 (321→322)
+2026-05-08T19:08:58.080Z [DEBUG] [useDeferredValue] Messages deferred by 1 (322→323)
+2026-05-08T19:08:59.082Z [DEBUG] [useDeferredValue] Messages deferred by 1 (323→324)
+2026-05-08T19:09:00.081Z [DEBUG] [useDeferredValue] Messages deferred by 1 (324→325)
+2026-05-08T19:09:01.084Z [DEBUG] [useDeferredValue] Messages deferred by 1 (325→326)
+2026-05-08T19:09:02.099Z [DEBUG] [useDeferredValue] Messages deferred by 1 (326→327)
+2026-05-08T19:09:03.107Z [DEBUG] [useDeferredValue] Messages deferred by 1 (327→328)
+2026-05-08T19:09:04.112Z [DEBUG] [useDeferredValue] Messages deferred by 1 (328→329)
+2026-05-08T19:09:05.115Z [DEBUG] [useDeferredValue] Messages deferred by 1 (329→330)
+2026-05-08T19:09:06.119Z [DEBUG] [useDeferredValue] Messages deferred by 1 (330→331)
+2026-05-08T19:09:07.120Z [DEBUG] [useDeferredValue] Messages deferred by 1 (331→332)
+2026-05-08T19:09:08.136Z [DEBUG] [useDeferredValue] Messages deferred by 1 (332→333)
+2026-05-08T19:09:09.145Z [DEBUG] [useDeferredValue] Messages deferred by 1 (333→334)
+2026-05-08T19:09:10.149Z [DEBUG] [useDeferredValue] Messages deferred by 1 (334→335)
+2026-05-08T19:09:11.163Z [DEBUG] [useDeferredValue] Messages deferred by 1 (335→336)
+2026-05-08T19:09:12.164Z [DEBUG] [useDeferredValue] Messages deferred by 1 (336→337)
+2026-05-08T19:09:13.166Z [DEBUG] [useDeferredValue] Messages deferred by 1 (337→338)
+2026-05-08T19:09:14.174Z [DEBUG] [useDeferredValue] Messages deferred by 1 (338→339)
+2026-05-08T19:09:15.175Z [DEBUG] [useDeferredValue] Messages deferred by 1 (339→340)
+2026-05-08T19:09:16.174Z [DEBUG] [useDeferredValue] Messages deferred by 1 (340→341)
+2026-05-08T19:09:17.175Z [DEBUG] [useDeferredValue] Messages deferred by 1 (341→342)
+2026-05-08T19:09:18.177Z [DEBUG] [useDeferredValue] Messages deferred by 1 (342→343)
+2026-05-08T19:09:19.181Z [DEBUG] [useDeferredValue] Messages deferred by 1 (343→344)
+2026-05-08T19:09:20.188Z [DEBUG] [useDeferredValue] Messages deferred by 1 (344→345)
+2026-05-08T19:09:21.194Z [DEBUG] [useDeferredValue] Messages deferred by 1 (345→346)
+2026-05-08T19:09:22.200Z [DEBUG] [useDeferredValue] Messages deferred by 1 (346→347)
+2026-05-08T19:09:23.200Z [DEBUG] [useDeferredValue] Messages deferred by 1 (347→348)
+2026-05-08T19:09:24.214Z [DEBUG] [useDeferredValue] Messages deferred by 1 (348→349)
+2026-05-08T19:09:25.217Z [DEBUG] [useDeferredValue] Messages deferred by 1 (349→350)
+2026-05-08T19:09:26.233Z [DEBUG] [useDeferredValue] Messages deferred by 1 (350→351)
+2026-05-08T19:09:27.238Z [DEBUG] [useDeferredValue] Messages deferred by 1 (351→352)
+2026-05-08T19:09:28.240Z [DEBUG] [useDeferredValue] Messages deferred by 1 (352→353)
+2026-05-08T19:09:29.255Z [DEBUG] [useDeferredValue] Messages deferred by 1 (353→354)
+2026-05-08T19:09:30.255Z [DEBUG] [useDeferredValue] Messages deferred by 1 (354→355)
+2026-05-08T19:09:31.259Z [DEBUG] [useDeferredValue] Messages deferred by 1 (355→356)
+2026-05-08T19:09:32.261Z [DEBUG] [useDeferredValue] Messages deferred by 1 (356→357)
+2026-05-08T19:09:33.263Z [DEBUG] [useDeferredValue] Messages deferred by 1 (357→358)
+2026-05-08T19:09:34.275Z [DEBUG] [useDeferredValue] Messages deferred by 1 (358→359)
+2026-05-08T19:09:35.277Z [DEBUG] [useDeferredValue] Messages deferred by 1 (359→360)
+2026-05-08T19:09:35.299Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:09:35.300Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.a7b; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:09:35.301Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:09:35.301Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:09:35.301Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:09:35.303Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:09:35.303Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:09:35.303Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:09:35.306Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:09:35.306Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:09:35.306Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:09:35.306Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:09:35.307Z [DEBUG] autocompact: tokens=120539 threshold=167000 effectiveWindow=180000
+2026-05-08T19:09:35.308Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:09:35.314Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267375314
+2026-05-08T19:09:35.314Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:09:35.314Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:09:35.315Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:09:35.315Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267375314 to C:\Users\emarquez\.claude.json
+2026-05-08T19:09:35.318Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:09:35.324Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:09:35.325Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:09:35.325Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:09:35.326Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:09:35.330Z [DEBUG] [useDeferredValue] Messages deferred by 1 (360→361)
+2026-05-08T19:09:35.400Z [DEBUG] High write ratio: blit=0, write=106667 (100.0% writes), screen=2291x102
+2026-05-08T19:09:36.009Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:09:37.507Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:09:39.893Z [DEBUG] [useDeferredValue] Messages deferred by 1 (361→362)
+2026-05-08T19:09:39.896Z [DEBUG] [useDeferredValue] Messages deferred by 1 (361→362)
+2026-05-08T19:09:40.837Z [DEBUG] [useDeferredValue] Messages deferred by 1 (362→363)
+2026-05-08T19:09:40.841Z [DEBUG] [useDeferredValue] Messages deferred by 1 (362→363)
+2026-05-08T19:09:40.848Z [DEBUG] [useDeferredValue] Messages deferred by 1 (362→363)
+2026-05-08T19:09:41.577Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:09:41.579Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:09:41.579Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:09:41.579Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:09:41.584Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:09:41.593Z [DEBUG] [useDeferredValue] Messages deferred by 1 (363→364)
+2026-05-08T19:09:41.662Z [DEBUG] High write ratio: blit=0, write=106793 (100.0% writes), screen=2294x102
+2026-05-08T19:09:41.675Z [DEBUG] [useDeferredValue] Messages deferred by 1 (363→364)
+2026-05-08T19:09:41.678Z [DEBUG] [useDeferredValue] Messages deferred by 1 (363→364)
+2026-05-08T19:09:41.704Z [DEBUG] [useDeferredValue] Messages deferred by 1 (363→364)
+2026-05-08T19:09:42.193Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:09:42.194Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.120; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:09:42.194Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:09:42.194Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:09:42.195Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:09:42.197Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:09:42.197Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:09:42.197Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:09:42.199Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:09:42.199Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:09:42.199Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:09:42.199Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:09:42.200Z [DEBUG] autocompact: tokens=121062 threshold=167000 effectiveWindow=180000
+2026-05-08T19:09:42.200Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:09:42.205Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267382205
+2026-05-08T19:09:42.206Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:09:42.206Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:09:42.206Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:09:42.206Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267382205 to C:\Users\emarquez\.claude.json
+2026-05-08T19:09:42.211Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:09:42.216Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:09:42.217Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:09:42.217Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:09:42.218Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:09:42.224Z [DEBUG] [useDeferredValue] Messages deferred by 1 (364→365)
+2026-05-08T19:09:42.828Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:09:44.461Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:09:45.505Z [DEBUG] [useDeferredValue] Messages deferred by 1 (365→366)
+2026-05-08T19:09:46.449Z [DEBUG] [useDeferredValue] Messages deferred by 1 (366→367)
+2026-05-08T19:09:46.453Z [DEBUG] [useDeferredValue] Messages deferred by 1 (366→367)
+2026-05-08T19:09:47.397Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:09:47.398Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:09:47.398Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:09:47.398Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:09:47.400Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2026-05-08T19:09:47.401Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:09:47.402Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:09:47.402Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:09:47.402Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:09:47.403Z [DEBUG] [useDeferredValue] Messages deferred by 1 (367→368)
+2026-05-08T19:09:47.412Z [DEBUG] [useDeferredValue] Messages deferred by 1 (367→368)
+2026-05-08T19:09:47.472Z [DEBUG] High write ratio: blit=0, write=106952 (100.0% writes), screen=2305x102
+2026-05-08T19:09:47.478Z [DEBUG] [useDeferredValue] Messages deferred by 1 (367→368)
+2026-05-08T19:09:47.499Z [DEBUG] [useDeferredValue] Messages deferred by 1 (367→368)
+2026-05-08T19:09:53.422Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:09:53.422Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:09:53.422Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:11:57.727Z [DEBUG] Aborting: tool=Bash isAbort=undefined hasFeedback=false isSubagent=false
+2026-05-08T19:11:57.727Z [DEBUG] Bash tool permission denied
+2026-05-08T19:11:57.730Z [DEBUG] [useDeferredValue] Messages deferred by 2 (368→370)
+2026-05-08T19:11:57.743Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:12:48.987Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:12:48.987Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:12:48.987Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:12:48.987Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:12:48.990Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-05-08T19:12:48.990Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:12:48.990Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-08T19:12:48.990Z [DEBUG] FileHistory: Making snapshot for message aecde1dd-5a68-4281-adcd-b8b7b03897fa
+2026-05-08T19:12:48.991Z [DEBUG] FileHistory: Missing tracked file: C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude\.setup\SETUP-INSTRUCTIONS.md
+2026-05-08T19:12:48.993Z [DEBUG] FileHistory: Missing tracked file: C:\Users\emarquez\Desktop\CLAUDE-CONTEXT-SETUP-SUMMARY.md
+2026-05-08T19:12:48.993Z [DEBUG] FileHistory: Added snapshot for aecde1dd-5a68-4281-adcd-b8b7b03897fa, tracking 24 files
+2026-05-08T19:12:48.994Z [DEBUG] [useDeferredValue] Messages deferred by 1 (370→371)
+2026-05-08T19:12:49.008Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:12:49.011Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267569011
+2026-05-08T19:12:49.011Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:12:49.011Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:12:49.011Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:12:49.011Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267569011 to C:\Users\emarquez\.claude.json
+2026-05-08T19:12:49.015Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:12:49.016Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.488; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:12:49.016Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:12:49.016Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:12:49.017Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:12:49.021Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267569021
+2026-05-08T19:12:49.021Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:12:49.021Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:12:49.021Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:12:49.021Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267569021 to C:\Users\emarquez\.claude.json
+2026-05-08T19:12:49.025Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:12:49.026Z [DEBUG] autocompact: tokens=121741 threshold=167000 effectiveWindow=180000
+2026-05-08T19:12:49.028Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:12:49.033Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267569033
+2026-05-08T19:12:49.033Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:12:49.033Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:12:49.033Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:12:49.033Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267569033 to C:\Users\emarquez\.claude.json
+2026-05-08T19:12:49.035Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:12:49.041Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:12:49.042Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:12:49.042Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:12:49.043Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:12:49.048Z [DEBUG] [useDeferredValue] Messages deferred by 1 (370→371)
+2026-05-08T19:12:49.807Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:12:51.947Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:12:55.182Z [DEBUG] BigQuery metrics exported successfully
+2026-05-08T19:12:55.182Z [DEBUG] BigQuery API Response: {
+  "accepted_count": 12,
+  "rejected_count": 0
+}
+2026-05-08T19:12:56.748Z [DEBUG] [useDeferredValue] Messages deferred by 1 (371→372)
+2026-05-08T19:12:57.161Z [DEBUG] [useDeferredValue] Messages deferred by 1 (372→373)
+2026-05-08T19:12:58.840Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:12:58.842Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:12:58.842Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:12:58.842Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:12:58.845Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:12:58.845Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:12:58.845Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.817; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:12:58.846Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:12:58.846Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:12:58.846Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.817; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:12:58.846Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:12:58.846Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:12:58.847Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:12:58.847Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:12:58.849Z [DEBUG] [useDeferredValue] Messages deferred by 1 (373→374)
+2026-05-08T19:12:58.917Z [DEBUG] High write ratio: blit=0, write=107520 (100.0% writes), screen=2310x102
+2026-05-08T19:12:58.929Z [DEBUG] [useDeferredValue] Messages deferred by 1 (373→374)
+2026-05-08T19:12:58.931Z [DEBUG] [useDeferredValue] Messages deferred by 1 (373→374)
+2026-05-08T19:12:58.952Z [DEBUG] [useDeferredValue] Messages deferred by 1 (373→374)
+2026-05-08T19:12:59.526Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:12:59.708Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:12:59.845Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "powershell -Command:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2026-05-08T19:12:59.845Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:12:59.847Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:12:59.848Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:12:59.848Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:13:11.508Z [DEBUG] Aborting: tool=Bash isAbort=undefined hasFeedback=false isSubagent=false
+2026-05-08T19:13:11.509Z [DEBUG] Bash tool permission denied
+2026-05-08T19:13:11.511Z [DEBUG] [useDeferredValue] Messages deferred by 2 (374→376)
+2026-05-08T19:13:11.520Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:13:29.936Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:13:29.936Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:13:29.936Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:13:29.936Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:13:29.939Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-05-08T19:13:29.940Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:13:29.940Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-08T19:13:29.940Z [DEBUG] FileHistory: Making snapshot for message 950139bb-f860-4aa2-8fa6-f18e082502d1
+2026-05-08T19:13:29.940Z [DEBUG] FileHistory: Missing tracked file: C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude\.setup\SETUP-INSTRUCTIONS.md
+2026-05-08T19:13:29.942Z [DEBUG] FileHistory: Missing tracked file: C:\Users\emarquez\Desktop\CLAUDE-CONTEXT-SETUP-SUMMARY.md
+2026-05-08T19:13:29.942Z [DEBUG] FileHistory: Added snapshot for 950139bb-f860-4aa2-8fa6-f18e082502d1, tracking 24 files
+2026-05-08T19:13:29.942Z [DEBUG] [useDeferredValue] Messages deferred by 1 (376→377)
+2026-05-08T19:13:29.955Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:13:29.958Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267609958
+2026-05-08T19:13:29.958Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:13:29.959Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:13:29.959Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:13:29.959Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267609958 to C:\Users\emarquez\.claude.json
+2026-05-08T19:13:29.962Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:13:29.964Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.20f; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:13:29.964Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:13:29.964Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:13:29.964Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:13:29.967Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267609967
+2026-05-08T19:13:29.967Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:13:29.968Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:13:29.968Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:13:29.968Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267609967 to C:\Users\emarquez\.claude.json
+2026-05-08T19:13:29.971Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:13:29.972Z [DEBUG] autocompact: tokens=122322 threshold=167000 effectiveWindow=180000
+2026-05-08T19:13:29.974Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:13:29.979Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267609979
+2026-05-08T19:13:29.979Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:13:29.979Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:13:29.979Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:13:29.979Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267609979 to C:\Users\emarquez\.claude.json
+2026-05-08T19:13:29.982Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:13:29.988Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:13:29.989Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:13:29.989Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:13:29.989Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:13:29.995Z [DEBUG] [useDeferredValue] Messages deferred by 1 (376→377)
+2026-05-08T19:13:30.626Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:13:31.841Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:13:34.759Z [DEBUG] [useDeferredValue] Messages deferred by 1 (377→378)
+2026-05-08T19:13:35.699Z [DEBUG] [useDeferredValue] Messages deferred by 1 (378→379)
+2026-05-08T19:13:35.702Z [DEBUG] [useDeferredValue] Messages deferred by 1 (378→379)
+2026-05-08T19:13:35.709Z [DEBUG] [useDeferredValue] Messages deferred by 1 (378→379)
+2026-05-08T19:13:37.450Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:13:37.451Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:13:37.451Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:13:37.451Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:13:37.667Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Read",
+        "ruleContent": "//c/Users/emarquez/OneDrive/16 - Obsidian/01_Claude_Home/**"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "session"
+  }
+]
+2026-05-08T19:13:37.667Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:13:37.669Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:13:37.669Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:13:37.669Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:13:37.669Z [DEBUG] [useDeferredValue] Messages deferred by 1 (379→380)
+2026-05-08T19:13:37.732Z [DEBUG] High write ratio: blit=0, write=108058 (100.0% writes), screen=2327x102
+2026-05-08T19:13:37.734Z [DEBUG] [useDeferredValue] Messages deferred by 1 (379→380)
+2026-05-08T19:13:43.751Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:13:43.751Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:13:43.751Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:13:46.475Z [DEBUG] Applying permission update: Adding 1 allow rule(s) to destination 'session': ["Read(//c/Users/emarquez/OneDrive/16 - Obsidian/01_Claude_Home/**)"]
+2026-05-08T19:13:46.476Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:13:46.500Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:13:47.107Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:13:47.108Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.15d; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:13:47.108Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:13:47.108Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:13:47.109Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:13:47.111Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:13:47.111Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:13:47.111Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:13:47.113Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:13:47.113Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:13:47.113Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:13:47.113Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:13:47.115Z [DEBUG] autocompact: tokens=122666 threshold=167000 effectiveWindow=180000
+2026-05-08T19:13:47.115Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:13:47.121Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267627121
+2026-05-08T19:13:47.121Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:13:47.122Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:13:47.122Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:13:47.122Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267627121 to C:\Users\emarquez\.claude.json
+2026-05-08T19:13:47.127Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:13:47.134Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:13:47.135Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:13:47.135Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:13:47.136Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:13:47.140Z [DEBUG] [useDeferredValue] Messages deferred by 2 (380→382)
+2026-05-08T19:13:47.795Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:13:49.732Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:13:50.698Z [DEBUG] [useDeferredValue] Messages deferred by 1 (382→383)
+2026-05-08T19:13:57.881Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:13:57.884Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:13:57.884Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:13:57.884Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:13:57.887Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:13:57.889Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:13:57.889Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:13:57.889Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:13:57.890Z [DEBUG] [useDeferredValue] Messages deferred by 1 (383→384)
+2026-05-08T19:13:57.957Z [DEBUG] High write ratio: blit=0, write=108899 (100.0% writes), screen=2347x102
+2026-05-08T19:13:57.960Z [DEBUG] [useDeferredValue] Messages deferred by 1 (383→384)
+2026-05-08T19:13:57.967Z [DEBUG] [useDeferredValue] Messages deferred by 1 (383→384)
+2026-05-08T19:13:57.970Z [DEBUG] [useDeferredValue] Messages deferred by 1 (383→384)
+2026-05-08T19:13:57.985Z [DEBUG] [useDeferredValue] Messages deferred by 1 (383→384)
+2026-05-08T19:14:03.966Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:14:03.966Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:14:03.966Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:14:22.880Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:14:22.896Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:14:23.592Z [DEBUG] Bash tool error (712ms): Shell command failed
+2026-05-08T19:14:23.594Z [DEBUG] Getting matching hook commands for PostToolUseFailure with query: Bash
+2026-05-08T19:14:23.594Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:14:23.594Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:14:23.595Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:14:23.595Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:14:23.595Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:14:23.595Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:14:23.596Z [DEBUG] autocompact: tokens=123326 threshold=167000 effectiveWindow=180000
+2026-05-08T19:14:23.596Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:14:23.601Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267663601
+2026-05-08T19:14:23.601Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:14:23.601Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:14:23.602Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:14:23.602Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267663601 to C:\Users\emarquez\.claude.json
+2026-05-08T19:14:23.605Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:14:23.611Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:14:23.611Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:14:23.611Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:14:23.612Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:14:23.617Z [DEBUG] [useDeferredValue] Messages deferred by 1 (384→385)
+2026-05-08T19:14:28.998Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:14:29.975Z [DEBUG] [useDeferredValue] Messages deferred by 1 (385→386)
+2026-05-08T19:14:29.977Z [DEBUG] [useDeferredValue] Messages deferred by 1 (385→386)
+2026-05-08T19:14:29.985Z [DEBUG] [useDeferredValue] Messages deferred by 1 (385→386)
+2026-05-08T19:14:32.366Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:14:32.368Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:14:32.368Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:14:32.368Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:14:32.579Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addDirectories",
+    "directories": [
+      "C:\\Users\\emarquez\\OneDrive\\16 - Obsidian\\01_Claude_Home\\00-Dashboard\\"
+    ],
+    "destination": "session"
+  },
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2026-05-08T19:14:32.579Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:14:32.581Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:14:32.581Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:14:32.581Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:14:32.582Z [DEBUG] [useDeferredValue] Messages deferred by 1 (386→387)
+2026-05-08T19:14:32.668Z [DEBUG] High write ratio: blit=0, write=108937 (100.0% writes), screen=2344x102
+2026-05-08T19:14:32.674Z [DEBUG] [useDeferredValue] Messages deferred by 1 (386→387)
+2026-05-08T19:14:38.685Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:14:38.685Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:14:38.685Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:14:39.636Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:14:39.660Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:14:41.655Z [DEBUG] [useDeferredValue] Messages deferred by 1 (387→388)
+2026-05-08T19:14:42.667Z [DEBUG] [useDeferredValue] Messages deferred by 1 (388→389)
+2026-05-08T19:14:43.675Z [DEBUG] [useDeferredValue] Messages deferred by 1 (389→390)
+2026-05-08T19:14:44.680Z [DEBUG] [useDeferredValue] Messages deferred by 1 (390→391)
+2026-05-08T19:14:45.685Z [DEBUG] [useDeferredValue] Messages deferred by 1 (391→392)
+2026-05-08T19:14:46.692Z [DEBUG] [useDeferredValue] Messages deferred by 1 (392→393)
+2026-05-08T19:14:47.698Z [DEBUG] [useDeferredValue] Messages deferred by 1 (393→394)
+2026-05-08T19:14:48.700Z [DEBUG] [useDeferredValue] Messages deferred by 1 (394→395)
+2026-05-08T19:14:49.713Z [DEBUG] [useDeferredValue] Messages deferred by 1 (395→396)
+2026-05-08T19:14:50.714Z [DEBUG] [useDeferredValue] Messages deferred by 1 (396→397)
+2026-05-08T19:14:51.718Z [DEBUG] [useDeferredValue] Messages deferred by 1 (397→398)
+2026-05-08T19:14:52.732Z [DEBUG] [useDeferredValue] Messages deferred by 1 (398→399)
+2026-05-08T19:14:53.734Z [DEBUG] [useDeferredValue] Messages deferred by 1 (399→400)
+2026-05-08T19:14:54.746Z [DEBUG] [useDeferredValue] Messages deferred by 1 (400→401)
+2026-05-08T19:14:55.755Z [DEBUG] [useDeferredValue] Messages deferred by 1 (401→402)
+2026-05-08T19:14:56.770Z [DEBUG] [useDeferredValue] Messages deferred by 1 (402→403)
+2026-05-08T19:14:57.785Z [DEBUG] [useDeferredValue] Messages deferred by 1 (403→404)
+2026-05-08T19:14:58.788Z [DEBUG] [useDeferredValue] Messages deferred by 1 (404→405)
+2026-05-08T19:14:59.788Z [DEBUG] [useDeferredValue] Messages deferred by 1 (405→406)
+2026-05-08T19:15:00.793Z [DEBUG] [useDeferredValue] Messages deferred by 1 (406→407)
+2026-05-08T19:15:01.797Z [DEBUG] [useDeferredValue] Messages deferred by 1 (407→408)
+2026-05-08T19:15:02.800Z [DEBUG] [useDeferredValue] Messages deferred by 1 (408→409)
+2026-05-08T19:15:03.813Z [DEBUG] [useDeferredValue] Messages deferred by 1 (409→410)
+2026-05-08T19:15:04.818Z [DEBUG] [useDeferredValue] Messages deferred by 1 (410→411)
+2026-05-08T19:15:05.819Z [DEBUG] [useDeferredValue] Messages deferred by 1 (411→412)
+2026-05-08T19:15:06.825Z [DEBUG] [useDeferredValue] Messages deferred by 1 (412→413)
+2026-05-08T19:15:07.840Z [DEBUG] [useDeferredValue] Messages deferred by 1 (413→414)
+2026-05-08T19:15:08.851Z [DEBUG] [useDeferredValue] Messages deferred by 1 (414→415)
+2026-05-08T19:15:09.864Z [DEBUG] [useDeferredValue] Messages deferred by 1 (415→416)
+2026-05-08T19:15:10.877Z [DEBUG] [useDeferredValue] Messages deferred by 1 (416→417)
+2026-05-08T19:15:11.880Z [DEBUG] [useDeferredValue] Messages deferred by 1 (417→418)
+2026-05-08T19:15:12.880Z [DEBUG] [useDeferredValue] Messages deferred by 1 (418→419)
+2026-05-08T19:15:13.886Z [DEBUG] [useDeferredValue] Messages deferred by 1 (419→420)
+2026-05-08T19:15:14.890Z [DEBUG] [useDeferredValue] Messages deferred by 1 (420→421)
+2026-05-08T19:15:15.890Z [DEBUG] [useDeferredValue] Messages deferred by 1 (421→422)
+2026-05-08T19:15:16.905Z [DEBUG] [useDeferredValue] Messages deferred by 1 (422→423)
+2026-05-08T19:15:17.911Z [DEBUG] [useDeferredValue] Messages deferred by 1 (423→424)
+2026-05-08T19:15:18.918Z [DEBUG] [useDeferredValue] Messages deferred by 1 (424→425)
+2026-05-08T19:15:19.923Z [DEBUG] [useDeferredValue] Messages deferred by 1 (425→426)
+2026-05-08T19:15:20.924Z [DEBUG] [useDeferredValue] Messages deferred by 1 (426→427)
+2026-05-08T19:15:21.928Z [DEBUG] [useDeferredValue] Messages deferred by 1 (427→428)
+2026-05-08T19:15:22.857Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:15:22.858Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.15d; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:15:22.858Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:15:22.858Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:15:22.859Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:15:22.861Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:15:22.861Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:15:22.861Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:15:22.863Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:15:22.863Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:15:22.864Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:15:22.864Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:15:22.865Z [DEBUG] autocompact: tokens=123699 threshold=167000 effectiveWindow=180000
+2026-05-08T19:15:22.865Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:15:22.871Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267722871
+2026-05-08T19:15:22.871Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:15:22.871Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:15:22.872Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:15:22.872Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267722871 to C:\Users\emarquez\.claude.json
+2026-05-08T19:15:22.875Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:15:22.882Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:15:22.883Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:15:22.883Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:15:22.883Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:15:22.889Z [DEBUG] [useDeferredValue] Messages deferred by 1 (428→429)
+2026-05-08T19:15:23.005Z [DEBUG] High write ratio: blit=0, write=108552 (100.0% writes), screen=2334x102
+2026-05-08T19:15:23.544Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:16:09.136Z [ERROR] Error: Error: File does not exist.
+    at Object.call (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1370:6150)
+    at async file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:5890:1593
+2026-05-08T19:16:09.210Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:16:09.213Z [ERROR] Error: Error: File does not exist.
+    at Object.call (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1370:6150)
+    at async file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:5890:1593
+2026-05-08T19:16:09.290Z [ERROR] Error: Error: File does not exist.
+    at Object.call (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1370:6150)
+    at async file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:5890:1593
+2026-05-08T19:16:09.366Z [ERROR] Error: Error: File does not exist.
+    at Object.call (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1370:6150)
+    at async file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:5890:1593
+2026-05-08T19:16:09.458Z [ERROR] Error: Error: File does not exist.
+    at Object.call (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1370:6150)
+    at async file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:5890:1593
+2026-05-08T19:16:09.547Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.555Z [ERROR] Error: Error: File does not exist.
+    at Object.call (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1370:6150)
+    at async file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:5890:1593
+2026-05-08T19:16:09.556Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.566Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.568Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.573Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.576Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.577Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.579Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.581Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.582Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.584Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.586Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.590Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.592Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.594Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.597Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.601Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.602Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.605Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.608Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.610Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.614Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.617Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.620Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.626Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.628Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.631Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.633Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.636Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.638Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.644Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.646Z [DEBUG] [useDeferredValue] Messages deferred by 1 (429→430)
+2026-05-08T19:16:09.649Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:16:09.651Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:16:09.651Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:16:09.651Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:16:09.876Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addDirectories",
+    "directories": [
+      "C:\\Users\\emarquez\\OneDrive\\16 - Obsidian\\01_Claude_Home\\.obsidian\\"
+    ],
+    "destination": "session"
+  },
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2026-05-08T19:16:09.877Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:16:09.878Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:16:09.878Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:16:09.878Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:16:09.879Z [DEBUG] [useDeferredValue] Messages deferred by 2 (429→431)
+2026-05-08T19:16:09.951Z [DEBUG] High write ratio: blit=0, write=108899 (100.0% writes), screen=2345x102
+2026-05-08T19:16:09.954Z [DEBUG] [useDeferredValue] Messages deferred by 2 (429→431)
+2026-05-08T19:16:09.960Z [DEBUG] [useDeferredValue] Messages deferred by 2 (429→431)
+2026-05-08T19:16:09.964Z [DEBUG] [useDeferredValue] Messages deferred by 2 (429→431)
+2026-05-08T19:16:09.986Z [DEBUG] [useDeferredValue] Messages deferred by 2 (429→431)
+2026-05-08T19:16:15.962Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:16:15.962Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:16:15.962Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:17:29.229Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:17:29.247Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:17:29.873Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:17:29.874Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.15d; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:17:29.874Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:17:29.874Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:17:29.875Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:17:29.877Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:17:29.877Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:17:29.877Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:17:29.879Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:17:29.879Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:17:29.879Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:17:29.879Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:17:29.880Z [DEBUG] autocompact: tokens=123960 threshold=167000 effectiveWindow=180000
+2026-05-08T19:17:29.880Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:17:29.886Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778267849886
+2026-05-08T19:17:29.886Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:17:29.886Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:17:29.886Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:17:29.886Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778267849886 to C:\Users\emarquez\.claude.json
+2026-05-08T19:17:29.892Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:17:29.898Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:17:29.899Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:17:29.899Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:17:29.900Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:17:29.905Z [DEBUG] [useDeferredValue] Messages deferred by 1 (431→432)
+2026-05-08T19:17:30.556Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:17:36.491Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:17:37.514Z [DEBUG] [useDeferredValue] Messages deferred by 1 (432→433)
+2026-05-08T19:17:37.517Z [DEBUG] [useDeferredValue] Messages deferred by 1 (432→433)
+2026-05-08T19:17:37.525Z [DEBUG] [useDeferredValue] Messages deferred by 1 (432→433)
+2026-05-08T19:17:54.788Z [ERROR] Error: Error: ENOENT: no such file or directory, open 'C:\Users\emarquez\.claude\remote-settings.json'
+    at Module.openSync (node:fs:559:18)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:816
+    at _X (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:50017)
+    at Object.readSync (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:750)
+    at XX (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6224:105)
+    at DJ (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6226:224)
+    at G88 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:8346)
+    at qV8 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:24044)
+    at R5Y (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25284)
+    at Timeout._onTimeout (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2183:25497)
+2026-05-08T19:17:54.987Z [DEBUG] Remote settings: No settings found (404)
+2026-05-08T19:17:55.221Z [DEBUG] BigQuery metrics exported successfully
+2026-05-08T19:17:55.221Z [DEBUG] BigQuery API Response: {
+  "accepted_count": 12,
+  "rejected_count": 0
+}
+2026-05-08T19:18:00.626Z [DEBUG] executePreToolHooks called for tool: Write
+2026-05-08T19:18:00.628Z [DEBUG] Getting matching hook commands for PreToolUse with query: Write
+2026-05-08T19:18:00.628Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:18:00.628Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2026-05-08T19:18:00.705Z [DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  },
+  {
+    "type": "addDirectories",
+    "directories": [
+      "C:\\Users\\emarquez\\OneDrive\\16 - Obsidian\\01_Claude_Home\\.setup"
+    ],
+    "destination": "session"
+  }
+]
+2026-05-08T19:18:00.705Z [DEBUG] executePermissionRequestHooks called for tool: Write
+2026-05-08T19:18:00.706Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Write
+2026-05-08T19:18:00.706Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:18:00.706Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2026-05-08T19:18:00.707Z [DEBUG] [useDeferredValue] Messages deferred by 1 (433→434)
+2026-05-08T19:18:00.808Z [DEBUG] High write ratio: blit=0, write=114679 (100.0% writes), screen=2514x102
+2026-05-08T19:18:00.815Z [DEBUG] [useDeferredValue] Messages deferred by 1 (433→434)
+2026-05-08T19:18:00.818Z [DEBUG] [useDeferredValue] Messages deferred by 1 (433→434)
+2026-05-08T19:18:00.819Z [DEBUG] [useDeferredValue] Messages deferred by 1 (433→434)
+2026-05-08T19:18:00.833Z [DEBUG] [useDeferredValue] Messages deferred by 1 (433→434)
+2026-05-08T19:18:06.824Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:18:06.824Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:18:06.824Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:20:11.236Z [DEBUG] FileHistory: Tracked file modification for C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\.setup\create-links.ps1
+2026-05-08T19:20:11.237Z [DEBUG] Writing to temp file: C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\.setup\create-links.ps1.tmp.35184.1778268011237
+2026-05-08T19:20:11.237Z [DEBUG] Temp file written successfully, size: 6049 bytes
+2026-05-08T19:20:11.237Z [DEBUG] Renaming C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\.setup\create-links.ps1.tmp.35184.1778268011237 to C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\.setup\create-links.ps1
+2026-05-08T19:20:11.238Z [DEBUG] File C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\.setup\create-links.ps1 written atomically
+2026-05-08T19:20:11.241Z [DEBUG] Getting matching hook commands for PostToolUse with query: Write
+2026-05-08T19:20:11.241Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:20:11.241Z [DEBUG] Matched 1 unique hooks for query "Write" (1 before deduplication)
+2026-05-08T19:20:11.243Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:20:11.243Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:20:11.243Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:20:11.243Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:20:11.245Z [DEBUG] autocompact: tokens=126070 threshold=167000 effectiveWindow=180000
+2026-05-08T19:20:11.245Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:20:11.253Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268011253
+2026-05-08T19:20:11.253Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:20:11.253Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:20:11.253Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:20:11.253Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268011253 to C:\Users\emarquez\.claude.json
+2026-05-08T19:20:11.257Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:20:11.264Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:20:11.265Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:20:11.265Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:20:11.266Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:20:11.274Z [DEBUG] [useDeferredValue] Messages deferred by 3 (434→437)
+2026-05-08T19:20:11.289Z [DEBUG] Full reset (scrollback changes): scrollbackRows=2466, firstChangeY=2334
+  prev: "──────────────────────────────────────────────────────────────────────────────────────────────────────"
+  next: "· Effecting… (2m 31s · ↑ 3.1k tokens)                                                                 "
+2026-05-08T19:20:11.375Z [DEBUG] [lspRecommendation] Looking for LSP plugins for .ps1
+2026-05-08T19:20:11.376Z [DEBUG] [useDeferredValue] Messages deferred by 3 (434→437)
+2026-05-08T19:20:11.378Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:20:11.378Z [DEBUG] [lspRecommendation] Failed to load marketplace claude-plugins-official: ConfigParseError: Invalid schema: C:\Users\emarquez\.claude\plugins\marketplaces\anthropics-claude-plugins-official\.claude-plugin\marketplace.json plugins.0.source: Invalid input, plugins.1.source: Invalid input, plugins.7.source: Invalid input, plugins.8.source: Invalid input, plugins.15.source: Invalid input, plugins.16.source: Invalid input, plugins.17.source: Invalid input, plugins.18.source: Invalid input, plugins.19.source: Invalid input, plugins.20.source: Invalid input, plugins.21.source: Invalid input, plugins.25.source: Invalid input, plugins.52.source: Invalid input, plugins.55.source: Invalid input, plugins.56.source: Invalid input, plugins.57.source: Invalid input, plugins.61.source: Invalid input, plugins.84.source: Invalid input, plugins.86.source: Invalid input, plugins.87.source: Invalid input, plugins.88.source: Invalid input, plugins.94.source: Invalid input, plugins.96.source: Invalid input, plugins.98.source: Invalid input, plugins.102.source: Invalid input, plugins.103.source: Invalid input, plugins.117.source: Invalid input, plugins.123.source: Invalid input, plugins.133.source: Invalid input, plugins.136.source: Invalid input, plugins.142.source: Invalid input, plugins.147.source: Invalid input, plugins.156.source: Invalid input, plugins.157.source: Invalid input, plugins.164.source: Invalid input
+2026-05-08T19:20:13.514Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:20:14.555Z [DEBUG] [useDeferredValue] Messages deferred by 1 (437→438)
+2026-05-08T19:20:14.560Z [DEBUG] [useDeferredValue] Messages deferred by 1 (437→438)
+2026-05-08T19:20:14.569Z [DEBUG] [useDeferredValue] Messages deferred by 1 (437→438)
+2026-05-08T19:20:16.588Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:20:16.590Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:20:16.590Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:20:16.590Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:20:16.865Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addDirectories",
+    "directories": [
+      "C:\\Users\\emarquez\\OneDrive\\16 - Obsidian\\01_Claude_Home"
+    ],
+    "destination": "session"
+  },
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2026-05-08T19:20:16.865Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:20:16.867Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:20:16.867Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:20:16.867Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:20:16.867Z [DEBUG] [useDeferredValue] Messages deferred by 1 (438→439)
+2026-05-08T19:20:16.954Z [DEBUG] High write ratio: blit=0, write=109472 (100.0% writes), screen=2360x102
+2026-05-08T19:20:16.957Z [DEBUG] [useDeferredValue] Messages deferred by 1 (438→439)
+2026-05-08T19:20:22.962Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:20:22.963Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:20:22.963Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:20:27.995Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:20:28.016Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:20:28.727Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:20:28.729Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.15d; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:20:28.729Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:20:28.729Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:20:28.731Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:20:28.734Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:20:28.734Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:20:28.734Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:20:28.738Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:20:28.738Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:20:28.738Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:20:28.738Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:20:28.741Z [DEBUG] autocompact: tokens=126263 threshold=167000 effectiveWindow=180000
+2026-05-08T19:20:28.742Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:20:28.751Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268028751
+2026-05-08T19:20:28.751Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:20:28.752Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:20:28.752Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:20:28.752Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268028751 to C:\Users\emarquez\.claude.json
+2026-05-08T19:20:28.756Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:20:28.765Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:20:28.766Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:20:28.766Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:20:28.767Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:20:28.772Z [DEBUG] [useDeferredValue] Messages deferred by 1 (439→440)
+2026-05-08T19:20:29.376Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:20:31.026Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:20:32.025Z [DEBUG] [useDeferredValue] Messages deferred by 1 (440→441)
+2026-05-08T19:20:47.518Z [DEBUG] executePreToolHooks called for tool: Write
+2026-05-08T19:20:47.519Z [DEBUG] Getting matching hook commands for PreToolUse with query: Write
+2026-05-08T19:20:47.519Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:20:47.519Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2026-05-08T19:20:47.595Z [DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  },
+  {
+    "type": "addDirectories",
+    "directories": [
+      "C:\\Users\\emarquez\\OneDrive\\16 - Obsidian\\01_Claude_Home"
+    ],
+    "destination": "session"
+  }
+]
+2026-05-08T19:20:47.595Z [DEBUG] executePermissionRequestHooks called for tool: Write
+2026-05-08T19:20:47.596Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Write
+2026-05-08T19:20:47.596Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:20:47.596Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2026-05-08T19:20:47.597Z [DEBUG] [useDeferredValue] Messages deferred by 1 (441→442)
+2026-05-08T19:20:47.668Z [DEBUG] High write ratio: blit=0, write=111900 (100.0% writes), screen=2476x102
+2026-05-08T19:20:47.672Z [DEBUG] [useDeferredValue] Messages deferred by 1 (441→442)
+2026-05-08T19:20:47.675Z [DEBUG] [useDeferredValue] Messages deferred by 1 (441→442)
+2026-05-08T19:20:47.676Z [DEBUG] [useDeferredValue] Messages deferred by 1 (441→442)
+2026-05-08T19:20:47.689Z [DEBUG] [useDeferredValue] Messages deferred by 1 (441→442)
+2026-05-08T19:20:53.688Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:20:53.688Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:20:53.688Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:21:02.334Z [DEBUG] FileHistory: Tracked file modification for C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\README.md
+2026-05-08T19:21:02.334Z [DEBUG] Writing to temp file: C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\README.md.tmp.35184.1778268062334
+2026-05-08T19:21:02.335Z [DEBUG] Temp file written successfully, size: 2421 bytes
+2026-05-08T19:21:02.335Z [DEBUG] Renaming C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\README.md.tmp.35184.1778268062334 to C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\README.md
+2026-05-08T19:21:02.335Z [DEBUG] File C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\README.md written atomically
+2026-05-08T19:21:02.339Z [DEBUG] Getting matching hook commands for PostToolUse with query: Write
+2026-05-08T19:21:02.339Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:21:02.339Z [DEBUG] Matched 1 unique hooks for query "Write" (1 before deduplication)
+2026-05-08T19:21:02.340Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:21:02.340Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:21:02.340Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:21:02.340Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:21:02.341Z [DEBUG] autocompact: tokens=127249 threshold=167000 effectiveWindow=180000
+2026-05-08T19:21:02.342Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:21:02.347Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268062347
+2026-05-08T19:21:02.347Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:21:02.348Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:21:02.348Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:21:02.348Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268062347 to C:\Users\emarquez\.claude.json
+2026-05-08T19:21:02.351Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:21:02.358Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:21:02.359Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:21:02.359Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:21:02.359Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:21:02.365Z [DEBUG] [useDeferredValue] Messages deferred by 3 (442→445)
+2026-05-08T19:21:02.377Z [DEBUG] Full reset (scrollback changes): scrollbackRows=2428, firstChangeY=2352
+  prev: "──────────────────────────────────────────────────────────────────────────────────────────────────────"
+  next: "✽ Enchanting… (2m 56s · ↑ 4.0k tokens)                                                                "
+2026-05-08T19:21:02.410Z [DEBUG] [lspRecommendation] Looking for LSP plugins for .md
+2026-05-08T19:21:02.410Z [DEBUG] [useDeferredValue] Messages deferred by 3 (442→445)
+2026-05-08T19:21:02.412Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:21:02.413Z [DEBUG] [lspRecommendation] Failed to load marketplace claude-plugins-official: ConfigParseError: Invalid schema: C:\Users\emarquez\.claude\plugins\marketplaces\anthropics-claude-plugins-official\.claude-plugin\marketplace.json plugins.0.source: Invalid input, plugins.1.source: Invalid input, plugins.7.source: Invalid input, plugins.8.source: Invalid input, plugins.15.source: Invalid input, plugins.16.source: Invalid input, plugins.17.source: Invalid input, plugins.18.source: Invalid input, plugins.19.source: Invalid input, plugins.20.source: Invalid input, plugins.21.source: Invalid input, plugins.25.source: Invalid input, plugins.52.source: Invalid input, plugins.55.source: Invalid input, plugins.56.source: Invalid input, plugins.57.source: Invalid input, plugins.61.source: Invalid input, plugins.84.source: Invalid input, plugins.86.source: Invalid input, plugins.87.source: Invalid input, plugins.88.source: Invalid input, plugins.94.source: Invalid input, plugins.96.source: Invalid input, plugins.98.source: Invalid input, plugins.102.source: Invalid input, plugins.103.source: Invalid input, plugins.117.source: Invalid input, plugins.123.source: Invalid input, plugins.133.source: Invalid input, plugins.136.source: Invalid input, plugins.142.source: Invalid input, plugins.147.source: Invalid input, plugins.156.source: Invalid input, plugins.157.source: Invalid input, plugins.164.source: Invalid input
+2026-05-08T19:21:04.818Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:21:05.253Z [DEBUG] [useDeferredValue] Messages deferred by 1 (445→446)
+2026-05-08T19:21:05.367Z [DEBUG] High write ratio: blit=0, write=109860 (100.0% writes), screen=2369x102
+2026-05-08T19:21:35.226Z [ERROR] Error: Error: Command failed: cygpath -u 'C:\Users\emarquez\OneDrive\16 - Obsidian\01_Claude_Home\QUICK-START.md'
+      0 [main] bash (59868) C:\Program Files\Git\bin\..\usr\bin\bash.exe: *** fatal error - add_item ("\??\C:\Program Files\Git", "/", ...) failed, errno 1
+
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at checkExecSyncError (node:child_process:925:11)
+    at execSync (node:child_process:997:15)
+    at Ab (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:26:3421)
+    at file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:55:1112
+    at z (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:54:20027)
+    at w0 (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:6222:9829)
+    at Object.validateInput (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2437:2342)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+2026-05-08T19:21:35.227Z [DEBUG] [useDeferredValue] Messages deferred by 1 (446→447)
+2026-05-08T19:21:35.320Z [DEBUG] High write ratio: blit=0, write=109849 (100.0% writes), screen=2369x102
+2026-05-08T19:21:35.338Z [DEBUG] [useDeferredValue] Messages deferred by 2 (446→448)
+2026-05-08T19:21:35.361Z [DEBUG] [useDeferredValue] Messages deferred by 2 (446→448)
+2026-05-08T19:21:35.481Z [DEBUG] High write ratio: blit=0, write=109849 (100.0% writes), screen=2369x102
+2026-05-08T19:21:35.509Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:21:35.509Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:21:35.509Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:21:35.509Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:21:35.512Z [DEBUG] autocompact: tokens=128492 threshold=167000 effectiveWindow=180000
+2026-05-08T19:21:35.513Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:21:35.522Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268095522
+2026-05-08T19:21:35.522Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:21:35.523Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:21:35.523Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:21:35.523Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268095522 to C:\Users\emarquez\.claude.json
+2026-05-08T19:21:35.526Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:21:35.540Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:21:35.541Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:21:35.541Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:21:35.543Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:21:35.554Z [DEBUG] [useDeferredValue] Messages deferred by 2 (446→448)
+2026-05-08T19:21:38.139Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:21:39.181Z [DEBUG] [useDeferredValue] Messages deferred by 1 (448→449)
+2026-05-08T19:21:39.187Z [DEBUG] [useDeferredValue] Messages deferred by 1 (448→449)
+2026-05-08T19:21:45.254Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:21:45.257Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:21:45.257Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:21:45.257Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:21:55.723Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addDirectories",
+    "directories": [
+      "C:\\Users\\emarquez\\OneDrive\\16 - Obsidian\\01_Claude_Home"
+    ],
+    "destination": "session"
+  }
+]
+2026-05-08T19:21:55.724Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:21:55.726Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:21:55.726Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:21:55.726Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:21:55.726Z [DEBUG] [useDeferredValue] Messages deferred by 1 (449→450)
+2026-05-08T19:21:55.829Z [DEBUG] High write ratio: blit=0, write=111552 (100.0% writes), screen=2468x102
+2026-05-08T19:21:55.835Z [DEBUG] [useDeferredValue] Messages deferred by 1 (449→450)
+2026-05-08T19:21:55.852Z [DEBUG] [useDeferredValue] Messages deferred by 1 (449→450)
+2026-05-08T19:21:55.883Z [DEBUG] [useDeferredValue] Messages deferred by 1 (449→450)
+2026-05-08T19:22:01.845Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:22:01.845Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:22:01.845Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:22:55.216Z [DEBUG] BigQuery metrics exported successfully
+2026-05-08T19:22:55.216Z [DEBUG] BigQuery API Response: {
+  "accepted_count": 15,
+  "rejected_count": 0
+}
+2026-05-08T19:23:14.206Z [DEBUG] Applying permission update: Adding 1 directory with destination 'session': ["C:\\Users\\emarquez\\OneDrive\\16 - Obsidian\\01_Claude_Home"]
+2026-05-08T19:23:14.208Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:23:14.230Z [DEBUG] Full reset (scrollback changes): scrollbackRows=2420, firstChangeY=2368
+  prev: "──────────────────────────────────────────────────────────────────────────────────────────────────────"
+  next: "· Booping… (3m 50s · ↓ 5.5k tokens)                                                                   "
+2026-05-08T19:23:14.262Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:23:14.857Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:23:14.858Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.15d; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:14.858Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:14.858Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:14.859Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:14.861Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:23:14.861Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:23:14.861Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:23:14.863Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:23:14.863Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:23:14.863Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:23:14.863Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:23:14.864Z [DEBUG] autocompact: tokens=129293 threshold=167000 effectiveWindow=180000
+2026-05-08T19:23:14.865Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:23:14.871Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268194871
+2026-05-08T19:23:14.871Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:23:14.872Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:23:14.872Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:23:14.872Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268194871 to C:\Users\emarquez\.claude.json
+2026-05-08T19:23:14.875Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:23:14.882Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:14.883Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:14.883Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:14.884Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:14.890Z [DEBUG] [useDeferredValue] Messages deferred by 1 (450→451)
+2026-05-08T19:23:15.508Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:23:15.835Z [ERROR] Error: Error: File does not exist.
+    at Object.call (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1370:6150)
+    at async file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:5890:1593
+2026-05-08T19:23:17.099Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:23:17.996Z [DEBUG] [useDeferredValue] Messages deferred by 1 (451→452)
+2026-05-08T19:23:18.000Z [DEBUG] [useDeferredValue] Messages deferred by 1 (451→452)
+2026-05-08T19:23:18.009Z [DEBUG] [useDeferredValue] Messages deferred by 1 (451→452)
+2026-05-08T19:23:24.611Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:23:24.613Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:23:24.613Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:23:24.613Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:23:24.825Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:23:24.825Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:23:24.825Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.15d; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:24.825Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:24.825Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:24.826Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.ebb; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:24.826Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:24.826Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:24.827Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:24.827Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:24.829Z [DEBUG] [useDeferredValue] Messages deferred by 1 (452→453)
+2026-05-08T19:23:24.904Z [DEBUG] High write ratio: blit=0, write=109981 (100.0% writes), screen=2374x102
+2026-05-08T19:23:24.910Z [DEBUG] [useDeferredValue] Messages deferred by 1 (452→453)
+2026-05-08T19:23:24.912Z [DEBUG] [useDeferredValue] Messages deferred by 1 (452→453)
+2026-05-08T19:23:24.929Z [DEBUG] [useDeferredValue] Messages deferred by 1 (452→453)
+2026-05-08T19:23:25.408Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:23:25.450Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:23:25.534Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "\"/c/Users/emarquez/OneDrive/16 - Obsidian/01_Claude_Home/.setup/GIT-SETUP.md\" << 'ENDFILE'\n# Git Setup - HOME VAULT\n\n**Repository:** https://github.com/Eduardodmb/ClaudeHome.git\n**Context:** C:\\Users\\eduar\\.claude\n\n---\n\n## One-Time Setup\n\n```bash\ncd \"C:\\Users\\eduar\\.claude\"\n\n# Initialize Git\ngit init\ngit remote add origin https://github.com/Eduardodmb/ClaudeHome.git\n\n# Create .gitignore\ncat > .gitignore << 'EOF'\n*.tmp\n*.log\n.DS_Store\nThumbs.db\nstate/\n*.pdf\n*.docx\n*.pptx\nEOF\n\n# Initial commit\ngit add .\ngit commit -m \"Initial context commit - Home vault\"\ngit push -u origin main\n```\n\nVerify: https://github.com/Eduardodmb/ClaudeHome\n\n---\n\n## Daily Workflow\n\n**Morning:**\n```bash\ngit pull\n```\n\n**After Changes:**\n```bash\ngit add .\ngit commit -m \"Update: [description]\"\ngit push\n```\n\n**End of Day:**\n```bash\ngit add .\ngit commit -m \"EOD: Updates\"\ngit push\n```\n\n---\n\n## Git Commands\n\n```bash\ngit status          # Check changes\ngit pull            # Get updates\ngit add .           # Stage all\ngit commit -m \"...\"  # Commit\ngit push            # Upload\ngit log --oneline   # History\n```\n\n---\n\n## Troubleshooting\n\n**Authentication failed?**\n- Use GitHub Personal Access Token\n- Settings → Developer settings → Tokens\n\n**Merge conflict?**\n```bash\ngit fetch origin\ngit reset --hard origin/main\n```\n\n---\n\n**Git + Obsidian + Claude = Complete context management**\nENDFILE"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2026-05-08T19:23:25.535Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-05-08T19:23:25.536Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-05-08T19:23:25.536Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:23:25.536Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:23:25.844Z [DEBUG] Full reset (scrollback changes): scrollbackRows=2421, firstChangeY=2366
+  prev: "  Reading 2 files… (ctrl+o to expand)                                                                 "
+  next: "● Reading 2 files… (ctrl+o to expand)                                                                 "
+2026-05-08T19:23:26.477Z [DEBUG] Full reset (scrollback changes): scrollbackRows=2421, firstChangeY=2366
+  prev: "● Reading 2 files… (ctrl+o to expand)                                                                 "
+  next: "  Reading 2 files… (ctrl+o to expand)                                                                 "
+2026-05-08T19:23:31.562Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:23:31.562Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:23:31.562Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:23:48.543Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:23:48.559Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:23:48.582Z [DEBUG] Full reset (scrollback changes): scrollbackRows=2421, firstChangeY=2368
+  prev: "──────────────────────────────────────────────────────────────────────────────────────────────────────"
+  next: "✢ Boogieing… (4m 1s · ↓ 6.0k tokens)                                                                  "
+2026-05-08T19:23:49.178Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:23:49.180Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.15d; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:49.180Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:49.180Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:49.181Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:49.183Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:23:49.183Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:23:49.183Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:23:49.185Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:23:49.185Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:23:49.185Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:23:49.185Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:23:49.187Z [DEBUG] autocompact: tokens=129893 threshold=167000 effectiveWindow=180000
+2026-05-08T19:23:49.188Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:23:49.195Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268229195
+2026-05-08T19:23:49.195Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:23:49.195Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:23:49.195Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:23:49.195Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268229195 to C:\Users\emarquez\.claude.json
+2026-05-08T19:23:49.200Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:23:49.209Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:49.210Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:49.210Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:49.211Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:49.216Z [DEBUG] [useDeferredValue] Messages deferred by 1 (453→454)
+2026-05-08T19:23:52.139Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:23:53.125Z [DEBUG] [useDeferredValue] Messages deferred by 1 (454→455)
+2026-05-08T19:23:53.849Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:23:53.852Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:23:53.852Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:23:53.852Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:23:53.934Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:23:53.940Z [DEBUG] [useDeferredValue] Messages deferred by 1 (455→456)
+2026-05-08T19:23:54.056Z [DEBUG] High write ratio: blit=0, write=109995 (100.0% writes), screen=2374x102
+2026-05-08T19:23:54.065Z [DEBUG] [useDeferredValue] Messages deferred by 1 (455→456)
+2026-05-08T19:23:54.069Z [DEBUG] [useDeferredValue] Messages deferred by 1 (455→456)
+2026-05-08T19:23:54.093Z [DEBUG] [useDeferredValue] Messages deferred by 1 (455→456)
+2026-05-08T19:23:54.522Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:23:54.523Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.a7b; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:54.524Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:54.524Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:54.525Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:54.526Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:23:54.526Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:23:54.526Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:23:54.528Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:23:54.528Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:23:54.528Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:23:54.528Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:23:54.530Z [DEBUG] autocompact: tokens=130276 threshold=167000 effectiveWindow=180000
+2026-05-08T19:23:54.530Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:23:54.534Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268234534
+2026-05-08T19:23:54.535Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:23:54.535Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:23:54.535Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:23:54.535Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268234534 to C:\Users\emarquez\.claude.json
+2026-05-08T19:23:54.539Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:23:54.546Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:54.547Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:54.547Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:54.548Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:54.555Z [DEBUG] [useDeferredValue] Messages deferred by 2 (456→458)
+2026-05-08T19:23:54.831Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:23:55.195Z [ERROR] Error: Error: File does not exist.
+    at Object.call (file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1370:6150)
+    at async file:///C:/Users/emarquez/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:5890:1593
+2026-05-08T19:23:56.599Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:23:57.565Z [DEBUG] [useDeferredValue] Messages deferred by 1 (458→459)
+2026-05-08T19:23:58.173Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:23:58.176Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:23:58.176Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:23:58.176Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:23:58.392Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:23:58.400Z [DEBUG] [useDeferredValue] Messages deferred by 1 (459→460)
+2026-05-08T19:23:58.496Z [DEBUG] High write ratio: blit=0, write=109996 (100.0% writes), screen=2374x102
+2026-05-08T19:23:58.505Z [DEBUG] [useDeferredValue] Messages deferred by 1 (459→460)
+2026-05-08T19:23:58.508Z [DEBUG] [useDeferredValue] Messages deferred by 1 (459→460)
+2026-05-08T19:23:58.528Z [DEBUG] [useDeferredValue] Messages deferred by 1 (459→460)
+2026-05-08T19:23:58.755Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:23:58.982Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:23:58.983Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.15d; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:58.983Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:58.983Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:58.985Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:58.988Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:23:58.988Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:23:58.988Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:23:58.991Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:23:58.991Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:23:58.991Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:23:58.991Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:23:58.994Z [DEBUG] autocompact: tokens=130862 threshold=167000 effectiveWindow=180000
+2026-05-08T19:23:58.995Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:23:59.003Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268239003
+2026-05-08T19:23:59.003Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:23:59.004Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:23:59.004Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:23:59.004Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268239003 to C:\Users\emarquez\.claude.json
+2026-05-08T19:23:59.008Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:23:59.016Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:23:59.016Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:23:59.016Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:23:59.017Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:23:59.025Z [DEBUG] [useDeferredValue] Messages deferred by 1 (460→461)
+2026-05-08T19:23:59.663Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:24:00.829Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:24:01.830Z [DEBUG] [useDeferredValue] Messages deferred by 1 (461→462)
+2026-05-08T19:24:01.834Z [DEBUG] [useDeferredValue] Messages deferred by 1 (461→462)
+2026-05-08T19:24:01.846Z [DEBUG] [useDeferredValue] Messages deferred by 1 (461→462)
+2026-05-08T19:24:02.335Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-05-08T19:24:02.337Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-05-08T19:24:02.337Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:24:02.337Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:24:02.339Z [DEBUG] Session environment not yet supported on Windows
+2026-05-08T19:24:02.353Z [DEBUG] [useDeferredValue] Messages deferred by 1 (462→463)
+2026-05-08T19:24:02.459Z [DEBUG] High write ratio: blit=0, write=109996 (100.0% writes), screen=2374x102
+2026-05-08T19:24:02.467Z [DEBUG] [useDeferredValue] Messages deferred by 1 (462→463)
+2026-05-08T19:24:02.499Z [DEBUG] [useDeferredValue] Messages deferred by 1 (462→463)
+2026-05-08T19:24:02.888Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-05-08T19:24:02.889Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.15d; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:24:02.890Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:24:02.890Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:24:02.890Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:24:02.892Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-05-08T19:24:02.892Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:24:02.892Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-05-08T19:24:02.894Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:24:02.894Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:24:02.894Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:24:02.894Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:24:02.895Z [DEBUG] autocompact: tokens=131026 threshold=167000 effectiveWindow=180000
+2026-05-08T19:24:02.896Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:24:02.903Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268242903
+2026-05-08T19:24:02.903Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:24:02.904Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:24:02.904Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:24:02.904Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268242903 to C:\Users\emarquez\.claude.json
+2026-05-08T19:24:02.907Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:24:02.918Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:24:02.919Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:24:02.919Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:24:02.920Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:24:02.932Z [DEBUG] [useDeferredValue] Messages deferred by 1 (463→464)
+2026-05-08T19:24:03.666Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:24:04.964Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:24:05.435Z [DEBUG] [useDeferredValue] Messages deferred by 1 (464→465)
+2026-05-08T19:24:05.555Z [DEBUG] High write ratio: blit=0, write=110087 (100.0% writes), screen=2377x102
+2026-05-08T19:24:42.767Z [WARN] Streaming stall detected: 36.9s gap between events (stall #1)
+2026-05-08T19:24:45.171Z [DEBUG] executePreToolHooks called for tool: Write
+2026-05-08T19:24:45.174Z [DEBUG] Getting matching hook commands for PreToolUse with query: Write
+2026-05-08T19:24:45.174Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:24:45.174Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2026-05-08T19:24:45.247Z [DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  },
+  {
+    "type": "addDirectories",
+    "directories": [
+      "C:\\Users\\emarquez\\Desktop"
+    ],
+    "destination": "session"
+  }
+]
+2026-05-08T19:24:45.249Z [DEBUG] executePermissionRequestHooks called for tool: Write
+2026-05-08T19:24:45.253Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Write
+2026-05-08T19:24:45.253Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:24:45.253Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2026-05-08T19:24:45.254Z [DEBUG] [useDeferredValue] Messages deferred by 1 (465→466)
+2026-05-08T19:24:45.398Z [DEBUG] High write ratio: blit=0, write=116027 (100.0% writes), screen=2596x102
+2026-05-08T19:24:45.404Z [DEBUG] [useDeferredValue] Messages deferred by 1 (465→466)
+2026-05-08T19:24:45.409Z [DEBUG] [useDeferredValue] Messages deferred by 1 (465→466)
+2026-05-08T19:24:45.410Z [DEBUG] [useDeferredValue] Messages deferred by 1 (465→466)
+2026-05-08T19:24:45.427Z [WARN] Streaming completed with 1 stall(s), total stall time: 36.9s
+2026-05-08T19:24:45.428Z [DEBUG] [useDeferredValue] Messages deferred by 1 (465→466)
+2026-05-08T19:24:51.420Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-05-08T19:24:51.420Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:24:51.420Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-05-08T19:25:40.484Z [DEBUG] FileHistory: Tracked file modification for C:\Users\emarquez\Desktop\HOME-VAULT-READY.md
+2026-05-08T19:25:40.485Z [DEBUG] Writing to temp file: C:\Users\emarquez\Desktop\HOME-VAULT-READY.md.tmp.35184.1778268340485
+2026-05-08T19:25:40.485Z [DEBUG] Temp file written successfully, size: 6185 bytes
+2026-05-08T19:25:40.485Z [DEBUG] Renaming C:\Users\emarquez\Desktop\HOME-VAULT-READY.md.tmp.35184.1778268340485 to C:\Users\emarquez\Desktop\HOME-VAULT-READY.md
+2026-05-08T19:25:40.486Z [DEBUG] File C:\Users\emarquez\Desktop\HOME-VAULT-READY.md written atomically
+2026-05-08T19:25:40.489Z [DEBUG] Getting matching hook commands for PostToolUse with query: Write
+2026-05-08T19:25:40.489Z [DEBUG] Found 5 hook matchers in settings
+2026-05-08T19:25:40.489Z [DEBUG] Matched 1 unique hooks for query "Write" (1 before deduplication)
+2026-05-08T19:25:40.491Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-05-08T19:25:40.491Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-05-08T19:25:40.491Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-05-08T19:25:40.491Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-05-08T19:25:40.492Z [DEBUG] autocompact: tokens=133252 threshold=167000 effectiveWindow=180000
+2026-05-08T19:25:40.492Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:25:40.499Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268340499
+2026-05-08T19:25:40.499Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:25:40.499Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:25:40.499Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:25:40.499Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268340499 to C:\Users\emarquez\.claude.json
+2026-05-08T19:25:40.502Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:25:40.509Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:25:40.511Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:25:40.511Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:25:40.511Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:25:40.518Z [DEBUG] [useDeferredValue] Messages deferred by 3 (466→469)
+2026-05-08T19:25:40.530Z [DEBUG] Full reset (scrollback changes): scrollbackRows=2548, firstChangeY=2373
+  prev: "──────────────────────────────────────────────────────────────────────────────────────────────────────"
+  next: "✻ Slithering… (4m 58s · ↑ 8.1k tokens)                                                                "
+2026-05-08T19:25:40.558Z [DEBUG] [lspRecommendation] Looking for LSP plugins for .md
+2026-05-08T19:25:40.559Z [DEBUG] [useDeferredValue] Messages deferred by 3 (466→469)
+2026-05-08T19:25:40.561Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-05-08T19:25:40.561Z [DEBUG] [lspRecommendation] Failed to load marketplace claude-plugins-official: ConfigParseError: Invalid schema: C:\Users\emarquez\.claude\plugins\marketplaces\anthropics-claude-plugins-official\.claude-plugin\marketplace.json plugins.0.source: Invalid input, plugins.1.source: Invalid input, plugins.7.source: Invalid input, plugins.8.source: Invalid input, plugins.15.source: Invalid input, plugins.16.source: Invalid input, plugins.17.source: Invalid input, plugins.18.source: Invalid input, plugins.19.source: Invalid input, plugins.20.source: Invalid input, plugins.21.source: Invalid input, plugins.25.source: Invalid input, plugins.52.source: Invalid input, plugins.55.source: Invalid input, plugins.56.source: Invalid input, plugins.57.source: Invalid input, plugins.61.source: Invalid input, plugins.84.source: Invalid input, plugins.86.source: Invalid input, plugins.87.source: Invalid input, plugins.88.source: Invalid input, plugins.94.source: Invalid input, plugins.96.source: Invalid input, plugins.98.source: Invalid input, plugins.102.source: Invalid input, plugins.103.source: Invalid input, plugins.117.source: Invalid input, plugins.123.source: Invalid input, plugins.133.source: Invalid input, plugins.136.source: Invalid input, plugins.142.source: Invalid input, plugins.147.source: Invalid input, plugins.156.source: Invalid input, plugins.157.source: Invalid input, plugins.164.source: Invalid input
+2026-05-08T19:25:42.756Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:25:43.500Z [DEBUG] [useDeferredValue] Messages deferred by 1 (469→470)
+2026-05-08T19:25:56.547Z [DEBUG] [useDeferredValue] Messages deferred by 1 (470→471)
+2026-05-08T19:25:56.622Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2026-05-08T19:25:56.622Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:25:56.622Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-08T19:25:56.623Z [DEBUG] autocompact: tokens=134537 threshold=167000 effectiveWindow=180000
+2026-05-08T19:25:56.625Z [DEBUG] Auto tool search disabled: 0 tokens (threshold: 20000, 10% of context) [source: query]
+2026-05-08T19:25:56.631Z [DEBUG] Writing to temp file: C:\Users\emarquez\.claude.json.tmp.35184.1778268356631
+2026-05-08T19:25:56.631Z [DEBUG] Preserving file permissions: 100666
+2026-05-08T19:25:56.631Z [DEBUG] Temp file written successfully, size: 36935 bytes
+2026-05-08T19:25:56.631Z [DEBUG] Applied original permissions to temp file
+2026-05-08T19:25:56.631Z [DEBUG] Renaming C:\Users\emarquez\.claude.json.tmp.35184.1778268356631 to C:\Users\emarquez\.claude.json
+2026-05-08T19:25:56.634Z [DEBUG] File C:\Users\emarquez\.claude.json written atomically
+2026-05-08T19:25:56.642Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.41.0f7; cc_entrypoint=cli; cch=00000;
+2026-05-08T19:25:56.642Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-05-08T19:25:56.642Z [DEBUG] [API:auth] OAuth token check starting
+2026-05-08T19:25:56.643Z [DEBUG] [API:auth] OAuth token check complete
+2026-05-08T19:25:56.649Z [DEBUG] [useDeferredValue] Messages deferred by 1 (471→472)
+2026-05-08T19:25:58.684Z [DEBUG] Stream started - received first chunk
+2026-05-08T19:26:26.445Z [DEBUG] Forked agent [prompt_suggestion] received message: type=assistant
+2026-05-08T19:26:26.470Z [DEBUG] Forked agent [prompt_suggestion] received message: type=assistant
+2026-05-08T19:26:26.511Z [DEBUG] Getting matching hook commands for SubagentStop with query:
+2026-05-08T19:26:26.511Z [DEBUG] Found 0 hook matchers in settings
+2026-05-08T19:26:26.511Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-05-08T19:26:26.512Z [DEBUG] Forked agent [prompt_suggestion] finished: 2 messages, types=[assistant, assistant], totalUsage: input=10 output=1119 cacheRead=133268 cacheCreate=1283
+2026-05-08T19:26:26.515Z [DEBUG] [Speculation] enabled=false
+2026-05-08T19:27:55.217Z [DEBUG] BigQuery metrics exported successfully
+2026-05-08T19:27:55.217Z [DEBUG] BigQuery API Response: {
+  "accepted_count": 15,
+  "rejected_count": 0
+}
+2026-05-08T19:27:55.263Z [DEBUG] Metrics opt-out API response: enabled=true, vcsLinking=undefined

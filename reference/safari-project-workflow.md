@@ -1,0 +1,382 @@
+# Safari Circuits Project Workflow
+
+How to create and manage Safari Circuits company projects using the personal vault + team SharePoint approach.
+
+---
+
+## Overview
+
+**Privacy Model:**
+- Work privately in personal Obsidian vault (`00_Claude_Safari\05-Projects`)
+- Only publish finalized deliverables to team SharePoint
+- Project memory syncs via Git (personal-claude-docs), not SharePoint
+
+**Benefits:**
+- Team doesn't see exploratory questions, rough drafts, or thinking process
+- Can't accidentally share half-baked ideas
+- Project memory follows you home ↔ work via Git
+- Obsidian integration for linking, templates, graph view
+- Clear publishing flow with explicit approval
+
+---
+
+## Creating a New Safari Project
+
+### Step 1: Create Project in Personal Vault
+
+```powershell
+# Set variables
+$projectName = "Safari-{Project-Name}"  # e.g., "Safari-CMMC-Level-2"
+$vaultPath = "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude_Safari"
+$projectPath = "$vaultPath\05-Projects\$projectName"
+
+# Create project structure
+New-Item -ItemType Directory -Path "$projectPath\00-Inbox" -Force
+New-Item -ItemType Directory -Path "$projectPath\01-Research" -Force
+New-Item -ItemType Directory -Path "$projectPath\02-Drafts" -Force
+New-Item -ItemType Directory -Path "$projectPath\03-Deliverables" -Force
+
+Write-Host "✓ Project created: $projectPath" -ForegroundColor Green
+```
+
+### Step 2: Create Project Files from Template
+
+Use the template at: `personal-claude-docs/.claude/enterprise/reference/safari-project-template.md`
+
+Copy and customize:
+
+```powershell
+# Copy template
+$templatePath = "$env:USERPROFILE\personal-claude-docs\.claude\enterprise\reference\safari-project-template.md"
+$claudeMdPath = "$projectPath\CLAUDE.md"
+
+Copy-Item $templatePath $claudeMdPath
+
+# Edit with VS Code or Obsidian
+code $claudeMdPath
+# OR
+obsidian://open?vault=00_Claude_Safari&file=05-Projects/$projectName/CLAUDE.md
+```
+
+Customize these sections:
+- Project Overview (goal, timeline, stakeholders, status)
+- Context for Claude (background, terminology, requirements)
+- Team SharePoint Locations (where deliverables will be published)
+- Common Tasks & Prompts (frequent operations)
+- Decision Log (key decisions as project progresses)
+
+### Step 3: Create SharePoint Links File
+
+```powershell
+# Create _links.md with SharePoint references
+$linksTemplate = @"
+# Team SharePoint Links & Publishing
+
+## Published Project Folder (Team SharePoint)
+
+**Primary Location:**
+``````
+S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Projects\{folder-name}
+``````
+
+> ⚠️ **IMPORTANT:** This is a TEAM SharePoint. Only publish finalized deliverables here.
+
+## Publishing Workflow
+
+[See Safari-CMMC-Level-2\_links.md for complete publishing instructions]
+
+Quick publish command:
+``````powershell
+Copy-Item .\03-Deliverables\*.* 'S:\...\Projects\{folder-name}\' -Force
+``````
+"@
+
+$linksTemplate | Out-File "$projectPath\_links.md" -Encoding utf8
+```
+
+### Step 4: Add PowerShell Alias
+
+Edit your PowerShell profile (`$PROFILE`):
+
+```powershell
+function safari-{shortname} {
+    cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude_Safari\05-Projects\Safari-{Project-Name}"
+    claude
+}
+```
+
+Example:
+```powershell
+function cmmc {
+    cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude_Safari\05-Projects\Safari-CMMC-Level-2"
+    claude
+}
+```
+
+Then reload: `. $PROFILE`
+
+Usage: Just type the alias to instantly open that project in Claude Code.
+
+---
+
+## Daily Workflow
+
+### Working on the Project
+
+```powershell
+# Navigate to project (or use alias)
+cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude_Safari\05-Projects\Safari-{Project-Name}"
+
+# Start Claude Code
+claude
+```
+
+**What happens:**
+- Claude loads project-specific CLAUDE.md
+- Memory accumulates at `~/.claude/projects/C--Users-...-{Project-Name}/`
+- This memory syncs via personal-claude-docs Git (not SharePoint!)
+
+### Capturing Ideas and Notes
+
+```
+User: "Note to self: Engineering team confirmed they need Gerber Viewer"
+Claude: [Captures to 00-Inbox/]
+
+User: "/learn We decided to prioritize MFA because it affects 15 CMMC controls"
+Claude: [Captures to project memory]
+```
+
+### Creating Deliverables
+
+```
+User: "Create an executive presentation comparing the 3 vendors. Save to 02-Drafts/"
+Claude: [Creates presentation-draft.pptx in 02-Drafts/]
+
+User: "Update the presentation to emphasize software flexibility. Review and polish for board presentation."
+Claude: [Iterates on draft]
+
+User: "Looks good. Move to 03-Deliverables/ and prepare for publication."
+Claude: [Moves file, updates filename to remove "draft"]
+```
+
+### Publishing to Team SharePoint
+
+```powershell
+# 1. Review deliverable one last time
+Start-Process .\03-Deliverables\executive-summary.pptx
+
+# 2. Create team folder (first time only)
+New-Item -ItemType Directory -Path 'S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Projects\{folder-name}' -Force
+
+# 3. Copy to SharePoint
+Copy-Item .\03-Deliverables\executive-summary.pptx `
+          'S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Projects\{folder-name}\' -Force
+
+# 4. Verify
+explorer 'S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Projects\{folder-name}'
+
+# 5. Email stakeholders
+# Subject: {Project Name} - {Document Name} Available for Review
+# Body: The {document name} is now available at S:\...\Projects\{folder-name}\{filename}
+```
+
+---
+
+## Project Memory Sync
+
+### How It Works
+
+```
+Personal Vault Project:
+C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude_Safari\05-Projects\Safari-CMMC-Level-2\
+  ↓
+Claude Code working directory
+  ↓
+Project memory stored at:
+~/.claude/projects/C--Users-emarquez-OneDrive-...-00_Claude_Safari-05-Projects-Safari-CMMC-Level-2/
+  ↓ symlink
+personal-claude-docs/.claude/project-memory/C--Users-emarquez-OneDrive-...-00_Claude_Safari-05-Projects-Safari-CMMC-Level-2/
+  ↓ Git sync
+GitHub (personal-claude-docs repo)
+  ↓ Git pull on other computer
+Home computer gets same project memory!
+```
+
+### Syncing Across Computers
+
+**On work computer (after working on project):**
+```powershell
+cd $env:USERPROFILE\personal-claude-docs
+git add .claude/project-memory/
+git commit -m "Update: CMMC project progress"
+git push
+```
+
+**On home computer:**
+```powershell
+cd $env:USERPROFILE\personal-claude-docs
+git pull
+
+# Project memory is now synced!
+cd "D:\OneDrive\16 - Obsidian\01_Claude_Home\05-Projects\Safari-CMMC-Level-2"
+claude
+# Claude remembers all decisions and context from work computer
+```
+
+---
+
+## Privacy Guidelines
+
+### ✅ Safe to Publish (Team SharePoint)
+
+- Final presentations
+- Executive summaries
+- Decision memos (approved)
+- Cost comparisons (approved for sharing)
+- Vendor comparison matrices
+- Implementation timelines
+- Board-ready documents
+
+### ❌ Keep Private (Personal Vault Only)
+
+- Rough drafts with comments
+- Exploratory questions to Claude ("What if we chose CloudFit instead?")
+- "What if" scenarios
+- Budget sensitivity analysis
+- Internal strategy discussions
+- Vendor negotiation notes
+- Personal opinions/concerns
+- Work-in-progress documents
+- Any document with "DRAFT" watermarks
+
+### When in Doubt
+
+**Ask:** "Would I be comfortable with the entire company seeing this?"
+- **Yes:** Safe to publish to SharePoint
+- **No:** Keep in personal vault
+
+---
+
+## Recommended Folder Structure
+
+```
+00_Claude_Safari/
+└── 05-Projects/
+    ├── Safari-CMMC-Level-2/
+    │   ├── CLAUDE.md                     ← Project context + knowledge base
+    │   ├── _links.md                     ← SharePoint locations + publish commands
+    │   ├── 00-Inbox/                     ← Quick captures, meeting notes
+    │   │   ├── README.md
+    │   │   ├── vendor-questions-2026-05-15.md
+    │   │   └── meeting-notes-2026-05-18.md
+    │   ├── 01-Research/                  ← Source docs, analysis
+    │   │   ├── README.md
+    │   │   ├── vendor-proposals/
+    │   │   ├── cost-analysis.xlsx
+    │   │   └── requirements/
+    │   ├── 02-Drafts/                    ← WIP documents (PRIVATE)
+    │   │   ├── README.md
+    │   │   ├── executive-summary-draft.pptx
+    │   │   └── board-presentation-v2.pptx
+    │   └── 03-Deliverables/              ← Ready to publish
+    │       ├── README.md
+    │       └── executive-summary.pptx
+    ├── Safari-Azure-Migration/
+    │   └── [same structure]
+    └── Safari-BeFirst-Modernization/
+        └── [same structure]
+```
+
+---
+
+## Common Prompts
+
+### Start New Project
+```
+I'm starting a new Safari project: [Project Name]. Help me create the directory structure
+and customize the CLAUDE.md template with the following details: [context, goals, stakeholders].
+```
+
+### Generate Deliverable
+```
+Create a [presentation/report/memo] for [audience] covering [topic].
+Include: [key points].
+Save to 02-Drafts/[filename]-[date].
+```
+
+### Prepare for Publishing
+```
+Review the [document name] in 02-Drafts/. Remove any internal notes or rough thinking.
+Polish for [audience] and move to 03-Deliverables/ when ready.
+```
+
+### Sync Project Memory
+```
+I'm switching to my home computer. Commit the project memory changes with message
+"Update: [project name] progress - [what was accomplished]"
+```
+
+---
+
+## Troubleshooting
+
+### Project Memory Not Syncing
+
+**Symptom:** Claude doesn't remember decisions from other computer
+
+**Fix:**
+```powershell
+# 1. Verify symlink exists
+Get-Item ~/.claude/projects
+# Should show: Mode: l----- Target: personal-claude-docs/.claude/project-memory
+
+# 2. Check git status
+cd $env:USERPROFILE\personal-claude-docs
+git status
+# Should show changes in .claude/project-memory/
+
+# 3. Manually sync
+git add .claude/project-memory/
+git commit -m "Sync project memory"
+git push
+```
+
+### Can't Access Team SharePoint from PowerShell
+
+**Symptom:** `Copy-Item` fails with access denied
+
+**Fix:**
+1. Verify S: drive is mapped correctly
+2. Check SharePoint permissions
+3. Try opening in Explorer first: `explorer 'S:\...'`
+4. Manually copy files if needed
+
+### Vault Not Found
+
+**Symptom:** `cd` command fails to find vault path
+
+**Fix:**
+```powershell
+# Verify vault exists
+Test-Path "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude_Safari"
+
+# If not synced yet, wait for OneDrive sync
+# Or check if path is different on this computer
+```
+
+---
+
+## Quick Reference Card
+
+| Task | Command |
+|------|---------|
+| **Start project** | `{alias}` (e.g., `cmmc`) |
+| **Quick capture** | Add file to `00-Inbox/` |
+| **Work on deliverable** | Create in `02-Drafts/` |
+| **Publish to SharePoint** | Move to `03-Deliverables/`, then `Copy-Item` |
+| **Sync memory** | `cd ~/personal-claude-docs && git add .claude/project-memory/ && git commit && git push` |
+| **Open SharePoint** | `explorer 'S:\...\Projects\{folder}'` |
+
+---
+
+*This workflow keeps your thinking private while collaborating effectively with the team.*

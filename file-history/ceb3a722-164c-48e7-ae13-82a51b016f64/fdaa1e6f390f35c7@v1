@@ -1,0 +1,742 @@
+using DocumentFormat.OpenXml.Spreadsheet;
+using Firstronic.Areas.Dashboards.Models;
+using Firstronic.Framework.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using static Firstronic.Framework.APIs.Station;
+
+namespace Firstronic.Areas.Dashboards.Controllers
+{
+  public class StationController : BaseSecurityController
+  {
+    //===============================================================
+    // ACTION: Station
+    //===============================================================
+    public async Task<ActionResult> Index(int id = 0, int year = 0, int month = 0, int day = 0)
+    {
+      var model = new customreport_station();
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      model.month = month;
+      model.year = year;
+      model.day = day;
+      model.stationid = id;
+
+      List<Task<HourOEE>> tasks = new List<Task<HourOEE>>();
+
+      DateTime recordtime = new DateTime(year, month, day);
+
+      for (int i = 6; i < 30; i++)
+      {
+        DateTime recordWithHour = recordtime.AddHours(+i);
+
+        tasks.Add(Firstronic.Framework.APIs.Station.getHourOEEAsync(id, recordWithHour.Year, recordWithHour.Month, recordWithHour.Day, recordWithHour.Hour));
+      }
+
+      // Esperar a que todas las tareas se completen
+      HourOEE[] responses = await Task.WhenAll(tasks);
+
+      List<HourOEE> Items = new List<HourOEE>();
+
+      foreach (HourOEE response in responses)
+      {
+        Items.Add(response);
+      }
+
+      model.Items = Items;
+
+      return View(model);
+    }
+
+
+    public ActionResult Connectivity(int id = 0, int year = 0, int month = 0, int day = 0)
+    {
+      var model = new customreport_station();
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      model.month = month;
+      model.year = year;
+      model.day = day;
+      model.stationid = id;
+
+      return View(model);
+    }
+
+    public ActionResult OEE(int? id = 0, int year = 0, int month = 0, int day = 0)
+    {
+      var model = new customreport_station();
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      model.month = month;
+      model.year = year;
+      model.day = day;
+      model.stationid = id;
+
+      return View(model);
+    }
+
+    //===============================================================
+    // ACTION: Station
+    //===============================================================
+    public ActionResult Loaded_Material(int? id = 0, int year = 0, int month = 0, int day = 0, int line_side = 0)
+    {
+      var model = new customreport_station_material();
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      model.month = month;
+      model.year = year;
+      model.day = day;
+      model.stationid = id;
+      model.line_side = line_side;
+
+      return View(model);
+    }
+
+    //===============================================================
+    // FUNCTION: DOnwtimeCharts
+    //===============================================================
+    [HttpPost]
+    public string DowntimeChart_Group(int? id = 0, int year = 0, int month = 0, int day = 0)
+    {
+
+      DateTime current = DateTime.Now;
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      DateTime _seguida = new DateTime(year, month, day, 6, 0, 0);
+
+      DateTime _seguidas = _seguida;
+
+      DateTime _seguidae = _seguida.AddHours(+24);
+
+      DataTable dt_dw = Firstronic.Framework.Functions.Functions.GetDWTimes_Summary(id.ToString(), _seguidas, _seguidae);
+
+      List<morris_donut> iData = new List<morris_donut>();
+
+      DataTable result = dt_dw.AsEnumerable()
+      .GroupBy(x => x.Field<string>("Razon"))
+      .Select(grp => new
+      {
+        Categoria = grp.Key,
+        Total = grp.Sum(x => x.Field<int>("Minutes"))
+      })
+      .PropertiesToDataTable();
+
+      result.DefaultView.Sort = "Total DESC";
+      result = result.DefaultView.ToTable();
+
+      foreach (DataRow dw in result.Rows)
+      {
+        if (dw[0].ToString() == "No yet")
+        {
+
+        }
+        else
+        {
+          morris_donut details = new morris_donut();
+          details.value = double.Parse(dw[1].ToString());
+          details.label = dw[0].ToString();
+          iData.Add(details);
+        }
+
+      }
+
+      var jsonSerializer = new JavaScriptSerializer();
+      string data = jsonSerializer.Serialize(iData);
+      return data;
+    }
+
+    //===============================================================
+    // FUNCTION: DOnwtimeCharts
+    //===============================================================
+    [HttpPost]
+    public JsonResult DowntimeChart_Json(int? id = 0, int year = 0, int month = 0, int day = 0)
+    {
+
+      DateTime current = DateTime.Now;
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      DateTime _seguida = new DateTime(year, month, day, 6, 0, 0);
+
+      DateTime _seguidas = _seguida;
+
+      DateTime _seguidae = _seguida.AddHours(+24);
+
+      DataTable dt_dw = Firstronic.Framework.Functions.Functions.GetDWTimes_Summary(id.ToString(), _seguidas, _seguidae);
+
+      List<object> iData = new List<object>();
+
+      DataTable result = dt_dw.AsEnumerable()
+      .GroupBy(x => x.Field<string>("Razon"))
+      .Select(grp => new
+      {
+        Categoria = grp.Key,
+        Total = grp.Sum(x => x.Field<int>("Minutes"))
+      }).Where(x=> x.Categoria!="No yet")
+      .PropertiesToDataTable();
+
+      result.DefaultView.Sort = "Total DESC";
+      result = result.DefaultView.ToTable();
+
+      foreach (DataRow dw in result.Rows)
+      {
+        if (dw[0].ToString() == "No yet")
+        {
+
+        }
+        else
+        {
+          morris_donut details = new morris_donut();
+          details.value = double.Parse(dw[1].ToString());
+          details.label = dw[0].ToString();
+          iData.Add(details);
+        }
+
+      }
+
+      DataTable dt = result;
+
+      //Looping and extracting each DataColumn to List<Object>    
+      foreach (DataColumn dc in dt.Columns)
+      {
+        List<object> xz = new List<object>();
+        xz = (from DataRow drr in dt.Rows select drr[dc.ColumnName]).ToList();
+        iData.Add(xz);
+      }
+      ViewBag.ChartData = iData;
+      //Source data returned as JSON    
+      return Json(iData, JsonRequestBehavior.AllowGet);
+    }
+
+    //===============================================================
+    // FUNCTION: DOnwtimeCharts
+    //===============================================================
+    [HttpPost]
+    public JsonResult DowntimeChart(int StationID, int Width = 600, int year = 0, int month = 0, int day = 0)
+    {
+      List<object> iData = new List<object>();
+
+      DateTime current = DateTime.Now;
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      DateTime _seguida = new DateTime(year, month, day, 6, 0, 0);
+
+      DateTime _seguidas = _seguida;
+
+      DateTime _seguidae = _seguida.AddHours(+24);
+
+
+      SqlParameter[] parameters = new SqlParameter[] {
+        new SqlParameter("@StationID", SqlDbType.Int) { Value = StationID },
+        new SqlParameter("@Seguidas", SqlDbType.DateTime) { Value = _seguidas},
+        new SqlParameter("@SeguidaE", SqlDbType.DateTime) { Value = _seguidae}
+      };
+
+
+      // Check if is >today
+
+      DataTable TableDWU = new DataTable();
+      // Define columns
+      TableDWU.Columns.Add("Inicio", typeof(System.DateTime));
+      TableDWU.Columns.Add("Fin", typeof(System.DateTime));
+      TableDWU.Columns.Add("Razon", typeof(System.String));
+      TableDWU.Columns.Add("Categoria", typeof(System.String));
+      TableDWU.Columns.Add("Minutes", typeof(System.Int32));
+
+      DataTable dt_first = Firstronic.Framework.Queries.GetDatatableFromQuery("Select Top 1 Dtstart, Dtend,CASE WHEN dt.RazonSpecific='Otro' THEN dt.RazonGral ELSE dt.RazonSpecific END as Razon,dt.RazonGral as Categoria FROM PD_tbl_downtimes_history INNER JOIN EN_idt_downtimes_codes dt ON PD_tbl_downtimes_history.DownTimeCodeID=dt.DownTimeCodeID Where StationID=@StationID AND DTStart<@Seguidas order by DTStart DESC", parameters);
+
+      if (dt_first.Rows.Count > 0)
+      {
+        if (dt_first.Rows[0].Field<DateTime>("Dtend") > _seguidas && dt_first.Rows[0].Field<DateTime>("Dtend") < _seguidae)
+        {
+          DateTime ends = dt_first.Rows[0].Field<DateTime>("Dtend");
+          TableDWU.Rows.Add(new DateTime(ends.Year, ends.Month, ends.Day, 6, 0, 0), ends, dt_first.Rows[0].Field<string>("Razon"), dt_first.Rows[0].Field<string>("Categoria"), (ends - new DateTime(ends.Year, ends.Month, ends.Day, 6, 0, 0)).TotalMinutes);
+        }
+      }
+
+      DataTable dt_middle = Firstronic.Framework.Queries.GetDatatableFromQuery("Select Dtstart, Dtend,CASE WHEN dt.RazonSpecific='Otro' THEN dt.RazonGral ELSE dt.RazonSpecific END as Razon,dt.RazonGral as Categoria FROM PD_tbl_downtimes_history INNER JOIN EN_idt_downtimes_codes dt ON PD_tbl_downtimes_history.DownTimeCodeID=dt.DownTimeCodeID Where StationID=@StationID AND DTStart > @Seguidas and DTend<@SeguidaE order by DTStart ASC", parameters);
+
+
+      if (dt_middle.Rows.Count > 0)
+      {
+        for (int tes = 0; tes <= dt_middle.Rows.Count - 1; tes++)
+        {
+          TableDWU.Rows.Add(dt_middle.Rows[tes].Field<DateTime>("DtStart"), dt_middle.Rows[tes].Field<DateTime>("Dtend"), dt_middle.Rows[tes].Field<string>("Razon"), dt_middle.Rows[tes].Field<string>("Categoria"), (dt_middle.Rows[tes].Field<DateTime>("Dtend") - dt_middle.Rows[tes].Field<DateTime>("DtStart")).TotalMinutes);
+        }
+      }
+
+      DataTable dt_last = Firstronic.Framework.Queries.GetDatatableFromQuery("Select Top 1 Dtstart, Dtend,CASE WHEN dt.RazonSpecific='Otro' THEN dt.RazonGral ELSE dt.RazonSpecific END as Razon,dt.RazonGral as Categoria FROM PD_tbl_downtimes_history INNER JOIN EN_idt_downtimes_codes dt ON PD_tbl_downtimes_history.DownTimeCodeID=dt.DownTimeCodeID Where StationID=@StationID AND DTend>@SeguidaE order by DTend ASC", parameters);
+
+      if (dt_last.Rows.Count > 0)
+      {
+        if (dt_last.Rows[0].Field<DateTime>("Dtstart") < _seguidae && dt_last.Rows[0].Field<DateTime>("Dtstart") > _seguidas)
+        {
+          DateTime ends = dt_last.Rows[0].Field<DateTime>("Dtstart");
+          TableDWU.Rows.Add(ends, (new DateTime(_seguidae.Year, _seguidae.Month, _seguidae.Day, 6, 0, 0)).AddSeconds(-1), dt_last.Rows[0].Field<string>("Razon"), dt_last.Rows[0].Field<string>("Categoria"), ((new DateTime(_seguidae.Year, _seguidae.Month, _seguidae.Day, 6, 0, 0)).AddSeconds(-1) - ends).TotalMinutes);
+        }
+      }
+
+      DataTable dv = new DataTable();
+      dv.Columns.Add("Inicio", typeof(System.DateTime));
+      dv.Columns.Add("Fin", typeof(System.DateTime));
+      dv.Columns.Add("Razon", typeof(System.String));
+      dv.Columns.Add("Categoria", typeof(System.String));
+      dv.Columns.Add("Minutes", typeof(System.Int32));
+      dv.Columns.Add("Shift", typeof(System.Int32));
+
+      foreach (DataRow row in TableDWU.Rows)
+      {
+        DateTime Dia = row.Field<DateTime>("Inicio");
+        // =============== Veo el dia y turno de la semana...
+        var dfi = DateTimeFormatInfo.CurrentInfo;
+        var calendar = dfi.Calendar;
+        int semanasystema = calendar.GetWeekOfYear(Dia, dfi.CalendarWeekRule, DayOfWeek.Sunday);
+
+        bool none = true;
+        // 0 de domingo a 6 sabado
+        if (semanasystema % 2 == 0)
+        {
+          none = false;
+        }
+
+        int dayofwk = (int)Dia.DayOfWeek;
+
+        // Turno
+        int shift = 1;
+        int nextshift = 2;
+        if (Dia.Hour < 6)
+        {
+          shift = 4;
+          nextshift = 1;
+        }
+        else if (dayofwk <= 3 & Dia.Hour < 6)
+        {
+          shift = 2;
+          nextshift = 1;
+          if (dayofwk == 3 & none == true)
+          {
+            nextshift = 3;
+          }
+        }
+        else if (dayofwk < 3 & Dia.Hour < 18)
+        {
+          shift = 1;
+          nextshift = 2;
+        }
+        else if (dayofwk < 3 & Dia.Hour < 24)
+        {
+          shift = 2;
+          nextshift = 1;
+          if (dayofwk == 2 & none == true)
+          {
+            nextshift = 3;
+          }
+        }
+        else if (dayofwk >= 4 & Dia.Hour >= 18)
+        {
+          shift = 4;
+          nextshift = 3;
+          if (dayofwk == 6)
+          {
+            nextshift = 1;
+          }
+        }
+        else if (dayofwk >= 4 & Dia.Hour >= 6)
+        {
+          shift = 3;
+          nextshift = 4;
+        }
+        else if (dayofwk > 4 & Dia.Hour < 6)
+        {
+          shift = 4;
+          nextshift = 3;
+        }
+        else if (dayofwk == 4 & Dia.Hour < 6 & none == false)
+        {
+          shift = 4;
+          nextshift = 3;
+        }
+        else if (dayofwk == 4 & Dia.Hour < 6 & none == true)
+        {
+          shift = 2;
+          nextshift = 3;
+        }
+        else if (dayofwk == 3 & Dia.Hour < 18 & none == false)
+        {
+          shift = 1;
+          nextshift = 4;
+        }
+        else if (dayofwk == 3 & Dia.Hour < 18 & none == true)
+        {
+          shift = 3;
+          nextshift = 2;
+        }
+        else if (dayofwk == 3 & Dia.Hour < 24 & none == false)
+        {
+          shift = 4;
+          nextshift = 3;
+        }
+        else if (dayofwk == 3 & Dia.Hour < 24 & none == true)
+        {
+          shift = 2;
+          nextshift = 3;
+        }
+
+        DateTime fin = row.Field<DateTime>("Fin");
+
+
+        if (shift == 1 | shift == 3)
+        {
+          if (fin > new DateTime(Dia.Year, Dia.Month, Dia.Day, 18, 0, 0))
+          {
+            var temp = (new DateTime(Dia.Year, Dia.Month, Dia.Day, 18, 0, 0)).AddSeconds(-1);
+            dv.Rows.Add(row.Field<DateTime>("Inicio"), temp, row["Razon"], row["Categoria"], (temp - Dia).TotalMinutes, shift);
+            dv.Rows.Add((new DateTime(Dia.Year, Dia.Month, Dia.Day, 18, 0, 0)), row.Field<DateTime>("Fin"), row["Razon"], row["Categoria"], (fin - temp).TotalMinutes, nextshift);
+          }
+          else
+          {
+            dv.Rows.Add(row.Field<DateTime>("Inicio"), row.Field<DateTime>("Fin"), row["Razon"], row["Categoria"], row["minutes"], shift);
+          }
+        }
+        else if (Dia.Hour < 24)
+        {
+          if (fin > (new DateTime(Dia.Year, Dia.Month, Dia.Day, 6, 0, 0)).AddHours(+24))
+          {
+            var temp = (new DateTime(Dia.Year, Dia.Month, Dia.Day, 6, 0, 0)).AddHours(+24).AddSeconds(-1);
+            dv.Rows.Add(row.Field<DateTime>("Inicio"), temp, row["Razon"], row["Categoria"], (temp - Dia).TotalMinutes, shift);
+            dv.Rows.Add(temp, row.Field<DateTime>("Fin"), row["Razon"], row["Categoria"], (fin - temp).TotalMinutes, nextshift);
+          }
+          else
+          {
+            dv.Rows.Add(row.Field<DateTime>("Inicio"), row.Field<DateTime>("Fin"), row["Razon"], row["Categoria"], row["minutes"], shift);
+
+          }
+        }
+        else if (fin > (new DateTime(Dia.Year, Dia.Month, Dia.Day, 6, 0, 0)))
+        {
+          var temp = (new DateTime(Dia.Year, Dia.Month, Dia.Day, 6, 0, 0)).AddSeconds(-1);
+          dv.Rows.Add(row.Field<DateTime>("Inicio"), temp, row["Razon"], row["Categoria"], (temp - Dia).TotalMinutes, shift);
+          dv.Rows.Add(temp, row.Field<DateTime>("Fin"), row["Razon"], row["Categoria"], (fin - temp).TotalMinutes, nextshift);
+        }
+        else
+        {
+          dv.Rows.Add(row.Field<DateTime>("Inicio"), row.Field<DateTime>("Fin"), row["Razon"], row["Categoria"], row["minutes"], shift);
+        }
+      }
+
+      DataTable dvF = new DataTable();
+      dvF.Columns.Add("Inicio", typeof(System.DateTime));
+      dvF.Columns.Add("Fin", typeof(System.DateTime));
+      dvF.Columns.Add("Razon", typeof(System.String));
+      dvF.Columns.Add("Categoria", typeof(System.String));
+      dvF.Columns.Add("Minutes", typeof(System.Int32));
+
+      foreach (DataRow row in dv.Rows)
+      {
+        dvF.Rows.Add(row.Field<DateTime>("Inicio"), row.Field<DateTime>("Fin"), row["Razon"], row["Categoria"], row["minutes"]);
+      }
+
+      dvF.Columns.Add("posmin", typeof(System.Int64));
+      dvF.Columns.Add("posline", typeof(System.Int64));
+
+      DateTime tod = DateTime.Now;
+
+      if (tod < _seguidae)
+      {
+        dvF.Rows.Add(tod, _seguidae, "No yet", "No yet", (_seguidae - tod).TotalMinutes);
+      }
+
+      int dimensionpanel = Width;
+      var minendia = 1440;
+
+      double factorred = dimensionpanel / (double)minendia;
+
+      long counter = 0;
+      counter = _seguida.Ticks;
+
+
+      foreach (DataRow fila in dvF.Rows)
+      {
+        DateTime datet = fila.Field<DateTime>("Inicio");
+        TimeSpan posinicial = new TimeSpan(datet.Ticks - counter);
+        DateTime datet2 = fila.Field<DateTime>("Fin");
+        DateTime datet3 = fila.Field<DateTime>("Inicio");
+        double duracion = (datet2 - datet3).TotalMinutes;
+
+
+        fila["posmin"] = System.Convert.ToInt32(duracion * factorred);
+        fila["posline"] = System.Convert.ToInt32(posinicial.TotalMinutes * factorred);
+      }
+
+      DataTable dt = dvF;
+
+      //Looping and extracting each DataColumn to List<Object>    
+      foreach (DataColumn dc in dt.Columns)
+      {
+        List<object> x = new List<object>();
+        x = (from DataRow drr in dt.Rows select drr[dc.ColumnName]).ToList();
+        iData.Add(x);
+      }
+      ViewBag.ChartData = iData;
+      //Source data returned as JSON    
+      return Json(iData, JsonRequestBehavior.AllowGet);
+    }
+
+    //===============================================================
+    // FUNCTION: Unlocks
+    //===============================================================
+    [HttpPost]
+    public JsonResult UnlockChart(int StationID, int Width = 600, int year = 0, int month = 0, int day = 0)
+    {
+
+      List<object> iData = new List<object>();
+
+      DateTime current = DateTime.Now;
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      DateTime _seguida = new DateTime(year, month, day, 6, 0, 0);
+
+      DateTime _seguidas = _seguida;
+
+      DateTime _seguidae = _seguida.AddHours(+24);
+
+      SqlParameter[] parameters = new SqlParameter[] {
+        new SqlParameter("@StationID", SqlDbType.Int) { Value = StationID },
+        new SqlParameter("@Seguidas", SqlDbType.DateTime) { Value = _seguidas},
+        new SqlParameter("@SeguidaE", SqlDbType.DateTime) { Value = _seguidae}
+      };
+
+      DataTable TableDWU = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT PD_tbl_unlock_station_history.AutoID, PD_tbl_unlock_station_history.Trndate, PD_idt_stations.StationName, CS_idt_partnumbers.PartNumber, PD_tbl_unlock_station_history.Side, EN_idt_defect_department.DefectDepartment, PD_tbl_unlock_station_history.Details, PD_tbl_unlock_station_history.QtyDefects, CONCAT(HR_idt_users.FirstName,' ' ,HR_idt_users.LastName) as UnlockBy, PD_tbl_unlock_station_history.Comments, PD_tbl_unlock_station_history.GActions, PD_tbl_unlock_station_history.GactionsDate,validos.trndate2 FROM PD_tbl_unlock_station_history INNER JOIN PD_idt_stations ON PD_tbl_unlock_station_history.StationID = PD_idt_stations.StationID INNER JOIN CS_idt_partnumbers ON PD_tbl_unlock_station_history.PartID = CS_idt_partnumbers.PartID INNER JOIN HR_idt_users ON PD_tbl_unlock_station_history.ControlID = HR_idt_users.ControlID INNER JOIN EN_idt_defect_department ON PD_tbl_unlock_station_history.DefectDepartment = EN_idt_defect_department.AutoID LEFT  JOIN (select stationid, jobid, jobtype, partid,side,max(trndate) as 'trndate2' From PD_tbl_unlock_station_history Group by stationid, jobid, jobtype, partid,side) validos ON PD_tbl_unlock_station_history.StationID=validos.StationID and PD_tbl_unlock_station_history.JobID=validos.JobID and PD_tbl_unlock_station_history.JobType=validos.JobType and PD_tbl_unlock_station_history.PartID=validos.PartID and PD_tbl_unlock_station_history.side=validos.side Where Notify=1 AND PD_tbl_unlock_station_history.QtyDefects>1 and PD_tbl_unlock_station_history.StationID=@StationID AND PD_tbl_unlock_station_history.Trndate Between @Seguidas AND @SeguidaE order by trndate2 desc,PD_tbl_unlock_station_history.stationid, PD_tbl_unlock_station_history.jobid, PD_tbl_unlock_station_history.jobtype, PD_tbl_unlock_station_history.partid,PD_tbl_unlock_station_history.side,PD_tbl_unlock_station_history.Trndate asc", parameters);
+
+      TableDWU.Columns.Add("posmin", typeof(System.Int64));
+      TableDWU.Columns.Add("posline", typeof(System.Int64));
+
+      DateTime tod = DateTime.Now;
+
+      int dimensionpanel = Width;
+      var minendia = 1440;
+
+      double factorred = dimensionpanel / (double)minendia;
+
+      long counter = 0;
+      counter = _seguida.Ticks;
+
+
+      foreach (DataRow fila in TableDWU.Rows)
+      {
+        DateTime datet = fila.Field<DateTime>("Trndate");
+        TimeSpan posinicial = new TimeSpan(datet.Ticks - counter);
+        double duracion = 10;
+
+        fila["posmin"] = System.Convert.ToInt32(duracion * factorred);
+        fila["posline"] = System.Convert.ToInt32(posinicial.TotalMinutes * factorred);
+      }
+
+      DataTable dt = TableDWU;
+
+      //Looping and extracting each DataColumn to List<Object>    
+      foreach (DataColumn dc in dt.Columns)
+      {
+        List<object> x = new List<object>();
+        x = (from DataRow drr in dt.Rows select drr[dc.ColumnName]).ToList();
+        iData.Add(x);
+      }
+      ViewBag.ChartData = iData;
+      //Source data returned as JSON    
+      return Json(iData, JsonRequestBehavior.AllowGet);
+    }
+
+    //===============================================================
+    // FUNCTION: Tickets Charts
+    //===============================================================
+    [HttpPost]
+    public JsonResult TicketsChart(int StationID, int Width = 600, int year = 0, int month = 0, int day = 0)
+    {
+      List<object> iData = new List<object>();
+
+      DateTime current = DateTime.Now;
+
+      if (year == 0 || month == 0 || day == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+        day = DateTime.Now.Day;
+      }
+
+      DateTime _seguida = new DateTime(year, month, day, 6, 0, 0);
+
+      DateTime _seguidas = _seguida;
+
+      DateTime _seguidae = _seguida.AddHours(+24);
+
+      SqlParameter[] parameters = new SqlParameter[] {
+        new SqlParameter("@StationID", SqlDbType.Int) { Value = StationID },
+        new SqlParameter("@Seguidas", SqlDbType.DateTime) { Value = _seguidas},
+        new SqlParameter("@SeguidaE", SqlDbType.DateTime) { Value = _seguidae}
+      };
+
+      //MERGE WITH Previous data... 
+      DataTable dt_first = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT TOP 1 cast(@Seguidas as datetime) as TrnDate, PD_tbl_station_issues.IssueComments, PD_tbl_station_issues.IssueSolve, PD_tbl_station_issues.IssueSolution, PD_tbl_station_issues.Side,PD_tbl_station_issues.IssueSolveDate,PD_idt_issuestype.IssueType, PD_tbl_issue_ids.IssueDescription, CS_idt_partnumbers.PartNumber,DATEDIFF(MINUTE,cast(@Seguidas as datetime),isnull(IssueSolveDate,getdate())) as posmin1 FROM            PD_tbl_station_issues LEFT JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID LEFT JOIN PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID LEFT JOIN PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID LEFT JOIN PD_tbl_issue_ids ON PD_tbl_station_issues.IssueID = PD_tbl_issue_ids.IssueID LEFT JOIN CS_idt_partnumbers ON PD_tbl_station_issues.PartID = CS_idt_partnumbers.PartID WHERE PD_tbl_station_issues.StationID=@StationID AND PD_tbl_station_issues.Trndate < @Seguidas AND IssueSolveDate>@Seguidas and PD_idt_issuestype.Downtime=1 order by Trndate desc", parameters);
+
+      DataTable dt_middle = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT PD_tbl_station_issues.TrnDate, PD_tbl_station_issues.IssueComments, PD_tbl_station_issues.IssueSolve, PD_tbl_station_issues.IssueSolution, PD_tbl_station_issues.Side,PD_tbl_station_issues.IssueSolveDate,PD_idt_issuestype.IssueType, PD_tbl_issue_ids.IssueDescription,  CS_idt_partnumbers.PartNumber,DATEDIFF(MINUTE,TrnDate,isnull(IssueSolveDate,getdate())) as posmin1 FROM PD_tbl_station_issues LEFT JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID LEFT JOIN PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID LEFT JOIN PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID LEFT JOIN PD_tbl_issue_ids ON PD_tbl_station_issues.IssueID = PD_tbl_issue_ids.IssueID LEFT JOIN CS_idt_partnumbers ON PD_tbl_station_issues.PartID = CS_idt_partnumbers.PartID WHERE PD_tbl_station_issues.StationID=@StationID AND PD_tbl_station_issues.Trndate Between @Seguidas AND @SeguidaE and PD_idt_issuestype.Downtime=1 order by Trndate asc", parameters);
+
+      dt_first.Merge(dt_middle);
+
+      DataTable dt_fin = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT PD_tbl_station_issues.TrnDate, PD_tbl_station_issues.IssueComments, PD_tbl_station_issues.IssueSolve, PD_tbl_station_issues.IssueSolution, PD_tbl_station_issues.Side,cast(@SeguidaE as datetime) as IssueSolveDate, PD_idt_issuestype.IssueType, PD_tbl_issue_ids.IssueDescription,  CS_idt_partnumbers.PartNumber,DATEDIFF(MINUTE,TrnDate,cast(@SeguidaE as datetime)) as posmin1 FROM PD_tbl_station_issues LEFT JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID LEFT JOIN PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID LEFT JOIN PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID LEFT JOIN PD_tbl_issue_ids ON PD_tbl_station_issues.IssueID = PD_tbl_issue_ids.IssueID LEFT JOIN CS_idt_partnumbers ON PD_tbl_station_issues.PartID = CS_idt_partnumbers.PartID WHERE PD_tbl_station_issues.StationID=@StationID AND PD_tbl_station_issues.Trndate <@SeguidaE AND isnull(IssueSolveDate,getdate())>@SeguidaE and PD_idt_issuestype.Downtime=1 order by Trndate desc", parameters);
+
+      dt_first.Merge(dt_fin);
+
+      dt_first.Columns.Add("posmin", typeof(System.Int64));
+      dt_first.Columns.Add("posline", typeof(System.Int64));
+
+      DateTime tod = DateTime.Now;
+
+      int dimensionpanel = Width;
+      var minendia = 1440;
+
+      double factorred = dimensionpanel / (double)minendia;
+
+      long counter = 0;
+      counter = _seguida.Ticks;
+
+
+      foreach (DataRow fila in dt_first.Rows)
+      {
+        DateTime datet = fila.Field<DateTime>("Trndate");
+        TimeSpan posinicial = new TimeSpan(datet.Ticks - counter);
+        double duracion = fila.Field<Int32>("posmin1");
+
+        if (duracion > 1440)
+        {
+          duracion = 30;
+        }
+
+        fila["posmin"] = System.Convert.ToInt32(duracion * factorred);
+        fila["posline"] = System.Convert.ToInt32(posinicial.TotalMinutes * factorred);
+      }
+
+      DataTable dt = dt_first;
+
+      //Looping and extracting each DataColumn to List<Object>    
+      foreach (DataColumn dc in dt.Columns)
+      {
+        List<object> x = new List<object>();
+        x = (from DataRow drr in dt.Rows select drr[dc.ColumnName]).ToList();
+        iData.Add(x);
+      }
+      ViewBag.ChartData = iData;
+      //Source data returned as JSON    
+      return Json(iData, JsonRequestBehavior.AllowGet);
+    }
+
+    //===============================================================
+    // FUNCTION: Assembly Instruction
+    //===============================================================
+    public ActionResult AssyInstruction(int id = 0, int processid = 0)
+    {
+      var model = new customreport_station();
+            
+      model.stationid = id;
+      model.year = processid;
+
+      return View(model);
+    }
+
+    [HttpPost]
+    public JsonResult AssyGetURL(int? stationid = 0, int processid = 0)
+    {
+
+      SqlParameter[] parameters = new SqlParameter[] {
+        new SqlParameter("@stationid", SqlDbType.Int) { Value = stationid }
+      };
+
+      string URL = "";
+
+      DataTable dt = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT  TOP (1) PART_STATION_SETUP.Setup_ID, PART_STATION_SETUP.PartID, PART_STATION_SETUP.Side, PART_STATION.AreaID FROM  PART_STATION_SETUP INNER JOIN PART_STATION ON PART_STATION_SETUP.StationID = PART_STATION.StationID WHERE        (PART_STATION_SETUP.StationID = @stationid) ORDER BY PART_STATION_SETUP.Setup_ID DESC", parameters);
+
+      if (dt.Rows.Count > 0){
+        SqlParameter[] aiParameters = new SqlParameter[] {
+        new SqlParameter("@areaid", SqlDbType.Int) { Value = Convert.ToInt32(dt.Rows[0]["AreaID"]) },
+        new SqlParameter("@ProcessID", SqlDbType.Int) { Value = processid },
+        new SqlParameter("@partid", SqlDbType.Int) { Value = Convert.ToInt32(dt.Rows[0]["PartID"]) },
+        new SqlParameter("@side", SqlDbType.NVarChar) { Value = dt.Rows[0]["Side"] }
+        };
+
+        URL = Firstronic.Framework.Queries.GetStringFromQuery("SELECT [Url] FROM [ENGINEERING_ASSEMBLYINSTRUCTION_LEGACY] where areaid=@areaid and side=@side and partid=@partid and ProcessID=@ProcessID and Active=1 order by Version desc", aiParameters);
+
+        if (URL.StartsWith("http"))
+        {
+
+
+        }
+        else if (URL.ToString().Contains("aids"))
+        {
+          URL = "https://10.120.40.11/UploadedFiles/AssemblyInstructions/" + URL.Substring(26).Replace("\\\\10.120.10.4\\befirstdata\\UploadedFiles\\AssemblyInstructions\\", "");
+
+        }
+        else
+        {
+          URL = "https://10.120.40.11/UploadedFiles/AssemblyInstructions/" + URL.Replace("\\\\10.120.10.4\\befirstdata\\UploadedFiles\\AssemblyInstructions\\", "");
+        }
+      }
+
+      return Json(new { URL = URL }, JsonRequestBehavior.AllowGet);
+    }
+
+  }
+}

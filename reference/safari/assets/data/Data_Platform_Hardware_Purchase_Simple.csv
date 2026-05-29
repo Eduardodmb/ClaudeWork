@@ -1,0 +1,71 @@
+Work Item Type,Title,Description,Area Path,Assigned To,State,Priority,Story Points,Acceptance Criteria,Parent,Tags
+Epic,Data Platform Infrastructure Acquisition,"Procure, install, and provision new hardware for data streaming platform (PostgreSQL, Kafka, Iceberg, Flink, Trino). Server Spec: Dell R660/R760 or HPE DL380 Gen11, 2× Xeon Gold 6430, 256GB RAM, 3-tier storage (2× 3.84TB NVMe hot, 4× 3.84TB SATA RAID10 warm, 4× 8TB HDD RAID10 cold), 2× 10GbE. Budget: $18-25K new / $12-18K refurb.",IT Organization,Unassigned,New,1,,"• Hardware purchased within budget
+• Server installed and configured
+• Ubuntu 22.04 LTS provisioned
+• Storage tiers operational
+• System documentation complete
+• Handoff to data engineering team complete",,"Hardware Purchase,Data Platform"
+Feature,Hardware Procurement,"Specify requirements, obtain quote from approved vendor, and purchase hardware.",IT Organization\Infrastructure Management,Unassigned,New,1,6,"• Technical specification documented
+• Vendor quote received and approved
+• Purchase order issued
+• Hardware delivered",Data Platform Infrastructure Acquisition,"Procurement"
+Requirement,Prepare Technical Specification and Request Quote,"Document all hardware requirements and submit quote request to approved vendor.","IT Organization\Infrastructure Management",Unassigned,New,1,2,"• Spec includes CPU, RAM, storage (with RAID configs), network requirements
+• Quote request submitted to vendor
+• Quote deadline communicated",Hardware Procurement,"Specifications,Quote"
+Requirement,Review Quote and Approve Purchase,"Review vendor quote, verify technical compliance and pricing, obtain internal approvals.","IT Organization\Infrastructure Management",Unassigned,New,1,2,"• Quote received and reviewed
+• Technical compliance verified (no SAN, correct drive types)
+• Price within budget ($18-25K new / $12-18K refurb)
+• Internal approvals obtained",Hardware Procurement,"Quote Review,Approval"
+Requirement,Issue PO and Coordinate Delivery,"Submit purchase order and schedule hardware delivery to data center.","IT Organization\Infrastructure Management",Unassigned,New,1,2,"• PO approved and submitted
+• Delivery date confirmed
+• Receiving location prepared
+• Facilities team coordinated",Hardware Procurement,"Logistics"
+Feature,Physical Installation and RAID Configuration,"Install server in rack, configure RAID arrays, and verify hardware health.",IT Organization\Infrastructure Management,Unassigned,New,1,8,"• Server racked with power and network
+• All 3 storage tiers configured in RAID
+• Hardware diagnostics passed
+• System ready for OS installation",Data Platform Infrastructure Acquisition,"Installation,Hardware"
+Requirement,Rack Server and Connect Infrastructure,"Mount server, connect dual power supplies and network cables, coordinate with facilities team.","IT Organization\Infrastructure Management",Unassigned,New,1,3,"• Server mounted in rack
+• Dual PSUs connected to separate circuits
+• 2× 10GbE network connected
+• Rack space and cooling verified",Physical Installation and RAID Configuration,"Rack Installation"
+Requirement,Configure Storage RAID Arrays,"Configure 3-tier storage: Hot (2× 3.84TB NVMe), Warm (4× 3.84TB SATA RAID10 ~12TB), Cold (4× 8TB HDD RAID10 ~16TB).","IT Organization\Infrastructure Management",Unassigned,New,1,3,"• Hot tier NVMe configured
+• Warm tier RAID10 array created and initialized
+• Cold tier RAID10 array created and initialized
+• All arrays show healthy status
+• RAID configs documented",Physical Installation and RAID Configuration,"Storage,RAID"
+Requirement,Run Hardware Diagnostics,"Execute Dell ePSA or HPE diagnostics to verify all components.","IT Organization\Infrastructure Management",Unassigned,New,1,2,"• Diagnostics completed successfully
+• No hardware errors detected
+• Test results documented",Physical Installation and RAID Configuration,"Testing"
+Feature,Ubuntu Provisioning and Configuration,"Install Ubuntu 22.04 LTS, configure storage mounts, networking, and security.",IT Organization\Infrastructure Management,Unassigned,New,1,13,"• Ubuntu 22.04 LTS installed and updated
+• All storage tiers mounted (/data/hot, /data/warm, /data/cold)
+• Static IPs configured
+• SSH hardened and firewall enabled
+• System ready for application deployment",Data Platform Infrastructure Acquisition,"Ubuntu,OS Configuration"
+Requirement,Install Ubuntu and Configure Storage Mounts,"Install Ubuntu 22.04 LTS and mount all storage tiers with appropriate filesystems (XFS).","IT Organization\Infrastructure Management",Unassigned,New,1,5,"• Ubuntu installed on NVMe
+• All volumes formatted (XFS recommended)
+• Mount points created and configured in fstab
+• Storage permissions set
+• Mounts verified persistent",Ubuntu Provisioning and Configuration,"Ubuntu,Storage"
+Requirement,Configure Network and Security,"Set static IPs, harden SSH, enable firewall, and configure automatic security updates.","IT Organization\Infrastructure Management",Unassigned,New,1,5,"• Static IPs configured for both interfaces
+• SSH key-based auth enabled, root login disabled
+• UFW firewall configured and enabled
+• Unattended security updates configured
+• fail2ban installed",Ubuntu Provisioning and Configuration,"Network,Security"
+Requirement,Install Management Tools and Verify System,"Install monitoring agents, configure remote management (DRAC/iLO), and perform final system verification.","IT Organization\Infrastructure Management",Unassigned,New,2,3,"• Monitoring agent installed (if applicable)
+• DRAC/iLO configured
+• System health verified
+• All services operational",Ubuntu Provisioning and Configuration,"Monitoring,Verification"
+Feature,Documentation and Handoff,"Create system documentation and hand off to data engineering team.",IT Organization\Infrastructure Management,Unassigned,New,2,5,"• Hardware and network documentation complete
+• Credentials documented securely
+• Access provided to data engineering team
+• Handoff meeting conducted",Data Platform Infrastructure Acquisition,"Documentation,Handoff"
+Requirement,Create System Documentation,"Document hardware specs, network config, storage layout, RAID configs, and operational procedures.","IT Organization\Infrastructure Management",Unassigned,New,2,3,"• Hardware inventory documented (model, serial, specs)
+• Network configuration documented (IPs, VLANs)
+• Storage architecture documented (tiers, RAID, mounts)
+• Access procedures documented
+• Basic runbook created",Documentation and Handoff,"Documentation"
+Requirement,Conduct Team Handoff,"Transfer knowledge, credentials, and access to data engineering team. Obtain sign-off.","IT Organization\Data Engineering",Unassigned,New,1,2,"• Handoff meeting conducted
+• Documentation reviewed with team
+• Credentials transferred securely
+• SSH access verified for team members
+• Sign-off obtained",Documentation and Handoff,"Handoff,Knowledge Transfer"

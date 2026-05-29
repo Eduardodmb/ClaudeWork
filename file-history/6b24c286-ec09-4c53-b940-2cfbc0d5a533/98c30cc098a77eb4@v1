@@ -1,0 +1,644 @@
+@using NonFactors.Mvc.Grid;
+@using System.Data;
+@using System.Data.SqlClient;
+@using System.Globalization;
+
+
+@model ApplicationUserModel
+
+@{
+  bool isNew = !(Model != null && !string.IsNullOrEmpty(Model.Id));
+}
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text">Manage User: @Model.UserName</h3>
+  </div>
+  <div class="md-card-content">
+    @using (Html.BeginForm())
+    {
+      @Html.AntiForgeryToken()
+
+
+
+      @Html.HiddenFor(y => y.Id, new { @id = "txtID" })
+
+    <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#tabs_4'}">
+      <li class="uk-active" aria-expanded="true"><a href="#">General</a></li>
+      @if (!isNew)
+      {
+        if (Request.IsAuthenticated && User.IsInRole("BF Administrator"))
+        {
+          <li class="" aria-expanded="false"><a href="#">Roles</a></li>
+          <li class="" aria-expanded="false"><a href="#">Email Management</a></li>
+        }
+        if (Request.IsAuthenticated && User.IsInRole("BF User Manager (Training)"))
+        {
+          <li class="" aria-expanded="false"><a href="#">Image</a></li>
+          <li class="" aria-expanded="false"><a href="#">Skills</a></li>
+        }
+        <li class="" aria-expanded="false"><a href="#">Alerts</a></li>
+        <li class="" aria-expanded="false"><a href="#">Email Suscriptions</a></li>
+      }
+    </ul>
+
+    <ul id="tabs_4" class="uk-switcher uk-margin">
+      <li aria-hidden="false" class="uk-active">
+        <div class="input-group mb-2">
+          @Html.LabelFor(x => x.UserName)
+          @Html.TextBoxFor(x => x.UserName, new { @class = "md-input" })
+        </div>
+        <div class="input-group mb-2">
+          @Html.LabelFor(x => x.Email)
+          @Html.TextBoxFor(x => x.Email, new { @class = "md-input" })
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group mb-2">
+              @Html.LabelFor(x => x.Name)
+              @Html.TextBoxFor(x => x.Name, new { @class = "md-input" })
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-2">
+              @Html.LabelFor(x => x.Surname)
+              @Html.TextBoxFor(x => x.Surname, new { @class = "md-input" })
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-2">
+              @Html.LabelFor(x => x.Location)
+              @Html.TextBoxFor(x => x.Location, new { @class = "md-input" })
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-2">
+              @Html.LabelFor(x => x.Badge)
+              @Html.TextBoxFor(x => x.Badge, new { @class = "md-input" })
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-2">
+              @Html.LabelFor(x => x.ControlID)
+              @Html.TextBoxFor(x => x.ControlID, new { @class = "md-input", @id = "txtControlID" })
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-2">
+              @Html.LabelFor(x => x.Facility_Key)
+              @Html.DropDownListFor(x => x.Facility_Key, Model.FacilityList, "-- Select Facility --", new { @class = "md-input" })
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-2">
+              @Html.LabelFor(x => x.Building_Key)
+              @Html.DropDownListFor(x => x.Building_Key, Model.BuildingList, "-- Select Building --", new { @class = "md-input" })
+            </div>
+          </div>
+        </div>
+        
+        <div class="input-group custom-textarea mb-3">
+          @Html.LabelFor(x => x.Description)
+          @Html.TextAreaFor(x => x.Description, new { @class = "md-input", @rows = "1" })
+        </div>
+
+
+        @if (isNew)
+        {
+          <div class="col-md-12">
+            <div class="input-group mb-2">
+              @Html.LabelFor(x => x.Password)
+              @Html.TextBoxFor(x => x.Password, new { @class = "md-input" })
+            </div>
+          </div>
+
+          <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("ChangePassword", "User", new { Area = "Manage",username=Model.UserName })" role="tab" aria-controls="component-1-3" aria-selected="false">
+            <i class="fa fa-key fs-14 mr-1"></i> Change Password
+          </a>
+        }
+
+        <div class="form-group mt-4 pt-4 border-top">
+          @if (Request.IsAuthenticated && (User.IsInRole("BF Administrator") || User.IsInRole("BF User Manager (Training)")))
+          {
+            <button type="submit" name="action:@(isNew ? "Create": "Edit")" class="md-btn md-btn-primary md-btn-small">
+              Save
+            </button>
+          }
+
+          <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("ChangePassword", "User", new { Area = "Manage",username=Model.UserName })" role="tab" aria-controls="component-1-3" aria-selected="false">
+            <i class="fa fa-key fs-14 mr-1"></i> Change Password
+          </a>
+
+          <div class="d-inline-block">
+            <span class="mx-2 text-light font-weight-light fs-15">or</span>
+            <i class="fas fa-long-arrow-alt-left fs-13 text-primary o-8"></i>
+            <a href="@Url.Action("Index", "User")" class="m-link fs-15"> Back to list</a>
+          </div>
+        </div>
+      </li>
+      @if (!isNew)
+      {
+        var reportlist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [id],[Reporte] FROM [IT_idt_reports] Order by Reporte ASC");
+
+        @*------------------------------------------------------------------------*@
+        if (Request.IsAuthenticated && User.IsInRole("BF Administrator"))
+        {
+          <li aria-hidden="true">
+            @foreach (var role in Model.Roles)
+            {
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="SelectedRoleNames" value="@role.Name" id="user-role-@role.Name"
+                       checked="@(Model.SelectedRoleNames != null && Model.SelectedRoleNames.Contains(role.Name))" />
+                <label class="form-check-label" for="user-role-@role.Name">@role.Name</label>
+              </div>
+            }
+
+            <div class="d-flex mt-4">
+              <div>
+                <button type="submit" name="action:Edit" class="md-btn md-btn-primary md-btn-small">
+                  Save
+                </button>
+
+                <a class="btn btn-base-primary btn-sm pl-4 pr-4 transition-hover" href="@Url.Action("Create", "Role")">
+                  @Resources.Actions.Add Role
+                </a>
+              </div>
+            </div>
+            <div class="pageSide">
+              <ul class="js-scroll-nav duik-content-nav">
+                <li>
+                  <div class="form-group mb-1">
+                    <div class="custom-control custom-checkbox">
+                      @Html.CheckBoxFor(m => m.IsActive, new { @class = "custom-control-input" })
+                      @Html.LabelFor(m => m.IsActive, new { @class = "custom-control-label" })
+                    </div>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <div class="custom-control custom-checkbox">
+                      @Html.CheckBoxFor(m => m.EmailConfirmed, new { @class = "custom-control-input" })
+                      @Html.LabelFor(m => m.EmailConfirmed, new { @class = "custom-control-label" })
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li aria-hidden="true">
+
+            <div class="uk-grid">
+              <div class="uk-width-1-1">
+                <p class="request-info mn-b-10">Exclusive list, for managment people.</p>
+              </div>
+            </div>
+
+            @Html.AjaxGrid(Url.Action("GetSuscriptions", "User", new { id = Model.ControlID, UserID = Model.Id }))
+
+            <div class="row mn-t-15" id="Toaddauthorized">
+              <div class="col-5">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  @Html.Label("Report")
+                  @Html.DropDownList("Report", (IEnumerable<SelectListItem>)reportlist, new { @class = "md-input", @id = "ddlReportID" })
+                </div>
+              </div>
+              <div class="col-2 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  <input id="btnSuscriptions" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              $('#btnSuscriptions').click(function (e) {
+                e.preventDefault(); // <------------------ stop default behaviour of button
+                // Load new data
+                var v_UserID = $("#txtID").val();
+                var v_ControlID = $("#txtControlID").val();
+                var v_ReportID = $("#ddlReportID").val();
+
+                var req = { ControlID: v_ControlID, ReportID: v_ReportID, v_UserID: v_UserID };
+
+                $.ajax({
+                  type: "POST",
+                  url: "/Manage/User/AddSuscriptions",
+                  async: false,
+                  contentType: "application/json; charset=utf-8",
+                  data: JSON.stringify(req),
+                  success: function () {
+                    // Reload Grid
+                    updateSuscriptions();
+                  }
+                })
+              });
+
+              function updateSuscriptions() {
+                var grid = new MvcGrid(document.querySelector('#mvcSuscriptions'));
+                grid.requestType = 'post';
+                grid.reload();
+              };
+
+              $(document).on('click', '#mvcSuscriptions>table>tbody>tr>td>a.delRow', function (e) {
+                e.preventDefault(); // <------------------ stop default behaviour of button
+                var target = $(this).attr("href");
+
+                $.ajax({
+                  type: "POST",
+                  url: target,
+                  async: false,
+                  contentType: "application/json; charset=utf-8",
+                  success: function () {
+                    // Reload Grid
+                    updateSuscriptions();
+                  }
+                })
+              });
+
+            </script>
+          </li>
+        }
+        if (Request.IsAuthenticated && User.IsInRole("BF User Manager (Training)"))
+        {
+
+          <li aria-hidden="true">
+            <div class="uk-grid">
+              <div class="uk-width-1-1">
+                <p class="request-info mn-b-10">Update User Image.</p>
+              </div>
+            </div>
+
+            @{
+              SqlParameter[] parameters = new SqlParameter[]
+                { new SqlParameter("@Id",SqlDbType.NVarChar){Value =(Model.Id ?? "").ToString()} };
+
+              var picturename = Firstronic.Framework.Queries.GetStringFromQuery("SELECT Common_Files_Uploaded.FileName FROM AspNetUsers INNER JOIN Common_Files_Uploaded ON AspNetUsers.PictureID = CAST(Common_Files_Uploaded.FileID AS NVARCHAR(10)) WHERE (AspNetUsers.Id = @Id)", parameters);
+              if (picturename != "")
+              {
+
+                string cadenaTexto = picturename;
+                int excel = cadenaTexto.IndexOf(".xl");
+                int word = cadenaTexto.IndexOf(".do");
+                int powerpoit = cadenaTexto.IndexOf(".pp");
+                int pdf = cadenaTexto.IndexOf(".pdf");
+
+                if (excel > 0 || word > 0 || powerpoit > 0 || pdf > 0)
+                {
+                  <div class="input-group mb-3">
+                    <div class="input-group mb-3 mn-t-20">
+                      <div class="input-group-prepend">
+                        <label for="html">Favor de dar clic en el enlace.</label><br>
+                      </div>
+                      <div class="input-group-prepend">
+                        <a href="@Html.Raw(Path.Combine("/UploadedFiles/Users/",picturename))" download="proposed_file_name">Download</a>
+                      </div>
+                    </div>
+                  </div>
+                }
+                else
+                {
+                  <div class="input-group mb-3">
+                    <img id='theImg' src="@Html.Raw(Path.Combine("/UploadedFiles/Users/",picturename))" class="img-element" width="600" height="480" />
+                  </div>
+                }
+              }
+
+              <div class="input-group mb-3 mn-t-20">
+                @Html.Label("Attachment", new { @class = "m-0 fs-14" })
+                @Html.TextBox("Picture", null, new { @class = "md-input", @id = "txtUpdateFiles", type = "file" })
+              </div>
+
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                Filevalidation = () => {
+                  const fi = document.getElementById('txtUpdateFiles');
+                  // Check if any file is selected.
+                  if (fi.files.length > 0) {
+                    for (var i = 0; i <= fi.files.length - 1; i++) {
+                      const fsize = fi.files.item(i).size;
+                      const file = Math.round((fsize / 1024));
+                      // The size of the file.
+                      if (file >= 30096) {
+                        alert("File too Big, please select a file less than 30mb");
+                        $("#txtUpdateFiles").html("");
+                      }
+                    }
+
+                    var nurl = ""
+
+                    var fileUpload = $("#txtUpdateFiles").get(0);
+                    var files = fileUpload.files;
+
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                      fileData.append(files[i].name, files[i]);
+
+                    }
+                    //// Adding one more key to FormData object
+                    //fileData.append('username', ‘Manas’);
+
+                    $.ajax({
+                      type: "POST",
+                      url: "/Manage/User/UploadFile",
+                      async: false,
+                      contentType: false,
+                      processData: false,
+                      data: fileData,
+                      success: function (response) {
+                        nurl = response;
+                        var AutoID = $("#txtID").val();
+                        var req = { partid: AutoID, url: nurl };
+                        $.ajax({
+                          type: "POST",
+                          url: "/Manage/User/SavePicture",
+                          async: false,
+                          contentType: "application/json; charset=utf-8",
+                          data: JSON.stringify(req),
+                          success: function () {
+                            alert("The file was saved successfully");
+                            location.reload();
+                          }
+                        })
+                      },
+                      error: function () {
+
+                      }
+                    });
+                  }
+                }
+              </script>
+            }
+          </li>
+          <li aria-hidden="true">
+
+            <div class="uk-grid">
+              <div class="uk-width-1-1">
+                <p class="request-info mn-b-10">Update Skills.</p>
+              </div>
+            </div>
+
+
+            @Html.AjaxGrid(Url.Action("GetSKILLS", "User", new { id = Model.Id }))
+
+            @{
+              var Skilllist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"  SELECT [Skill_Key], [Skill] FROM [PLEX_idt_Personnel_v_Skill] order by skill asc");
+            }
+
+            @Html.HiddenFor(x => x.Id, new { @class = "md-input", @id = "txtID" })
+
+            <div class="row mn-t-15" id="Toaddauthorized">
+              <div class="col-5">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  @Html.Label("Skill")
+                  @Html.DropDownList("Skill", (IEnumerable<SelectListItem>)Skilllist, new { @class = "md-input", @id = "ddlSkillID" })
+                </div>
+              </div>
+              <div class="col-2 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  <input id="btnSKILLS" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              $('#btnSKILLS').click(function (e) {
+                e.preventDefault(); // <------------------ stop default behaviour of button
+                // Load new data
+                var v_ControlID = $("#txtID").val();
+                var v_SkillID = $("#ddlSkillID").val();
+
+                var req = { ControlID: v_ControlID, SkillID: v_SkillID };
+                $.ajax({
+                  type: "POST",
+                  url: "/Manage/User/AddSKILLS",
+                  async: false,
+                  contentType: "application/json; charset=utf-8",
+                  data: JSON.stringify(req),
+                  success: function () {
+                    // Reload Grid
+                    updateSKILLS();
+                  }
+                })
+              });
+
+              function updateSKILLS() {
+                var grid = new MvcGrid(document.querySelector('#mvcSKILLS'));
+                grid.requestType = 'post';
+                grid.reload();
+              };
+
+              $(document).on('click', '#mvcSKILLS>table>tbody>tr>td>a.delRow', function (e) {
+                e.preventDefault(); // <------------------ stop default behaviour of button
+                var target = $(this).attr("href");
+
+                $.ajax({
+                  type: "POST",
+                  url: target,
+                  async: false,
+                  contentType: "application/json; charset=utf-8",
+                  success: function () {
+                    // Reload Grid
+                    updateSKILLS();
+                  }
+                })
+              });
+
+            </script>
+
+
+
+
+
+          </li>
+        }
+
+
+        <li aria-hidden="true">
+
+          <div class="uk-grid">
+            <div class="uk-width-1-1">
+              <p class="request-info mn-b-10">Update Alerts.</p>
+            </div>
+          </div>
+
+
+          @Html.AjaxGrid(Url.Action("GetAlerts", "User", new { id = Model.Id }))
+
+          @{
+            var Arealist = Firstronic.Framework.Functions.Dropdowns.GetAreasList(
+              includeAll: true,
+              activeReport: true);
+
+            var Customerlist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT 0 AS [CustomerID], 'ALL' AS [CustomerName] UNION ALL SELECT [CustomerID], [CustomerName] FROM [CS_idt_external_customers] ORDER BY [CustomerID]");
+
+
+            var optionsParent = new List<SelectListItem>();
+
+            var o = new SelectListItem
+            {
+              Value = "1",
+              Text = "Alerts",
+              Selected = true
+            };
+            optionsParent.Add(o);
+            o = new SelectListItem
+            {
+              Value = "2",
+              Text = "Tickets",
+              Selected = false
+            };
+            optionsParent.Add(o);
+
+          }
+
+          @Html.HiddenFor(x => x.Id, new { @class = "md-input", @id = "txtID" })
+
+          <div class="row mn-t-15" id="Toaddauthorized">
+            <div class="col-5">
+              <div class="p-0 input-group mb-3 mn-r-10">
+                @Html.Label("Area")
+                @Html.DropDownList("Area", (IEnumerable<SelectListItem>)Arealist, new { @class = "md-input", @id = "ddlArea" })
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="p-0 input-group mb-3 mn-r-10">
+                @Html.Label("Customer")
+                @Html.DropDownList("Customer", (IEnumerable<SelectListItem>)Customerlist, new { @class = "md-input", @id = "ddlCustomer" })
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="p-0 input-group mb-3 mn-r-10">
+                @Html.Label("Type")
+                @Html.DropDownList("Type", (IEnumerable<SelectListItem>)optionsParent, new { @class = "md-input", @id = "ddlSuscription" })
+              </div>
+            </div>
+            <div class="col-2 ">
+              <div class="p-0 input-group mb-3 mn-r-10">
+                <input id="btnAlerts" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+            $('#btnAlerts').click(function (e) {
+              e.preventDefault(); // <------------------ stop default behaviour of button
+              // Load new data
+              var v_ControlID = $("#txtID").val();
+              var v_Area = $("#ddlArea").val();
+              var v_Customer = $("#ddlCustomer").val();
+              var v_Suscription = $("#ddlSuscription").val();
+
+
+              var req = { UserID: v_ControlID, Area: v_Area, Customer: v_Customer, Suscription: v_Suscription };
+              $.ajax({
+                type: "POST",
+                url: "/Manage/User/AddAlerts",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(req),
+                success: function () {
+                  // Reload Grid
+                  updateAlerts();
+                }
+              })
+            });
+
+            function updateAlerts() {
+              var grid = new MvcGrid(document.querySelector('#mvcAlerts'));
+              grid.requestType = 'post';
+              grid.reload();
+            };
+
+            $(document).on('click', '#mvcAlerts>table>tbody>tr>td>a.delRow', function (e) {
+              e.preventDefault(); // <------------------ stop default behaviour of button
+              var target = $(this).attr("href");
+
+              $.ajax({
+                type: "POST",
+                url: target,
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                  // Reload Grid
+                  updateAlerts();
+                }
+              })
+            });
+
+          </script>
+        </li>
+        <li aria-hidden="true">
+          <div class="uk-grid">
+            <div class="uk-width-1-1">
+              <p class="request-info mn-b-10">Add Suscriptions.</p>
+            </div>
+          </div>
+
+          @Html.AjaxGrid(Url.Action("GetSuscriptionsUser", "User", new { id = Model.ControlID, UserID = Model.Id }))
+
+          @{
+            //var reportlist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [id],[Reporte] FROM [IT_idt_reports] Order by Reporte ASC");
+          }
+
+          <div class="row mn-t-15" id="Toaddauthorized">
+            <div class="col-5">
+              <div class="p-0 input-group mb-3 mn-r-10">
+                @Html.Label("Report")
+                @Html.DropDownList("Report", (IEnumerable<SelectListItem>)reportlist, new { @class = "md-input", @id = "ddlReportID2" })
+              </div>
+            </div>
+            <div class="col-2 ">
+              <div class="p-0 input-group mb-3 mn-r-10">
+                <input id="btnSuscriptionsUser" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+            $('#btnSuscriptionsUser').click(function (e) {
+              e.preventDefault(); // <------------------ stop default behaviour of button
+              // Load new data
+              var v_UserID = $("#txtID").val();
+              var v_ControlID = $("#txtControlID").val();
+              var v_ReportID = $("#ddlReportID2").val();
+
+              var req = { ControlID: v_ControlID, ReportID: v_ReportID, v_UserID: v_UserID };
+
+              $.ajax({
+                type: "POST",
+                url: "/Manage/User/AddSuscriptionsUser",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(req),
+                success: function () {
+                  // Reload Grid
+                  updateSuscriptionsUser();
+                }
+              })
+            });
+
+            function updateSuscriptionsUser() {
+              var grid = new MvcGrid(document.querySelector('#mvcSuscriptionsUser'));
+              grid.requestType = 'post';
+              grid.reload();
+            };
+
+            $(document).on('click', '#mvcSuscriptionsUser>table>tbody>tr>td>a.delRow', function (e) {
+              e.preventDefault(); // <------------------ stop default behaviour of button
+              var target = $(this).attr("href");
+
+              $.ajax({
+                type: "POST",
+                url: target,
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                  // Reload Grid
+                  updateSuscriptionsUser();
+                }
+              })
+            });
+
+          </script>
+        </li>
+      }
+
+    </ul>
+    }
+  </div>
+</div>

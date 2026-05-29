@@ -1,0 +1,157 @@
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web.Mvc;
+using Firstronic.Framework.Data;
+
+namespace Firstronic.Areas.Manage.Controllers
+{
+  [Authorize(Roles = "BF Administrator")]
+  public class ReportsController : BaseSecurityController
+  {
+    private readonly DataContext db;
+
+    #region Ctor
+
+    public ReportsController()
+    {
+      db = new DataContext();
+    }
+
+    #endregion Ctor
+
+    /// <summary>
+    /// Main report page for Role & Position Audit
+    /// </summary>
+    public ActionResult Index()
+    {
+      return View();
+    }
+
+    /// <summary>
+    /// Section 1: Roles with User Members
+    /// Returns roles with member counts and expandable member lists
+    /// </summary>
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult GetRolesWithMembers(bool activeOnly = true)
+    {
+      // Query 1: Get all roles with user counts
+      var rolesQuery = @"
+        SELECT
+          AspNetRoles.Id,
+          AspNetRoles.Name,
+          AspNetRoles.Facility_Key,
+          COUNT(AspNetUserRoles.UserId) AS MemberCount
+        FROM AspNetRoles
+        LEFT JOIN AspNetUserRoles ON AspNetUserRoles.RoleId = AspNetRoles.Id
+        WHERE AspNetRoles.IsVisible = 1
+        GROUP BY AspNetRoles.Id, AspNetRoles.Name, AspNetRoles.Facility_Key
+        ORDER BY AspNetRoles.Name ASC";
+
+      SqlParameter[] parameters = new SqlParameter[] { };
+      DataTable dtRoles = Firstronic.Framework.Queries.GetDatatableFromQuery(rolesQuery, parameters);
+
+      ViewBag.ActiveOnly = activeOnly;
+      return PartialView("_RolesWithMembers", dtRoles);
+    }
+
+    /// <summary>
+    /// Get members for a specific role (called via AJAX for expand/collapse)
+    /// </summary>
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public JsonResult GetRoleMembers(string roleId, bool activeOnly = true)
+    {
+      var membersQuery = @"
+        SELECT
+          AspNetUserRoles.RoleId,
+          AspNetUserRoles.UserId,
+          AspNetUsers.Name,
+          AspNetUsers.Surname,
+          AspNetUsers.Badge,
+          AspNetUsers.UserName,
+          AspNetUsers.IsActive
+        FROM AspNetUserRoles
+        INNER JOIN AspNetUsers ON AspNetUserRoles.UserId = AspNetUsers.Id
+        WHERE AspNetUserRoles.RoleId = @RoleId
+          AND (@ActiveOnly = 0 OR AspNetUsers.IsActive = 1)
+        ORDER BY AspNetUsers.Name ASC, AspNetUsers.Surname ASC";
+
+      SqlParameter[] parameters = new SqlParameter[]
+      {
+        new SqlParameter("@RoleId", SqlDbType.NVarChar) { Value = roleId },
+        new SqlParameter("@ActiveOnly", SqlDbType.Bit) { Value = activeOnly }
+      };
+
+      DataTable dtMembers = Firstronic.Framework.Queries.GetDatatableFromQuery(membersQuery, parameters);
+
+      // Convert DataTable to anonymous objects for JSON serialization
+      var members = dtMembers.AsEnumerable().Select(row => new
+      {
+        UserId = row["UserId"].ToString(),
+        Name = row["Name"].ToString(),
+        Surname = row["Surname"].ToString(),
+        Badge = row["Badge"].ToString(),
+        UserName = row["UserName"].ToString(),
+        IsActive = Convert.ToBoolean(row["IsActive"])
+      }).ToList();
+
+      return Json(members, JsonRequestBehavior.AllowGet);
+    }
+
+    /// <summary>
+    /// Section 2: Users Without Position Assignments
+    /// Returns users who have role assignments but no position assigned
+    /// </summary>
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult GetUsersWithoutPosition(bool activeOnly = true)
+    {
+      // Query 3: Users without positions but with role assignments
+      var usersQuery = @"
+        SELECT DISTINCT
+          AspNetUsers.Id,
+          AspNetUsers.Name,
+          AspNetUsers.Surname,
+          AspNetUsers.Badge,
+          AspNetUsers.UserName,
+          AspNetUsers.IsActive,
+          STUFF((
+            SELECT ', ' + AspNetRoles.Name
+            FROM AspNetRoles
+            INNER JOIN AspNetUserRoles ON AspNetUserRoles.RoleId = AspNetRoles.Id
+            WHERE AspNetUserRoles.UserId = AspNetUsers.Id
+            FOR XML PATH(''), TYPE
+          ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS RoleNames
+        FROM AspNetUsers
+        WHERE EXISTS (
+          SELECT 1 FROM AspNetUserRoles
+          WHERE AspNetUserRoles.UserId = AspNetUsers.Id
+        )
+        AND NOT EXISTS (
+          SELECT 1 FROM AspNetUserPositions
+          WHERE AspNetUserPositions.UserId = AspNetUsers.Id
+        )
+        AND (@ActiveOnly = 0 OR AspNetUsers.IsActive = 1)
+        ORDER BY AspNetUsers.Name ASC, AspNetUsers.Surname ASC";
+
+      SqlParameter[] parameters = new SqlParameter[]
+      {
+        new SqlParameter("@ActiveOnly", SqlDbType.Bit) { Value = activeOnly }
+      };
+
+      DataTable dtUsers = Firstronic.Framework.Queries.GetDatatableFromQuery(usersQuery, parameters);
+
+      ViewBag.ActiveOnly = activeOnly;
+      return PartialView("_UsersWithoutPosition", dtUsers);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+      if (disposing)
+      {
+        db.Dispose();
+      }
+      base.Dispose(disposing);
+    }
+  }
+}

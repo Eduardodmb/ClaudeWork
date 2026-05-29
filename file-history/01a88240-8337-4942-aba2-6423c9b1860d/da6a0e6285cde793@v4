@@ -1,0 +1,309 @@
+@{
+  ViewBag.Title = "Role & Position Audit Report";
+}
+
+@section head
+{
+  <style nonce="@Html.ScriptNonce()">
+    .report-section {
+      margin-bottom: 30px;
+    }
+
+    .filter-section {
+      background-color: #f5f5f5;
+      padding: 20px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .warning-section {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .role-members-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .role-members-table th,
+    .role-members-table td {
+      padding: 8px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .role-members-table th {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+
+    .role-members-table tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .role-members-table tbody tr:hover {
+      background-color: #e9ecef;
+    }
+
+    .expand-btn {
+      cursor: pointer;
+      color: #007bff;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    .expand-btn:hover {
+      color: #0056b3;
+    }
+
+    .member-list {
+      display: none;
+      padding: 10px;
+      background-color: #f8f9fa;
+      margin-top: 5px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+    }
+
+    .member-list table {
+      width: 100%;
+      margin: 0;
+    }
+
+    .member-list th {
+      background-color: #6c757d;
+      color: white;
+      padding: 6px;
+      font-size: 0.9em;
+    }
+
+    .member-list td {
+      padding: 6px;
+      font-size: 0.9em;
+    }
+
+    .badge-inactive {
+      background-color: #dc3545;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.8em;
+    }
+
+    .badge-active {
+      background-color: #28a745;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.8em;
+    }
+
+    /* Print Styling */
+    @@media print {
+      header,
+      footer,
+      .sidebar,
+      .md-card-toolbar-actions,
+      .noPrint,
+      .filter-section {
+        display: none !important;
+      }
+
+      .main-content {
+        padding: 0 !important;
+      }
+
+      .md-card {
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+
+      .report-section {
+        page-break-inside: avoid;
+      }
+
+      table {
+        page-break-inside: auto;
+      }
+
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+
+      .member-list {
+        display: block !important;
+      }
+
+      .expand-btn {
+        display: none;
+      }
+    }
+  </style>
+}
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text">Role & Position Audit Report</h3>
+    <div class="md-card-toolbar-actions">
+      <button onclick="window.print()" class="md-btn md-btn-primary noPrint">
+        <i class="fa fa-print"></i> Print Report
+      </button>
+    </div>
+  </div>
+  <div class="md-card-content">
+    <div class="filter-section noPrint">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chkActiveOnly" checked />
+            <label class="form-check-label" for="chkActiveOnly">
+              Active Users Only
+            </label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <button id="btnGenerateReport" class="md-btn md-btn-primary md-btn-block">
+            <i class="fa fa-refresh"></i> Generate Report
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-muted">
+      This report provides a comprehensive audit of user access and role assignments.
+      Use this for compliance reviews and identifying users who need position assignments.
+    </p>
+  </div>
+</div>
+
+<!-- Section 1: Roles with Members -->
+<div class="md-card report-section">
+  <div class="md-card-toolbar">
+    <h4 class="md-card-toolbar-heading-text">Section 1: Roles with User Members</h4>
+  </div>
+  <div class="md-card-content" id="RolesMembersSection">
+    <p class="text-muted">Click "Generate Report" to load data...</p>
+  </div>
+</div>
+
+<!-- Section 2: Users Without Positions -->
+<div class="md-card report-section">
+  <div class="md-card-toolbar">
+    <h4 class="md-card-toolbar-heading-text">Section 2: Users Without Position Assignments</h4>
+  </div>
+  <div class="md-card-content" id="UsersWithoutPositionSection">
+    <p class="text-muted">Click "Generate Report" to load data...</p>
+  </div>
+</div>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $(document).ready(function () {
+    // Generate Report button click handler
+    $('#btnGenerateReport').click(function (e) {
+      e.preventDefault();
+      generateReport();
+    });
+
+    // Auto-load report on page load
+    generateReport();
+  });
+
+  function generateReport() {
+    var activeOnly = $('#chkActiveOnly').is(':checked');
+
+    // Show loading indicator
+    WaitingForm_Start();
+
+    // Load Section 1: Roles with Members
+    $('#RolesMembersSection').load('@Url.Action("GetRolesWithMembers", "Reports", new { area = "Manage" })', {
+      activeOnly: activeOnly
+    }, function (response, status, xhr) {
+      if (status === "error") {
+        $('#RolesMembersSection').html('<div class="alert alert-danger">Error loading roles data: ' + xhr.statusText + '</div>');
+      }
+    });
+
+    // Load Section 2: Users Without Position
+    $('#UsersWithoutPositionSection').load('@Url.Action("GetUsersWithoutPosition", "Reports", new { area = "Manage" })', {
+      activeOnly: activeOnly
+    }, function (response, status, xhr) {
+      if (status === "error") {
+        $('#UsersWithoutPositionSection').html('<div class="alert alert-danger">Error loading users data: ' + xhr.statusText + '</div>');
+      }
+      WaitingForm_Stop();
+    });
+  }
+
+  // Function to expand/collapse role members (called from partial view)
+  window.toggleRoleMembers = function (roleId, roleName) {
+    var $memberDiv = $('#members-' + roleId);
+
+    if ($memberDiv.is(':visible')) {
+      // Collapse
+      $memberDiv.slideUp();
+      $('#expand-icon-' + roleId).removeClass('fa-chevron-up').addClass('fa-chevron-down');
+    } else {
+      // Check if already loaded
+      if ($memberDiv.data('loaded')) {
+        $memberDiv.slideDown();
+        $('#expand-icon-' + roleId).removeClass('fa-chevron-down').addClass('fa-chevron-up');
+      } else {
+        // Load members via AJAX
+        var activeOnly = $('#chkActiveOnly').is(':checked');
+
+        $.ajax({
+          url: '@Url.Action("GetRoleMembers", "Reports", new { area = "Manage" })',
+          type: 'POST',
+          data: { roleId: roleId, activeOnly: activeOnly },
+          success: function (members) {
+            if (members.length === 0) {
+              $memberDiv.html('<p class="text-muted"><em>No members found.</em></p>');
+            } else {
+              var html = '<table class="table table-sm table-bordered mb-0">';
+              html += '<thead><tr>';
+              html += '<th>Name</th>';
+              html += '<th>Badge</th>';
+              html += '<th>Username</th>';
+              html += '<th>Status</th>';
+              html += '</tr></thead><tbody>';
+
+              $.each(members, function (index, member) {
+                html += '<tr>';
+                html += '<td>' + member.Name + ' ' + member.Surname + '</td>';
+                html += '<td>' + member.Badge + '</td>';
+                html += '<td>' + member.UserName + '</td>';
+                html += '<td>';
+                if (member.IsActive) {
+                  html += '<span class="badge-active">Active</span>';
+                } else {
+                  html += '<span class="badge-inactive">Inactive</span>';
+                }
+                html += '</td>';
+                html += '</tr>';
+              });
+
+              html += '</tbody></table>';
+              $memberDiv.html(html);
+            }
+
+            $memberDiv.data('loaded', true);
+            $memberDiv.slideDown();
+            $('#expand-icon-' + roleId).removeClass('fa-chevron-down').addClass('fa-chevron-up');
+          },
+          error: function (xhr, status, error) {
+            $memberDiv.html('<div class="alert alert-danger">Error loading members: ' + error + '</div>');
+            $memberDiv.slideDown();
+          }
+        });
+      }
+    }
+  };
+</script>

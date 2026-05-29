@@ -1,0 +1,107 @@
+# IT Documentation - Document ID Control
+
+**Purpose:** Central registry for all IT documentation across Safari Circuits projects.
+
+**Last Updated:** 2026-05-11
+
+---
+
+## Document ID Format
+
+| Format | Description | Example | Filename Example |
+|--------|-------------|---------|------------------|
+| **IT-XXX** | General IT documents | IT-017 | `IT-017_IT_Computer_Use_Policy.md` |
+| **IT-XXX W1** | Work instructions / manuals | IT-030 W1 | `IT-030_W1_BeFirst_Part_Number_Config.md` |
+| **IT-XXX W1 FN** | Multiple topics under same procedure | IT-030 W1 F1 | `IT-030_W1_F1_BeFirst_General_Settings.md` |
+
+**Filename Convention:** `ID_AppName_Description.md`
+- ID: IT-XXX or IT-XXX_W1 or IT-XXX_W1_FN
+- AppName: BeFirst, Plex, or IT
+- Description: Short descriptive name (use underscores for spaces)
+
+**F Number Usage:** Different topics within the same procedure (F1, F2, F3...)
+
+---
+
+## Document Registry
+
+### Complete Document List
+
+| ID | Type | Title | App | Owner | F1 | F2 | F3 | F4 | F5 | F8 | F9 | Status | Path |
+|----|------|-------|-----|-------|----|----|----|----|----|----|----|----|------|
+| IT-001 W1 | Work Instruction | Packout Verification Software | BeFirst | IT | PVS Yield and Issue Data | | | | | | | Legacy (DOCX) | BeFirst\01_User_Manuals |
+| IT-002 W1 | Work Instruction | Packout Verification Serial Number Tracking | BeFirst | IT | | | | | | | | Legacy (DOCX) | BeFirst\01_User_Manuals |
+| IT-003 W1 | Work Instruction | Solicitud y Asignacion de Equipos de Computo | IT | IT | | | | | | | | Legacy (DOCX) | IT Hub\02_Procedures |
+| IT-010 W1 | Work Instruction | Development and Validation of Labels (JZ) | BeFirst | IT | | | | | | | | Legacy (DOCX) | BeFirst\01_User_Manuals |
+| IT-011 | Form | IT User/Admin Charter | IT | IT | Form IT User Charter | Form IT Admin Charter | | | | | | Legacy (DOCX) | IT Hub\05_Forms |
+| IT-012 | Form | Safari GR PC Install Checklist | IT | IT | | | | | | | | Legacy (XLSX) | IT Hub\05_Forms |
+| IT-013 W1 | Work Instruction | Software Development Process | BeFirst | IT | Software Dev Main Doc | Module Feature Scope | Software Requirements Specs | Release Plan | PLEX Software Validation | End User Template | Module Validation Report | Legacy (DOCX) | BeFirst\01_User_Manuals |
+| IT-015 | Procedure | Incident Response Plan | IT | IT | Incident Response Worksheet | | | | | | | Legacy (DOCX) | IT Hub\02_Procedures |
+| IT-016 | Procedure | Risk Assessment | IT | IT | Server Request Form | | | | | | | Legacy (DOCX/XLSX) | IT Hub\02_Procedures |
+| IT-017 | Policy | Computer Use Policy | IT | IT | | | | | | | | Legacy (DOCX) | IT Hub\01_Policies |
+| IT-020 | Form | Incident Report Template | IT | IT | | | | | | | | Legacy (DOCX) | IT Hub\05_Forms |
+| IT-030 W1 | Work Instruction | Part Number Configuration | BeFirst | IT | | | | | | | | New (MD) | BeFirst\01_User_Manuals_MD |
+
+---
+
+## Document Types
+
+- **Policy** - IT governance and compliance documents
+- **Procedure** - Step-by-step IT operational procedures
+- **Work Instruction** - Detailed work instructions and user manuals
+- **Form** - Templates, checklists, and forms
+- **Manual** - Comprehensive user or system manuals
+
+---
+
+## Status Values
+
+- **New (MD)** - New Markdown document in new location
+- **Migrated** - Converted from DOCX to MD and moved to new location
+- **Legacy (DOCX)** - Still in old location as DOCX file
+- **Legacy (XLSX)** - Excel file in old location
+- **Draft** - Work in progress
+- **Archived** - Old version, superseded by newer document
+
+---
+
+## Next Available IDs
+
+- **Work Instructions (W1):** IT-031 W1
+- **General IT (Policies/Procedures/Forms):** IT-021
+
+---
+
+## Directory Structure
+
+```
+S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\
+├── Enterprise Solution Architecture\
+│   └── Enterprise Systems\
+│       ├── BeFirst\
+│       │   ├── 01_User_Manuals\             ← Legacy DOCX files
+│       │   └── 01_User_Manuals_MD\          ← New MD files
+│       │       └── assets\                  ← Screenshots
+│       └── Plex\
+│           ├── 01_User_Manuals\             ← Legacy DOCX files
+│           └── 01_User_Manuals_MD\          ← New MD files
+│               └── assets\                  ← Screenshots
+└── Grand Rapids IT Hub\
+    ├── 01_Policies\                         ← IT policies (IT-XXX)
+    ├── 02_Procedures\                       ← IT procedures (IT-XXX)
+    ├── 05_Forms\                            ← IT forms and templates (IT-XXX)
+    ├── DOCUMENT-ID-CONTROL.md               ← This file
+    └── README-DOCUMENT-CONTROL.md           ← Quick reference
+```
+
+---
+
+## Notes
+
+- All Markdown files use naming convention: `ID_AppName_Description.md`
+- Screenshots stored in `assets/` subfolder within each manual directory
+- Document control maintained at IT Hub level
+- F numbers track different topics/forms under the same procedure ID
+- Old DOCX/XLSX files remain in original folders until migrated
+- IT-001 shows as "W1" (was listed as "WI" - confirm if correct)
+- Some documents have non-sequential F numbers (e.g., F1, F2, F3, F4, F5, F8, F9)

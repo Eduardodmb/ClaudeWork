@@ -1,0 +1,197 @@
+@using Firstronic.Areas.Manage.Controllers
+@model tbl_Common_Building
+
+@{
+    bool isNew = !(Model != null && Model.Building_Key.HasValue && Model.Building_Key.Value > 0);
+}
+
+@using (Html.BeginForm())
+{
+
+<div class="container container-big" id="ContainerBig">
+    <div class="row">
+        <div class="col-md-9">
+            @Html.Partial("_Breadcrumb", isNew ? "Create Building" : "Edit Building")
+
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("", new { @class = "hide" })
+
+            @Html.HiddenFor(x => x.Building_Key)
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                @Html.LabelFor(x => x.Building_Key, new { @class = "m-0 fs-14" })
+                            </span>
+                        </div>
+                        @Html.TextBoxFor(x => x.Building_Key, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                @Html.LabelFor(x => x.Building_Code, new { @class = "m-0 fs-14" })
+                            </span>
+                        </div>
+                        @Html.TextBoxFor(x => x.Building_Code, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                @Html.LabelFor(x => x.Name, new { @class = "m-0 fs-14" })
+                            </span>
+                        </div>
+                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                @Html.LabelFor(x => x.Facility_Key, new { @class = "m-0 fs-14" })
+                            </span>
+                        </div>
+                        @Html.DropDownListFor(x => x.Facility_Key, Model.FacilityList, "-- Select Facility --", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                @Html.LabelFor(x => x.Default_Location, new { @class = "m-0 fs-14" })
+                            </span>
+                        </div>
+                        @Html.TextBoxFor(x => x.Default_Location, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                @Html.LabelFor(x => x.Receiving_Location, new { @class = "m-0 fs-14" })
+                            </span>
+                        </div>
+                        @Html.TextBoxFor(x => x.Receiving_Location, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                @Html.LabelFor(x => x.Shipping_Location, new { @class = "m-0 fs-14" })
+                            </span>
+                        </div>
+                        @Html.TextBoxFor(x => x.Shipping_Location, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                @Html.LabelFor(x => x.Width, new { @class = "m-0 fs-14" })
+                            </span>
+                        </div>
+                        @Html.TextBoxFor(x => x.Width, new { @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                @Html.LabelFor(x => x.Height, new { @class = "m-0 fs-14" })
+                            </span>
+                        </div>
+                        @Html.TextBoxFor(x => x.Height, new { @class = "form-control", @type = "number" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h5 class="border-bottom pb-2 mb-3">Facility Types</h5>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check mb-3">
+                        @Html.CheckBoxFor(x => x.Main_Facility, new { @class = "form-check-input" })
+                        @Html.LabelFor(x => x.Main_Facility, new { @class = "form-check-label" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check mb-3">
+                        @Html.CheckBoxFor(x => x.PRODUCTION, new { @class = "form-check-input" })
+                        @Html.LabelFor(x => x.PRODUCTION, new { @class = "form-check-label" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check mb-3">
+                        @Html.CheckBoxFor(x => x.WAREHOUSE, new { @class = "form-check-input" })
+                        @Html.LabelFor(x => x.WAREHOUSE, new { @class = "form-check-label" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check mb-3">
+                        @Html.CheckBoxFor(x => x.SHIPPING, new { @class = "form-check-input" })
+                        @Html.LabelFor(x => x.SHIPPING, new { @class = "form-check-label" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group mt-4 pt-4 border-top">
+                    <button type="submit" name="action:@(isNew ? "Create": "Edit")" class="md-btn md-btn-primary md-btn-small">
+                         Save
+                    </button>
+
+                    @if (!isNew)
+                    {
+                        @(Html.Fst().ConfirmModal("Delete", "Building", new { @id = Model.Building_Key })
+                                                                             .Title("Confirm Delete")
+                                                                             .Content("Are you sure do you want to delete this building?")
+                                                                             .For(Html.Fst().Button().Text("Delete").Color(BootstrapColor.Secondary).Size(ButtonSize.Small))
+                        )
+                    }
+
+                    <div class="d-inline-block">
+                        <span class="mx-2 text-light font-weight-light fs-15">or</span>
+                        <i class="fas fa-long-arrow-alt-left fs-13 text-primary o-8"></i>
+                        <a href="@Url.Action("Index", "Building")" class="m-link fs-15"> Back to list</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="pageSide">
+                <ul class="js-scroll-nav duik-content-nav">
+                    @if (!isNew)
+                    {
+                        <li class="duik-content-nav__item contents mt-4">Actions</li>
+                        <li>
+                            <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("Create", "Building")">
+                                @Resources.Actions.Add
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+}

@@ -1,0 +1,98 @@
+# IT Documentation - Document ID Control
+
+**Purpose:** Central registry for all IT documentation across Safari Circuits projects.
+
+**Last Updated:** 2026-05-11
+
+---
+
+## Document ID Format
+
+| Format | Description | Example | Filename Example |
+|--------|-------------|---------|------------------|
+| **IT-XXX** | General IT documents | IT-001 | `IT-001_IT_Network_Policy.md` |
+| **IT-XXX W1** | Work instructions / manuals | IT-030 W1 | `IT-030_W1_BeFirst_Part_Number_Config.md` |
+| **IT-XXX W1 FN** | Multiple topics under same procedure | IT-030 W1 F1 | `IT-030_W1_F1_BeFirst_General_Settings.md` |
+
+**Filename Convention:** `ID_AppName_Description.md`
+- ID: IT-XXX or IT-XXX_W1 or IT-XXX_W1_FN
+- AppName: BeFirst, Plex, or IT
+- Description: Short descriptive name (use underscores for spaces)
+
+**F Number Usage:** Different topics within the same procedure (F1, F2, F3...)
+
+---
+
+## Document Registry
+
+### BeFirst Documents
+
+| ID | Title | Owner | Status | Path |
+|----|-------|-------|--------|------|
+| IT-030 W1 | Part Number Configuration | IT | New (MD) | BeFirst\01_User_Manuals_MD |
+
+### Plex Documents
+
+| ID | Title | Owner | Status | Path |
+|----|-------|-------|--------|------|
+| (to be added) | | | | Plex\01_User_Manuals_MD |
+
+### IT General Documents
+
+#### Policies
+
+| ID | Title | Owner | Status | Path |
+|----|-------|-------|--------|------|
+| (to be added) | | | | Grand Rapids IT Hub\01_Policies |
+
+#### Procedures
+
+| ID | Title | Owner | Status | Path |
+|----|-------|-------|--------|------|
+| (to be added) | | | | Grand Rapids IT Hub\02_Procedures |
+
+---
+
+## Status Values
+
+- **New (MD)** - New Markdown document in new location
+- **Migrated** - Converted from DOCX to MD and moved to new location
+- **Legacy (DOCX)** - Still in old location as DOCX file
+- **Draft** - Work in progress
+- **Archived** - Old version, superseded by newer document
+
+---
+
+## Next Available IDs
+
+- **BeFirst:** IT-031 W1
+- **Plex:** IT-030 W1 (available)
+- **IT General:** IT-030 (available)
+
+---
+
+## Directory Structure
+
+```
+S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\
+├── Enterprise Solution Architecture\
+│   └── Enterprise Systems\
+│       ├── BeFirst\
+│       │   └── 01_User_Manuals_MD\          ← BeFirst manuals (IT-XXX W1)
+│       └── Plex\
+│           └── 01_User_Manuals_MD\          ← Plex manuals (IT-XXX W1)
+└── Grand Rapids IT Hub\
+    ├── 01_Policies\                         ← IT policies (IT-XXX)
+    ├── 02_Procedures\                       ← IT procedures (IT-XXX)
+    └── DOCUMENT-ID-CONTROL.md               ← This file
+```
+
+---
+
+## Notes
+
+- All Markdown files use naming convention: `ID_AppName_Description.md`
+- Screenshots stored in `assets/` subfolder within each manual directory
+- Document control maintained at IT Hub level
+- F numbers track different topics under the same procedure ID
+- Old DOCX files remain in `01_User_Manuals` folder until migrated

@@ -1,0 +1,399 @@
+#!/usr/bin/env python3
+"""
+Document ID Compliance Checker
+Validates document filenames against DOCUMENT-ID-CONTROL.md standards
+"""
+
+import os
+import re
+import csv
+from pathlib import Path
+from typing import Dict, List, Tuple
+from dataclasses import dataclass, asdict
+from collections import defaultdict
+from datetime import datetime
+
+
+@dataclass
+class DocumentInfo:
+    """Information about a document file"""
+    path: Path
+    filename: str
+    folder: str
+    is_compliant: bool
+    current_id: str = ""
+    suggested_id: str = ""
+    reason: str = ""
+
+
+class DocumentIDChecker:
+    """Checks document naming compliance against IT-XXX standard"""
+
+    # Expected format: IT-XXX or IT-XXX_W1 or IT-XXX_W1_FN
+    ID_PATTERN = re.compile(r'^IT-\d{3}(?:_W\d+)?(?:_F\d+)?')
+
+    # Standard filename format: ID_AppName_Description.ext
+    FILENAME_PATTERN = re.compile(
+        r'^(IT-\d{3}(?:_W\d+)?(?:_F\d+)?)[\s_](.+)\.(docx?|xlsx?|pdf|md|vsdx)$',
+        re.IGNORECASE
+    )
+
+    def __init__(self, base_path: str):
+        """
+        Initialize checker with base directory path
+
+        Args:
+            base_path: Root directory of IT Hub
+        """
+        self.base_path = Path(base_path)
+        self.folders_to_check = [
+            "01_Policies",
+            "02_Procedures",
+            "03_Architecture_and_infrastructure",
+            "05_Forms"
+        ]
+        self.used_ids = self._load_used_ids()
+
+    def _load_used_ids(self) -> set:
+        """Load IDs from DOCUMENT-ID-CONTROL.md"""
+        control_file = self.base_path / "DOCUMENT-ID-CONTROL.md"
+        used_ids = set()
+
+        if not control_file.exists():
+            print(f"Warning: {control_file} not found")
+            return used_ids
+
+        with open(control_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                # Match lines in the registry table
+                match = re.match(r'^\|\s*(IT-\d{3}(?:\s+W\d+)?)', line)
+                if match:
+                    # Normalize: IT-015 W1 → IT-015_W1
+                    doc_id = match.group(1).replace(' W', '_W')
+                    used_ids.add(doc_id)
+
+        return used_ids
+
+    def check_filename(self, filepath: Path, folder: str) -> DocumentInfo:
+        """
+        Check if a filename matches the expected pattern
+
+        Args:
+            filepath: Path to the file
+            folder: Folder name (for categorization)
+
+        Returns:
+            DocumentInfo object with compliance status
+        """
+        filename = filepath.name
+
+        # Skip archive folders
+        if "99_Archive" in str(filepath):
+            return DocumentInfo(
+                path=filepath,
+                filename=filename,
+                folder=folder,
+                is_compliant=True,
+                reason="Archived - skipped"
+            )
+
+        # Check if filename matches the pattern
+        match = self.FILENAME_PATTERN.match(filename)
+
+        if match:
+            doc_id = match.group(1)
+            description = match.group(2)
+            extension = match.group(3)
+
+            # Normalize ID format (replace spaces with underscores)
+            doc_id_normalized = doc_id.replace(' ', '_')
+
+            return DocumentInfo(
+                path=filepath,
+                filename=filename,
+                folder=folder,
+                is_compliant=True,
+                current_id=doc_id_normalized,
+                reason="Matches standard format"
+            )
+        else:
+            # Non-compliant - suggest an ID
+            suggested_id = self._suggest_id(filename, folder)
+            description = self._extract_description(filename)
+
+            # Build suggested filename
+            app_name = "IT"  # Default to IT
+            if "plex" in filename.lower():
+                app_name = "Plex"
+            elif "befirst" in filename.lower():
+                app_name = "BeFirst"
+
+            desc_formatted = description.replace(' ', '_')
+            suggested_filename = f"{suggested_id}_{app_name}_{desc_formatted}{filepath.suffix}"
+
+            return DocumentInfo(
+                path=filepath,
+                filename=filename,
+                folder=folder,
+                is_compliant=False,
+                suggested_id=suggested_filename,
+                reason="Does not match IT-XXX format"
+            )
+
+    def _suggest_id(self, filename: str, folder: str) -> str:
+        """
+        Suggest an ID for a non-compliant filename
+
+        Args:
+            filename: Current filename
+            folder: Folder containing the file
+
+        Returns:
+            Suggested ID (e.g., IT-021 or IT-021_W1)
+        """
+        # Check if it's a work instruction (SOP, manual, guide)
+        work_instruction_keywords = ['sop', 'manual', 'guide', 'instruction', 'setup']
+        is_work_instruction = any(kw in filename.lower() for kw in work_instruction_keywords)
+
+        # Find next available ID
+        next_id = self._find_next_available_id()
+
+        # Add W1 suffix for work instructions
+        if is_work_instruction and folder == "02_Procedures":
+            return f"{next_id}_W1"
+
+        return next_id
+
+    def _find_next_available_id(self) -> str:
+        """Find the next available IT-XXX ID"""
+        # Start from IT-021 (as per DOCUMENT-ID-CONTROL.md)
+        start_num = 21
+
+        for num in range(start_num, 999):
+            candidate = f"IT-{num:03d}"
+            # Check both base ID and W1 variants
+            if candidate not in self.used_ids and f"{candidate}_W1" not in self.used_ids:
+                return candidate
+
+        return "IT-999"  # Fallback
+
+    def _extract_description(self, filename: str) -> str:
+        """Extract a clean description from filename"""
+        # Remove extension
+        name_without_ext = Path(filename).stem
+
+        # Remove leading numbers and underscores (e.g., "01_", "02_")
+        name_cleaned = re.sub(r'^\d{2}_', '', name_without_ext)
+
+        # Replace underscores and multiple spaces with single space
+        name_cleaned = name_cleaned.replace('_', ' ')
+        name_cleaned = re.sub(r'\s+', ' ', name_cleaned)
+
+        # Clean up common patterns
+        name_cleaned = re.sub(r'\s*v\d+(\.\d+)?\s*$', '', name_cleaned)  # Remove version numbers
+        name_cleaned = re.sub(r'\s*SOP\s*', '', name_cleaned, flags=re.IGNORECASE)
+
+        return name_cleaned.strip()
+
+    def scan_folders(self) -> Dict[str, List[DocumentInfo]]:
+        """
+        Scan all configured folders for documents
+
+        Returns:
+            Dictionary mapping folder names to lists of DocumentInfo objects
+        """
+        results = defaultdict(list)
+
+        for folder in self.folders_to_check:
+            folder_path = self.base_path / folder
+
+            if not folder_path.exists():
+                print(f"Warning: Folder not found: {folder_path}")
+                continue
+
+            # Walk through all files in the folder
+            for root, dirs, files in os.walk(folder_path):
+                for file in files:
+                    filepath = Path(root) / file
+
+                    # Skip temp files
+                    if file.startswith('~$') or file.startswith('.'):
+                        continue
+
+                    # Check only relevant document types
+                    if filepath.suffix.lower() in ['.docx', '.doc', '.xlsx', '.xls', '.pdf', '.md', '.vsdx']:
+                        doc_info = self.check_filename(filepath, folder)
+                        results[folder].append(doc_info)
+
+        return results
+
+    def generate_report(self, results: Dict[str, List[DocumentInfo]]) -> str:
+        """
+        Generate a text report of compliance check results
+
+        Args:
+            results: Dictionary of scan results
+
+        Returns:
+            Formatted report string
+        """
+        report_lines = []
+        report_lines.append("=" * 80)
+        report_lines.append("DOCUMENT ID COMPLIANCE REPORT")
+        report_lines.append("=" * 80)
+        report_lines.append("")
+
+        total_files = 0
+        compliant_files = 0
+        non_compliant_files = 0
+        archived_files = 0
+
+        for folder, documents in sorted(results.items()):
+            report_lines.append(f"\n{'='*80}")
+            report_lines.append(f"FOLDER: {folder}")
+            report_lines.append(f"{'='*80}\n")
+
+            # Separate into categories
+            compliant = [d for d in documents if d.is_compliant and "Archived" not in d.reason]
+            non_compliant = [d for d in documents if not d.is_compliant]
+            archived = [d for d in documents if "Archived" in d.reason]
+
+            total_files += len(documents)
+            compliant_files += len(compliant)
+            non_compliant_files += len(non_compliant)
+            archived_files += len(archived)
+
+            # Compliant files
+            if compliant:
+                report_lines.append(f"[OK] COMPLIANT FILES ({len(compliant)}):")
+                report_lines.append("-" * 80)
+                for doc in sorted(compliant, key=lambda x: x.filename):
+                    report_lines.append(f"  [OK] {doc.current_id:15s} | {doc.filename}")
+                report_lines.append("")
+
+            # Non-compliant files
+            if non_compliant:
+                report_lines.append(f"[!!] NON-COMPLIANT FILES ({len(non_compliant)}):")
+                report_lines.append("-" * 80)
+                for doc in sorted(non_compliant, key=lambda x: x.filename):
+                    report_lines.append(f"  [!!] Current:   {doc.filename}")
+                    report_lines.append(f"       Suggested: {doc.suggested_id}")
+                    report_lines.append(f"       Reason:    {doc.reason}")
+                    report_lines.append("")
+
+            # Archived files
+            if archived:
+                report_lines.append(f"[AR] ARCHIVED FILES ({len(archived)}) - Skipped")
+                report_lines.append("-" * 80)
+                for doc in sorted(archived, key=lambda x: x.filename):
+                    report_lines.append(f"  [AR] {doc.filename}")
+                report_lines.append("")
+
+        # Summary
+        report_lines.append("\n" + "=" * 80)
+        report_lines.append("SUMMARY")
+        report_lines.append("=" * 80)
+        report_lines.append(f"Total files scanned:    {total_files}")
+        report_lines.append(f"  [OK] Compliant:          {compliant_files}")
+        report_lines.append(f"  [!!] Non-compliant:      {non_compliant_files}")
+        report_lines.append(f"  [AR] Archived (skipped): {archived_files}")
+        report_lines.append("")
+
+        if non_compliant_files > 0:
+            report_lines.append("ACTION REQUIRED:")
+            report_lines.append("  1. Review non-compliant files above")
+            report_lines.append("  2. Rename files using suggested IDs")
+            report_lines.append("  3. Update DOCUMENT-ID-CONTROL.md registry")
+            report_lines.append("  4. Follow format: ID_AppName_Description.ext")
+        else:
+            report_lines.append("[OK] All documents are compliant!")
+
+        report_lines.append("\n" + "=" * 80)
+
+        return "\n".join(report_lines)
+
+    def generate_csv_report(self, results: Dict[str, List[DocumentInfo]], output_path: Path):
+        """
+        Generate CSV report for easier tracking and bulk renaming
+
+        Args:
+            results: Dictionary of scan results
+            output_path: Path to save CSV file
+        """
+        with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
+            fieldnames = [
+                'Status',
+                'Folder',
+                'Current_Filename',
+                'Current_ID',
+                'Suggested_Filename',
+                'Suggested_ID_Only',
+                'Full_Path',
+                'Reason'
+            ]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+
+            for folder, documents in sorted(results.items()):
+                for doc in sorted(documents, key=lambda x: x.filename):
+                    # Skip archived
+                    if "Archived" in doc.reason:
+                        continue
+
+                    # Extract just the ID from suggested filename
+                    suggested_id_only = ""
+                    if doc.suggested_id:
+                        match = re.match(r'(IT-\d{3}(?:_W\d+)?(?:_F\d+)?)', doc.suggested_id)
+                        if match:
+                            suggested_id_only = match.group(1)
+
+                    writer.writerow({
+                        'Status': 'OK' if doc.is_compliant else 'NON-COMPLIANT',
+                        'Folder': folder,
+                        'Current_Filename': doc.filename,
+                        'Current_ID': doc.current_id,
+                        'Suggested_Filename': doc.suggested_id if not doc.is_compliant else '',
+                        'Suggested_ID_Only': suggested_id_only,
+                        'Full_Path': str(doc.path),
+                        'Reason': doc.reason
+                    })
+
+
+def main():
+    """Main execution function"""
+    # Set base path to current directory
+    base_path = Path(__file__).parent
+
+    print("Starting Document ID Compliance Check...")
+    print(f"Base path: {base_path}\n")
+
+    # Initialize checker
+    checker = DocumentIDChecker(base_path)
+
+    # Scan folders
+    results = checker.scan_folders()
+
+    # Generate report
+    report = checker.generate_report(results)
+
+    # Print to console
+    print(report)
+
+    # Save to file
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    report_file = base_path / f"document_compliance_report_{timestamp}.txt"
+    csv_file = base_path / f"document_compliance_report_{timestamp}.csv"
+
+    with open(report_file, 'w', encoding='utf-8') as f:
+        f.write(report)
+
+    # Generate CSV report
+    checker.generate_csv_report(results, csv_file)
+
+    print(f"\nReports saved:")
+    print(f"  Text: {report_file}")
+    print(f"  CSV:  {csv_file}")
+
+
+if __name__ == "__main__":
+    main()

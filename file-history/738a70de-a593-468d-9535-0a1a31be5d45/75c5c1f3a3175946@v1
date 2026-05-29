@@ -1,0 +1,104 @@
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web;
+
+namespace Firstronic.Framework.Account
+{
+  public class ApplicationUser : IdentityUser
+  {
+    public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+    {
+      var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+      return userIdentity;
+    }
+
+
+    public string NormalizedUserName { get; set; }
+
+    public string NormalizedEmail { get; set; }
+
+    [MaxLength(128)]
+    public string Name { get; set; }
+
+    public string Description { get; set; }
+
+    public string Location { get; set; }
+
+    [MaxLength(128)]
+    public string Surname { get; set; }
+    public int? PictureId { get; set; }
+    public bool IsActive { get; set; }
+
+    [Display(Name = "Badge")]
+    [MaxLength(128)]
+    public string Badge { get; set; }
+
+    public int? ControlID { get; set; }
+  }
+
+  public class ApplicationUserModel
+  {
+    public string Id { get; set; }
+
+    [Display(Name = "User Name")]
+    public string UserName { get; set; }
+
+    public string NormalizedUserName { get; set; }
+
+
+    [Display(Name = "Password")]
+    public string Password { get; set; }
+
+    [Display(Name = "Email")]
+    public string Email { get; set; }
+
+    public string NormalizedEmail { get; set; }
+
+    [Display(Name = "Email Confirmed")]
+    public bool EmailConfirmed { get; set; }
+
+    public string[] SelectedRoleNames { get; set; }
+
+    public List<ApplicationRoleModel> Roles { get; set; }
+
+    [Display(Name = "Name")]
+    [MaxLength(128)]
+    public string Name { get; set; }
+
+    [Display(Name = "Description")]
+    public string Description { get; set; }
+
+    [Display(Name = "Surname")]
+    [MaxLength(128)]
+    public string Surname { get; set; }
+
+    [Display(Name = "Location")]
+    [MaxLength(128)]
+    public string Location { get; set; }
+
+    [Display(Name = "Badge")]
+    [MaxLength(128)]
+    public string Badge { get; set; }
+
+    [Display(Name = "IsAdmin")]
+    public bool IsAdmin { get; set; }
+    [Display(Name = "Active")]
+    public bool IsActive { get; set; }
+
+    public int? ControlID { get; set; }
+
+    public int? AvatarId { get; set; }
+
+    [Display(Name = "Avatar")]
+    public string AvatarUrl { get; set; }
+
+
+
+  }
+}

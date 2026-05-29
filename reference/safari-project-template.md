@@ -1,0 +1,181 @@
+# Safari Circuits - {Project Name}
+
+## Project Overview
+
+**Goal:** {What you're trying to achieve}
+**Timeline:** {Start date} - {Target completion} (Decision: Week X, Implementation: X days)
+**Stakeholders:**
+- {Your name} (IT Systems Engineering Manager) - Project Lead
+- {Manager/Director} - Approval Authority
+- {Other stakeholders} - {Role in project}
+
+**Status:** {Planning | Research | Active | On Hold | Complete}
+
+---
+
+## Context for Claude
+
+{Brief description of what this project is about. Include:
+- Why this project exists (business need, compliance requirement, etc.)
+- Key terminology and acronyms
+- Relevant background that Claude needs to understand
+- Critical technical requirements or constraints}
+
+### Critical Requirements
+- {Requirement 1}
+- {Requirement 2}
+- {Requirement 3}
+
+---
+
+## Workspace Structure
+
+- **00-Inbox**: Quick captures, meeting notes, vendor emails, questions to process
+- **01-Research**: {What goes in research for THIS project}
+- **02-Drafts**: {Types of documents you'll create - presentations, reports, etc.}
+- **03-Deliverables**: Finalized outputs ready for team SharePoint
+
+---
+
+## Team SharePoint Locations
+
+**Published deliverables:** `S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Projects\{folder-name}`
+**Related folders:**
+- {Folder 1}: `S:\...\{path}`
+- {Folder 2}: `S:\...\{path}`
+
+> **IMPORTANT:** Work happens privately in this vault. Only finalized deliverables get published to team SharePoint.
+
+---
+
+## Key Resources
+
+- {Important document or system}: {Where to find it}
+- {External reference}: {URL or path}
+- {Stakeholder contacts}: {Names and emails}
+
+---
+
+## Common Tasks & Prompts
+
+### {Task Name 1}
+```
+{Describe what Claude should do}
+{Include specific details like format, location, what to include}
+Save to {folder}/[filename]-[date].{extension}
+```
+
+### {Task Name 2}
+```
+{Another common operation}
+```
+
+### {Task Name 3}
+```
+{Another task you'll frequently do}
+```
+
+---
+
+## Publishing Workflow
+
+1. **Draft Phase**
+   - Create document in `02-Drafts/`
+   - Iterate and refine with Claude Code
+   - Get internal review/feedback
+
+2. **Finalize Phase**
+   - Move polished document to `03-Deliverables/`
+   - Verify all sensitive info removed
+   - Final quality check
+
+3. **Publish to SharePoint**
+   ```powershell
+   # Manual copy (never auto-sync drafts!)
+   Copy-Item .\03-Deliverables\{filename} `
+             'S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Projects\{folder-name}\' -Force
+   ```
+
+4. **Notification**
+   - Email stakeholders with SharePoint link
+   - Schedule review meeting if needed
+
+---
+
+## Decision Timeline
+
+| Week | Milestone | Activities |
+|------|-----------|------------|
+| **Week 1** | {Milestone 1} | {Activities} |
+| **Week 2** | {Milestone 2} | {Activities} |
+| **Week 3** | {Milestone 3} | {Activities} |
+| **Week 4** | {Milestone 4} | {Activities} |
+
+**Target {Decision/Completion} Date:** {Set specific date}
+**Critical Deadline:** {If applicable}
+
+---
+
+## Decision Criteria Weighting
+
+{If this is a decision/evaluation project}
+
+| Criteria | Weight | Rationale |
+|----------|--------|-----------|
+| {Criterion 1} | XX% | {Why this matters} |
+| {Criterion 2} | XX% | {Why this matters} |
+| {Criterion 3} | XX% | {Why this matters} |
+
+---
+
+## Decision Log
+
+*Capture key decisions with `/learn` as they're made*
+
+- [{YYYY-MM-DD}] Project created in personal vault - work privately, publish finals to SharePoint
+- [{YYYY-MM-DD}] Decision: {What was decided and why}
+- [Add decisions as project progresses]
+
+---
+
+## Related Projects
+
+- {Related Project 1} ({How it relates})
+- {Related Project 2} ({How it relates})
+
+---
+
+## Project Aliases (PowerShell)
+
+Add to `~/.config/powershell/profile.ps1`:
+
+```powershell
+function {shortname} {
+    cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude_Safari\05-Projects\Safari-{Project-Name}"
+    claude
+}
+```
+
+Usage: Just type `{shortname}` to instantly open this project in Claude Code.
+
+---
+
+## Source Documents
+
+{List key source documents stored in 01-Research/}
+
+- {Document 1}: `01-Research/{filename}`
+- {Document 2}: `01-Research/{filename}`
+
+---
+
+## Notes for Future Reference
+
+{Anything else important about this project that doesn't fit above}
+
+{Delete this section if not needed}
+
+---
+
+*This project follows the Safari Circuits private vault + team SharePoint workflow.*
+*See: ~/.claude/reference/safari-project-workflow.md for complete documentation.*

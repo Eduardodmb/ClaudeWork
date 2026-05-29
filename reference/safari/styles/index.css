@@ -1,0 +1,14 @@
+/**
+ * Safari Styles - Combined Import
+ *
+ * Single import for all Safari CSS theming and components.
+ *
+ * Usage:
+ *   @import url('/shared/styles/index.css');
+ *
+ * Or in HTML:
+ *   <link rel="stylesheet" href="/shared/styles/index.css">
+ */
+
+@import url('./safari-theme.css');
+@import url('./safari-components.css');

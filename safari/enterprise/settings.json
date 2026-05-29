@@ -1,0 +1,132 @@
+{
+  "project": {
+    "name": "organizational-docs",
+    "description": "Safari Circuits organizational documentation and knowledge base",
+    "type": "documentation",
+    "version": "1.0.0"
+  },
+  "context": {
+    "include": [
+      "domains/**/*.md",
+      "products/**/*.md",
+      "agents/**/*.md",
+      "shared/**/*.md",
+      "_meta/**/*.md"
+    ],
+    "exclude": [
+      "projects/archive/**"
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
+      "Bash(gh pr:*)",
+      "Bash(gh issue:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(npm run validate:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run build:*)"
+    ],
+    "deny": []
+  },
+  "agents": {
+    "directory": ".claude/agents",
+    "available": [
+      "code-simplifier",
+      "code-architect",
+      "verify-app",
+      "build-validator",
+      "oncall-guide",
+      "doc-reviewer",
+      "domain-validator",
+      "index-updater",
+      "knowledge-curator",
+      "skill-developer"
+    ]
+  },
+  "commands": {
+    "directory": ".claude/commands",
+    "available": [
+      "commit-push-pr",
+      "quick-commit",
+      "test-and-fix",
+      "review-changes",
+      "first-principles",
+      "update-docs",
+      "validate-docs",
+      "sync-index"
+    ]
+  },
+  "skills": {
+    "directory": ".claude/skills",
+    "directory_description": "Project-specific or experimental skills",
+    "extended_directory": "agents/skills",
+    "extended_directory_description": "Shared organizational skills (primary location)",
+    "autoload": true,
+    "rbac": {
+      "enabled": true,
+      "default_role": "skill-viewer",
+      "roles_file": ".claude/roles.json"
+    },
+    "lifecycle": {
+      "states": ["draft", "review", "approved", "published", "deprecated", "archived"],
+      "require_review": true,
+      "require_approval": true
+    },
+    "categories": [
+      "code-generation",
+      "documentation",
+      "analysis",
+      "domain-specific",
+      "research",
+      "operations"
+    ]
+  },
+  "enterprise": {
+    "skill_standards": {
+      "required_sections": [
+        "Purpose",
+        "Trigger Phrases",
+        "Required Context",
+        "Steps",
+        "Output",
+        "Example"
+      ],
+      "recommended_sections": [
+        "Prerequisites",
+        "Error Handling",
+        "Related Skills",
+        "Changelog"
+      ],
+      "metadata_required": true,
+      "version_control": true
+    },
+    "governance": {
+      "audit_logging": true,
+      "change_tracking": true,
+      "review_required_for_publish": true
+    }
+  },
+  "preferences": {
+    "documentation_style": "technical",
+    "markdown_flavor": "github",
+    "diagram_tool": "mermaid"
+  }
+}

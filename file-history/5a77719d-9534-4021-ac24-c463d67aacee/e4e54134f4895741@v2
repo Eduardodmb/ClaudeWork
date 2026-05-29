@@ -1,0 +1,1907 @@
+using Firstronic.Core.Entities.App.Personnel;
+using Firstronic.Core.Entities.App.Quality;
+using Firstronic.Framework.Data;
+using Firstronic.Framework.Attributes;
+using Microsoft.AspNet.Identity;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data.SqlClient;
+using Firstronic.Core.Entities.App.First;
+using Firstronic.Areas.Quality.Models;
+using DocumentFormat.OpenXml.Office2010.Excel;
+
+namespace Firstronic.Areas.Quality.Controllers
+{
+  //===============================================================
+  // CONTROLLER START : Poll
+  //===============================================================
+  [Authorize]
+  public class Poll5SController : BaseSecurityController
+  {
+    #region Fields
+    private readonly DataContext db;
+    #endregion Fields
+
+    #region Ctor
+    public Poll5SController()
+    {
+      db = new DataContext();
+    }
+    #endregion Ctor
+
+    public ActionResult Index()
+    {
+      return View("");
+    }
+
+
+    public ActionResult UpdateComments(int id)
+    {
+      SqlParameter[] parameters = new SqlParameter[]{
+                                                         new SqlParameter("@Poll_ID",SqlDbType.Int){Value =id},
+                                                    };
+
+      var model = db.Database.SqlQuery<tbl_Quality_5SUpdateComments>($@"SELECT 
+    QANS.Poll_ID, 
+    Qua.Person, 
+    Qua.AreaID,
+ CASE
+        WHEN A.TYPEID = 1 THEN P.Area  
+        ELSE C.CellName               
+    END AS Area_Name,
+    QANS.Question_ID, 
+    Q.Question_Name,
+    QANS.Answer_Text,
+  QANS.ExtraComments,
+    QANS.Answer_Value,
+    QANS.TrnDate
+   
+FROM 
+    [PROD_MES].[dbo].[QUALITY_5S_ANSWERS] QANS
+JOIN 
+    [PROD_MES].[dbo].[QUALITY_5S] Qua ON Qua.Poll_ID = QANS.Poll_ID
+JOIN 
+    [PROD_MES].[dbo].[QUALITY_5S_QUESTIONS] Q ON Q.Question_Area_ID = Qua.AreaID
+    AND Q.Question_No = QANS.Question_ID
+LEFT JOIN 
+    [QUALITY_5S_AREAS] A ON A.ID = Q.Question_Area_ID 
+LEFT JOIN 
+    [PD_idt_areas] P ON Qua.AreaID = P.AreaID  
+LEFT JOIN 
+    [PD_idt_cells] C ON Qua.AreaID = C.CellID WHERE  QANS.Poll_ID =@Poll_ID",parameters).ToArray().ToList().AsQueryable();
+
+      return View(model);
+    }
+
+    [HttpPost]
+    public ActionResult UpdateComm(int Poll_ID,  int Question_ID, string Answer_Text)
+    {
+      
+      if (Poll_ID > 0 && !string.IsNullOrEmpty(Answer_Text))
+      {
+
+        SqlParameter[] parameters = new SqlParameter[]{
+                                                         new SqlParameter("@Poll_ID",SqlDbType.Int){Value =Poll_ID},
+                                                    };
+
+        var answer = db.Database.SqlQuery<tbl_Quality_5SUpdateComments>($@"SELECT 
+    QANS.Poll_ID
+FROM 
+    [PROD_MES].[dbo].[QUALITY_5S_ANSWERS] QANS
+ WHERE  QANS.Poll_ID =@Poll_ID", parameters).FirstOrDefault();
+        
+
+        if (answer != null)
+        {
+          // Actualizar el comentario
+
+          SqlParameter[] parametersUpdate = new SqlParameter[]
+          {
+            new SqlParameter("@Poll_ID", SqlDbType.Int) { Value = Poll_ID },
+            new SqlParameter("@Comments", SqlDbType.NVarChar) { Value = Answer_Text },
+            
+            new SqlParameter("@Question_ID", SqlDbType.NVarChar) { Value = Question_ID }
+          };
+
+
+          var result = db.ExecuteCommand(@"
+            UPDATE QUALITY_5S_ANSWERS
+            SET ExtraComments = @Comments
+            WHERE Poll_ID = @Poll_ID
+            AND  Question_ID = @Question_ID", parametersUpdate);
+
+          if (result > 0)
+          {
+            this.NotifySuccess("Successfully updated.");
+          }
+          else if (result == 0)
+          {
+            this.NotifyError("Record not updated!");
+          }
+          else
+          {
+            this.NotifyError("Error in database.");
+          }
+          // Redirigir a la página de detalles de la encuesta (o donde sea necesario)
+          return RedirectToAction("UpdateComments", new { id = Poll_ID });
+         // return RedirectToAction("UpdateComments");
+        }
+        else
+        {
+          // Si no se encuentra la encuesta, agregar un error
+          ModelState.AddModelError("", "No se encontró la encuesta con el ID proporcionado.");
+        }
+      }
+
+      // Si algo sale mal, devolver a la vista con el error
+      return View();
+
+   
+  
+
+
+
+    }
+
+
+    public ActionResult List()
+    {
+      SqlParameter[] ParametersInt = new SqlParameter[]{
+                new SqlParameter("@ID",SqlDbType.NVarChar){Value = User.Identity.GetUserId()
+                }
+              };
+      var model = db.Database.SqlQuery<tbl_Quality_5S_FULL>($@"SELECT 
+    Q.Poll_ID,
+    Q.User_ID,
+    Q.TrnDate,
+    Q.CloseDate,
+    Q.Comments,
+    Q.Person,
+    A.ID AS AreaID,  
+    CASE   
+        WHEN A.TYPEID = 1 THEN P.Area 
+        ELSE C.CellName  
+    END AS Area
+FROM Quality_5S Q
+ JOIN QUALITY_5S_AREAS A ON A.ID = Q.AreaID
+left JOIN PD_idt_areas P ON A.ID = P.AreaID  
+LEFT JOIN PD_idt_cells C ON A.ID = C.CellID
+LEFT JOIN QUALITY_5S_AREAS_CLASSIFICATION_TYPE ACT ON A.AreaClassificationType = ACT.TypeID WHERE Q.User_ID=@ID",ParametersInt).ToArray().ToList().AsQueryable();
+
+      return View(model);
+    }
+    public ActionResult Create()
+    {
+      var model = new tbl_Quality_5S_FULL();
+      var FirstronicFacilitiesList = new List<SelectListItem>();
+      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      model.FacilityList = FirstronicFacilitiesList;
+      return View(model);
+    }
+
+
+
+
+    // GET:
+
+    [HttpPost]
+    [ValidateInput(false)]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Create")]
+    public ActionResult Create(tbl_Quality_5S_FULL model)
+    {
+
+
+      if (ModelState.IsValid)
+      {
+       
+
+        SqlParameter[] parameters = new SqlParameter[]{
+                            new SqlParameter("@Comments",SqlDbType.NVarChar){Value =(model.Comments ?? "").ToString()},
+                            new SqlParameter("@Person",SqlDbType.NVarChar){Value =(model.Person ?? "").ToString()},
+                            new SqlParameter("@AreaID",SqlDbType.Int){Value =model.AreaID},
+                            new SqlParameter("@ID",SqlDbType.NVarChar){Value = User.Identity.GetUserId()}
+
+                        };
+
+        var result = db.ExecuteInsertCommand($@"INSERT INTO [dbo].[Quality_5S]
+                   (User_ID,
+					TrnDate,
+					Comments,
+					Person,AreaID)
+					VALUES (@ID,GETDATE(),@Comments,@Person,@AreaID)", parameters);
+
+        if (result > 0)
+        {
+          //this.NotifySuccess("Successfully saved.");
+          return RedirectToAction("EditQuestion", new { Id = result });
+        }
+        else if (result == 0)
+        {
+          this.NotifyError("Record can not save!");
+          return RedirectToAction("List");
+        }
+        else
+        {
+          this.NotifyError("Error in database.");
+          return RedirectToAction("List");
+        }
+      }
+
+      return View(model);
+    }
+
+    public ActionResult EndQuestions()
+    {
+    
+      return View();
+    }
+
+    public ActionResult EditQuestion(int id, int questionid = 0)
+    {
+
+      var model = new tbl_Quality_5S_FULL_partial_Question();
+      SqlParameter[] parameters = new SqlParameter[]{
+                            new SqlParameter("@Poll_ID",SqlDbType.Int){Value =id},
+                        };
+      model.Poll = db.Database.SqlQuery<tbl_Quality_5S_FULL>($@"SELECT [Poll_ID]
+                          ,[User_ID]
+                          ,[TrnDate]
+                          ,[CloseDate]
+                          ,[Comments]
+                          ,[Person],[AreaID]
+                      FROM [Quality_5S] WHERE Poll_ID=@Poll_ID and CloseDate is null", parameters).FirstOrDefault();
+
+      if (questionid == 0)
+      {
+        questionid = 1;
+      }
+
+      model.Questions = Firstronic.Framework.Functions.Queries.GetIntFromQuery("SELECT Count(*) FROM [Quality_5S_Questions]  where question_area_id = "+model.Poll.AreaID);
+
+     // model.Questions = Firstronic.Framework.Functions.Queries.GetIntFromQuery("SELECT Count(*) FROM [Quality_5S_Questions] ");
+
+      if (questionid > model.Questions)
+      {
+      
+        Firstronic.Framework.Functions.Queries.ExecuteSimpleQuery("UPDATE Quality_5S SET CloseDate=GETDATE() WHERE Poll_ID= " + id+"");
+
+        return RedirectToAction("EndQuestions");
+      }
+      SqlParameter[] parametersdt_question = new SqlParameter[]{
+                                   new SqlParameter("@Question_No",SqlDbType.Int){Value =questionid},
+                              };
+      DataTable dt_question = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [Question_ID],[Question_Name],[Question_Type_ID] FROM [Quality_5S_Questions] where [Question_No]=" + questionid + " and question_area_id = "+model.Poll.AreaID + " order by question_no asc", parametersdt_question);
+
+     // DataTable dt_question = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [Question_ID],[Question_Name],[Question_Type_ID] FROM [Quality_5S_Questions] where [Question_No]=" + questionid + "", parametersdt_question);
+
+      if (dt_question == null|| dt_question.Rows.Count==0)
+      {
+        this.NotifyError("5S questions does not exist.");
+        return RedirectToAction("List");
+      }
+
+
+      if (dt_question.Rows.Count > 0)
+      {
+        model.QuestionNo = questionid;
+        model.QuestionID = int.Parse(dt_question.Rows[0][0].ToString());
+        model.Question = dt_question.Rows[0][1].ToString();
+        model.QuestionType = int.Parse(dt_question.Rows[0][2].ToString());
+
+        return View(model);
+      }
+      else
+      {
+        return RedirectToAction("List");
+      }
+    }
+
+    //POST EDIT
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "EditQuestion")]
+    public ActionResult EditQuestion(tbl_Quality_5S_FULL_partial_Question model)
+    {
+      if (ModelState.IsValid)
+      {
+        var id = model.Poll.Poll_ID;
+        SqlParameter[] parameters = new SqlParameter[]{
+                                   new SqlParameter("@Poll_ID",SqlDbType.Int){Value =id},
+                              };
+        var record = db.Database.SqlQuery<tbl_Quality_5S>($@"SELECT *  FROM Quality_5S WHERE Poll_ID=@Poll_ID and CloseDate is null", parameters).FirstOrDefault();
+
+        if (record is null)
+        {
+          this.NotifyError("Record not found.");
+          return RedirectToAction("List");
+        }
+        SqlParameter[] parametersINSERT = new SqlParameter[]{
+                                  new SqlParameter("@Poll_ID",SqlDbType.Int){Value =id},
+                                  new SqlParameter("@Question_ID",SqlDbType.Int){Value =model.QuestionNo},
+                                  new SqlParameter("@Answer_Text",SqlDbType.NVarChar){Value =(model.Answer ?? "").ToString()},
+                                  new SqlParameter("@Answer_Value",SqlDbType.Int){Value =model.AnswerValue},
+                              };
+        var result = db.ExecuteCommand(@"INSERT INTO [dbo].[Quality_5S_Answers]
+                               ([Poll_ID]
+                               ,[Question_ID]
+                               ,[Answer_Text]
+                               ,[Answer_Value])
+                         VALUES
+                               (@Poll_ID
+                               ,@Question_ID
+                               ,@Answer_Text
+                               ,@Answer_Value)", parametersINSERT);
+
+        if (result > 0)
+        {
+          return RedirectToAction("EditQuestion", new { Id = model.Poll.Poll_ID, questionid = model.QuestionNo + 1 });
+        }
+        else if (result == 0)
+        {
+          this.NotifyError("Record can not save!");
+        }
+        else
+        {
+          this.NotifyError("Error in database.");
+        }
+
+        return RedirectToAction("Edit", new { id = model.Poll.Poll_ID });
+      }
+
+      return View(model);
+    }
+
+    // GET
+    public ActionResult Edit(int id)
+    {
+      SqlParameter[] parameters = new SqlParameter[]{
+                                                         new SqlParameter("@Poll_ID",SqlDbType.Int){Value =id},
+                                                    };
+      var model0 = db.Database.SqlQuery<tbl_Quality_5S_FULL>($@"SELECT [Poll_ID]
+                          ,[User_ID]
+                          ,[TrnDate]
+                          ,[CloseDate]
+                          ,[Comments]
+                          ,[Person],AreaID
+                      FROM [Quality_5S] WHERE Poll_ID=@Poll_ID and closeDate is null", parameters).FirstOrDefault();
+
+      if (model0 == null)
+      {
+        this.NotifyError("5S audit does not exist or is already closed.");
+        return RedirectToAction("List");
+      }
+      SqlParameter[] parameterscurrent = new SqlParameter[]{
+                                                         new SqlParameter("@Poll_ID",SqlDbType.Int){Value =id},
+                                                    };
+      var current = Firstronic.Framework.Queries.GetIntFromQuery(@"SELECT isnull(max(Question_No),0) as questionno
+                  FROM[Quality_5S_Answers] LEFT JOIN[Quality_5S_Questions] ON[Quality_5S_Answers].Question_ID = [Quality_5S_Questions].Question_No
+                  WHERE[Quality_5S_Answers].[Poll_ID] = @Poll_ID", parameterscurrent);
+
+
+      return RedirectToAction("EditQuestion", new { Id = id, questionid = current + 1 });
+    }
+
+    // POST DELETE
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Delete")]
+    public ActionResult Delete(tbl_Quality_5S_FULL model)
+    {
+      if (ModelState.IsValid)
+      {
+        SqlParameter[] parameterscurrent = new SqlParameter[]{
+                                                         new SqlParameter("@Poll_ID",SqlDbType.Int){Value =model.Poll_ID},
+                                                    };
+        var record = db.Database.SqlQuery<tbl_Quality_5S>($@"SELECT *  " +
+                        "FROM Quality_5S WHERE Poll_ID=@Poll_ID ").FirstOrDefault();
+
+        if (record is null)
+        {
+          this.NotifyError("Record not found.");
+          return RedirectToAction("List");
+        }
+        SqlParameter[] parameterscurrentDELETE = new SqlParameter[]{
+                                                         new SqlParameter("@Poll_ID",SqlDbType.Int){Value =model.Poll_ID},
+                                                    };
+        var result = db.ExecuteCommand("DELETE FROM Quality_5S " +
+                   " WHERE Poll_ID=@Poll_ID", parameterscurrentDELETE);
+
+        if (result > 0)
+          this.NotifySuccess("Successfully saved.");
+        else if (result == 0)
+          this.NotifyError("Record can not save!");
+        else
+          this.NotifyError("Error in database.");
+
+        return RedirectToAction("List");
+      }
+
+      return View(model);
+    }
+
+    [HttpPost]
+    public ActionResult Update(tbl_Quality_5S_FULL model)
+    {
+      if (ModelState.IsValid && !string.IsNullOrWhiteSpace(model.Comments))
+      {
+       
+        SqlParameter[] parameterscurrent = new SqlParameter[]
+        {
+            new SqlParameter("@Poll_ID", SqlDbType.Int) { Value = model.Poll_ID }
+        };
+
+        var record = db.Database.SqlQuery<tbl_Quality_5S>($@"
+            SELECT * FROM Quality_5S WHERE Poll_ID=@Poll_ID", parameterscurrent).FirstOrDefault();
+
+        if (record == null)
+        {
+          this.NotifyError("Record not found.");
+          return RedirectToAction("List");
+        }
+
+        
+        SqlParameter[] parametersUpdate = new SqlParameter[]
+        {
+            new SqlParameter("@Poll_ID", SqlDbType.Int) { Value = model.Poll_ID },
+            new SqlParameter("@Comments", SqlDbType.NVarChar) { Value = model.Comments } 
+        };
+
+        
+        var result = db.ExecuteCommand(@"
+            UPDATE Quality_5S
+            SET Comments = @Comments
+            WHERE Poll_ID = @Poll_ID", parametersUpdate);
+
+        if (result > 0)
+        {
+          this.NotifySuccess("Successfully updated.");
+        }
+        else if (result == 0)
+        {
+          this.NotifyError("Record not updated!");
+        }
+        else
+        {
+          this.NotifyError("Error in database.");
+        }
+
+        return RedirectToAction("List");
+      }
+
+      return View(model);
+    }
+
+
+
+    //DASHBOARDS
+    [HttpPost]
+    public JsonResult Dash_Average(int year = 0, int month = 0, int zone = 0, string Zones = "", string Search = "")
+    {
+
+      List<object> iData = new List<object>();
+
+      if (year == 0 || month == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+      }
+
+      //Get date table
+      DateTime date_start = new DateTime(year, month, 1);
+      DateTime date_end = date_start.AddMonths(+1);
+
+      // GET MONTH DATA
+      DataTable dt_result = Framework.Functions.Queries.GetDatatableFromQuery(@"SELECT TOP 30
+                        CONVERT(varchar,CAST(Quality_5S.TrnDate as date),101) as TrnDate, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (1) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S1, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (2) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S2, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (3) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S3, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (4) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S4, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (5) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S5, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (6) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S6
+                        FROM Quality_5S_Answers 
+                        INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+                        INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+                        INNER JOIN PD_idt_areas ON Quality_5S.AreaID = PD_idt_areas.AreaID
+                        GROUP BY CAST(Quality_5S.TrnDate as date)
+                        Order by CAST(Quality_5S.TrnDate as date) DESC");
+
+      if (zone > 0)
+      {
+
+        SqlParameter[] parameters = new SqlParameter[]{
+                                                                         new SqlParameter("@AreaID",SqlDbType.Int){Value =zone},
+                                                                    };
+        dt_result = Framework.Queries.GetDatatableFromQuery(@"SELECT    TOP 30
+                        CONVERT(varchar,CAST(Quality_5S.TrnDate as date),101) as TrnDate, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (1) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S1, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (2) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S2, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (3) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S3, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (4) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S4, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (5) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S5, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (6) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S6
+                        FROM Quality_5S_Answers 
+                        INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+                        INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+                        INNER JOIN PD_idt_areas ON Quality_5S.AreaID = PD_idt_areas.AreaID
+                        WHERE Quality_5S.AreaID= @AreaID
+                        GROUP BY CAST(Quality_5S.TrnDate as date)
+                        Order by CAST(Quality_5S.TrnDate as date) DESC", parameters);
+      }
+
+      if (Zones == "" && Search.Length > 0)
+      {
+        dt_result = Framework.Functions.Queries.GetDatatableFromQuery(@"SELECT    TOP 30
+                        CONVERT(varchar,CAST(Quality_5S.TrnDate as date),101) as TrnDate, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (1) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S1, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (2) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S2, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (3) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S3, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (4) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S4, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (5) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S5, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (6) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S6
+                        FROM Quality_5S_Answers 
+                        INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+                        INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+                        INNER JOIN PD_idt_areas ON Quality_5S.AreaID = PD_idt_areas.AreaID
+                        WHERE Quality_5S.AreaID= '-1'
+                        GROUP BY CAST(Quality_5S.TrnDate as date)
+                        Order by CAST(Quality_5S.TrnDate as date) DESC");
+      }
+
+      if (Zones.Length > 0)
+      {
+
+        SqlParameter[] ParametersInt = new SqlParameter[]{
+                new SqlParameter("@ID",SqlDbType.NVarChar){Value = Zones.Substring(0, Zones.Length - 1)}
+              };
+        dt_result = Framework.Queries.GetDatatableFromQuery(@"
+                        SELECT    TOP 30
+                        CONVERT(varchar,CAST(Quality_5S.TrnDate as date),101) as TrnDate, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (1) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S1, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (2) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S2, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (3) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S3, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (4) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S4, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (5) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S5, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (6) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S6
+                        FROM Quality_5S_Answers 
+                        INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+                        INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+                        INNER JOIN PD_idt_areas ON Quality_5S.AreaID = PD_idt_areas.AreaID
+                        WHERE Quality_5S.AreaID in (@ID)
+                        GROUP BY CAST(Quality_5S.TrnDate as date)
+                        Order by CAST(Quality_5S.TrnDate as date) DESC",ParametersInt);
+      }
+
+      DataTable reversedDt = dt_result.Clone();
+      for (var row = dt_result.Rows.Count - 1; row >= 0; row--)
+        reversedDt.ImportRow(dt_result.Rows[row]);
+
+      //Looping and extracting each DataColumn to List<Object>    
+      foreach (DataColumn dc in reversedDt.Columns)
+      {
+        List<object> x = new List<object>();
+        x = (from DataRow drr in reversedDt.Rows select drr[dc.ColumnName]).ToList();
+        iData.Add(x);
+      }
+      ViewBag.ChartData = iData;
+      //Source data returned as JSON    
+      return Json(iData, JsonRequestBehavior.AllowGet);
+    }
+
+    //DASHBOARDS
+    [HttpPost]
+    public JsonResult Dash_Average_Radar(int year = 0, int month = 0, int zone = 0, string Zones = "", string Search = "")
+    {
+
+      List<object> iData = new List<object>();
+
+      if (year == 0 || month == 0)
+      {
+        year = DateTime.Now.Year;
+        month = DateTime.Now.Month;
+      }
+
+      //Get date table
+      DateTime date_start = new DateTime(year, month, 1);
+      DateTime date_end = date_start.AddMonths(+1);
+
+      // GET MONTH DATA
+      DataTable dt_result = Framework.Functions.Queries.GetDatatableFromQuery(@"SELECT 0 as TrnDate, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (1) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S1, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (2) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S2, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (3) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S3, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (4) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S4, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (5) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S5, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (6) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S6
+                        FROM Quality_5S_Answers 
+                        INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+                        INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+                        INNER JOIN PD_idt_areas ON Quality_5S.AreaID = PD_idt_areas.AreaID
+                        WHERE Quality_5S.TrnDate > DATEADD(MONTH,-1,GETDATE())
+                        ");
+
+      if (zone > 0)
+      {
+        SqlParameter[] ParametersInt = new SqlParameter[]{
+                new SqlParameter("@ID",SqlDbType.NVarChar){Value = zone}
+              };
+        dt_result = Framework.Queries.GetDatatableFromQuery(@"SELECT 0 as TrnDate, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (1) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S1, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (2) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S2, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (3) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S3, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (4) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S4, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (5) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S5, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (6) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S6
+                        FROM Quality_5S_Answers 
+                        INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+                        INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+                        INNER JOIN PD_idt_areas ON Quality_5S.AreaID = PD_idt_areas.AreaID
+                        WHERE Quality_5S.AreaID=@ID AND Quality_5S.TrnDate > DATEADD(MONTH,-1,GETDATE())",ParametersInt);
+      }
+
+      if (Zones == "" && Search.Length > 0)
+      {
+        dt_result = Framework.Functions.Queries.GetDatatableFromQuery(@"SELECT  0 as TrnDate, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (1) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S1, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (2) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S2, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (3) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S3, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (4) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S4, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (5) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S5, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (6) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S6
+                        FROM Quality_5S_Answers 
+                        INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+                        INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+                        INNER JOIN PD_idt_areas ON Quality_5S.AreaID = PD_idt_areas.AreaID
+                        WHERE Quality_5S.AreaID= '-1'  AND Quality_5S.TrnDate > DATEADD(MONTH,-1,GETDATE())");
+      }
+
+      if (Zones.Length > 0)
+      {
+        dt_result = Framework.Functions.Queries.GetDatatableFromQuery(@"SELECT 0 as TrnDate, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (1) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S1, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (2) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S2, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (3) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S3, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (4) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S4, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (5) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S5, 
+                        AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (6) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S6
+                        FROM Quality_5S_Answers 
+                        INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+                        INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+                        INNER JOIN PD_idt_areas ON Quality_5S.AreaID = PD_idt_areas.AreaID
+                        WHERE Quality_5S.AreaID in (" + Zones.Substring(0, Zones.Length - 1) + @")  AND Quality_5S.TrnDate > DATEADD(MONTH,-1,GETDATE())");
+      }
+
+      DataTable reversedDt = dt_result.Clone();
+      for (var row = dt_result.Rows.Count - 1; row >= 0; row--)
+        reversedDt.ImportRow(dt_result.Rows[row]);
+
+      //Looping and extracting each DataColumn to List<Object>    
+      foreach (DataColumn dc in reversedDt.Columns)
+      {
+        List<object> x = new List<object>();
+        x = (from DataRow drr in reversedDt.Rows select drr[dc.ColumnName]).ToList();
+        iData.Add(x);
+      }
+      ViewBag.ChartData = iData;
+      //Source data returned as JSON    
+      return Json(iData, JsonRequestBehavior.AllowGet);
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    //public string GetDataAsJson()
+    //{
+    //  string ParseJson = "";
+
+    //  string Query = @"SELECT   
+    //                    CONVERT(varchar,CAST(Quality_5S.TrnDate as date),101) as TrnDate, 
+    //                    AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (1) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S1, 
+    //                    AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (2) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S2, 
+    //                    AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (3) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S3, 
+    //                    AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (4) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S4, 
+    //                    AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (5) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S5, 
+    //                    AVG(CASE WHEN Quality_5S_Questions.Question_Category_ID in (6) THEN CAST(Quality_5S_Answers.Answer_Value as float) END)   as S6
+    //                    FROM Quality_5S_Answers 
+    //                    INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+    //                    INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+    //                    INNER JOIN PD_idt_areas ON Quality_5S.AreaID = PD_idt_areas.AreaID
+    //                    GROUP BY CAST(Quality_5S.TrnDate as date)
+    //                    Order by CAST(Quality_5S.TrnDate as date) DESC";
+
+    //  ParseJson = Framework.Functions.Queries.GetCSVFromQuery(Query);
+
+    //  return ParseJson;
+    //}
+
+    public string GetDataAsJson()
+    {
+      string ParseJson = "";
+
+      string Query = @"SELECT 
+      Quality_5S.[Poll_ID]
+	  ,Quality_5S.Person
+	  ,Quality_5S_Questions.Question_Name
+	  ,Quality_5S_Questions.Question_No
+	  ,Quality_5S_Questions.Question_Category_ID
+      ,QUALITY_5S_ANSWERS.Answer_Text
+      ,QUALITY_5S_ANSWERS.Answer_Value
+	 ,PD_idt_cells.CellID
+	  ,PD_idt_cells.CellName
+	  ,QUALITY_5S_CATEGORIES.Question_Category
+      ,QUALITY_5S_ANSWERS.TrnDate
+  FROM [PROD_MES].[dbo].[QUALITY_5S_ANSWERS]
+   INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No
+ INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID 
+ INNER JOIN PD_idt_cells ON Quality_5S.AreaID = PD_idt_cells.CellID
+ inner join QUALITY_5S_CATEGORIES on QUALITY_5S_CATEGORIES.Question_Category_ID = QUALITY_5S_QUESTIONS.Question_Category_ID
+ 
+ Order by Person asc,Question_No asc, AreaID asc";
+
+      ParseJson = Framework.Functions.Queries.GetCSVFromQuery(Query);
+
+      return ParseJson;
+    }
+
+    public ActionResult DescargarCsv()
+    {
+      string query = @"SELECT 
+    Quality_5S.[Poll_ID],
+    Quality_5S.Person,
+    Quality_5S_Questions.Question_Name,
+    Quality_5S_Questions.Question_No,
+    Quality_5S_Questions.Question_Category_ID,
+    QUALITY_5S_ANSWERS.Answer_Text,
+    QUALITY_5S_ANSWERS.Answer_Value,
+    PD_idt_cells.CellID,
+    PD_idt_cells.CellName,
+    QUALITY_5S_CATEGORIES.Question_Category,
+    QUALITY_5S_ANSWERS.TrnDate
+FROM [PROD_MES].[dbo].[QUALITY_5S_ANSWERS]
+INNER JOIN Quality_5S_Questions ON Quality_5S_Answers.Question_ID = Quality_5S_Questions.Question_No 
+INNER JOIN Quality_5S ON Quality_5S_Answers.Poll_ID = Quality_5S.Poll_ID and  Quality_5S.AreaID = QUALITY_5S_QUESTIONS.question_area_id 
+INNER JOIN PD_idt_cells ON Quality_5S.AreaID = PD_idt_cells.CellID
+INNER JOIN QUALITY_5S_CATEGORIES ON QUALITY_5S_CATEGORIES.Question_Category_ID = QUALITY_5S_QUESTIONS.Question_Category_ID
+GROUP BY
+    Quality_5S.[Poll_ID],
+    Quality_5S.Person,
+    Quality_5S_Questions.Question_Name,
+    Quality_5S_Questions.Question_No,
+    Quality_5S_Questions.Question_Category_ID,
+    QUALITY_5S_ANSWERS.Answer_Text,
+    QUALITY_5S_ANSWERS.Answer_Value,
+    PD_idt_cells.CellID,
+    PD_idt_cells.CellName,
+    QUALITY_5S_CATEGORIES.Question_Category,
+    QUALITY_5S_ANSWERS.TrnDate
+ORDER BY 
+    Quality_5S.Person ASC,
+    Quality_5S_Questions.Question_No ASC,
+    PD_idt_cells.CellID ASC;";
+
+      string contenidoCsv = Framework.Functions.Queries.GetCSVFromQuery(query);
+      byte[] archivoBytes = System.Text.Encoding.UTF8.GetBytes(contenidoCsv);
+      string fechaActual = DateTime.Now.ToString("MM-dd-yyyy-HH-mm-ss");
+
+      // Devolver archivo
+      return File(archivoBytes, "text/csv", $"Reporte_5S_{fechaActual}.csv");
+    }
+
+
+
+    public ActionResult Poll5SReport_Export(DateTime? stardate, DateTime? enddate, int customerid = 0, bool execute = false)
+    {
+
+      DateTime stardate2 = DateTime.Now.Date;
+      DateTime enddate2 = DateTime.Now.Date;
+
+      if (stardate != null)
+      {
+        stardate2 = stardate ?? DateTime.Now.Date;
+      }
+
+      if (enddate != null)
+      {
+        enddate2 = enddate ?? DateTime.Now.Date;
+      }
+
+      var model = new CapasReport_Report();
+
+      model.stardate = DateTime.Now.Date.AddDays(-30);
+
+      model.enddate = DateTime.Now.Date.AddDays(+1);
+
+      model.execute = execute;
+
+      model.CustomerID = customerid;
+
+      SqlParameter[] parameters = new SqlParameter[] { new SqlParameter("@CustomerID", SqlDbType.Int) { Value = model.CustomerID }, new SqlParameter("@stardate", SqlDbType.DateTime) { Value = model.stardate }, new SqlParameter("@enddate", SqlDbType.DateTime) { Value = model.enddate } };
+
+      string QueryByCustomers = "SELECT  Quality_5S_Audit_History.AutoID,dbo.RemoveNonAlphaCharacters(Quality_5S_Questions.Question_Name), dbo.RemoveNonAlphaCharacters(comments) as Comments, IIF(Quality_5S_Audit_History.AnswerID = '2', 'Malo','Bueno') AS Resultado, Quality_5S_Audit_History.Acciones,  Quality_5S_Audit_History.TrnDate, Quality_5S_Audit_History.TrdAudit, Quality_5S_Audit_History.AuditID, Quality_5S_Audit_History.AuditLevel, Quality_5S_Audit_History.TaskID,  Quality_5S_Audit_History.StationID, Quality_5S_Audit_History.ProcessID, Quality_5S_Audit_History.Shift,  REPLACE(PD_idt_areas.Area, 'ó', 'o'), AspNetUsers.Name,Quality_5S_Questions.GROUP_NAME  FROM Quality_5S_Audit_History INNER JOIN   Quality_5S_Questions ON Quality_5S_Audit_History.QuestionID = Quality_5S_Questions.Question_ID INNER JOIN  PD_idt_areas ON Quality_5S_Audit_History.AreaID = PD_idt_areas.AreaID INNER JOIN  AspNetUsers ON Quality_5S_Audit_History.UserID = AspNetUsers.Id where Quality_5S_Audit_History.TrnDate between @stardate and @enddate order by Quality_5S_Audit_History.TrdAudit desc";
+
+      DataTable dtResult = Firstronic.Framework.Queries.GetDatatableFromQuery(QueryByCustomers, parameters, "BeFirst:ConnectionString", 60);
+
+      //Build the CSV file data as a Comma separated string.
+      string dateNow = DateTime.Now.ToString("yyyyddMHHmmss");
+      string dbDumpFile = "Poll5SReport" + dateNow + ".csv";
+      string dumpQuery = string.Empty;
+      string columnValue = string.Empty;
+      string csv = string.Empty;
+
+      foreach (DataColumn column in dtResult.Columns)
+      {
+        csv += column.ColumnName + ',';
+      }
+
+      //Add new line.
+      csv += "\r\n";
+
+      foreach (DataRow row in dtResult.Rows)
+      {
+        foreach (DataColumn column in dtResult.Columns)
+        {
+          columnValue = string.Empty; //Clean up
+          columnValue = row[column.ColumnName].ToString();
+          columnValue = columnValue.Replace(",", "");
+          //Add the Data rows.
+          csv += columnValue + ',';
+        }
+
+        //Add new line.
+        csv += "\r\n";
+      }
+
+      Response.Clear();
+      Response.Buffer = true;
+      Response.AddHeader("content-disposition", "attachment;filename=" + dbDumpFile);
+      Response.Charset = "";
+      Response.ContentType = "application/text";
+      Response.Output.Write(csv);
+      Response.Flush();
+      Response.End();
+
+      return RedirectToAction("Poll5SReport", "Poll5S", new { Area = "Quality" });
+    }
+
+
+
+
+    [HttpPost]
+    public JsonResult Poll5SLevelChart(int level, string dinicio, string dfinal)
+    {
+      List<object> iData = new List<object>();
+
+      //Get date table
+      DateTime date_start = DateTime.Parse(dinicio);
+      DateTime date_end = DateTime.Parse(dfinal);
+
+      double dias = (date_end - date_start).TotalDays;
+
+      DataTable dt_data = new DataTable();
+      dt_data.Columns.Add("Date", typeof(string));
+      dt_data.Columns.Add("Quanitty", typeof(int));
+      dt_data.Columns.Add("Goal", typeof(double));
+
+      for (int ii = 0; ii < dias; ii++)
+      {
+        SqlParameter[] ParametersInt = new SqlParameter[]{
+                new SqlParameter("@date",SqlDbType.NVarChar){Value =date_start.AddDays(ii).ToString("MM/dd/yyyy HH:mm:ss")}
+              };
+        int total = Framework.Queries.GetIntFromQuery(@"SELECT Count(distinct AuditID) FROM [Quality_5S_Audit_History] where AuditLevel=1 and TrnDate=@date",ParametersInt);
+
+        double goal = 20;
+
+        double percentage = 0;
+
+        try
+        {
+          percentage = total / goal;
+        }
+        catch (Exception)
+        {
+
+        }
+
+        dt_data.Rows.Add(date_start.AddDays(ii).ToString("MM/dd") + " " + percentage.ToString("P0"), total, 20);
+      }
+
+      //Looping and extracting each DataColumn to List<Object>    
+      foreach (DataColumn dc in dt_data.Columns)
+      {
+        List<object> x = new List<object>();
+        x = (from DataRow drr in dt_data.Rows select drr[dc.ColumnName]).ToList();
+        iData.Add(x);
+      }
+      ViewBag.ChartData = iData;
+      //Source data returned as JSON    
+      return Json(iData, JsonRequestBehavior.AllowGet);
+    }
+
+
+    public ActionResult Poll5SReport(string Fecha = "")
+    {
+      var model = new Poll5SReport();
+
+      if (Fecha == "")
+      {
+        model.Fecha = Firstronic.Framework.Functions.Queries.GetStringFromQuery("Declare @FromDate   Date = '2019-04-21', @ToDate     Date = Getdate() ;With Date (Date) As ( Select  @FromDate Union All Select  DateAdd(Day, 1, Date) From    Date Where   Date < @ToDate ) Select TOP 1 CONVERT(VARCHAR, Date,20) as Fecha, Concat('Week ',Weekno,' - ',DatePart(YY, Date)) as Week From ( Select  Date, DatePart(Week, Date) WeekNo, DateName(WeekDay, Date) WeekDay From    Date) semanas  where WeekDay='Sunday' Order by Fecha desc Option  (MaxRecursion 0)");
+      }
+      else
+      {
+        model.Fecha = Fecha;
+      }
+
+      return View(model);
+    }
+
+    public ActionResult Poll5SDetails(string id = "")
+    {
+      ViewBag.LinkableId = id;
+
+      return View();
+    }
+
+    [Authorize]
+    public ActionResult Start5SAudit_Selection()
+    {
+      return View();
+    } 
+
+
+    [Authorize]
+    public ActionResult Start5SAuditold(int Building_Key = 0)
+    {
+
+      if (Building_Key == 0)
+      {
+        return RedirectToAction("Start5SAudit_Selection");
+      }
+      SqlParameter[] areaParameters = new SqlParameter[]{
+                    new SqlParameter("@Building_Key",SqlDbType.Int){Value =Building_Key}
+                };
+
+      // Check today history...
+      var model = new tbl_Quality_5S_Status_FULL();
+
+      SqlParameter[] ParametersInt = new SqlParameter[]{
+                new SqlParameter("@ID",SqlDbType.NVarChar){Value = User.Identity.GetUserId()}
+              };
+      //checar nive
+      int LevelID = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [LevelID] FROM [Quality_5S_Auditors]where UserId=@ID", ParametersInt);
+
+      //obtenemos auditorias  semana actual
+      DataTable dt_current_week = Firstronic.Framework.Queries.GetDatatableFromQuery("  SELECT * FROM [Quality_5S_Audit_History] where UserID=@ID and AuditLevel=( SELECT [LevelID] FROM [Quality_5S_Auditors]where UserId=@ID) and QuestionID = (  SELECT TOP (1)[Question_No] FROM [Quality_5S_Questions] where groupname=( SELECT [LevelID] FROM [Quality_5S_Auditors] where UserId=@ID)  order by Question_ID desc) and (TrnDate BETWEEN  convert(datetime,(SELECT FORMAT ((SELECT  DATEADD(dd, 0 - (@@DATEFIRST + 5 + DATEPART(dw, GETDATE())) % 7, GETDATE()) Monday), 'yyyy/MM/dd')))  and convert(datetime,(SELECT FORMAT ((SELECT  DATEADD(dd, 6 - (@@DATEFIRST + 5 + DATEPART(dw, GETDATE())) % 7, GETDATE()) Sunday), 'yyyy/MM/dd'))) )", ParametersInt);
+      if (dt_current_week.Rows.Count > 0 && LevelID == 2)
+      {
+        Firstronic.Framework.Queries.ExecuteSimpleQuery("UPDATE Quality_5S_Status SET IsComplete=1 WHERE UserID = @ID", ParametersInt);
+        return View(model);
+      }
+
+      //obtenemos auditorias mes actual
+      DataTable dt_current_Month = Firstronic.Framework.Queries.GetDatatableFromQuery("  SELECT  * FROM [Quality_5S_Audit_History] where UserID=@ID and AuditLevel=( SELECT [LevelID] FROM [Quality_5S_Auditors]where UserId=@ID) and QuestionID = (  SELECT TOP (1)[Question_No] FROM [Quality_5S_Questions] where groupname=( SELECT [LevelID] FROM [Quality_5S_Auditors]where UserId=@ID)  order by Question_ID desc) and (TrnDate BETWEEN  (SELECT DATEADD(DAY, 1, EOMONTH(getdate(), -1)))  and (SELECT EOMONTH(getdate()) ) )", ParametersInt);
+      if (dt_current_Month.Rows.Count > 0 && LevelID == 3)
+      {
+        Firstronic.Framework.Queries.ExecuteSimpleQuery("UPDATE Quality_5S_Status SET IsComplete=1 WHERE UserID = @ID", ParametersInt);
+        return View(model);
+      }
+
+      model.UserID = User.Identity.GetUserId();
+
+      model.Building_Key = Building_Key;
+
+      model.TrnDate = DateTime.Now;
+      SqlParameter[] parametersdt_current = new SqlParameter[]{
+                    new SqlParameter("@UserId",SqlDbType.NVarChar){Value =(model.UserID ?? "").ToString()},
+                    new SqlParameter("@TrnDate",SqlDbType.Date){Value =model.TrnDate.ToString("MM/dd/yyyy")},
+                };
+
+      DataTable dt_current = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [AutoID],[AreaID],[QuestionNo],[IsComplete],[LevelID] FROM[Quality_5S_Status] WHERE UserID = @UserId and trndate = @TrnDate AND AreaID<>0", parametersdt_current);
+
+      if (dt_current.Rows.Count > 0)
+      {
+        model.AutoID = int.Parse(dt_current.Rows[0][0].ToString());
+
+        model.AreaID = int.Parse(dt_current.Rows[0][1].ToString());
+
+        model.QuestionNo = int.Parse(dt_current.Rows[0][2].ToString());
+
+        model.IsComplete = bool.Parse(dt_current.Rows[0][3].ToString());
+
+        model.LevelID = int.Parse(dt_current.Rows[0][4].ToString());
+
+      }
+      else
+      {
+        //GET AREAID RANDOM!!!
+        int total = Firstronic.Framework.Queries.GetIntFromQuery("SELECT count(*) FROM [Quality_5S_Areas] WHERE Building_Key=@Building_Key", areaParameters);
+
+        int totalhoy = Firstronic.Framework.Functions.Queries.GetIntFromQuery("SELECT count(distinct areaid) FROM [Quality_5S_Status] WHERE trnDate=getdate() AND AreaID<>0");
+
+        if (total == 0)
+        {
+          this.NotifyError("Area Missing. Contact IS.");
+          return RedirectToAction("Start5SAudit_Selection");
+        }
+
+        if (totalhoy < total)
+        {
+          //Random Faltante
+          model.AreaID = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [AutoID] FROM [Quality_5S_Areas] WHERE AutoID not in (SELECT [AreaID] FROM [Quality_5S_Status] WHERE TrnDate=CAST(GETDATE() as date) AND AreaID<>0) AND Building_Key=@Building_Key ORDER BY NEWID()", areaParameters);
+
+          if (model.AreaID == 0)
+          {
+            model.AreaID = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [AutoID] FROM [Quality_5S_Areas] WHERE Building_Key=@Building_Key ORDER BY NEWID()", areaParameters);
+          }
+        }
+        else if (totalhoy >= total)
+        {
+          //Rando Anu
+          model.AreaID = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [AutoID] FROM [Quality_5S_Areas] WHERE Building_Key=@Building_Key ORDER BY NEWID()", areaParameters);
+        }
+        else
+        {
+          // RANDOM 
+          model.AreaID = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [AutoID] FROM [Quality_5S_Areas] WHERE Building_Key=@Building_Key ORDER BY NEWID()", areaParameters);
+        }
+
+        var levelID = 1;
+        SqlParameter[] parametersdt_leveldb = new SqlParameter[]{
+                    new SqlParameter("@UserId",SqlDbType.NVarChar){Value =(model.UserID ?? "").ToString()},
+                };
+        int leveldb = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [LevelID] FROM [Quality_5S_Auditors] where UserId=@UserId", parametersdt_leveldb);
+
+        if (leveldb > 0)
+        {
+          levelID = leveldb;
+        }
+
+        SqlParameter[] parametersINSERT = new SqlParameter[]{
+                    new SqlParameter("@UserID",SqlDbType.NVarChar){Value =(model.UserID ?? "").ToString()},
+                    new SqlParameter("@AreaID",SqlDbType.Int){Value =model.AreaID},
+                    new SqlParameter("@LevelID",SqlDbType.Int){Value =levelID},
+                    new SqlParameter("@Building_Key",SqlDbType.Int){Value =Building_Key}
+                };
+        SqlParameter[] parametersINSERT2 = new SqlParameter[]{
+                    new SqlParameter("@UserID",SqlDbType.NVarChar){Value =(model.UserID ?? "").ToString()},
+                    new SqlParameter("@AreaID",SqlDbType.Int){Value =model.AreaID}
+                   
+                };
+        Firstronic.Framework.Queries.ExecuteSimpleQuery("INSERT INTO [dbo].[Quality_5S_Status] ([UserID] ,[TrnDate] ,[AreaID] ,[QuestionNo] ,[IsComplete],[LevelID],Building_Key) VALUES (@UserID,GETDATE(),@AreaID,1,0,@LevelID,@Building_Key)", parametersINSERT);
+
+
+
+        Firstronic.Framework.Queries.ExecuteSimpleQuery("INSERT INTO [dbo].[Quality_5S] ([User_ID] ,[TrnDate] ,[AreaID]) VALUES (@UserID,GETDATE(),@AreaID)", parametersINSERT2);
+
+
+
+        SqlParameter[] parameters_current2 = new SqlParameter[]{
+                    new SqlParameter("@UserID",SqlDbType.NVarChar){Value =(model.UserID ?? "").ToString()},
+                    new SqlParameter("@TrnDate",SqlDbType.Date){Value =model.TrnDate.ToString("MM/dd/yyyy")},
+                };
+
+        
+        DataTable dt_current2 = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [AutoID],[AreaID],[QuestionNo],[IsComplete],[LevelID] FROM[Quality_5S_Status] WHERE UserID = @UserID  AND AreaID<>0 and trndate = @TrnDate", parameters_current2);
+
+        if (dt_current2.Rows.Count > 0)
+        {
+          model.AutoID = int.Parse(dt_current2.Rows[0][0].ToString());
+
+          model.AreaID = int.Parse(dt_current2.Rows[0][1].ToString());
+
+          model.QuestionNo = int.Parse(dt_current2.Rows[0][2].ToString());
+
+          model.IsComplete = bool.Parse(dt_current2.Rows[0][3].ToString());
+
+          model.LevelID = int.Parse(dt_current2.Rows[0][4].ToString());
+
+
+
+
+
+        }
+      }
+
+
+      if (model.IsComplete)
+      {
+        return View(model);
+      }
+      else
+      {
+        //SqlParameter[] parameters = new SqlParameter[]{
+        //            new SqlParameter("@groupName",SqlDbType.NVarChar){Value ="5S Week"},
+        //        };
+        //int totalq = Firstronic.Framework.Queries.GetIntFromQuery("SELECT Count(*) FROM [Quality_5S_Questions] WHERE groupname = @groupName", parameters);
+        SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@Question_levelID",SqlDbType.Int){Value = model.LevelID},
+                };
+        int totalq = Firstronic.Framework.Queries.GetIntFromQuery("SELECT Count(*) FROM [Quality_5S_Questions] WHERE [groupname]<= @Question_levelID)", parameters);
+
+     
+
+        // Checl if Total is reached
+        if (model.QuestionNo > totalq)
+        {
+          SqlParameter[] parameterUPDATE = new SqlParameter[]{
+                    new SqlParameter("@UserID",SqlDbType.NVarChar){Value =(model.UserID ?? "").ToString()},
+                    new SqlParameter("@TrnDate",SqlDbType.Date){Value = model.TrnDate.ToString("MM/dd/yyyy")},
+
+                };
+          Firstronic.Framework.Queries.ExecuteSimpleQuery("UPDATE Quality_5S_Status SET IsComplete=1 WHERE UserID = @UserID and trndate = @TrnDate", parameterUPDATE);
+
+          model.IsComplete = true;
+
+          return View(model);
+        }
+        else
+        {
+          return RedirectToAction("Poll5SQuestion", new { QuestionNo = model.QuestionNo, Building_Key = model.Building_Key });
+        }
+      }
+    }
+
+
+    [Authorize]
+    public ActionResult Start5SAudit(int Building_Key = 0)
+    {
+
+      Building_Key = 278344;
+      SqlParameter[] areaParameters = new SqlParameter[]{
+                    new SqlParameter("@Building_Key",SqlDbType.Int){Value =Building_Key}
+                };
+
+     int Area = Firstronic.Framework.Queries.GetIntFromQuery("SELECT top 1 AreaID FROM PD_idt_areas WHERE AreaID not in (SELECT [AreaID] FROM [QUALITY_5S]WHERE DATEPART(WEEK, TrnDate) = DATEPART(WEEK, GETDATE()) AND YEAR(TrnDate) = YEAR(GETDATE()) AND AreaID<>0) AND Facility_Key=@Building_Key ORDER BY NEWID()", areaParameters);
+
+      SqlParameter[] ParametersInt = new SqlParameter[]{
+                new SqlParameter("@ID",SqlDbType.NVarChar){Value = User.Identity.GetUserId()}
+              };
+      string Name = Firstronic.Framework.Queries.GetStringFromQuery(" select Name from AspNetUsers where ID=@ID", ParametersInt);
+
+      SqlParameter[] parameters = new SqlParameter[]{
+                            new SqlParameter("@Comments",SqlDbType.NVarChar){Value = ""},
+                            new SqlParameter("@Person",SqlDbType.NVarChar){Value =Name},
+                            new SqlParameter("@AreaID",SqlDbType.Int){Value =Area},
+                            new SqlParameter("@ID",SqlDbType.NVarChar){Value = User.Identity.GetUserId()}
+
+                        };
+
+      var result = db.ExecuteInsertCommand($@"INSERT INTO [dbo].[Quality_5S]
+                   (User_ID,
+					TrnDate,
+					Comments,
+					Person,AreaID)
+					VALUES
+                   (@ID," +
+                  "GETDATE()," +
+                  "@Comments," +
+                  "@Person," +
+                  "@AreaID)", parameters);
+
+      if (result > 0)
+      {
+        //this.NotifySuccess("Successfully saved.");
+        return RedirectToAction("EditQuestion", new { Id = result });
+      }
+      else if (result == 0)
+      {
+        this.NotifyError("Record can not save!");
+        return RedirectToAction("List");
+      }
+      else
+      {
+        this.NotifyError("Error in database.");
+        return RedirectToAction("List");
+      }
+
+    }
+
+
+
+
+
+    //aqui hace todas las preguntas y las inserta
+    [Authorize]
+    public ActionResult Poll5SQuestion(int QuestionNo, string Answer = "", string Comments = "", int AnswerValue = 4, int Building_Key = 0)
+    {
+      var model = new Firstronic.Core.Entities.App.Quality.tbl_Quality_5S_History_FULL2();
+
+      // Base in the question get the question ID...
+
+      model.UserID = User.Identity.GetUserId();
+
+      model.Building_Key = Building_Key;
+
+      model.TrnDate = DateTime.Now;
+      SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@UserID",SqlDbType.NVarChar){Value =(model.UserID ?? "").ToString()},
+                    new SqlParameter("@TrnDate",SqlDbType.Date){Value =model.TrnDate.ToString("MM/dd/yyyy")},
+                };
+      DataTable dt_current = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [AutoID],[AreaID],[QuestionNo],[IsComplete],[LevelID] FROM [Quality_5S_Status] WHERE UserID = @UserID and trndate = @TrnDate AND AreaID<>0", parameters);
+
+      if (dt_current.Rows.Count > 0)
+      {
+        model.AutoID = int.Parse(dt_current.Rows[0][0].ToString());
+
+        model.AuditID = model.AutoID;
+
+        model.AreaID = int.Parse(dt_current.Rows[0][1].ToString());
+
+        model.Area_Name = "";
+        SqlParameter[] parameterstypoarea = new SqlParameter[]{
+                    new SqlParameter("@AutoID",SqlDbType.Int){Value =model.AreaID},
+                };
+        DataTable typoarea = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [TypeID],[ID] FROM [Quality_5S_Areas] WHERE AutoID=@AutoID", parameterstypoarea);
+
+        if (typoarea.Rows.Count > 0)
+        {
+          SqlParameter[] ParametersInt = new SqlParameter[]{
+                new SqlParameter("@ID",SqlDbType.NVarChar){Value = typoarea.Rows[0][1].ToString()}
+              };
+          if (typoarea.Rows[0][0].ToString() == "1")
+          {
+            model.Area_Name = Firstronic.Framework.Queries.GetStringFromQuery("SELECT [Area] FROM [PD_idt_areas] WHERE [AreaID]=@ID", ParametersInt);
+          }
+          else
+          {
+            model.Area_Name = Firstronic.Framework.Queries.GetStringFromQuery("SELECT [CellName] FROM [PD_idt_cells] WHERE [CellID]=@ID", ParametersInt);
+          }
+        }
+
+        model.Question_No = QuestionNo;
+
+        model.AuditLevel = int.Parse(dt_current.Rows[0][4].ToString());
+        SqlParameter[] parametersdtQuestions = new SqlParameter[]{
+                    new SqlParameter("@Question_Audit_ID",SqlDbType.Int){Value =model.AuditLevel },
+                    
+                };
+        
+
+        DataTable dtQuestions = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [Question_ID],[Question_Name],[Question_Type_ID]  FROM [Quality_5S_Questions] WHERE [groupname] <= @Question_Audit_ID  Order by Question_No ASC", parametersdtQuestions);
+
+
+        model.Question = dtQuestions.Rows[QuestionNo - 1][1].ToString();
+
+        model.QuestionID = int.Parse(dtQuestions.Rows[QuestionNo - 1][0].ToString());
+
+        model.Question_Type_ID = int.Parse(dtQuestions.Rows[QuestionNo - 1][2].ToString());
+
+        if (Comments != "")
+        {
+          model.Comments = Comments;
+        }
+
+        model.Answer = Answer;
+
+        model.AnswerValue = AnswerValue;
+
+        return View(model);
+      }
+      else
+      {
+        return RedirectToAction("Start5SAudit");
+      }
+    }
+
+    //POST EDIT -- CHANGE AREA
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Question5SRemove")]
+    public ActionResult Question5SRemove(tbl_Quality_5S_History_FULL2 model)
+    {
+      if (ModelState.IsValid)
+      {
+
+        if (model.Answer == null)
+        {
+          model.Answer = "";
+        }
+
+        // SAVE DATA...
+        SqlParameter[] parametersInsert2 = new SqlParameter[]{
+            new SqlParameter("@UserID",SqlDbType.VarChar){Value =(model.UserID ?? "").ToString()},
+            new SqlParameter("@TrnDate",SqlDbType.Date){Value =model.TrnDate.ToString("MM/dd/yyyy")},
+        };
+
+        var result = Firstronic.Framework.Queries.ExecuteQuery(@"DELETE FROM Quality_5S_Status WHERE UserID = @UserID  AND AreaID<>0 and trndate = @TrnDate AND QuestionNo=1", parametersInsert2);
+
+        return RedirectToAction("Start5SAudit", new { Building_Key = model.Building_Key });
+      }
+
+      return View(model);
+    }
+
+
+
+
+
+    //POST EDIT
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Poll5SQuestion")]
+    public ActionResult Poll5SQuestion(tbl_Quality_5S_History_FULL2 model)
+    {
+      if (ModelState.IsValid)
+      {
+
+        if (model.Answer == null)
+        {
+          model.Answer = "";
+        }
+
+        if (model.AnswerValue <= 2 && model.OwnerID == "-1")
+        {
+          this.NotifyError("Selecciona un dueño. / Select the owner");
+
+          return RedirectToAction("Poll5SQuestion", new { QuestionNo = model.Question_No, Answer = model.Answer, Comments = model.Comments, AnswerValue = model.AnswerValue, Building_Key = model.Building_Key });
+        }
+
+        if (model.AnswerValue <= 2 && model.Answer.Length < 10)
+        {
+          this.NotifyError("Agregar comentarios mas largos. / Add a detailed comment.");
+
+          return RedirectToAction("Poll5SQuestion", new { QuestionNo = model.Question_No, Answer = model.Answer, Comments = model.Comments, AnswerValue = model.AnswerValue, Building_Key = model.Building_Key });
+        }
+
+        //GENERATE TASK!...
+        if (model.OwnerID != "-1")
+        {
+          SqlParameter[] parametersArea_Name = new SqlParameter[]{
+                    new SqlParameter("@AreaID",SqlDbType.Int){Value =model.AreaID},
+                };
+
+          model.Area_Name = Firstronic.Framework.Queries.GetStringFromQuery("SELECT [Area] FROM [PD_idt_areas] where AreaID=@AreaID", parametersArea_Name);
+
+          SqlParameter[] parametersQuestion = new SqlParameter[]{
+                    new SqlParameter("@Question_ID",SqlDbType.Int){Value =model.QuestionID},
+                };
+
+          model.Question = Firstronic.Framework.Queries.GetStringFromQuery("SELECT [Question_Name] FROM [Quality_5S_Questions] where Question_ID=@Question_ID", parametersQuestion);
+
+          SqlParameter[] parametersInsert = new SqlParameter[]{
+                    new SqlParameter("@OriginID",SqlDbType.Int){Value ="1"},
+                    new SqlParameter("@PriorityID",SqlDbType.Int){Value ="1"},
+                    new SqlParameter("@TaskName",SqlDbType.VarChar){Value =("5S AUDIT " + model.AutoID + " AREA " + model.Area_Name  ?? "").ToString()},
+                    new SqlParameter("@Description",SqlDbType.VarChar){Value =( model.Question + " R.- " + model.Answer.Replace("'", "") ?? "").ToString()},
+                    new SqlParameter("@TrnDate",SqlDbType.DateTime){Value =DateTime.Now},
+                    new SqlParameter("@UpdateBy",SqlDbType.Int){Value =model.UserID},
+                    new SqlParameter("@Owners",SqlDbType.VarChar){Value =model.OwnerID},
+                    new SqlParameter("@Status",SqlDbType.Int){Value ="0"},
+                    new SqlParameter("@TrnUpdate",SqlDbType.DateTime){Value =DateTime.Now},
+                    new SqlParameter("@OwnerID",SqlDbType.NVarChar){Value =model.OwnerID},
+                    new SqlParameter("@UserId",SqlDbType.NVarChar){Value =(User.Identity.GetUserId() ?? "").ToString()},
+                };
+
+          model.TaskID = Firstronic.Framework.Queries.InsertQuery(@"INSERT INTO IT_tbl_tasks_monitor
+                              ([OriginID]
+                              ,[PriorityID]
+                              ,[TaskName]
+                              ,[Description]
+                              ,[TrnDate]
+                              ,[UpdateBy]
+                              ,[Owners]
+                              ,[Status]
+                              ,[TrnUpdate]
+                              ,[TrnPlanDue],[OwnerID],[UserId])
+                         VALUES
+                                (@OriginID
+                              ,@PriorityID
+                              ,@TaskName
+                              ,@Description
+                              ,@TrnDate
+                              ,@UpdateBy
+                              ,@Owners
+                              ,@Status
+                              ,@TrnUpdate
+                              ,DATEADD(dd,1,GETDATE()),@OwnerID,@UserId)", parametersInsert);
+        }
+
+        // SAVE DATA...
+        SqlParameter[] parametersInsert2 = new SqlParameter[]{
+                    new SqlParameter("@QuestionID",SqlDbType.Int){Value =model.QuestionID?? -1},
+                    new SqlParameter("@AnswerID",SqlDbType.Int){Value =model.AnswerValue},
+                    new SqlParameter("@Comments",SqlDbType.VarChar){Value =(model.Answer.Replace("'", "") ?? "").ToString()},
+                    new SqlParameter("@AreaID",SqlDbType.Int){Value =model.AreaID?? -1},
+                    new SqlParameter("@Acciones",SqlDbType.VarChar){Value =(model.Acciones ?? "").ToString()},
+                    new SqlParameter("@OwnerID",SqlDbType.Int){Value =-1}, // duda aqui cambiar el campo de la tabla a string ?
+                    new SqlParameter("@UserID",SqlDbType.VarChar){Value =(model.UserID ?? "").ToString()},
+                    new SqlParameter("@AuditID",SqlDbType.Int){Value =model.AuditID ?? -1},
+                    new SqlParameter("@AuditLevel",SqlDbType.Int){Value =model.AuditLevel?? -1},
+                    new SqlParameter("@TaskID",SqlDbType.Int){Value =model.TaskID},
+                };
+
+        var result = Firstronic.Framework.Queries.InsertQuery(@"INSERT INTO [dbo].[Quality_5S_AUDIT_History]
+                     ([QuestionID]
+                     ,[AnswerID]
+                     ,[Comments]
+                     ,[AreaID]
+                     ,[TrnDate]
+                     ,[TrdAudit]
+                     ,[UserID]
+                     ,[AuditID]
+                     ,[AuditLevel]
+                     ,[Shift],[OwnerID],[TaskID])
+                         VALUES
+                               (@QuestionID
+                               ,@AnswerID
+                               ,@Comments
+                               ,@AreaID,GETDATE(),GETDATE(),@UserID,@AuditID,@AuditLevel,dbo.fnGetShift(GETDATE()),@OwnerID,@TaskID)", parametersInsert2);
+
+
+        //save data in 5S answers
+
+        //SqlParameter[] parameters = new SqlParameter[]{
+        //            new SqlParameter("@UserID",SqlDbType.NVarChar){Value =(model.UserID ?? "").ToString()},
+        //            new SqlParameter("@TrnDate",SqlDbType.Date){Value =model.TrnDate.ToString("MM/dd/yyyy")},
+        //        };
+        //DataTable dt_current = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [Poll_ID],[AreaID],[QuestionNo],[IsComplete],[LevelID] FROM[Quality_5S] WHERE UserID = @UserId and trndate = @TrnDate AND AreaID<>0", parameters);
+
+        //if (dt_current.Rows.Count > 0)
+        //{
+        //  model.AutoID = int.Parse(dt_current.Rows[0][0].ToString());
+
+        //  model.AreaID = int.Parse(dt_current.Rows[0][1].ToString());
+
+        //  model.QuestionNo = int.Parse(dt_current.Rows[0][2].ToString());
+
+        //  model.IsComplete = bool.Parse(dt_current.Rows[0][3].ToString());
+
+        //  model.LevelID = int.Parse(dt_current.Rows[0][4].ToString());
+
+        //}
+
+
+
+        SqlParameter[] parametersINSERT = new SqlParameter[]{
+                                  new SqlParameter("@Poll_ID",SqlDbType.Int){Value =model.AuditID},
+                                  new SqlParameter("@Question_ID",SqlDbType.Int){Value =model.QuestionID},
+                                  new SqlParameter("@Answer_Text",SqlDbType.NVarChar){Value =(model.Comments ?? "").ToString()},
+                                  new SqlParameter("@Answer_Value",SqlDbType.Int){Value =model.AnswerValue},
+                              };
+        var result5s = db.ExecuteCommand(@"INSERT INTO [dbo].[Quality_5S_Answers]
+                               ([Poll_ID]
+                               ,[Question_ID]
+                               ,[Answer_Text]
+                               ,[Answer_Value])
+                         VALUES
+                               (@Poll_ID
+                               ,@Question_ID
+                               ,@Answer_Text
+                               ,@Answer_Value)", parametersINSERT);
+
+
+        if (result > 0)
+        {
+          //SEND EMAIL TO THE OWNER TBD
+          if (model.TaskID > 0)
+          {
+            Firstronic.Framework.Emails.TasksManger.SendEmail(model.TaskID, Request.Url);
+          }
+
+          //UPDATE Question NO fro user data.
+          SqlParameter[] parametersUPDATE = new SqlParameter[]{
+                    new SqlParameter("@UserID",SqlDbType.NVarChar){Value =(model.UserID ?? "").ToString()},
+                    new SqlParameter("@TrnDate",SqlDbType.Date){Value =model.TrnDate.ToString("MM/dd/yyyy")},
+                };
+          Firstronic.Framework.Queries.ExecuteSimpleQuery("UPDATE [dbo].[Quality_5S_Status] SET [QuestionNo] = [QuestionNo] + 1 WHERE UserID = @UserID and trndate = @TrnDate AND AreaID<>0", parametersUPDATE);
+        }
+        else if (result == 0)
+        {
+          this.NotifyError("Record can not save!");
+        }
+        else
+        {
+          this.NotifyError("Error in database.");
+        }
+
+        return RedirectToAction("Start5SAudit", new { Building_Key = model.Building_Key });
+      }
+
+      return View(model);
+    }
+
+
+  }
+  [Authorize(Roles = "BF Capas Questions Edit")]
+    public class Poll5SQuestionsController : BaseSecurityController
+    {
+      #region Fields
+      private readonly DataContext db;
+      #endregion Fields
+
+      #region Ctor
+      public Poll5SQuestionsController()
+      {
+        db = new DataContext();
+      }
+      #endregion Ctor
+
+      public ActionResult Index()
+      {
+        var model = db.Database.SqlQuery<tbl_Quality_5S_Questions_FULL>($@"SELECT    QUALITY_5S_QUESTIONS.Question_ID, QUALITY_5S_QUESTIONS.Question_Name, QUALITY_5S_QUESTIONS.Question_Type_ID, QUALITY_5S_QUESTIONS.Question_No, 
+                          QUALITY_5S_CATEGORIES.Question_Category, QUALITY_5S_QUESTIONS_TYPE.Question_Type, QUALITY_5S_QUESTIONS.GROUPNAME
+FROM      QUALITY_5S_QUESTIONS 
+						INNER JOIN
+                         QUALITY_5S_QUESTIONS_TYPE ON 
+						 QUALITY_5S_QUESTIONS.Question_Type_ID = QUALITY_5S_QUESTIONS_TYPE.Question_Type_ID
+						 inner join 
+					     QUALITY_5S_CATEGORIES on
+						 QUALITY_5S_CATEGORIES.Question_Category_ID =  QUALITY_5S_QUESTIONS.Question_Category_ID  order by QUALITY_5S_QUESTIONS.Question_Category_ID asc").ToArray().ToList().AsQueryable();
+
+        return View(model);
+      }
+
+      public ActionResult List()
+      {
+        var model = db.Database.SqlQuery<tbl_Quality_5S_Questions_FULL>($@"
+      SELECT        QUALITY_5S_QUESTIONS.Question_ID, QUALITY_5S_QUESTIONS.Question_Name, QUALITY_5S_QUESTIONS.Question_Type_ID, QUALITY_5S_QUESTIONS.Question_No, 
+                          QUALITY_5S_CATEGORIES.Question_Category, QUALITY_5S_QUESTIONS_TYPE.Question_Type, QUALITY_5S_QUESTIONS.GROUPNAME ,QUALITY_5S_QUESTIONS.Question_area_ID,
+						  PD_idt_cells.cellname
+           FROM   QUALITY_5S_QUESTIONS 
+						INNER JOIN
+                         QUALITY_5S_QUESTIONS_TYPE ON 
+						 QUALITY_5S_QUESTIONS.Question_Type_ID = QUALITY_5S_QUESTIONS_TYPE.Question_Type_ID
+						 inner join 
+					     QUALITY_5S_CATEGORIES on
+						 QUALITY_5S_CATEGORIES.Question_Category_ID =  QUALITY_5S_QUESTIONS.Question_Category_ID  
+						INNER JOIN PD_idt_cells ON QUALITY_5S_QUESTIONS.Question_area_ID = PD_idt_cells.CellID 
+						order by Question_area_ID asc, Question_No asc,QUALITY_5S_QUESTIONS.Question_Category_ID asc
+").ToArray().ToList().AsQueryable();
+
+        return View(model);
+      }
+
+      // GET:
+      public ActionResult Create()
+      {
+        var model = new tbl_Quality_5S_Questions_FULL();
+        var FirstronicFacilitiesList = new List<SelectListItem>();
+        FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+        model.FacilityList = FirstronicFacilitiesList;
+        return View(model);
+      }
+
+      [HttpPost]
+      [ValidateInput(false)]
+      [ValidateAntiForgeryToken]
+      [MultipleButtonAction(Name = "action", Argument = "Create")]
+      public ActionResult Create(tbl_Quality_5S_Questions_FULL model)
+      {
+        if (ModelState.IsValid)
+        {
+          SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@Question_Name",SqlDbType.NVarChar){Value =(model.Question_Name ?? "").ToString()},
+                    new SqlParameter("@Question_Type_ID",SqlDbType.Int){Value =model.Question_Type_ID},
+                    new SqlParameter("@Question_No",SqlDbType.Int){Value =model.Question_No},
+                    new SqlParameter("@Question_Category_ID",SqlDbType.Int){Value =model.Question_Category_ID},
+                    new SqlParameter("@Question_AreaID",SqlDbType.Int){Value =model.Question_Area_ID},
+                    new SqlParameter("@GROUPNAME",SqlDbType.VarChar){Value =(model.GROUPNAME.Trim() ?? "").ToString()},
+                };
+          var result = db.ExecuteInsertCommand($@"INSERT INTO [dbo].[Quality_5S_Questions]
+                   (Question_Name,
+					Question_Type_ID,
+					Question_No,
+					Question_Category_ID,
+					GROUPNAME,Question_Area_ID)
+					VALUES
+                   (@Question_Name," +
+              "@Question_Type_ID," +
+              "@Question_No," +
+              "@Question_Category_ID," +
+             "@GROUPNAME,@Question_AreaID)", parameters);
+
+          if (result > 0)
+          {
+            this.NotifySuccess("Successfully saved.");
+            return RedirectToAction("Edit", new { Id = result });
+          }
+          else if (result == 0)
+          {
+            this.NotifyError("Record can not save!");
+            return RedirectToAction("List");
+          }
+          else
+          {
+            this.NotifyError("Error in database.");
+            return RedirectToAction("List");
+          }
+        }
+
+        return View(model);
+      }
+
+      // GET
+      public ActionResult Edit(int id)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@Question_ID",SqlDbType.Int){Value =id},
+                };
+        var model0 = db.Database.SqlQuery<tbl_Quality_5S_Questions_FULL>($@" SELECT  QUALITY_5S_QUESTIONS.Question_ID, QUALITY_5S_QUESTIONS.Question_Name, QUALITY_5S_QUESTIONS.Question_Type_ID, QUALITY_5S_QUESTIONS.Question_No, 
+                          QUALITY_5S_CATEGORIES.Question_Category, QUALITY_5S_QUESTIONS_TYPE.Question_Type, QUALITY_5S_QUESTIONS.GROUPNAME ,QUALITY_5S_QUESTIONS.question_area_id
+FROM      QUALITY_5S_QUESTIONS 
+						INNER JOIN
+                         QUALITY_5S_QUESTIONS_TYPE ON 
+						 QUALITY_5S_QUESTIONS.Question_Type_ID = QUALITY_5S_QUESTIONS_TYPE.Question_Type_ID
+						 inner join 
+					     QUALITY_5S_CATEGORIES on
+						 QUALITY_5S_CATEGORIES.Question_Category_ID =  QUALITY_5S_QUESTIONS.Question_Category_ID WHERE QUALITY_5S_QUESTIONS.Question_ID=@Question_ID", parameters).FirstOrDefault();
+
+        if (model0 == null)
+        {
+          this.NotifyError("Not found.");
+          return RedirectToAction("List");
+        }
+
+        var FirstronicFacilitiesList = new List<SelectListItem>();
+        FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+        var model = new tbl_Quality_5S_Questions_FULL
+        {
+          Question_ID = model0.Question_ID,
+          Question_Name = model0.Question_Name,
+          Question_Type_ID = model0.Question_Type_ID,
+          Question_No = model0.Question_No,
+          Question_Category = model0.Question_Category,        
+          GROUPNAME = model0.GROUPNAME,
+          FacilityList = FirstronicFacilitiesList
+        };
+        return View(model);
+      }
+
+      // POST EDIT 
+      [HttpPost]
+      [ValidateAntiForgeryToken]
+      [MultipleButtonAction(Name = "action", Argument = "Edit")]
+      public ActionResult Edit(tbl_Quality_5S_Questions_FULL model)
+      {
+        if (ModelState.IsValid)
+        {
+          var id = model.Question_ID;
+          SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@Question_ID",SqlDbType.Int){Value = model.Question_ID},
+                };
+          var record = db.Database.SqlQuery<tbl_Quality_5S_Questions>($@"SELECT *  " +
+                  "FROM Quality_5S_Questions WHERE Question_ID=@Question_ID", parameters).FirstOrDefault();
+
+          if (record is null)
+          {
+            this.NotifyError("Record not found.");
+            return RedirectToAction("List");
+          }
+          SqlParameter[] parametersUPDATE = new SqlParameter[]{
+                    new SqlParameter("@Question_Name",SqlDbType.NVarChar){Value =(model.Question_Name ?? "").ToString()},
+                    new SqlParameter("@Question_Type_ID",SqlDbType.Int){Value =model.Question_Type_ID},
+                    new SqlParameter("@Question_No",SqlDbType.Int){Value =model.Question_No},
+                    new SqlParameter("@Question_Category_ID",SqlDbType.Int){Value =model.Question_Category_ID},
+                  
+                    new SqlParameter("@Question_ID",SqlDbType.Int){Value =record.Question_ID},
+                    new SqlParameter("@GROUPNAME",SqlDbType.VarChar){Value =(model.GROUPNAME.Trim() ?? "").ToString()},
+                };
+
+          var result = db.ExecuteCommand("UPDATE Quality_5S_Questions SET " +
+          "Question_Name = @Question_Name," +
+          "Question_Type_ID = @Question_Type_ID ," +
+          "Question_No = @Question_No," +
+          "Question_Category_ID = @Question_Category_ID," +
+          "GROUPNAME = @GROUPNAME" +
+          " WHERE Question_ID = @Question_ID", parametersUPDATE);
+
+          if (result > 0)
+            this.NotifySuccess("Successfully saved.");
+          else if (result == 0)
+            this.NotifyError("Record can not save!");
+          else
+            this.NotifyError("Error in database.");
+
+          return RedirectToAction("Edit", new { id = record.Question_ID });
+        }
+
+        return View(model);
+      }
+
+      // POST DELETE
+      [HttpPost]
+      [ValidateAntiForgeryToken]
+      [MultipleButtonAction(Name = "action", Argument = "Delete")]
+      public ActionResult Delete(tbl_Quality_5S_Questions_FULL model)
+      {
+        if (ModelState.IsValid)
+        {
+          SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@Question_ID",SqlDbType.Int){Value =model.Question_ID},
+                };
+          var record = db.Database.SqlQuery<tbl_Quality_5S_Questions>($@"SELECT *  " +
+                  "FROM Quality_5S_Questions WHERE Question_ID=@Question_ID ", parameters).FirstOrDefault();
+
+          if (record is null)
+          {
+            this.NotifyError("Record not found.");
+            return RedirectToAction("List");
+          }
+
+        SqlParameter[] ParametersInt = new SqlParameter[]{
+                new SqlParameter("@ID",SqlDbType.NVarChar){Value = record.Question_ID }
+              };
+        var result = db.ExecuteCommand("DELETE FROM Quality_5S_Questions  WHERE Question_ID=@ID" ,ParametersInt);
+
+          if (result > 0)
+            this.NotifySuccess("Successfully saved.");
+          else if (result == 0)
+            this.NotifyError("Record can not save!");
+          else
+            this.NotifyError("Error in database.");
+
+          return RedirectToAction("List");
+        }
+
+        return View(model);
+      }
+
+      [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+      public PartialViewResult Owners(int id)
+      {
+        var model = new tbl_Quality_5S_Question_Owners_FULL_partial();
+
+        model.id = id;
+        SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@Id",SqlDbType.Int){Value =id},
+                };
+        model.Modelo = db.Database.SqlQuery<Firstronic.Core.Entities.App.Quality.tbl_Quality_5S_Question_Owners_FULL>($@"SELECT Quality_5S_Question_Owners.AutoID, Quality_5S_Question_Owners.QuestionID, Quality_5S_Question_Owners.Owner, AspNetUsers.Name
+FROM            Quality_5S_Question_Owners INNER JOIN
+                         AspNetUsers ON Quality_5S_Question_Owners.Owner = AspNetUsers.Id WHERE QuestionID=@Id", parameters).ToArray().ToList().AsQueryable();
+
+        return PartialView("_Owners", model);
+      }
+
+      [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+      public bool DeleteOwners(int id)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@Id",SqlDbType.Int){Value =id},
+                };
+        var resultado = db.ExecuteCommand($@"DELETE FROM Quality_5S_Question_Owners WHERE AutoID=@Id", parameters);
+
+        return true;
+      }
+
+      [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+      public bool AddOwners(string CPU, int QuestionID)
+      {
+        //Search area and side to add...
+        if (QuestionID > 0)
+        {
+          using (DataContext db = new DataContext())
+          {
+            var conn = db.Database.Connection;
+            var connectionState = conn.State;
+            try
+            {
+              if (connectionState != System.Data.ConnectionState.Open) conn.Open();
+              SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@QuestionID",SqlDbType.Int){Value =QuestionID},
+                    new SqlParameter("@Owner",SqlDbType.NVarChar){Value =(CPU ?? "").ToString()},
+                };
+              string query_insert = $@"INSERT INTO [dbo].[Quality_5S_Question_Owners]
+                                                       ([QuestionID]
+                                                       ,[Owner])
+                                                 VALUES
+                                                   (@QuestionID
+                                                   ,@Owner)";
+              var resultado = db.ExecuteCommand(query_insert, parameters);
+
+
+            }
+            catch (System.Exception)
+            {
+              // error handling
+              //throw;
+            }
+          }
+        }
+        return true;
+      }
+
+
+
+    }
+
+
+
+  [Authorize(Roles = "System Administrator,BF Capas Areas Edit")]
+  public class Areas5SController : BaseSecurityController
+  {
+    #region Fields
+    private readonly DataContext db;
+    #endregion Fields
+
+    #region Ctor
+    public Areas5SController()
+    {
+      db = new DataContext();
+    }
+    #endregion Ctor
+
+
+    // GET: Quality/CapasAreas
+    public ActionResult Index()
+    {
+      return View();
+    }
+
+    public ActionResult List()
+    {
+
+      return View();
+    }
+    public ActionResult Create()
+    {
+      var model = new Quality_Capas_Areas_FULL();
+      var FirstronicFacilitiesList = new List<SelectListItem>();
+      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+      model.FacilityList = FirstronicFacilitiesList;
+      return View(model);
+    }
+
+    [HttpPost]
+    [ValidateInput(false)]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Create")]
+    public ActionResult Create(Quality_Capas_Areas_FULL model)
+    {
+      if (ModelState.IsValid)
+      {
+        SqlParameter[] parameters = new SqlParameter[]{
+                    new SqlParameter("@ID",SqlDbType.Int){Value =model.CellID},
+                    new SqlParameter("@TypeID",SqlDbType.Int){Value =model.TypeID},
+                };
+        var result = db.ExecuteInsertCommand($@"INSERT INTO [dbo].[Quality_5S_Areas]([ID],[TypeID]) VALUES (@ID,@TypeID)", parameters);
+        if (result > 0)
+        {
+          this.NotifySuccess("Successfully saved.");
+          return RedirectToAction("List");
+        }
+        else if (result == 0)
+        {
+          this.NotifyError("Record can not save!");
+          return RedirectToAction("List");
+        }
+        else
+        {
+          this.NotifyError("Error in database.");
+          return RedirectToAction("List");
+        }
+      }
+
+      return View(model);
+    }
+
+    public ActionResult Delete(int id)
+    {
+      SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@ID",SqlDbType.Int){Value = id},
+      };
+
+      var result = db.ExecuteCommand($@"DELETE FROM [dbo].[Quality_5S_Areas] WHERE AutoID=@ID", parameters);
+
+      this.NotifySuccess("Successfully saved.");
+      return RedirectToAction("List");
+    }
+
+
+    //Fill station.
+    [HttpPost]
+    [AllowAnonymous]
+    public ActionResult FillStations(int? TypeID, string All = "", string onlyactive = "-1")
+    {
+      var stations = Firstronic.Framework.Functions.Dropdowns.GetAreasList();
+      if (TypeID == 2)
+      {
+        stations = (List<SelectListItem>)Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT CellID,CellName FROM [PD_idt_cells]");
+      }
+      return Json(stations, JsonRequestBehavior.AllowGet);
+    }
+  }
+
+
+}

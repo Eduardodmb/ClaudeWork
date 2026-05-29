@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 900 550" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrow-slate" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34d399"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fb923c"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/>
+    </marker>
+    <marker id="arrow-pink" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f472b6"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" fill="#e2e8f0" font-size="24" font-weight="bold" font-family="system-ui, sans-serif">Context Compiler Pipeline</text>
+  <text x="450" y="58" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="system-ui, sans-serif">Natural Language → Structured Context  |  Exposed via Safari MCP Tools</text>
+
+  <!-- Input -->
+  <g transform="translate(30, 130)">
+    <rect width="130" height="80" fill="#1e293b" stroke="#64748b" stroke-width="2" rx="8"/>
+    <text x="65" y="30" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold" font-family="system-ui, sans-serif">Natural Language</text>
+    <text x="65" y="50" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">"Remember that we</text>
+    <text x="65" y="65" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">use PostgreSQL"</text>
+  </g>
+
+  <!-- Stage 1: Parse -->
+  <g transform="translate(180, 100)">
+    <rect width="120" height="140" fill="#0f172a" stroke="#60a5fa" stroke-width="2" rx="8"/>
+    <rect width="120" height="25" fill="#60a5fa" rx="8" ry="0"/>
+    <text x="60" y="18" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold" font-family="system-ui, sans-serif">1. PARSE</text>
+    <text x="60" y="50" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Extract:</text>
+    <text x="60" y="70" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Key assertions</text>
+    <text x="60" y="85" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Domain/topic</text>
+    <text x="60" y="100" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Relationships</text>
+    <text x="60" y="115" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Confidence</text>
+  </g>
+  <!-- MCP Tool Label -->
+  <text x="240" y="250" text-anchor="middle" fill="#60a5fa" font-size="9" font-style="italic" font-family="system-ui, sans-serif">context_capture</text>
+
+  <!-- Stage 2: Resolve -->
+  <g transform="translate(320, 100)">
+    <rect width="120" height="140" fill="#0f172a" stroke="#34d399" stroke-width="2" rx="8"/>
+    <rect width="120" height="25" fill="#34d399" rx="8" ry="0"/>
+    <text x="60" y="18" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold" font-family="system-ui, sans-serif">2. RESOLVE</text>
+    <text x="60" y="50" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Check:</text>
+    <text x="60" y="70" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Conflicts</text>
+    <text x="60" y="85" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• References</text>
+    <text x="60" y="100" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Dependencies</text>
+    <text x="60" y="115" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Schema</text>
+  </g>
+  <!-- MCP Tool Label -->
+  <text x="380" y="250" text-anchor="middle" fill="#34d399" font-size="9" font-style="italic" font-family="system-ui, sans-serif">context_resolve</text>
+
+  <!-- Stage 3: Optimize -->
+  <g transform="translate(460, 100)">
+    <rect width="120" height="140" fill="#0f172a" stroke="#fb923c" stroke-width="2" rx="8"/>
+    <rect width="120" height="25" fill="#fb923c" rx="8" ry="0"/>
+    <text x="60" y="18" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold" font-family="system-ui, sans-serif">3. OPTIMIZE</text>
+    <text x="60" y="50" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Transform:</text>
+    <text x="60" y="70" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Summarize</text>
+    <text x="60" y="85" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• De-duplicate</text>
+    <text x="60" y="100" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Structure</text>
+    <text x="60" y="115" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Token budget</text>
+  </g>
+  <!-- MCP Tool Label -->
+  <text x="520" y="250" text-anchor="middle" fill="#fb923c" font-size="9" font-style="italic" font-family="system-ui, sans-serif">context_optimize</text>
+
+  <!-- Stage 4: Allocate -->
+  <g transform="translate(600, 100)">
+    <rect width="120" height="140" fill="#0f172a" stroke="#a78bfa" stroke-width="2" rx="8"/>
+    <rect width="120" height="25" fill="#a78bfa" rx="8" ry="0"/>
+    <text x="60" y="18" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold" font-family="system-ui, sans-serif">4. ALLOCATE</text>
+    <text x="60" y="50" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Route:</text>
+    <text x="60" y="70" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Storage path</text>
+    <text x="60" y="85" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Asset type</text>
+    <text x="60" y="100" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Priority</text>
+    <text x="60" y="115" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Budget</text>
+  </g>
+  <!-- MCP Tool Label -->
+  <text x="660" y="250" text-anchor="middle" fill="#a78bfa" font-size="9" font-style="italic" font-family="system-ui, sans-serif">context_allocate</text>
+
+  <!-- Stage 5: Link -->
+  <g transform="translate(460, 310)">
+    <rect width="120" height="140" fill="#0f172a" stroke="#f472b6" stroke-width="2" rx="8"/>
+    <rect width="120" height="25" fill="#f472b6" rx="8" ry="0"/>
+    <text x="60" y="18" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold" font-family="system-ui, sans-serif">5. LINK</text>
+    <text x="60" y="50" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Connect:</text>
+    <text x="60" y="70" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Related assets</text>
+    <text x="60" y="85" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Update lineage</text>
+    <text x="60" y="100" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Register</text>
+    <text x="60" y="115" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">• Index</text>
+  </g>
+  <!-- MCP Tool Label -->
+  <text x="520" y="460" text-anchor="middle" fill="#f472b6" font-size="9" font-style="italic" font-family="system-ui, sans-serif">context_link</text>
+
+  <!-- Output -->
+  <g transform="translate(620, 340)">
+    <rect width="150" height="80" fill="#1e293b" stroke="#9B1C1C" stroke-width="2" rx="8"/>
+    <text x="75" y="25" text-anchor="middle" fill="#9B1C1C" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Structured Context</text>
+    <text x="75" y="45" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="system-ui, sans-serif">Registered in</text>
+    <text x="75" y="60" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">context-registry.json</text>
+  </g>
+
+  <!-- Arrows -->
+  <line x1="160" y1="170" x2="180" y2="170" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-slate)"/>
+  <line x1="300" y1="170" x2="320" y2="170" stroke="#60a5fa" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-blue)"/>
+  <line x1="440" y1="170" x2="460" y2="170" stroke="#34d399" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-green)"/>
+  <line x1="580" y1="170" x2="600" y2="170" stroke="#fb923c" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-orange)"/>
+
+  <!-- Down and around to Link -->
+  <line x1="660" y1="240" x2="660" y2="280" stroke="#a78bfa" stroke-width="2"/>
+  <line x1="660" y1="280" x2="580" y2="280" stroke="#a78bfa" stroke-width="2"/>
+  <line x1="580" y1="280" x2="580" y2="310" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+  <!-- Link to Output -->
+  <line x1="580" y1="380" x2="620" y2="380" stroke="#f472b6" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-pink)"/>
+
+  <!-- Quality Gates -->
+  <g transform="translate(320, 310)">
+    <rect width="120" height="100" fill="#1e293b" stroke="#fbbf24" stroke-width="2" rx="8"/>
+    <text x="60" y="25" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold" font-family="system-ui, sans-serif">Quality Gates</text>
+    <text x="60" y="50" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">✓ Schema valid</text>
+    <text x="60" y="65" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">✓ No conflicts</text>
+    <text x="60" y="80" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">✓ Token budget</text>
+  </g>
+  <text x="380" y="420" text-anchor="middle" fill="#fbbf24" font-size="9" font-style="italic" font-family="system-ui, sans-serif">context_quality</text>
+  <line x1="440" y1="360" x2="460" y2="360" stroke="#fbbf24" stroke-width="2" stroke-dasharray="5,5"/>
+
+  <!-- Safari MCP Server label -->
+  <g transform="translate(740, 100)">
+    <rect width="130" height="70" fill="#1e293b" stroke="#34d399" stroke-width="2" rx="8"/>
+    <text x="65" y="22" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold" font-family="system-ui, sans-serif">Safari MCP</text>
+    <text x="65" y="40" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Exposes pipeline</text>
+    <text x="65" y="55" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">as MCP tools</text>
+  </g>
+
+  <!-- Safari logo -->
+  <circle cx="850" cy="35" r="25" fill="#9B1C1C"/>
+  <text x="850" y="42" text-anchor="middle" fill="#e2e8f0" font-size="20" font-weight="bold" font-family="system-ui, sans-serif">S</text>
+
+  <!-- Footer -->
+  <text x="450" y="525" text-anchor="middle" fill="#475569" font-size="10" font-family="system-ui, sans-serif">Safari Circuits • Context Compiler exposed via safari:context_* MCP tools</text>
+</svg>

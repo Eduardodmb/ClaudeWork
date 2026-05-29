@@ -1,0 +1,294 @@
+# CMMC Level 2 Vendor Comparison - Executive Presentation
+**Date:** May 11, 2026
+**For:** Scott (IT Director)
+**Template:** `S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\10_Templates\01_PPT_Template.pptx`
+
+---
+
+## SLIDE 1: Title Slide
+
+**Title:** CMMC Level 2 Compliance Vendor Evaluation
+
+**Subtitle:** Executive Recommendation for Safari Circuits
+
+**Presenter:** Eduardo Marquez, IT Systems Engineering Manager
+**Date:** May 11, 2026
+
+---
+
+## SLIDE 2: Executive Summary
+
+**Headline:** Three Vendors Evaluated - Clear Recommendation
+
+**Key Points:**
+- ✅ **Recommendation: ARDALYST** - Best value for Safari's engineering needs
+- 📊 **3 vendors evaluated:** Ardalyst ($191K), CloudFit ($180K), Secureframe ($310K+)
+- 🔑 **Critical factor:** Software flexibility for engineering team (Gerber Viewer, CAD tools)
+- ⚠️ **Risk:** CloudFit is cheapest but blocks custom software installation
+- 💰 **Value:** Ardalyst costs only $10K more than CloudFit but provides full software freedom
+
+**Visual:** Simple 3-column comparison graphic showing vendor names with checkmarks/X marks
+
+---
+
+## SLIDE 3: The CMMC Level 2 Requirement
+
+**Headline:** Why This Matters
+
+**Content:**
+- Safari Circuits handles CUI (Controlled Unclassified Information) for DoD contracts
+- CMMC Level 2 certification is **mandatory** to maintain defense contracts
+- Must comply with NIST 800-171 (110 security controls)
+- **20 CUI users** requiring secure access
+- **Timeline:** Decision needed by Week 4 (CloudFit quote expires Jun 10, 2026)
+
+**Visual:** Icon or diagram showing DoD → Safari Circuits → CMMC L2 requirement flow
+
+---
+
+## SLIDE 4: Vendor Overview
+
+**3-Column Layout:**
+
+| **ARDALYST** | **CLOUDFIT** | **SECUREFRAME** |
+|--------------|--------------|-----------------|
+| Regional MSP | Fully Managed Enclave | SaaS Platform |
+| Otsego, MI (Local) | Lynchburg, VA | National (VC-backed) |
+| Full-service package | Turnkey, zero admin | Software-only |
+| 3-year commitment | 1-year renewable | 1 or 3-year options |
+
+**Bottom note:** All three vendors meet CMMC Level 2 technical requirements
+
+---
+
+## SLIDE 5: Cost Comparison (3-Year Total Cost of Ownership)
+
+**Headline:** True Cost Analysis - Infrastructure Included
+
+**Bar Chart:**
+```
+ARDALYST     ████████████████████ $190,568
+CLOUDFIT     ███████████████████  $180,000
+SECUREFRAME  ████████████████████████████ $310,000+
+             |————|————|————|————|————|————|
+             $0   $50K $100K $150K $200K $250K $300K
+```
+
+**Table Below Chart:**
+
+| Vendor | Year 1 | Annual (Yr 2-3) | 3-Year Total | Infrastructure |
+|--------|--------|-----------------|--------------|----------------|
+| **CloudFit** | $60,000 | $60,000 | **$180,000** | ✅ Included |
+| **Ardalyst** | $77,123 | $56,723 | **$190,568** | ✅ Included |
+| **Secureframe** | $70,000+ | $70,000+ | **$210,000+** | ❌ **Add $100K** for M365/AVD/Support |
+
+**Callout Box (Red):** Secureframe's quoted price is SOFTWARE ONLY - must separately purchase M365 GCC-High, Azure Virtual Desktop, and IT support (~$100K additional)
+
+**Color Coding:**
+- 🟢 Green: CloudFit $180K
+- 🟡 Yellow: Ardalyst $191K
+- 🔴 Red: Secureframe $310K+
+
+---
+
+## SLIDE 6: Critical Decision Factor - Software Flexibility
+
+**Headline:** Can Engineering Operate with M365/Teams/Edge ONLY?
+
+**Two-Column Layout:**
+
+### **What Engineering Needs:**
+- ✅ Gerber Viewer (PCB design files)
+- ✅ AutoCAD / CAD software
+- ✅ ERP system integration
+- ✅ Engineering calculators
+- ✅ Specialized manufacturing tools
+
+### **Vendor Software Policies:**
+
+**ARDALYST:** ✅ **Full Windows environment**
+- Install any software with proper change management
+- Your discretion with MSP support
+- Fast timeline (days)
+
+**SECUREFRAME:** ✅ **Any software on your infrastructure**
+- Full control (you manage everything)
+- Most flexible
+
+**CLOUDFIT:** ❌ **"Standard Worker Persona" ONLY**
+- M365 Apps, Teams, Edge Browser **ONLY**
+- Custom software requires approval + extra cost
+- Slow timeline (weeks for approval)
+
+**Callout Box (Red):** CloudFit explicitly states: "Additional applications outside of this standard set require a request and may incur additional costs"
+
+---
+
+## SLIDE 7: Comparison Matrix (Part 1 - Top 8 Criteria)
+
+**Headline:** Head-to-Head Comparison
+
+| **CRITERIA** | **ARDALYST** | **SECUREFRAME** | **CLOUDFIT** |
+|--------------|--------------|-----------------|--------------|
+| **1. Year 1 Cost** | 🟡 $77,123 | 🔴 $130,000+ | 🟢 $60,000 |
+| **2. 3-Year Total** | 🟡 $190,568 | 🔴 $310,000+ | 🟢 $180,000 |
+| **3. M365 + AVD Included** | 🟢 YES | 🔴 NO (Buy separate) | 🟢 YES |
+| **4. Admin Control** | 🟡 YOU HAVE ACCESS | 🟢 FULL CONTROL | 🔴 CLOUDFIT ONLY |
+| **5. Install Custom Software** | 🟢 YES (Your discretion) | 🟢 YES (Your control) | 🔴 APPROVAL REQUIRED (+Extra cost) |
+| **6. IT Support / Help Desk** | 🟢 INCLUDED | 🔴 NOT INCLUDED | 🟢 INCLUDED |
+| **7. CMMC L2 Compliance** | 🟢 FULL SUPPORT | 🟢 FULL SUPPORT | 🟢 FULL SUPPORT |
+| **8. 24/7 Monitoring** | 🟡 BUSINESS HOURS | 🟡 24/5 SUPPORT | 🟢 24/7 MONITORING |
+
+**Legend:**
+- 🟢 = Best/Advantage
+- 🟡 = Adequate/Acceptable
+- 🔴 = Concern/Issue
+
+---
+
+## SLIDE 8: Comparison Matrix (Part 2 - Bottom 7 Criteria)
+
+| **CRITERIA** | **ARDALYST** | **SECUREFRAME** | **CLOUDFIT** |
+|--------------|--------------|-----------------|--------------|
+| **9. Implementation Time** | 🟢 30-60 DAYS | 🔴 60-90 DAYS | 🟢 30 DAYS |
+| **10. Contract Length** | 🔴 3 YEARS MANDATORY | 🟢 1 OR 3 YEARS | 🟢 1 YEAR AUTO-RENEW |
+| **11. Software Flexibility** | 🟢 FULL WINDOWS ENV | 🟢 ANY SOFTWARE | 🔴 M365/TEAMS/EDGE ONLY |
+| **12. Scaling Users** | 🟡 $1,614/user | 🟢 $0 (up to 300 FTE) | 🔴 $3,000/user |
+| **13. Change Management** | 🟢 YOUR PROCESS (MSP support) | 🟢 YOUR PROCESS | 🔴 CLOUDFIT APPROVAL |
+| **14. Vendor Lock-In Risk** | 🟡 MODERATE | 🟢 LOW | 🔴 HIGH |
+| **15. Compliance Automation** | 🟡 BASIC | 🟢 ADVANCED (Comply AI) | 🟡 MANAGED SERVICE |
+
+**Summary Scorecard:**
+- **Ardalyst:** 7 Green, 6 Yellow, 2 Red
+- **Secureframe:** 8 Green, 2 Yellow, 5 Red
+- **CloudFit:** 6 Green, 2 Yellow, 7 Red
+
+---
+
+## SLIDE 9: Recommendation
+
+**Headline:** Recommended Vendor - ARDALYST
+
+**Why Ardalyst:**
+
+✅ **Best Balance of Cost vs. Capability**
+- Only $10K more than CloudFit ($191K vs $180K)
+- $120K less than Secureframe when infrastructure included
+
+✅ **Software Flexibility for Engineering**
+- Full Windows environment - install Gerber Viewer, CAD, etc.
+- Change management process with MSP support
+- No approval delays or extra costs
+
+✅ **Complete Solution Included**
+- M365 E5 GCC-High (20 licenses)
+- Azure Virtual Desktop (20 Cloud PCs)
+- IT Help Desk (Tier 1-3)
+- All infrastructure managed
+
+✅ **Local Vendor (Otsego, MI)**
+- Regional presence
+- Faster response times
+
+⚠️ **Trade-off:** 3-year mandatory commitment (vs 1-year with competitors)
+
+---
+
+## SLIDE 10: Why NOT the Alternatives?
+
+**Two-Column Layout:**
+
+### **Why NOT CloudFit?**
+❌ **"Standard Worker Persona" Too Restrictive**
+- Engineering CANNOT install Gerber Viewer, CAD tools
+- Every software request requires approval + extra cost
+- Weeks-long approval process
+
+❌ **Zero Admin Access**
+- Cannot troubleshoot own systems
+- Total dependence on CloudFit
+- High vendor lock-in
+
+❌ **Saves Only $10K Over 3 Years**
+- Not worth losing software freedom
+- Hidden costs for custom software unknown
+
+### **Why NOT Secureframe?**
+❌ **Software-Only Solution**
+- Must separately purchase:
+  - M365 E5 GCC-High: +$67K
+  - Azure Virtual Desktop: +$15-30K
+  - IT Support: +$45-60K
+- **True cost: $310K+** (60% more expensive)
+
+❌ **Requires IT Staff to Manage**
+- Safari doesn't have large IT department
+- Would need to hire or contract additional help
+
+---
+
+## SLIDE 11: Next Steps & Timeline
+
+**Headline:** Path to Implementation
+
+**Timeline:**
+
+| **Week** | **Milestone** | **Action** |
+|----------|---------------|------------|
+| **Week 1** | ✅ Vendor Evaluation Complete | This presentation |
+| **Week 2** | Internal Software Survey | Engineering team confirms software needs |
+| **Week 2** | Vendor Follow-Up | Send critical questions, request references |
+| **Week 3** | Due Diligence | Reference calls, demos, security review |
+| **Week 4** | **DECISION** | Contract negotiation, vendor selection |
+| **Week 5-6** | Contract Signing | Kickoff, implementation start |
+| **30-60 days** | Go-Live | CMMC compliance operational |
+
+**Critical Dates:**
+- ⚠️ **CloudFit Quote Expires:** June 10, 2026
+- 🎯 **Target Decision Date:** Week 4
+
+**Recommended Next Actions:**
+1. **Approve Ardalyst** as recommended vendor
+2. **Engineering software survey** to confirm requirements
+3. **Reference calls** with Ardalyst customers (manufacturing/PCB companies)
+4. **Contract negotiation** - confirm 3-year terms acceptable
+
+---
+
+## SLIDE 12: Questions & Discussion
+
+**Contact Information:**
+
+**Eduardo Marquez**
+IT Systems Engineering Manager
+e.marquez@safaricircuits.com
+
+**Vendor Contacts:**
+- **Ardalyst:** Bethany Carter - bcarter@ardalyst.com | 540-476-2432
+- **CloudFit:** Jayson McFadden - jaysonmcfadden@cloudfitsoftware.com
+- **Secureframe:** Andrew Mudiappu - andrew.mudiappu@secureframe.com | 415-578-1084
+
+---
+
+## INSTRUCTIONS FOR CREATING POWERPOINT
+
+1. **Open Template:** `S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\10_Templates\01_PPT_Template.pptx`
+
+2. **For Each Slide:**
+   - Use Safari Circuits branding colors
+   - Apply color coding: Green (✅/advantage), Yellow (⚠️/adequate), Red (❌/concern)
+   - Keep fonts readable (minimum 18pt for body text)
+   - Use Safari Circuits logo on each slide
+
+3. **Charts/Visuals:**
+   - Slide 5: Create horizontal bar chart for cost comparison
+   - Slide 7-8: Format comparison tables with color-coded cells
+   - Use icons/graphics from template library
+
+4. **Save As:**
+   - Location: `02-Drafts/cmmc-executive-presentation-2026-05-11.pptx`
+   - After review, move to `03-Deliverables/`
+
+---
+
+**END OF PRESENTATION OUTLINE**

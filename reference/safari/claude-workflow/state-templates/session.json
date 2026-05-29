@@ -1,0 +1,25 @@
+{
+  "sessionId": "[YYYY-MM-DD]-[NN]",
+  "startTime": "[ISO timestamp]",
+  "lastActivity": "[ISO timestamp]",
+  "focus": "[User's stated focus]",
+  "activeWorkItems": [],
+  "completedWorkItems": [],
+  "environment": "[Code|Config|Research|Documentation]",
+  "suggestedSkills": [],
+  "usedSkills": [],
+  "completed": false,
+  "phase": {
+    "name": "[Phase name]",
+    "number": 1,
+    "checkpointCount": 0,
+    "lastCheckpoint": null,
+    "contextTurns": 0,
+    "contextHealth": "fresh"
+  },
+  "sync": {
+    "lastPush": null,
+    "pendingLearnings": [],
+    "repoPath": "organizational-docs/shared/claude-workflow"
+  }
+}

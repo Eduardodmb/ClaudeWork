@@ -1,0 +1,364 @@
+#!/usr/bin/env python3
+"""
+Update DOCUMENT-ID-CONTROL.md table with actual documents found
+Groups F1, F2, etc. variants into their respective columns
+"""
+
+import os
+import re
+import shutil
+from pathlib import Path
+from datetime import datetime
+
+
+class DocumentControlUpdater:
+    """Updates DOCUMENT-ID-CONTROL.md with actual documents"""
+
+    # Expected format: IT-XXX or IT-XXX W1 or IT-XXX W1 FN
+    # Allow optional number prefix like "01_" or "02_"
+    ID_PATTERN = re.compile(r'^(?:\d{2}_)?(IT-\d{3}(?:\s+W\d+)?(?:\s+F\d+)?)', re.IGNORECASE)
+
+    def __init__(self, base_path: str):
+        self.base_path = Path(base_path)
+        self.control_file = self.base_path / "DOCUMENT-ID-CONTROL.md"
+
+        # IT Hub folders (relative to base_path)
+        self.folders_to_check = [
+            {
+                'path': self.base_path / "01_Policies",
+                'display': "IT Hub\\01_Policies",
+                'filter': None  # All supported extensions
+            },
+            {
+                'path': self.base_path / "02_Procedures",
+                'display': "IT Hub\\02_Procedures",
+                'filter': None
+            },
+            {
+                'path': self.base_path / "03_Architecture_and_infrastructure",
+                'display': "IT Hub\\03_Architecture_and_infrastructure",
+                'filter': None
+            },
+            {
+                'path': self.base_path / "05_Forms",
+                'display': "IT Hub\\05_Forms",
+                'filter': None
+            },
+            # BeFirst folders (absolute paths)
+            {
+                'path': Path(r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Product and Platform\BeFirst\01_User_Manuals"),
+                'display': "BeFirst\\01_User_Manuals",
+                'filter': ['.pdf']  # Only PDFs
+            },
+            {
+                'path': Path(r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Product and Platform\BeFirst\02_Development\00 - Dev Manuals\01 - Procedures"),
+                'display': "BeFirst\\02_Development\\01_Procedures",
+                'filter': ['.docx', '.doc']  # Only DOCX files
+            }
+        ]
+
+    def extract_id_from_filename(self, filename: str) -> str:
+        """
+        Extract document ID from filename if present
+
+        Returns:
+            Document ID (e.g., "IT-015" or "IT-015 W1") or empty string
+        """
+        match = self.ID_PATTERN.match(filename)
+        if match:
+            # Group 1 is the IT-XXX part (group 0 includes the optional prefix)
+            doc_id = match.group(1)
+            # Normalize: replace underscores with spaces for W1/F1 format
+            doc_id = doc_id.replace('_W', ' W').replace('_F', ' F')
+            return doc_id
+        return ""
+
+    def extract_f_number(self, doc_id: str) -> tuple:
+        """
+        Extract F number from document ID
+
+        Returns:
+            Tuple of (base_id, f_number) e.g., ("IT-015", "F1") or ("IT-015", None)
+        """
+        f_match = re.search(r'\s+F(\d+)$', doc_id)
+        if f_match:
+            base_id = doc_id[:f_match.start()]
+            f_num = f"F{f_match.group(1)}"
+            return base_id, f_num
+        return doc_id, None
+
+    def determine_doc_type(self, folder: str, has_w1: bool) -> str:
+        """Determine document type based on folder and ID format"""
+        if folder == "01_Policies":
+            return "Policy"
+        elif folder == "02_Procedures":
+            return "Work Instruction" if has_w1 else "Procedure"
+        elif folder == "05_Forms":
+            return "Form"
+        elif folder == "03_Architecture_and_infrastructure":
+            return "Manual"
+        return "Manual"
+
+    def extract_title(self, filename: str, doc_id: str) -> str:
+        """Extract title from filename by removing ID and extension"""
+        name = Path(filename).stem
+
+        # Remove ID prefix if present
+        if doc_id:
+            name = name[len(doc_id):].strip()
+            name = name.lstrip('_- ')
+
+        # Clean up common patterns
+        name = re.sub(r'^\d{2}_', '', name)  # Remove leading numbers like "01_"
+        name = name.replace('_', ' ')
+        name = re.sub(r'\s+', ' ', name)
+        name = re.sub(r'\s*v\d+(\.\d+)?\s*$', '', name)  # Remove version numbers
+
+        return name.strip()
+
+    def get_status(self, extension: str) -> str:
+        """Determine status based on file extension"""
+        ext_map = {
+            '.md': 'New (MD)',
+            '.docx': 'Legacy (DOCX)',
+            '.doc': 'Legacy (DOCX)',
+            '.xlsx': 'Legacy (XLSX)',
+            '.xls': 'Legacy (XLSX)',
+            '.pdf': 'Legacy (PDF)',
+            '.vsdx': 'Legacy (VSDX)'
+        }
+        return ext_map.get(extension.lower(), 'Legacy')
+
+    def scan_documents(self) -> dict:
+        """
+        Scan folders and return grouped document entries
+
+        Returns:
+            Dict with base IDs as keys, containing document info and F variants
+        """
+        documents = {}
+
+        for folder_config in self.folders_to_check:
+            folder_path = folder_config['path']
+            folder_display = folder_config['display']
+            extension_filter = folder_config['filter']
+
+            if not folder_path.exists():
+                print(f"Warning: Folder not found: {folder_path}")
+                continue
+
+            # Walk through all files
+            for root, dirs, files in os.walk(folder_path):
+                # Skip archive folders
+                if "99_Archive" in root or "01_Backups_Files" in root:
+                    continue
+
+                for file in files:
+                    # Skip temp files
+                    if file.startswith('~$') or file.startswith('.'):
+                        continue
+
+                    filepath = Path(root) / file
+                    extension = filepath.suffix.lower()
+
+                    # Check only document types
+                    all_extensions = ['.docx', '.doc', '.xlsx', '.xls', '.pdf', '.md', '.vsdx']
+                    if extension not in all_extensions:
+                        continue
+
+                    # Apply extension filter if specified
+                    if extension_filter and extension not in extension_filter:
+                        continue
+
+                    # Extract ID from filename
+                    doc_id = self.extract_id_from_filename(file)
+
+                    # Extract title
+                    title = self.extract_title(file, doc_id)
+
+                    # Determine type
+                    has_w1 = 'W1' in doc_id.upper() or 'w1' in file.lower()
+
+                    # Determine doc type from folder display path
+                    if "01_Policies" in folder_display:
+                        doc_type = "Policy"
+                    elif "02_Procedures" in folder_display or "01_Procedures" in folder_display:
+                        doc_type = "Work Instruction" if has_w1 else "Procedure"
+                    elif "05_Forms" in folder_display:
+                        doc_type = "Form"
+                    elif "01_User_Manuals" in folder_display:
+                        doc_type = "Work Instruction"
+                    else:
+                        doc_type = "Manual"
+
+                    # Status removed - no longer needed
+
+                    # Use display path
+                    path = folder_display
+
+                    # Extract base ID and F number
+                    if doc_id:
+                        base_id, f_num = self.extract_f_number(doc_id)
+                    else:
+                        # Skip documents without valid IDs - user will add them manually
+                        continue
+
+                    # Determine app from path
+                    if "BeFirst" in folder_display:
+                        app = "BeFirst"
+                    elif "Plex" in folder_display:
+                        app = "Plex"
+                    else:
+                        app = "IT"
+
+                    # Group by base ID
+                    if base_id not in documents:
+                        documents[base_id] = {
+                            'id': base_id,
+                            'type': doc_type,
+                            'title': title if not f_num else '',  # Main title from base doc
+                            'app': app,
+                            'owner': 'IT',
+                            'path': path,
+                            'f_variants': {},
+                            'has_base': not f_num  # True if this is the base document
+                        }
+
+                    # If this is an F variant, add to f_variants
+                    if f_num:
+                        documents[base_id]['f_variants'][f_num] = title
+                    else:
+                        # Update base document info if we don't have it yet
+                        if not documents[base_id]['has_base']:
+                            documents[base_id]['title'] = title
+                            documents[base_id]['type'] = doc_type
+                            documents[base_id]['path'] = path
+                            documents[base_id]['has_base'] = True
+
+        return documents
+
+    def update_control_file(self, documents: dict):
+        """Update DOCUMENT-ID-CONTROL.md with document list"""
+
+        if not self.control_file.exists():
+            print(f"Error: {self.control_file} not found")
+            return False
+
+        # Backup original
+        backup_path = self.control_file.with_suffix('.md.bak')
+        shutil.copy2(self.control_file, backup_path)
+        print(f"Backup created: {backup_path}")
+
+        # Read file
+        with open(self.control_file, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+
+        # Find table section
+        table_header_idx = -1
+        table_separator_idx = -1
+        table_end_idx = -1
+
+        for i, line in enumerate(lines):
+            if '| ID | Type | Title |' in line:
+                table_header_idx = i
+                table_separator_idx = i + 1
+            elif table_header_idx > 0 and table_end_idx == -1:
+                if line.strip() and not line.startswith('|'):
+                    table_end_idx = i
+                    break
+
+        if table_header_idx == -1:
+            print("Error: Could not find table header")
+            return False
+
+        if table_end_idx == -1:
+            table_end_idx = len(lines)
+
+        # Remove old table rows (keep header and separator)
+        del lines[table_separator_idx + 1:table_end_idx]
+
+        # Sort documents by ID (all should have IDs now)
+        doc_list = list(documents.values())
+
+        # Custom sort function to handle IT-XXX format
+        def sort_key(doc):
+            doc_id = doc['id']
+            # Extract number and W/F parts for proper sorting
+            match = re.match(r'IT-(\d+)(?:\s+W(\d+))?(?:\s+F(\d+))?', doc_id)
+            if match:
+                base_num = int(match.group(1))
+                w_num = int(match.group(2)) if match.group(2) else 0
+                f_num = int(match.group(3)) if match.group(3) else 0
+                return (base_num, w_num, f_num)
+            return (9999, 0, 0)  # Put any malformed IDs at the end
+
+        sorted_docs = sorted(doc_list, key=sort_key)
+
+        # Generate new table rows
+        new_rows = []
+        for doc in sorted_docs:
+            # Build F1-F9 columns (table has F1, F2, F3, F4, F5, F8, F9)
+            f_cols = []
+            for f_num in ['F1', 'F2', 'F3', 'F4', 'F5', 'F8', 'F9']:
+                f_cols.append(doc['f_variants'].get(f_num, ''))
+
+            f_cols_str = " | ".join(f_cols)
+
+            row = f"| {doc['id']} | {doc['type']} | {doc['title']} | {doc['app']} | {doc['owner']} | {f_cols_str} | {doc['path']} |\n"
+            new_rows.append(row)
+
+        # Insert new rows
+        insert_position = table_separator_idx + 1
+        for row in new_rows:
+            lines.insert(insert_position, row)
+            insert_position += 1
+
+        # Update "Last Updated" date
+        today = datetime.now().strftime("%Y-%m-%d")
+        for i, line in enumerate(lines):
+            if '**Last Updated:**' in line:
+                lines[i] = f"**Last Updated:** {today}\n"
+                break
+
+        # Write back
+        with open(self.control_file, 'w', encoding='utf-8') as f:
+            f.writelines(lines)
+
+        # Summary
+        total_f_variants = sum(len(d['f_variants']) for d in doc_list)
+
+        print("\n" + "="*80)
+        print("DOCUMENT-ID-CONTROL.md UPDATED")
+        print("="*80)
+        print(f"Total document entries: {len(documents)}")
+        print(f"  F variants found: {total_f_variants}")
+        print(f"  Sorted by ID")
+        print("="*80)
+
+        if total_f_variants > 0:
+            print(f"\nF variants grouped into their base document rows:")
+            for doc in sorted_docs:
+                if doc['f_variants']:
+                    print(f"  {doc['id']}: {', '.join(sorted(doc['f_variants'].keys()))}")
+
+        return True
+
+
+def main():
+    base_path = Path(__file__).parent
+
+    print("Scanning documents...")
+    updater = DocumentControlUpdater(base_path)
+
+    documents = updater.scan_documents()
+    total_files = sum(1 + len(d['f_variants']) for d in documents.values())
+    print(f"Found {total_files} documents with valid IDs")
+    print(f"Grouped into {len(documents)} entries")
+    print("(Documents without IDs are skipped - add them manually)")
+
+    updater.update_control_file(documents)
+    print("\nDone!")
+
+
+if __name__ == "__main__":
+    main()

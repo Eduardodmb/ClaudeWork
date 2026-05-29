@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cgm-bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <marker id="cgm-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#9B1C1C"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="600" fill="url(#cgm-bgGrad)"/>
+
+  <!-- Title Section -->
+  <text x="450" y="45" text-anchor="middle" fill="#f1f5f9" font-size="26" font-weight="600" font-family="system-ui, -apple-system, sans-serif">Context Governance Model</text>
+  <rect x="350" y="55" width="200" height="3" fill="#9B1C1C" rx="1.5"/>
+  <text x="450" y="80" text-anchor="middle" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">OpenMetadata-Inspired Governance Principles</text>
+
+  <!-- Central: Context Asset -->
+  <circle cx="450" cy="310" r="85" fill="#1e293b" stroke="#9B1C1C" stroke-width="3"/>
+  <text x="450" y="300" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="600" font-family="system-ui, sans-serif">Context</text>
+  <text x="450" y="325" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="600" font-family="system-ui, sans-serif">Asset</text>
+
+  <!-- Ownership (Top Left) -->
+  <g transform="translate(50, 115)">
+    <rect width="180" height="110" fill="#1e293b" stroke="#334155" stroke-width="1.5" rx="10"/>
+    <rect width="180" height="34" fill="#9B1C1C" rx="10" ry="10"/>
+    <rect y="22" width="180" height="12" fill="#9B1C1C"/>
+    <text x="90" y="24" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600" font-family="system-ui, sans-serif">Ownership</text>
+    <text x="90" y="56" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">Who is responsible?</text>
+    <text x="90" y="78" text-anchor="middle" fill="#f1f5f9" font-size="10" font-family="system-ui, sans-serif">Team / Individual</text>
+    <text x="90" y="95" text-anchor="middle" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">Accountability chain</text>
+  </g>
+  <line x1="230" y1="180" x2="370" y2="260" stroke="#9B1C1C" stroke-width="2" marker-end="url(#cgm-arrow)"/>
+
+  <!-- Classification (Top Center) -->
+  <g transform="translate(350, 100)">
+    <rect width="200" height="110" fill="#1e293b" stroke="#334155" stroke-width="1.5" rx="10"/>
+    <rect width="200" height="34" fill="#475569" rx="10" ry="10"/>
+    <rect y="22" width="200" height="12" fill="#475569"/>
+    <text x="100" y="24" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600" font-family="system-ui, sans-serif">Classification</text>
+    <text x="100" y="56" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">What type of context?</text>
+    <text x="100" y="78" text-anchor="middle" fill="#f1f5f9" font-size="10" font-family="system-ui, sans-serif">Domain / Sensitivity</text>
+    <text x="100" y="95" text-anchor="middle" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">Lifecycle stage</text>
+  </g>
+  <line x1="450" y1="210" x2="450" y2="225" stroke="#64748b" stroke-width="2" marker-end="url(#cgm-arrow)"/>
+
+  <!-- Lineage (Top Right) -->
+  <g transform="translate(670, 115)">
+    <rect width="180" height="110" fill="#1e293b" stroke="#334155" stroke-width="1.5" rx="10"/>
+    <rect width="180" height="34" fill="#475569" rx="10" ry="10"/>
+    <rect y="22" width="180" height="12" fill="#475569"/>
+    <text x="90" y="24" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600" font-family="system-ui, sans-serif">Lineage</text>
+    <text x="90" y="56" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">Where does it come from?</text>
+    <text x="90" y="78" text-anchor="middle" fill="#f1f5f9" font-size="10" font-family="system-ui, sans-serif">Dependencies</text>
+    <text x="90" y="95" text-anchor="middle" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">Impact analysis</text>
+  </g>
+  <line x1="670" y1="180" x2="530" y2="260" stroke="#64748b" stroke-width="2" marker-end="url(#cgm-arrow)"/>
+
+  <!-- Quality (Bottom Right) -->
+  <g transform="translate(670, 385)">
+    <rect width="180" height="110" fill="#1e293b" stroke="#334155" stroke-width="1.5" rx="10"/>
+    <rect width="180" height="34" fill="#475569" rx="10" ry="10"/>
+    <rect y="22" width="180" height="12" fill="#475569"/>
+    <text x="90" y="24" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600" font-family="system-ui, sans-serif">Quality</text>
+    <text x="90" y="56" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">Is it good context?</text>
+    <text x="90" y="78" text-anchor="middle" fill="#f1f5f9" font-size="10" font-family="system-ui, sans-serif">Freshness / Accuracy</text>
+    <text x="90" y="95" text-anchor="middle" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">Completeness</text>
+  </g>
+  <line x1="670" y1="440" x2="530" y2="360" stroke="#64748b" stroke-width="2" marker-end="url(#cgm-arrow)"/>
+
+  <!-- Discovery (Bottom Center) -->
+  <g transform="translate(350, 400)">
+    <rect width="200" height="110" fill="#1e293b" stroke="#334155" stroke-width="1.5" rx="10"/>
+    <rect width="200" height="34" fill="#475569" rx="10" ry="10"/>
+    <rect y="22" width="200" height="12" fill="#475569"/>
+    <text x="100" y="24" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600" font-family="system-ui, sans-serif">Discovery</text>
+    <text x="100" y="56" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">Can it be found?</text>
+    <text x="100" y="78" text-anchor="middle" fill="#f1f5f9" font-size="10" font-family="system-ui, sans-serif">Search / Tags</text>
+    <text x="100" y="95" text-anchor="middle" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">Recommendations</text>
+  </g>
+  <line x1="450" y1="400" x2="450" y2="395" stroke="#64748b" stroke-width="2" marker-end="url(#cgm-arrow)"/>
+
+  <!-- Access Control (Bottom Left) -->
+  <g transform="translate(50, 385)">
+    <rect width="180" height="110" fill="#1e293b" stroke="#334155" stroke-width="1.5" rx="10"/>
+    <rect width="180" height="34" fill="#475569" rx="10" ry="10"/>
+    <rect y="22" width="180" height="12" fill="#475569"/>
+    <text x="90" y="24" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600" font-family="system-ui, sans-serif">Access Control</text>
+    <text x="90" y="56" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">Who can use it?</text>
+    <text x="90" y="78" text-anchor="middle" fill="#f1f5f9" font-size="10" font-family="system-ui, sans-serif">Permissions</text>
+    <text x="90" y="95" text-anchor="middle" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">Scope boundaries</text>
+  </g>
+  <line x1="230" y1="440" x2="370" y2="360" stroke="#64748b" stroke-width="2" marker-end="url(#cgm-arrow)"/>
+
+  <!-- Safari Logo Mark -->
+  <g transform="translate(830, 20)">
+    <rect width="50" height="50" fill="#9B1C1C" rx="8"/>
+    <text x="25" y="35" text-anchor="middle" fill="#ffffff" font-size="24" font-weight="700" font-family="system-ui, sans-serif">S</text>
+  </g>
+
+  <!-- Subtle footer -->
+  <text x="450" y="580" text-anchor="middle" fill="#475569" font-size="10" font-family="system-ui, sans-serif">Safari Circuits • OpenMetadata-Inspired Context Governance</text>
+</svg>

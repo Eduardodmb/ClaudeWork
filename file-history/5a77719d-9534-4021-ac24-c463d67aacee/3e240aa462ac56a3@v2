@@ -1,0 +1,242 @@
+@using NonFactors.Mvc.Grid;
+@using System.Data;
+@using System.Data.SqlClient;
+@using System.Globalization;
+@model Firstronic.Core.Entities.App.First.tbl_Operation_validation_Areas_FULL
+
+
+@{
+  bool isNew = !(Model != null && Model.AutoID > 0);
+  var celltypelist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery("select Department_Name from Firstronic_Departments ]");
+}
+
+
+@{
+  var areaslist = Firstronic.Framework.Functions.Dropdowns.GetAreasList();
+}
+
+
+
+@using (Html.BeginForm())
+{
+  <div class="md-card">
+    <div class="md-card-content">
+
+      @Html.Partial("_Breadcrumb", "Manage Approvals")
+      @Html.AntiForgeryToken()
+      @Html.ValidationSummary("", new { @class = "hide" })
+
+      @*@Html.HiddenFor(y => y.Request_By, new { id = "txtstationid" })*@
+
+      <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#tabs_4'}">
+        <li class="uk-width-1-4 uk-active" aria-expanded="true"><a href="#">General</a></li>
+        @if (!isNew)
+        {
+          <li class="uk-width-1-4" aria-expanded="false"><a href="#">Approvals</a></li>
+          @*<li class="uk-width-1-4" aria-expanded="false"><a href="#">Approvals</a></li>*@
+          @*<li class="uk-width-1-4" aria-expanded="false"><a href="#">Close Order</a></li>*@
+        }
+      </ul>
+
+
+      <ul id="tabs_4" class="uk-switcher uk-margin">
+        <li aria-hidden="false" class="uk-active">
+
+          <div class="input-group mb-3" style="display: none">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+
+                @Html.LabelFor(y => y.AutoID, new { @class = "m-0 fs-14" })
+              </span>
+            </div>
+            @Html.TextBoxFor(y => y.AutoID, new { @class = "form-control", disabled = "disabled" })@*, disabled = "disabled"*@
+          </div>
+          <div class="input-group mb-3" style="display: none">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+
+                @Html.LabelFor(y => y.AutoID, new { @class = "m-0 fs-14" })
+              </span>
+            </div>
+            @Html.TextBoxFor(y => y.AutoID, new { @class = "form-control", disabled = "disabled" })@*, disabled = "disabled"*@
+          </div>
+
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+
+                @Html.LabelFor(y => y.Area, new { @class = "m-0 fs-14" })
+              </span>
+            </div>
+            @Html.DropDownListFor(Model => Model.AreaID, (IEnumerable<SelectListItem>)areaslist, new { @class = "form-control", @id = "ddlpm" })
+          </div>
+
+
+
+
+          @*</div>
+            <div class="tab-pane fade" id="component-1-2" role="tabpanel" aria-labelledby="component-1-2">*@
+
+
+
+        </li>
+
+        @*--------------------------------------------------------------------------------------------------*@
+        <li aria-hidden="true">
+          @Html.AjaxGrid(Url.Action("Substations", "ApproveStations", new { id = Model.AutoID }))
+
+          @{
+
+            //var arealist2 = Firstronic.Framework.Functions.Dropdowns.GetMoonshine_MaterialList_Continous_Moonshine_Material(null, "");
+            SqlParameter[] parameters = new SqlParameter[]{
+                        new SqlParameter("@AreaID",SqlDbType.Int){Value = Model.AreaID},
+            };
+            var stationlist = Firstronic.Framework.Queries.GetSelectedFromQuery(@"SELECT [StationID],Case WHEN LEN(Alias)>0 then Alias else [StationName] end as StationName  FROM [PD_idt_stations] where AreaID=@AreaID",parameters);
+            var partnumberslist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [PartID],[PartNumber] FROM [CS_idt_partnumbers] where IsActive=1 order by PartNumber");
+
+            var sublist2 = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"select AutoID, Material from Continous_Moonshine_Material");
+
+            var imagen = Model.Area;
+
+            if (imagen is null)
+            {
+              imagen = "1.png";
+            }
+
+          }
+          <div class="row mn-t-15" id="ToAddCPU">
+
+
+
+            @Html.TextBoxFor(y => y.AreaID, new { @class = "form-control", disabled = "disabled", @id = "ddlAreaID2", style = "display: none;" })
+
+
+            <div class="col-5">
+              <div class="p-0 input-group mb-3 mn-r-10">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    @Html.Label("Station", new { @class = "m-0 fs-14" })
+                  </span>
+                </div>
+                @Html.DropDownList("StationID", (IEnumerable<SelectListItem>)stationlist, new { @class = "form-control", @id = "ddlStationID" })
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="p-0 input-group mb-3 mn-r-10">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    @Html.Label("Part Number", new { @class = "m-0 fs-14" })
+                  </span>
+                </div>
+                @Html.DropDownList("PartID", (IEnumerable<SelectListItem>)partnumberslist, new { @class = "form-control", @id = "ddlPartID" })
+              </div>
+            </div>
+            <div class="col-2 ">
+              <div class="p-0 input-group mb-3 mn-r-10">
+                <input id="btnUpdateSubstation2" type="button" value="Add" class="btn btn-base-primary btn-sm btn-block transition-hover" />
+              </div>
+            </div>
+          </div>
+
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+            $('#btnUpdateSubstation2').click(function (e) {
+              e.preventDefault(); // <------------------ stop default behaviour of button
+              // Load new data
+              var v_StationID = $("#ddlStationID").val();
+              var v_PartID = $("#ddlPartID").val();
+              //var v_Material_Total = $("#ddlStationID").val();
+              var v_AreaID2 = $("#ddlAreaID2").val();
+
+              var req = { StationID: v_StationID, PartID: v_PartID, AreaID2: v_AreaID2 };
+
+              ajaxfncStation2(req, v_StationID);
+            });
+
+
+            function updatesubstations2() {
+              var grid = new MvcGrid(document.querySelector('#mvcSubstations'));
+              grid.requestType = 'post';
+              grid.reload();
+            };
+
+            function ajaxfncStation2(column, v_stage) {
+              $.ajax({
+                type: "POST",
+                url: "/Quality/ApproveStations/AddSubStation",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(column),
+                success: function () {
+
+                  $("#ddlStationID option[value='" + v_StationID + "']").remove();
+                  // Reload Grid
+                  updatesubstations2();
+                }
+              })
+            };
+
+            $(document).on('click', '#mvcSubstations>table>tbody>tr>td>a.delSubStation', function (e) {
+              e.preventDefault(); // <------------------ stop default behaviour of button
+              var target = $(this).attr("href");
+
+              $.ajax({
+                type: "POST",
+                url: target,
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                  // Reload Grid
+                  updatesubstations2();
+                }
+              })
+            });
+
+          </script>
+
+        </li>
+        @*--------------------------------------------------------------------------------------------------*@
+        @*--------------------------------------------------------------------------------------------------*@
+
+        @*--------------------------------------------------------------------------------------------------*@
+        @*--------------------------------------------------------------------------------------------------*@
+
+        @*--------------------------------------------------------------------------------------------------*@
+      </ul>
+
+
+
+
+      <div class="tab-pane">
+        <div class="form-group">
+          <div class="form-group mt-4 pt-4 border-top">
+            <button type="submit" onclick="return confirm('¿Está seguro que desea agregar el registro?')" name="action:@(isNew ? "Create": "Edit")" class="btn btn-primary btn-sm btn-wide transition-hover mr-2">
+              Save
+            </button>
+
+
+            @if (!isNew)
+            {
+              @(Html.Fst().ConfirmModal("Delete", "ApproveStations", new { @id = Model.AutoID })
+                                                                                                                                                                                            .Title("Confirm Delete")
+                                                                                                                                                                                            .Content("Are you sure do you want to Delete?")
+                                                                                                                                                                                            .For(Html.Fst().Button().Text("Delete").Color(BootstrapColor.Secondary).Size(ButtonSize.Small))
+              )
+            }
+
+            <div class="d-inline-block">
+              <span class="mx-2 text-light font-weight-light fs-15">or</span>
+              <i class="fas fa-long-arrow-alt-left fs-13 text-primary o-8"></i>
+              <a href="@Url.Action("List", "ApproveStations")" class="m-link fs-15"> Back to list</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+}

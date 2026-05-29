@@ -1,0 +1,29 @@
+@echo off
+REM ENVSelect Batch launcher script
+REM Requires Administrator privileges
+
+cd /d "%~dp0"
+
+REM Check for Python
+python --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Error: Python is not installed or not in PATH
+    pause
+    exit /b 1
+)
+
+REM Check if psutil is installed
+python -c "import psutil" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Installing required dependencies...
+    python -m pip install -r requirements.txt
+)
+
+REM Run ENVSelect
+echo.
+echo Starting ENVSelect...
+echo ========================================
+echo.
+python ENVSelect.py
+
+pause

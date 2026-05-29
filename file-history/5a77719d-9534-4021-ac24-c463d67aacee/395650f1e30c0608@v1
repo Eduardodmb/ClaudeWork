@@ -1,0 +1,236 @@
+@using NonFactors.Mvc.Grid;
+@model Firstronic.Core.Entities.App.Production.tbl_Part_Operation_Packout_Goal_Daily_FULL
+
+@{
+  bool isNew = !(Model != null && Model.AutoID > 0);
+}
+
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text">@Model.PartNumber </h3>
+  </div>
+  <div class="md-card-content">
+    @using (Html.BeginForm())
+    {
+
+      @Html.AntiForgeryToken()
+
+      @Html.HiddenFor(y => y.AutoID, new { @id = "txtPartID" })
+
+
+      var partlis = Firstronic.Framework.Functions.Dropdowns.GetPartNumbersList(0, "WHERE IsActive=1");
+
+
+      <div class="tab-content mt-4" id="component-1-content">
+        <div class="tab-pane fade show active" id="component-1-1" role="tabpanel" aria-labelledby="component-1-1">
+          <div class="input-group mb-3">
+            @Html.LabelFor(y => y.PartID, new { @class = "m-0 fs-14" })
+            @Html.DropDownListFor(y => y.PartID, (IEnumerable<SelectListItem>)partlis, new { @class = "md-input", id = "ddlequipment" })
+          </div>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+            $("#ddlequipment").chosen({ "search_contains": true });
+          </script>
+          <div class="input-group mb-3">
+            @Html.LabelFor(y => y.TrnDate, new { @class = "m-0 fs-14" })
+            @Html.TextBoxFor(y => y.TrnDate, new { @class = "md-input" })
+          </div>
+
+          @{
+
+            var options = new List<SelectListItem>();
+
+
+            var o = new SelectListItem
+            {
+              Value = "1",
+              Text = "1",
+              Selected = true
+            };
+            options.Insert(0, o);
+
+            var o2 = new SelectListItem
+            {
+              Value = "2",
+              Text = "2",
+              Selected = true
+            };
+            options.Insert(0, o2);
+
+            var o3 = new SelectListItem
+            {
+              Value = "3",
+              Text = "3",
+              Selected = true
+            };
+            options.Insert(0, o3);
+          }
+
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.ShiftVM, new { @class = "m-0 fs-14" })
+
+            @Html.DropDownListFor(y => y.ShiftVM, (IEnumerable<SelectListItem>)options, new { @class = "md-input" })
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.Goal, new { @class = "m-0 fs-14" })
+
+            @Html.TextBoxFor(y => y.Goal, new { @class = "md-input" })
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.GoalComments, new { @class = "m-0 fs-14" })
+
+            @Html.TextAreaFor(y => y.GoalComments, new { @class = "md-input", @rows = "3" })
+          </div>
+          <div class="input-group mb-3">
+
+            @Html.LabelFor(y => y.Manual, new { @class = "m-0 fs-14" })
+
+            @Html.TextBoxFor(y => y.Manual, new { @class = "md-input" })
+          </div>
+          @*<div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+
+                  @Html.LabelFor(y => y.SupervisorComments, new { @class = "m-0 fs-14" })
+                </span>
+              </div>
+              @Html.TextAreaFor(y => y.SupervisorComments, new { @class = "md-input", @rows = "3" })
+            </div>*@
+
+          @if (!isNew)
+          {
+            <h5 class="fw-600">Downtime Details.</h5>
+
+            @Html.AjaxGrid(Url.Action("Downtimes", "GoalDaily", new { id = Model.AutoID }))
+
+            <br />
+
+            var subareaslist_sbustring = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [AreaID],[Area] FROM [PD_idt_areas] WHERE Area_Type_ID=1 order by FlowID");
+
+            var subtypelist_sbustring = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [IssueTypeID] ,[IssueType] FROM [PD_idt_issuestype] WHERE IsVisible =1 order by OrderID asc");
+
+            <div class="uk-grid mn-t-15">
+              <div class="uk-width-1-1 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  @Html.Label("Area", new { @class = "m-0 fs-14" })
+                  @Html.DropDownList("Area", (IEnumerable<SelectListItem>)subareaslist_sbustring, new { @class = "md-input", id = "ddlsubstringareas" })
+                </div>
+              </div>
+              <div class="uk-width-1-1 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  @Html.Label("Type", new { @class = "m-0 fs-14" })
+                  @Html.DropDownList("Tipo", (IEnumerable<SelectListItem>)subtypelist_sbustring, new { @class = "md-input", id = "ddlsubstringtype" })
+                </div>
+              </div>
+              <div class="uk-width-1-1 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  @Html.Label("Tiempo (Min)", new { @class = "m-0 fs-14" })
+                  @Html.TextBox("Tiempo", null, new { @class = "md-input", id = "txtsubstringFormat" })
+                </div>
+              </div>
+              <div class="uk-width-1-1 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  @Html.Label("Commentarios", new { @class = "m-0 fs-14" })
+                  @Html.TextBox("Commentarios", null, new { @class = "md-input", id = "txtsubstringComments" })
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  <input id="btnUpdatesubstring" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+                </div>
+              </div>
+            </div>
+
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              $('#btnUpdatesubstring').click(function (e) {
+                e.preventDefault(); // <------------------ stop default behaviour of button
+                // Load new data
+                var v_stage = $("#ddlsubstringareas").val();
+                var v_partid = $("#txtPartID").val();
+                var v_Format = $("#txtsubstringFormat").val();
+                var v_Com = $("#txtsubstringComments").val();
+                var v_type = $("#ddlsubstringtype").val();
+
+                var req = { AreaID: v_stage, PartID: v_partid, Format: v_Format, Comment: v_Com, v_type: v_type };
+
+                $.ajax({
+                  type: "POST",
+                  url: "/Production/GoalDaily/AddDowntimes",
+                  async: false,
+                  contentType: "application/json; charset=utf-8",
+                  data: JSON.stringify(req),
+                  success: function () {
+
+                    $("#txtsubstringFormat").val('');
+                    $("#txtsubstringComments").val('');
+
+                    // Reload Grid
+                    updatesubstring();
+                  }
+                })
+              });
+
+              function updatesubstring() {
+                var grid = new MvcGrid(document.querySelector('#mvcSubString'));
+                grid.requestType = 'post';
+                grid.reload();
+              };
+
+              $(document).on('click', '#mvcSubString>table>tbody>tr>td>a.DeleteDowntimes', function (e) {
+                e.preventDefault(); // <------------------ stop default behaviour of button
+                var target = $(this).attr("href");
+
+                $.ajax({
+                  type: "POST",
+                  url: target,
+                  async: false,
+                  contentType: "application/json; charset=utf-8",
+                  success: function () {
+                    // Reload Grid
+                    updatesubstring();
+                  }
+                })
+              });
+
+            </script>
+          }
+
+
+        </div>
+        <div class="tab-pane fade" id="component-1-2" role="tabpanel" aria-labelledby="component-1-2">
+
+        </div>
+      </div>
+      <div class="tab-pane">
+        <div class="form-group">
+          <div class="form-group mt-4 pt-4 border-top">
+            <button type="submit" name="action:@(isNew ? "Create": "Edit")" class="md-btn md-btn-primary md-btn-small">
+              Save
+            </button>
+
+            @if (!isNew)
+            {
+              <a class="md-btn md-btn-danger md-btn-small" href="@Url.Action("Delete", "GoalDaily", new { @id = Model.AutoID })">
+                Delete
+              </a>
+            }
+
+            <a class="md-btn md-btn-dark md-btn-small" href="@Url.Action("List", "GoalDaily", new { year=Model.TrnDate.Year,month=Model.TrnDate.Month,day=Model.TrnDate.Day })">
+              Back to list
+            </a>
+
+            @if (!isNew)
+            {
+              <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("Create", "GoalDaily", new { year=Model.TrnDate.Year,month=Model.TrnDate.Month,day=Model.TrnDate.Day })">
+                @Resources.Actions.Add
+              </a>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

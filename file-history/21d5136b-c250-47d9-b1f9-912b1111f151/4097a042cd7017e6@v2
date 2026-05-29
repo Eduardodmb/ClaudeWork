@@ -1,0 +1,513 @@
+# Safari Circuits - CMMC Level 2 Compliance Vendor Evaluation
+
+## Project Overview
+
+**Goal:** Evaluate and select CMMC Level 2 compliance vendor for Safari Circuits
+**Timeline:** May 2026 - Q3 2026 (Decision: Week 4, Implementation: 30-90 days)
+**Stakeholders:**
+- Eduardo Marquez (IT Systems Engineering Manager) - Project Lead
+- Scott (IT Director) - Approval Authority
+- Engineering Team - Requirements Input
+- External C3PAO Auditor - Assessment Partner
+
+**Status:** Active - Vendor Evaluation Phase
+
+---
+
+## Context for Claude
+
+Safari Circuits, LLC is a manufacturing/electronics company in Otsego, Michigan that:
+- Manufactures circuit boards and handles CUI (Controlled Unclassified Information)
+- Requires CMMC Level 2 certification for Department of Defense contracts
+- Must comply with NIST 800-171 (110 security controls)
+- Has 20 CUI users requiring secure access
+- Needs specialized engineering software (Gerber Viewer for PCB design, potentially CAD tools)
+
+### Critical Technical Requirements
+- Microsoft 365 GCC-High environment
+- Azure Virtual Desktop infrastructure
+- Ability to install specialized engineering software
+- Ongoing compliance management and C3PAO assessment support
+
+---
+
+## Workspace Structure
+
+- **00-Inbox**: Quick captures, meeting notes, vendor emails, questions to process
+- **01-Research**: Vendor proposals, analysis documents, reference materials
+- **02-Drafts**: Work-in-progress presentations, comparison reports, decision memos
+- **03-Deliverables**: Finalized outputs ready for team SharePoint (executive summaries, board presentations)
+
+---
+
+## Team SharePoint Locations
+
+**Published deliverables:** `S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Projects\CMMC-Level-2`
+**Policies:** `S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Policies\Security`
+**Compliance:** `S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Compliance\Audits`
+
+> **IMPORTANT:** Work happens privately in this vault. Only finalized deliverables get published to team SharePoint.
+
+---
+
+## Presentation Template
+
+**Safari Circuits PowerPoint Template:** `S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\10_Templates\01_PPT_Template.pptx`
+
+**Design Guidelines:**
+- Maintain Safari Circuits branding from template
+- Use color coding for comparison tables:
+  - 🟢 Green: Advantage/Best option
+  - 🟡 Yellow: Adequate/Acceptable
+  - 🔴 Red: Concern/Issue
+- Keep text minimal - bullet points only
+- Focus on high-impact visuals (charts, tables, comparison matrices)
+
+---
+
+## Vendors Under Evaluation
+
+### 1. ARDALYST (Tesseract Advanced Complete Plus)
+- **Type:** Regional MSP (Otsego, Michigan)
+- **Quote:** XH9OQ-4WTCD-BHGSC-NWG3G (dated 03-12-2026)
+- **Contact:** Bethany Carter (bcarter@ardalyst.com, 540-476-2432)
+- **3-Year Total:** $190,568
+- **Key Feature:** Full-service package (M365 + AVD + support included)
+- **Constraint:** 3-year mandatory commitment
+
+### 2. SECUREFRAME (Complete + Defense Package)
+- **Type:** National SaaS compliance platform (VC-backed)
+- **Contact:** Andrew Mudiappu (andrew.mudiappu@secureframe.com, 415-578-1084)
+- **3-Year Total:** $210,000 platform + ~$100K infrastructure = **~$310K+**
+- **Key Feature:** Best-in-class automation, 200+ integrations
+- **Constraint:** Software-only (must purchase M365/AVD separately)
+
+### 3. CLOUDFIT SOFTWARE (easyCMMC)
+- **Type:** Fully managed CMMC enclave (Lynchburg, Virginia)
+- **Quote:** 20260511-194637581 (expires Jun 10, 2026)
+- **Contact:** Jayson McFadden (jaysonmcfadden@cloudfitsoftware.com), Ian Hunt (ianhunt@cloudfitsoftware.com)
+- **3-Year Total:** $180,000
+- **Key Feature:** Lowest cost, fully managed, zero admin burden
+- **Constraint:** NO admin access, "Standard Worker Persona" only (M365/Teams/Edge), custom software requires approval + extra cost
+
+---
+
+## Critical Decision Factors
+
+### 1. SOFTWARE FLEXIBILITY (HIGHEST PRIORITY)
+
+**The Question:** Can engineering team operate with ONLY M365/Teams/Edge, or do they need:
+- ✅ Gerber Viewer (PCB design files)
+- ✅ AutoCAD or CAD software
+- ✅ ERP system integration
+- ✅ Engineering calculators/simulation tools
+- ✅ Version control clients (Git, SVN)
+- ✅ Specialized manufacturing software
+
+**Impact on Vendor Selection:**
+- **If custom software needed:** ❌ CloudFit is NOT viable (approval delays, extra costs)
+- **If only M365 needed:** ✅ CloudFit saves $10K-130K
+
+### 2. ADMINISTRATIVE CONTROL vs. COST
+
+| Vendor | Admin Control | 3-Year Cost | Trade-off |
+|--------|--------------|-------------|-----------|
+| **Ardalyst** | ⚠️ Moderate (admin access, MSP manages) | 💰 $191K | Balanced: reasonable control at reasonable cost |
+| **Secureframe** | ✅ Full (your infrastructure, your rules) | 💰💰💰 $310K+ | Maximum control, highest cost |
+| **CloudFit** | ❌ None (CloudFit exclusive admin) | 💰 $180K | Cheapest, zero control |
+
+### 3. NIST 800-171 COMPLIANCE REQUIREMENTS
+
+If Safari has admin rights (Ardalyst/Secureframe), must implement:
+- Change Management Process (CM.L2-3.4.3)
+- Configuration Management (CM.L2-3.4.1, CM.L2-3.4.2)
+- Least Functionality (CM.L2-3.4.6)
+- Application Whitelisting (CM.L2-3.4.8)
+- Software Integrity Verification (SI.L2-3.13.3)
+- Vulnerability Management (RA.L2-3.11.2)
+- Audit and Accountability (AU.L2-3.3.1)
+
+**With CloudFit:** They manage all controls (Pro: no burden, Con: no visibility/control)
+
+---
+
+## 15-Point Vendor Comparison Matrix
+
+| CRITERIA | ARDALYST | SECUREFRAME | CLOUDFIT |
+|----------|----------|-------------|----------|
+| **1. Year 1 Cost (20 users)** | $77,123 | $130,000+ | $60,000 |
+| **2. 3-Year Total Cost** | $190,568 | $310,000+ | $180,000 |
+| **3. M365 + AVD Included** | ✓ YES | ✗ NO (Buy separate) | ✓ YES |
+| **4. Admin Control** | ✓ YOU HAVE ACCESS | ✓ FULL CONTROL | ✗ CLOUDFIT ONLY |
+| **5. Install Custom Software** | ✓ YES (Your discretion) | ✓ YES (Your control) | ✗ APPROVAL REQUIRED (+Extra cost) |
+| **6. IT Support / Help Desk** | ✓ INCLUDED | ✗ NOT INCLUDED | ✓ INCLUDED |
+| **7. CMMC L2 Compliance** | ✓ FULL SUPPORT | ✓ FULL SUPPORT | ✓ FULL SUPPORT |
+| **8. Compliance Automation** | ⚠️ BASIC (Manual processes) | ✓ ADVANCED (Comply AI, 200+ tests) | ⚠️ MANAGED SERVICE |
+| **9. 24/7 Monitoring** | ⚠️ BUSINESS HOURS | ✓ 24/5 SUPPORT | ✓ 24/7 MONITORING |
+| **10. Implementation Time** | 30-60 DAYS | 60-90 DAYS | 30 DAYS |
+| **11. Contract Length** | ✗ 3 YEARS MANDATORY | ✓ 1 OR 3 YEARS | ✓ 1 YEAR AUTO-RENEW |
+| **12. Software Flexibility** | ✓ FULL WINDOWS ENV | ✓ ANY SOFTWARE | ✗ M365/TEAMS/EDGE ONLY |
+| **13. Scaling Users** | $1,614/user | $0 (up to 300 FTE) | $3,000/user |
+| **14. Change Management** | ✓ YOUR PROCESS (MSP support) | ✓ YOUR PROCESS (Platform tracks) | ✗ CLOUDFIT APPROVAL |
+| **15. Vendor Lock-In Risk** | ⚠️ MODERATE | ✓ LOW | ✗ HIGH |
+
+---
+
+## Common Tasks & Prompts
+
+### Generate Executive Presentation
+```
+Create an executive summary presentation (5-7 slides) comparing the 3 CMMC vendors.
+Include: problem statement, vendor overview, comparison matrix, cost analysis,
+recommendation for Safari Circuits manufacturing needs, and next steps.
+Save to 02-Drafts/executive-summary-[date].pptx
+```
+
+### Create Detailed Analysis Report
+```
+Generate a detailed vendor analysis report (15-20 slides) covering:
+- Background (CMMC L2, Safari Circuits context)
+- Each vendor's offering, pricing breakdown, pros/cons
+- Side-by-side comparison matrix
+- Software flexibility analysis (Gerber Viewer use case)
+- NIST 800-171 compliance requirements
+- Risk assessment and recommendation
+Save to 02-Drafts/detailed-analysis-[date].pptx
+```
+
+### Draft Critical Questions for Vendors
+```
+Generate follow-up questions for [Vendor Name] based on the comparison analysis.
+Focus on: software installation process, timeline, costs, customer references,
+and specific concerns about [admin control / infrastructure / flexibility].
+Save to 00-Inbox/questions-[vendor]-[date].md
+```
+
+### Create Cost Breakdown Spreadsheet
+```
+Build a detailed cost comparison spreadsheet showing:
+- Year 1, Year 2, Year 3 costs for each vendor
+- Hidden costs for Secureframe (M365, AVD, endpoint management, SIEM, IT support)
+- Per-user scaling costs
+- Total 3-year TCO comparison
+Save to 01-Research/cost-analysis-[date].xlsx
+```
+
+### Generate Board Presentation
+```
+Create a board-level presentation (10-12 slides) for approval:
+- Executive summary of CMMC L2 requirement
+- Business impact (DoD contracts at risk)
+- Vendor evaluation summary
+- Financial comparison
+- Recommended vendor with justification
+- Implementation timeline and risks
+Save to 02-Drafts/board-presentation-[date].pptx
+```
+
+### Draft Decision Memo
+```
+Write a decision memorandum for Scott (IT Director) recommending [Vendor Name].
+Include: situation, analysis, alternatives considered, recommendation, and rationale.
+Format for executive readability (1-2 pages max).
+Save to 02-Drafts/decision-memo-[vendor]-[date].md
+```
+
+### Create Software Requirements Assessment
+```
+Generate a questionnaire for the engineering team to assess:
+- Current software used (list all applications)
+- Software needed in next 12 months
+- Which applications handle CUI
+- Frequency of new software installations
+- Critical vs. nice-to-have applications
+Save to 00-Inbox/engineering-software-survey.md
+```
+
+---
+
+## Publishing Workflow
+
+1. **Draft Phase**
+   - Create document in `02-Drafts/`
+   - Iterate and refine with Claude Code
+   - Get internal review/feedback
+
+2. **Finalize Phase**
+   - Move polished document to `03-Deliverables/`
+   - Verify all sensitive info removed
+   - Final quality check
+
+3. **Publish to SharePoint**
+   ```powershell
+   # Manual copy (never auto-sync drafts!)
+   Copy-Item .\03-Deliverables\executive-summary.pptx `
+             'S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Projects\CMMC-Level-2\'
+   ```
+
+4. **Notification**
+   - Email stakeholders with SharePoint link
+   - Schedule review meeting if needed
+
+---
+
+## Decision Timeline
+
+| Week | Milestone | Activities |
+|------|-----------|------------|
+| **Week 1** | Internal Assessment | Engineering software requirements survey, IT capability assessment, budget review |
+| **Week 2** | Vendor Follow-Up | Send critical questions, request customer references, schedule demos |
+| **Week 3** | Due Diligence | Reference calls, vendor demos, security review |
+| **Week 4** | Final Decision | Board presentation, contract negotiation, vendor selection |
+| **Week 5-6** | Kickoff | Contract signing, project kickoff, implementation start |
+
+**Target Decision Date:** [Set specific date]
+**CloudFit Quote Expires:** June 10, 2026
+
+---
+
+## Decision Criteria Weighting
+
+| Criteria | Weight | Rationale |
+|----------|--------|-----------|
+| Software flexibility | 30% | Engineering team MUST have tools to do their job |
+| Total cost (3-year TCO) | 25% | Budget constraints matter |
+| Administrative control | 20% | Ability to troubleshoot/respond quickly |
+| Compliance capabilities | 15% | Must achieve CMMC L2 certification |
+| Vendor maturity/support | 10% | Long-term partnership quality |
+
+---
+
+## Key Insights & Recommendations
+
+### Preliminary Analysis
+
+**For Safari Circuits (Manufacturing/Engineering Company):**
+
+🏆 **RECOMMENDED: ARDALYST** (if engineering needs specialized software)
+- ✅ Best balance of cost ($191K) vs. control
+- ✅ Full Windows environment - install Gerber Viewer, CAD, etc.
+- ✅ Admin rights with MSP support
+- ✅ All infrastructure included (M365, AVD, help desk)
+- ✅ Only $10K more than CloudFit, but far more flexible
+- ⚠️ 3-year commitment required
+
+**Alternative: CLOUDFIT** (if only M365/Teams/Edge needed)
+- ✅ Lowest cost ($180K)
+- ✅ Zero admin burden
+- ✅ Fast deployment
+- ❌ ONLY viable if engineering team confirms NO specialized software needed
+- ❌ High risk if requirements change
+
+**Alternative: SECUREFRAME** (if in-house IT team exists + want maximum control)
+- ✅ Best technology platform
+- ✅ Maximum flexibility
+- ❌ Most expensive ($310K+) when infrastructure added
+- ❌ Requires IT staff to manage
+
+### Critical Next Step
+**MUST DO FIRST:** Engineering team software requirements assessment
+- If answer is "we need custom software" → ❌ CloudFit eliminated
+- If answer is "M365 only is fine" → ✅ CloudFit saves money
+
+---
+
+## Vendor Contact Information
+
+| Vendor | Primary Contact | Email | Phone |
+|--------|----------------|-------|-------|
+| **Ardalyst** | Bethany Carter | bcarter@ardalyst.com | 540-476-2432 |
+| **Secureframe** | Andrew Mudiappu | andrew.mudiappu@secureframe.com | 415-578-1084 |
+| **CloudFit** | Jayson McFadden | jaysonmcfadden@cloudfitsoftware.com | - |
+| **CloudFit** | Ian Hunt | ianhunt@cloudfitsoftware.com | - |
+
+---
+
+## Source Documents
+
+All vendor proposals stored in: `01-Research/vendor-proposals/`
+
+- Ardalyst: `Tesseract_Advanced_Complete_-_Plus_Quote_Safari_Circuits.pdf`
+- Secureframe: `Pricing_Proposal__2_.pdf`
+- CloudFit SOW: `CloudFit_Statement_of_Work_-_easyCMMC_Services.pdf`
+- CloudFit Quote: `Safari_Circuits__LLC_-_easyCMMC_10_users.pdf`
+
+---
+
+## Decision Log
+
+*Capture key decisions with `/learn` as they're made*
+
+- [2026-05-11] Project created in personal vault - work privately, publish finals to SharePoint
+- [2026-05-11] Decision criteria weighted: Software flexibility (30%) is highest priority
+- [Add decisions as project progresses]
+
+---
+
+## Related Projects
+
+- Azure Migration (affects CMMC network segmentation requirements)
+- BeFirst Modernization (MFA implementation applies to CMMC)
+
+---
+
+## Project Aliases (PowerShell)
+
+Add to `~/.config/powershell/profile.ps1`:
+
+```powershell
+function cmmc {
+    cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude\05-Projects\Safari-CMMC-Level-2"
+    claude
+}
+```
+
+Usage: Just type `cmmc` to instantly open this project in Claude Code.
+
+---
+
+## FULL VENDOR COMPARISON KNOWLEDGE BASE
+
+<details>
+<summary>Expand for complete vendor comparison data (use for detailed analysis)</summary>
+
+### COST ANALYSIS (20 CUI USERS, 3-YEAR COMMITMENT)
+
+| Component | Ardalyst | Secureframe | CloudFit |
+|-----------|----------|-------------|----------|
+| **Year 1 Total** | $77,122.80 | $70,000 (3-yr) / $90,000 (1-yr) | $60,000 |
+| **Annual Recurring (Yr 2-3)** | $56,722.80/year | $70,000 or $90,000/year | $60,000/year |
+| **3-Year Contract Total** | $190,568.40 | $210,000 (3-yr) / $270,000 (1-yr renew) | $180,000 |
+| **Setup/Activation Fee** | $19,900 (one-time) | $0 (included) | $0 (included) |
+| **M365 E5 GCC-High Included?** | ✅ YES (20 licenses @ $1,120.80/user) | ❌ NO (add ~$22K/year) | ✅ YES (10 licenses included) |
+| **Azure Virtual Desktop Included?** | ✅ YES (20 Cloud PCs, 4vCPU/16GB) | ❌ NO (add ~$15K/year) | ✅ YES (managed AVD) |
+| **Endpoint Management Included?** | ✅ YES (Ardalyst EPM, 20 devices) | ❌ NO (add ~$1K/year) | ✅ YES (managed) |
+| **IT Support/Help Desk Included?** | ✅ YES (Tier 1-3) | ❌ NO | ✅ YES (end-user support) |
+| **TRUE TOTAL COST OF OWNERSHIP** | $190,568 | ~$310,000+ (with infrastructure) | $180,000 |
+
+**IMPORTANT:** Secureframe's quoted price is SOFTWARE ONLY. Must separately purchase:
+- Microsoft 365 E5 GCC-High licenses (~$22,416/year for 20 users)
+- Azure Virtual Desktop infrastructure (~$15,000/year)
+- Endpoint management tools (~$1,000/year)
+- SIEM/log management (~$5,000/year)
+- IT support staff or MSP (~$15,000-20,000/year)
+
+**TRUE COST RANKING:**
+1. 🥇 CloudFit: $180,000 (cheapest, but most restrictive)
+2. 🥈 Ardalyst: $190,568 (best value - complete solution)
+3. 🥉 Secureframe: $310,000+ (most expensive when infrastructure added)
+
+### INFRASTRUCTURE & SERVICES COMPARISON
+
+| Feature | Ardalyst | Secureframe | CloudFit |
+|---------|----------|-------------|----------|
+| **Microsoft 365 GCC-High** | ✅ 20 licenses included | ❌ You purchase separately | ✅ 10 licenses included |
+| **Azure Virtual Desktop** | ✅ 20 Cloud PCs (D2s v3: 4vCPU, 16GB RAM, P10 128GB storage) | ❌ You deploy & manage | ✅ Fully managed AVD |
+| **Cloud Environment** | Microsoft GCC-High (FedRAMP High) | Platform-agnostic (you build) | Microsoft GCC-High |
+| **Endpoint Management** | ✅ Ardalyst EPM (vuln scanning, patching) | ⚠️ Integrates with your tools (Qualys, etc.) | ✅ Microsoft Intune & Defender |
+| **Network Security** | ✅ Boundary protection, segmentation included | ❌ You implement | ✅ Managed by CloudFit |
+| **Log Management/SIEM** | ✅ Azure Log Analytics (GCC-High) | ❌ You provide SIEM | ✅ Managed monitoring |
+| **IT Help Desk** | ✅ Tier 1: $125/case; Tier 2-3: unlimited | ❌ Not provided | ✅ End-user support included |
+| **Device Lifecycle Mgmt** | ✅ Laptop provisioning ($295), Cloud PC ($195), decommissioning | ❌ Not provided | ✅ Managed by CloudFit |
+
+### ADMINISTRATIVE CONTROL & SOFTWARE FLEXIBILITY
+
+| Aspect | Ardalyst | Secureframe | CloudFit |
+|--------|----------|-------------|----------|
+| **Who Has Admin Rights?** | ✅ YOU (customer has admin access) | ✅ YOU (your infrastructure) | ❌ CLOUDFIT ONLY (exclusive admin rights) |
+| **Can Install Custom Software?** | ✅ YES - Your discretion with change management | ✅ YES - Full control | ❌ NO - CloudFit approval required, likely extra cost |
+| **Software Environment** | ✅ Full Windows 11 environment - install what you need | ✅ Any software on your infrastructure | ⚠️ "Standard Worker Persona" ONLY: M365 apps, Teams, Edge browser |
+| **Change Management Process** | ✅ Your internal process with MSP support | ✅ Your process (platform tracks changes) | ❌ CloudFit's process - submit requests, wait for approval |
+| **Timeline to Install New Software** | Days (your control) | Days (your control) | Weeks (CloudFit backlog + approval) |
+| **Application Whitelisting** | ✅ You configure (Intune/Defender) | ✅ You configure | ❌ CloudFit controls whitelist |
+| **Customization Beyond Standard** | ✅ Allowed | ✅ Allowed | ⚠️ Extra cost: "Custom development or bespoke configuration requests beyond standardized baseline" |
+
+**CRITICAL ISSUE FOR SAFARI CIRCUITS:**
+Engineering team needs Gerber Viewer for PCB design files and potentially other specialized software.
+
+- **Ardalyst:** ✅ Install freely with proper change management
+- **Secureframe:** ✅ Install on your infrastructure
+- **CloudFit:** ❌ Must request approval, likely additional cost, slow process
+
+CloudFit's "Standard Worker Persona":
+- Operating System: Windows 11
+- Installed Software: Microsoft 365 Apps, Teams, Edge Browser ONLY
+- "Additional applications outside of this standard set require a request and may incur additional costs."
+
+### CMMC LEVEL 2 COMPLIANCE CAPABILITIES
+
+| Capability | Ardalyst | Secureframe | CloudFit |
+|------------|----------|-------------|----------|
+| **CMMC L2 Program Coverage** | ✅ Tesseract Advanced Complete Plus - full NIST 800-171 | ✅ Secureframe Complete: CMMC L2 | ✅ easyCMMC aligned to CMMC L2 |
+| **SSP Generation** | ✅ Automated System Security Plan | ✅ Automated SSP | ✅ Templated SSP |
+| **POAM Management** | ✅ Plan of Action & Milestones tracking | ✅ Automated POAM updates | ✅ POAM support |
+| **SPRS Score Support** | ✅ Supplier Performance Risk System calculation | ✅ SPRS calculation | ✅ SPRS support |
+| **CUI User Limit** | 20 Cloud users (enclave: no specified limit) | 15 CUI users max | 10 users (in this quote) |
+| **Policy Generation** | ✅ Policy templates (SSP, POAM, CPM) | ✅ Policy library with version control | ✅ Templated policies, plans, procedures |
+| **Compliance Documentation** | ✅ Governance documentation included | ✅ Full compliance documentation | ✅ Templated compliance docs |
+| **C3PAO Assessment Support** | ✅ Audit support by compliance team | ✅ Audit support by 30+ former auditors | ✅ Assessment readiness support |
+| **Assessment Guarantee?** | ⚠️ No (support only) | ⚠️ No (enablement, not certification) | ⚠️ No - "CloudFit supports compliance enablement, not certification itself" |
+
+### TECHNOLOGY & AUTOMATION
+
+| Feature | Ardalyst | Secureframe | CloudFit |
+|---------|----------|-------------|----------|
+| **Automated Compliance Testing** | ⚠️ Basic automated tests (scope unclear) | ✅ 200+ pre-built automated tests | ⚠️ Managed service (CloudFit handles) |
+| **AI-Powered Remediation** | ❌ Not mentioned (manual remediation) | ✅ Comply AI - generates infrastructure-as-code (Terraform/CloudFormation) | ❌ Not mentioned |
+| **Continuous Monitoring** | ✅ Monitoring included (dashboard details limited) | ✅ Real-time dashboard with compliance scoring, risk trends | ✅ 24/7 monitoring & incident response |
+| **Integration Ecosystem** | ⚠️ Microsoft-centric (Azure, M365, Intune) | ✅ 200+ integrations (AWS, GCP, Azure, Okta, GitHub, Slack, HRIS, etc.) | ⚠️ Microsoft GCC-High only |
+| **Risk Management** | ✅ Basic risk tracking | ✅ Advanced risk register (org, financial, reputation, cyber, operational) | ⚠️ Managed by CloudFit |
+| **Vendor Risk Management** | ⚠️ Basic vendor tracking | ✅ Full TPRM lifecycle (questionnaires, auto-scoring, review cycles, doc repository) | ⚠️ Managed by CloudFit |
+| **Policy Management** | ✅ Policy generation & distribution | ✅ Centralized library, version control, auto-suggestions, employee attestation | ✅ Templated policies |
+| **Personnel Management** | ⚠️ Basic user tracking | ✅ Advanced personnel module (groups, access reviews, HRIS sync, reporting) | ⚠️ Managed by CloudFit |
+| **Custom Test Creation** | ❌ Not mentioned | ✅ Build custom compliance tests | ❌ Not applicable (managed service) |
+| **Dashboard Quality** | ⚠️ Basic (details not specified) | ✅ Advanced (compliance %, tests, risk trends, framework coverage) | ⚠️ CloudFit monitors, monthly reviews |
+| **Vulnerability Management** | ✅ Ardalyst EPM + Qualys integration | ⚠️ Integration only (you provide scanner) | ✅ Managed vulnerability management |
+
+**TECHNOLOGY MATURITY:**
+- **Ardalyst:** Services-first MSP, compliance capabilities appear manual/consultant-driven
+- **Secureframe:** Product-first SaaS company, heavy R&D investment (52% of company, 18 releases in 6 months, 122% R&D headcount growth)
+- **CloudFit:** Managed service provider, compliance handled by their team rather than automation
+
+### SUPPORT & EXPERTISE
+
+| Aspect | Ardalyst | Secureframe | CloudFit |
+|--------|----------|-------------|----------|
+| **Customer Success Manager** | ✅ Dedicated CSM | ✅ Dedicated CSM | ✅ Monthly service reviews |
+| **Support Hours** | ⚠️ Business hours (implied) | ✅ 24/5 online support | ✅ 24/7 monitoring & support |
+| **Compliance Team Size** | ⚠️ Not disclosed (smaller MSP) | ✅ 30+ compliance experts & former C3PAO auditors | ✅ US citizen FTEs with background checks |
+| **Former Auditor Access** | ⚠️ Unknown | ✅ Multiple former auditors (Marc Rubbinaccio CISSP/CISA, Dalia Cavazos CISA) | ⚠️ Not specified |
+| **Training** | ✅ User and admin training | ✅ Implementation and training | ✅ Onboarding included |
+| **Implementation Support** | ✅ Full implementation ($19,900 activation) | ✅ Implementation included | ✅ 30 days or less deployment |
+| **Ongoing Support Quality** | ⚠️ Regional MSP, smaller team | ✅ G2 Reviews: 99% quality of support, 98% ease of business | ⚠️ CloudFit manages all operations |
+
+### CONTRACT TERMS & FLEXIBILITY
+
+| Term | Ardalyst | Secureframe | CloudFit |
+|------|----------|-------------|----------|
+| **Contract Length** | ⚠️ 3 years MANDATORY | ✅ 1 year OR 3 years (your choice) | ✅ 1 year initial, auto-renews annually (up to 3 years) |
+| **Early Termination** | ⚠️ Not specified (likely difficult) | ⚠️ Not specified (annual commitment) | ✅ Can reduce/cancel at anniversary with 30-day notice |
+| **Payment Terms** | Annual prepayment, 14-day grace or forfeit kickoff date | Annual prepayment | Annual prepayment |
+| **Price Lock** | ✅ Fixed 3-year pricing | ⚠️ Subject to Microsoft price changes (disclaimer) | ⚠️ Not specified |
+| **Scaling Users** | $1,614/user to add (prorated) | $0 (flat rate up to 300 FTE) | $3,000/user to add (prorated), can reduce annually |
+| **Minimum User Count** | 20 users (enclave + cloud users) | 15 CUI users in this package | 10 users minimum (per quote) |
+| **Vendor Lock-In** | ⚠️ MODERATE - Must designate Ardalyst as Microsoft Partner of Record | ✅ LOW - Platform-agnostic, easy to switch | ❌ HIGH - No admin access = total dependence on CloudFit |
+| **Migration at Contract End** | ⚠️ You must migrate M365 licenses, Azure environment | ✅ Just cancel platform subscription | ❌ CloudFit manages licenses - "If Client cancels, Client assumes responsibility for M365 & Azure costs" |
+
+### VENDOR MATURITY & MARKET POSITION
+
+| Factor | Ardalyst | Secureframe | CloudFit |
+|--------|----------|-------------|----------|
+| **Company Type** | Regional MSP (Otsego, MI) | National SaaS platform (VC-backed) | Regional managed service (Lynchburg, VA) |
+| **Market Position** | Smaller regional player | Industry leader, rapid growth | Specialized CMMC boutique |
+| **R&D Investment** | ⚠️ Not disclosed (services-led) | ✅ 52% of company in R&D, 122% headcount growth | ⚠️ Not disclosed |
+| **Customer Reviews** | ⚠️ Not provided | ✅ G2 Leader: 99% support quality, 98% ease of business, 96% meets requirements | ⚠️ Not provided |
+| **Certifications** | Microsoft Partner | G2 Leader badges (Cloud Compliance, TPRM, Cloud Security) | Microsoft 2025 Partner of the Year (Defense & Intelligence Award), CAF/CO Certified CMMC Professional |
+| **Financial Stability** | ⚠️ Unknown (private MSP) | ✅ VC-backed, strong growth trajectory | ⚠️ Unknown (private) |
+| **CMMC Ecosystem Presence** | Regional | National | Growing (CAF/CO certified) |
+
+</details>
+
+---
+
+*This project knowledge base contains comprehensive vendor comparison data for CMMC Level 2 compliance decision-making. Use prompts above to generate presentations, reports, and analyses as needed.*

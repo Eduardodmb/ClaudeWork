@@ -1,0 +1,28 @@
+# Download Chart.js to vendor folder
+# Run this script from the BeFirst_Portal root directory
+
+$vendorPath = ".\firstronic\Content\vendor\chartjs"
+$chartJsUrl = "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"
+$chartJsMinUrl = "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+
+# Create directory if it doesn't exist
+if (-not (Test-Path $vendorPath)) {
+    New-Item -ItemType Directory -Path $vendorPath -Force
+    Write-Host "Created directory: $vendorPath" -ForegroundColor Green
+}
+
+# Download Chart.js
+Write-Host "Downloading Chart.js..." -ForegroundColor Cyan
+try {
+    Invoke-WebRequest -Uri $chartJsUrl -OutFile "$vendorPath\chart.umd.js"
+    Write-Host "Downloaded: chart.umd.js" -ForegroundColor Green
+
+    Invoke-WebRequest -Uri $chartJsMinUrl -OutFile "$vendorPath\chart.umd.min.js"
+    Write-Host "Downloaded: chart.umd.min.js" -ForegroundColor Green
+
+    Write-Host "`nChart.js downloaded successfully!" -ForegroundColor Green
+    Write-Host "Now update the view to use: ~/Content/vendor/chartjs/chart.umd.min.js" -ForegroundColor Yellow
+} catch {
+    Write-Host "Error downloading Chart.js: $_" -ForegroundColor Red
+    Write-Host "`nAlternative: Download manually from https://www.chartjs.org/docs/latest/getting-started/" -ForegroundColor Yellow
+}

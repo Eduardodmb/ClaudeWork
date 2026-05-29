@@ -1,0 +1,182 @@
+@model Firstronic.Core.Entities.App.First.tbl_CS_idt_external_customers
+
+@{
+  bool isNew = !(Model != null && !String.IsNullOrEmpty(Model.CustomerName));
+}
+
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text">Manage Customers</h3>
+  </div>
+  <div class="md-card-content">
+    @using (Html.BeginForm())
+    {
+      <div class="col-md-9">
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new { @class = "hide" })
+
+        @Html.HiddenFor(y => y.CustomerID)
+
+        <ul class="nav nav-bordered" id="component-1" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active show" data-toggle="tab" href="#component-1-1" role="tab" aria-controls="component-1-1" aria-selected="true">
+              <i class="fas fa-pencil-alt fs-14 mr-1"></i> General
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content mt-4" id="component-1-content">
+          <div class="tab-pane fade show active" id="component-1-1" role="tabpanel" aria-labelledby="component-1-1">
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+
+                  @Html.LabelFor(y => y.CustomerName, new { @class = "m-0 fs-14" })
+                </span>
+
+              </div>
+
+              @if (isNew)
+              {
+                @Html.TextBoxFor(y => y.CustomerName, new { @class = "form-control" })
+
+              }
+              else
+              {
+                @Html.TextBoxFor(y => y.CustomerName, new { @class = "form-control" })@*, disabled = "disabled"*@
+              }
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+
+                  @Html.LabelFor(y => y.PVS_DB, new { @class = "m-0 fs-14" })
+                </span>
+
+              </div>
+
+              @if (isNew)
+              {
+                @Html.TextBoxFor(y => y.PVS_DB, new { @class = "form-control" })
+
+              }
+              else
+              {
+                @Html.TextBoxFor(y => y.PVS_DB, new { @class = "form-control" })
+              }
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+
+                  @Html.LabelFor(y => y.PVS_NAME, new { @class = "m-0 fs-14" })
+                </span>
+
+              </div>
+
+              @if (isNew)
+              {
+                @Html.TextBoxFor(y => y.PVS_NAME, new { @class = "form-control" })
+
+              }
+              else
+              {
+                @Html.TextBoxFor(y => y.PVS_NAME, new { @class = "form-control" })
+              }
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+
+                  @Html.LabelFor(y => y.Customer_No, new { @class = "m-0 fs-14" })
+                </span>
+
+              </div>
+
+              @if (isNew)
+              {
+                @Html.TextBoxFor(y => y.Customer_No, new { @class = "form-control" })
+
+              }
+              else
+              {
+                @Html.TextBoxFor(y => y.Customer_No, new { @class = "form-control" })
+              }
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+
+                  @Html.LabelFor(y => y.Packout_Validation, new { @class = "m-0 fs-14" })
+                </span>
+
+              </div>
+
+              @if (isNew)
+              {
+                @Html.TextBoxFor(y => y.Packout_Validation, new { @class = "form-control" })
+
+              }
+              else
+              {
+                @Html.TextBoxFor(y => y.Packout_Validation, new { @class = "form-control" })
+              }
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+
+                  @Html.LabelFor(y => y.CFT_ID, new { @class = "m-0 fs-14" })
+                </span>
+              </div>
+
+              @{
+
+                var sublist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [CFT_ID],[CFT_Name] FROM [Common_CFT]");
+              }
+
+              @Html.DropDownListFor(y => y.CFT_ID, (IEnumerable<SelectListItem>)sublist, new { @class = "form-control", id = "ddlsubstation" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.IsVisible)
+              @Html.DropDownListFor(y => y.IsVisible, (IEnumerable<SelectListItem>)Model.IsVisible_List, new { @class = "md-input" })
+            </div>
+          </div>
+          <div class="tab-pane fade" id="component-1-2" role="tabpanel" aria-labelledby="component-1-2">
+
+          </div>
+        </div>
+        <div class="tab-pane">
+          <div class="form-group">
+            <div class="form-group mt-4 pt-4 border-top">
+              <button type="submit" name="action:@(isNew ? "Create": "Edit")" class="md-btn md-btn-primary md-btn-small">
+                Save
+              </button>
+
+              @if (!isNew)
+              {
+                @(Html.Fst().ConfirmModal("Delete", "Customers", new { @id = Model.CustomerID })
+                                                              .Title("Confirm Delete")
+                                                              .Content("Are you sure do you want to Delete?")
+                                                              .For(Html.Fst().Button().Text("Delete").Color(BootstrapColor.Secondary).Size(ButtonSize.Small))
+                )
+              }
+
+              <div class="d-inline-block">
+                <span class="mx-2 text-light font-weight-light fs-15">or</span>
+                <i class="fas fa-long-arrow-alt-left fs-13 text-primary o-8"></i>
+                <a href="@Url.Action("Index", "Customers")" class="m-link fs-15"> Back to list</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+</div>
+
+

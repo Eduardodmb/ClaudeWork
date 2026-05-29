@@ -1,0 +1,1344 @@
+@using NonFactors.Mvc.Grid;
+@using System.Data;
+@using System.Data.SqlClient;
+@using System.Globalization;
+
+@model Firstronic.Core.Entities.App.Engineering.tbl_CS_idt_partnumbers_FULL
+
+@{
+  bool isNew = !(Model != null && !String.IsNullOrEmpty(Model.PartNumber));
+  var customerlist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [CustomerID],[CustomerName] FROM [CS_idt_external_customers] Order by CustomerName asc");
+  var parttypelist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery("SELECT [Part_Type_ID] ,[Part_Type] FROM [Part_Type]");
+  var Typelist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery("SELECT [TypeID] ,[Type] FROM [SP_tbl_layers_extra_Type]");
+  var DocTypelist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery("SELECT TOP (1000) [AutoID],[DocType] FROM [EN_tbl_visualAids_DocType]");
+  var arealist_rates = Firstronic.Framework.Functions.Dropdowns.GetAreasList(null, "");
+  var today = DateTime.Now;
+}
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+  $(document).keypress(
+    function (event) {
+      if (event.which == '13') {
+        event.preventDefault();
+      }
+    });
+</script>
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text"> Part Number: @Model.PartNumber </h3>
+  </div>
+  <div class="md-card-content">
+    @using (Html.BeginForm())
+    {
+      @Html.AntiForgeryToken()
+      @Html.ValidationSummary("", new { @class = "hide" })
+      @Html.HiddenFor(y => y.PartID, new { @id = "txtPartID" })
+
+    <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#tabs_4'}">
+      <li class="uk-active" aria-expanded="true"><a href="#">General</a></li>
+      <li class="" aria-expanded="false"><a href="#">Image</a></li>
+      <li class="" aria-expanded="false"><a href="#">Area Locks</a></li>
+      <li class="" aria-expanded="false"><a href="#">Shipping Labels Validation</a></li>
+      <li class="" aria-expanded="false"><a href="#">Require Station Validation</a></li>
+      <li class="" aria-expanded="false"><a href="#">Rabbits</a></li>
+      <li class="" aria-expanded="false"><a href="#">Defects Qty</a></li>
+      <li class="" aria-expanded="false"><a href="#">Packout Certifications</a></li>
+      <li class="" aria-expanded="false"><a href="#">Assembly Instructions</a></li>
+      <li class="" aria-expanded="false"><a href="#">Custom Defects</a></li>
+      <li class="" aria-expanded="false"><a href="#">Rework Allowed</a></li>
+      <li class="" aria-expanded="false"><a href="#">Routing Approved</a></li>
+
+    </ul>
+
+    <ul id="tabs_4" class="uk-switcher uk-margin">
+
+      @*----------------------------------------------------------GENERAL-----------------------------------------------------------------*@
+      <li aria-hidden="false" class="uk-active">
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            <p class="request-info">General information about partnumbers.</p>
+          </div>
+        </div>
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            <div class="input-group mb-3">
+              @Html.LabelFor(y => y.PartNumber, new { @class = "m-0 fs-14" })
+              @{ if (!isNew)
+                {
+                  @Html.TextBoxFor(y => y.PartNumber, new { @class = "md-input", @id = "txtJobID", @readonly = "readonly" })
+                }
+                else
+                {
+                  @Html.TextBoxFor(y => y.PartNumber, new { @class = "md-input", @id = "txtJobID" })
+                }
+              }
+            </div>
+          </div>
+          <div class="uk-width-1-1">
+            <div class="input-group mb-3">
+              @Html.LabelFor(y => y.Part_key, new { @class = "m-0 fs-14" })
+              @Html.TextBoxFor(y => y.Part_key, new { @class = "md-input", ReadOnly = "True" })
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+
+          @Html.LabelFor(y => y.PartDesc, new { @class = "m-0 fs-14" })
+
+          @Html.TextBoxFor(y => y.PartDesc, new { @class = "md-input" })
+        </div>
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            <div class="input-group mb-3">
+
+              @Html.LabelFor(y => y.Facility_Name, new { @class = "m-0 fs-14" })
+              @Html.DropDownListFor(y => y.Facility_Key, (IEnumerable<SelectListItem>)Model.FacilityList, new { @class = "md-input" })
+            </div>
+          </div>
+          <div class="uk-width-1-1">
+            <div class="input-group mb-3">
+
+              @Html.LabelFor(y => y.CustomerID, new { @class = "m-0 fs-14" })
+              @Html.DropDownListFor(y => y.CustomerID, (IEnumerable<SelectListItem>)customerlist, new { @class = "md-input" })
+            </div>
+          </div>
+        </div>
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            <div class="input-group mb-3">
+
+              @Html.LabelFor(y => y.IsActive, new { @class = "m-0 fs-14" })
+              @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input" })
+            </div>
+          </div>
+          <div class="uk-width-1-1">
+
+          </div>
+        </div>
+      </li>
+
+      @*----------------------------------------------------------IMAGE-----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            @{
+              SqlParameter[] parameters = new SqlParameter[]
+              {
+                new SqlParameter("@Partid",SqlDbType.Int){Value =Model.PartID}
+};
+
+              var picturename = Firstronic.Framework.Queries.GetStringFromQuery("SELECT  [ImageURL] FROM  [CS_idt_partnumbers] WHERE Partid=@Partid", parameters).Replace("[img]", "").Replace("[/img]", "");
+
+              if (picturename != "")
+              {
+                <div class="input-group mb-3">
+                  <img id='theImg' src="@Html.Raw(Path.Combine("/UploadedFiles/PartNumbers/Pictures/",picturename))" class="img-element col-12" width="600" height="480" />
+                </div>
+              }
+            }
+
+            <div class="input-group mb-3">
+              @Html.Label("Attachment", new { @class = "m-0 fs-14" })
+              @Html.TextBox("Picture", null, new { @class = "md-input Filevalidation", @id = "txt_html", type = "file" })
+            </div>
+
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              Filevalidation = () => {
+                const fi = document.getElementById('txt_html');
+                // Check if any file is selected.
+                if (fi.files.length > 0) {
+                  for (var i = 0; i <= fi.files.length - 1; i++) {
+
+                    const fsize = fi.files.item(i).size;
+                    const file = Math.round((fsize / 1024));
+                    // The size of the file.
+                    if (file >= 30096) {
+                      alert(
+                        "File too Big, please select a file less than 30mb");
+                      $("#txt_html").html("");
+                    }
+                  }
+                  var nurl = ""
+
+                  var fileUpload = $("#txt_html").get(0);
+                  var files = fileUpload.files;
+
+                  var fileData = new FormData();
+
+                  // Looping over all files and add it to FormData object
+                  for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+
+                  }
+                  //// Adding one more key to FormData object
+                  //fileData.append('username', ‘Manas’);
+
+                  $.ajax({
+
+                    type: "POST",
+                    url: "/Quality/PartNumber/UploadFile",
+                    async: false,
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (response) {
+                      nurl = response;
+
+                      var v_PartID = $("#txtPartID").val();
+
+                      var req = { partid: v_PartID, url: nurl };
+
+                      $.ajax({
+                        type: "POST",
+                        url: "/Quality/PartNumber/SavePicture",
+                        async: false,
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(req),
+                        success: function () {
+
+                        }
+                      })
+                    },
+                    error: function () {
+
+                    }
+                  });
+                }
+              }
+            </script>
+          </div>
+        </div>
+      </li>
+
+      @*----------------------------------------------------------AREA LOCKS-----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            @{
+
+              SqlParameter[] parametersdif = new SqlParameter[]
+              {
+                 new SqlParameter("@Partid",SqlDbType.Int){Value =Model.PartID }
+};
+              DataTable dif = Firstronic.Framework.Queries.GetDatatableFromQuery(@"
+                                                          SELECT
+                                                            isnull(Part_Operation_Review_Operation.AutoID,0) as AutoID ,
+                                                            Part_Operation_Review_Operation.PartID, Part_Operation_Review_Operation.CurrentAreaID,
+                                                            Part_Operation_Review_Operation.PreviousAreaID,Part_Operation_Review_Operation.Facility_Key,
+                                                            Part_Operation_Review_Operation.Previous_Date, isnull(Part_Operation_Review_Operation_Validate.AutoID, 0) AS Validate
+                                                          FROM Part_Operation_Review_Operation
+                                                          FULL JOIN
+                                                            Part_Operation_Review_Operation_Validate ON Part_Operation_Review_Operation.PartID = Part_Operation_Review_Operation_Validate.PartID AND
+                                                            Part_Operation_Review_Operation.CurrentAreaID = Part_Operation_Review_Operation_Validate.CurrentAreaID AND
+                                                            Part_Operation_Review_Operation.PreviousAreaID = Part_Operation_Review_Operation_Validate.PreviousAreaID
+                                                          WHERE (Part_Operation_Review_Operation.partid = @Partid and Part_Operation_Review_Operation.CurrentAreaID = '14')
+                                                            or (Part_Operation_Review_Operation_Validate.partid = @Partid and Part_Operation_Review_Operation_Validate.CurrentAreaID = '14')", parametersdif);
+
+              bool pasa = false;
+
+              foreach (DataRow row in dif.Rows)
+              {
+                pasa = true;
+                if (int.Parse(row["AutoID"].ToString()) == 0 || int.Parse(row["Validate"].ToString()) == 0)
+                {
+                  pasa = false;
+                  break;
+                }
+              }
+
+            }
+            @if (pasa)
+            {
+              <p class="request-info text-center bg-c-green" style="background-color:greenyellow">APPROVED.</p>
+            }
+            else
+            {
+              //Check last
+              SqlParameter[] parametersdifbypass = new SqlParameter[]
+              {
+                 new SqlParameter("@partid",SqlDbType.Int){Value =Model.PartID}
+};
+              DataTable difbypass = Firstronic.Framework.Queries.GetDatatableFromQuery(@"select trndate from Part_Operation_Review_Operation_ByPass where trndate>DATEADD(hh,-4,GETDATE()) and partid = @partid and CurrentAreaID = '14' order by trndate desc", parametersdifbypass);
+
+              if (difbypass.Rows.Count > 0)
+              {
+                if (difbypass.Rows[0][0].ToString() == "")
+                {
+                  <p class="request-info text-center bg-c-red" style="background-color:firebrick">NOT APPROVED.</p>
+                }
+                else
+                {
+                  <p class="request-info text-center bg-c-yellow" style="background-color:firebrick">NOT APPROVED. By pass @difbypass.Rows[0][0].ToString() </p>
+                }
+              }
+              else
+              {
+                SqlParameter[] parametersalloempty = new SqlParameter[]
+               {
+                                        new SqlParameter("@partid",SqlDbType.Int){Value =Model.PartID}
+};
+                DataTable alloempty = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT [ControlID] FROM [Part_Operation_Packout_No_Filters] WHERE partid=@partid", parametersalloempty);
+
+                if (alloempty.Rows.Count > 0)
+                {
+                  <p class="request-info text-center bg-c-green" style="background-color:greenyellow">APPROVED WITHOUT FILTERS.</p>
+                }
+                else
+                {
+                  SqlParameter[] parametersdtallowed = new SqlParameter[]
+                   {
+                                              new SqlParameter("@PartID",SqlDbType.Int){Value =Model.PartID}
+};
+                  DataTable dtallowed = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT [PartID],[TrnDate],[ControlID] FROM [Part_Operation_Packout_No_Filters_Engineering] WHERE PartID=@PartID", parametersdtallowed);
+
+                  if (dtallowed.Rows.Count > 0)
+                  {
+                    <p class="request-info text-center bg-c-red" style="background-color:firebrick">ENGINEERING ALLOW WITHOUT FILTERS, PLEASE APROVE IF IS NECESSARY.</p>
+                  }
+                  else
+                  {
+                    <p class="request-info text-center bg-c-red" style="background-color:firebrick">NOT APPROVED.</p>
+                  }
+                }
+              }
+            }
+
+            @Html.AjaxGrid(Url.Action("LocksList", "PartNumber", new { Area = "Quality", id = Model.PartID }))
+
+          <div class="row mn-t-25">
+            <div class="col-12">
+              <p class="request-info">Please set the a validation time limit. Por favor selecciona el limite de la approbacion (hasta cuando es valida). </p>
+            </div>
+          </div>
+
+            <div class="row mn-t-15">
+              <div class="col-12">
+                <div class="input-group mb-3">
+
+                  @Html.LabelFor(y => y.LimitPVS, new { @class = "m-0 fs-14" })
+                  @Html.EditorFor(y => y.LimitPVS, "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "md-input", id = "ddlDateEnd", @Value = today.AddYears(+1).ToString("MM/dd/yy") } })
+                </div>
+              </div>
+            </div>
+
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              $("#ddlDateEnd").datepicker({
+                dateFormat: "mm/dd/y",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-1:+5"
+              });
+            </script>
+
+            <button type="submit" name="action:Approve" class="md-btn md-btn-success">
+              Approve Changes
+            </button>
+
+            <button type="submit" name="action:ApproveWithout" class="md-btn md-btn-success">
+              Approve Without Filters
+            </button>
+          </div>
+        </div>
+      </li>
+
+      @*----------------------------------------------------------SHIPPING LABELS VALIDATION-----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            <p class="request-info">Shipping Labels Validation</p>
+          </div>
+        </div>
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            @Html.AjaxGrid(Url.Action("GetLabelValidation", "PartNumber", new { id = Model.PartID }))
+
+            @{
+              var subltype = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [Validation_TypeID] ,[Validation_Type] FROM [Part_Operation_Shipping_Label_Validator_Type]");
+            }
+
+            <div class="row mn-t-15">
+              <div class="col-6 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  @Html.Label("Type", new { @class = "m-0 fs-14" })
+                  @Html.DropDownList("Type", (IEnumerable<SelectListItem>)subltype, new { @class = "md-input", id = "ddllabelvaltype" })
+                </div>
+              </div>
+              <div class="col-6 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  @Html.Label("Format", new { @class = "m-0 fs-14" })
+                  @Html.TextBox("Format", null, new { @class = "md-input", id = "txtlabelvalFormat" })
+                </div>
+              </div>
+              <div class="col-6 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  @Html.Label("Sort No", new { @class = "m-0 fs-14" })
+                  @Html.TextBox("Sort No", null, new { @class = "md-input", id = "txtlabelvalSortno" })
+                </div>
+              </div>
+              <div class="col-2 ">
+                <div class="p-0 input-group mb-3 mn-r-10">
+                  <input id="btnlabelval" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+                </div>
+              </div>
+            </div>
+
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              $('#btnlabelval').click(function (e) {
+                e.preventDefault(); // <------------------ stop default behaviour of button
+                // Load new data
+                var v_stage = $("#ddllabelvaltype").val();
+                var v_partid = $("#txtPartID").val();
+                var v_Format = $("#txtlabelvalFormat").val();
+                var v_Quantity = $("#txtlabelvalSortno").val();
+                var v_Description = $("#ddllabelvaltype option:selected").text();
+
+                var req = { ValidationType: v_stage, PartID: v_partid, SortNo: v_Quantity, FortmatEasy: v_Format, Description: v_Description };
+
+                $.ajax({
+                  type: "POST",
+                  url: "/Quality/PartNumber/AddLabelValidation",
+                  async: false,
+                  contentType: "application/json; charset=utf-8",
+                  data: JSON.stringify(req),
+                  success: function () {
+
+                    $("#txtlabelvalFormat").val('');
+                    $("#txtlabelvalSortno").val('');
+
+                    // Reload Grid
+                    updateLabelValidation();
+                  }
+                })
+              });
+
+              function updateLabelValidation() {
+                var grid = new MvcGrid(document.querySelector('#mvcLabelValidation'));
+                grid.requestType = 'post';
+                grid.reload();
+              };
+
+
+              $(document).on('click', '#mvcLabelValidation>table>tbody>tr>td>a.DeleteLabelValidation', function (e) {
+                e.preventDefault(); // <------------------ stop default behaviour of button
+                var target = $(this).attr("href");
+
+                $.ajax({
+                  type: "POST",
+                  url: target,
+                  async: false,
+                  contentType: "application/json; charset=utf-8",
+                  success: function () {
+                    // Reload Grid
+                    updateLabelValidation();
+                  }
+                })
+              });
+
+            </script>
+          </div>
+        </div>
+      </li>
+
+      @*----------------------------------------------------------REQUIRE STATION VALIDATION-----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            <p class="request-info">Select Areas that requires station validations. </p>
+          </div>
+        </div>
+
+        @Html.AjaxGrid(Url.Action("ApprovedStations", "PartNumber", new { id = Model.PartID }))
+
+        @{
+
+          var arealist = Firstronic.Framework.Functions.Dropdowns.GetAreasList(null, "");
+          var sublist2 = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [StationID],Case WHEN LEN(Alias)>0 then Alias else [StationName] end as StationName  FROM [PD_idt_stations]");
+        }
+
+        <div class="row mn-t-15" id="Toaddauthorized">
+          <div class="col-5">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("Area", new { @class = "m-0 fs-14" })
+              @Html.DropDownList("AreaID", (IEnumerable<SelectListItem>)arealist, new { @class = "md-input FillStations", @id = "ddlareaid" })
+            </div>
+          </div>
+          <div class="col-2 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <input id="btnUpdateApprovedStations" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" nonce="@Html.ScriptNonce()">
+          $('#btnUpdateApprovedStations').click(function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            // Load new data
+            var v_areaid = $("#ddlareaid").val();
+            var v_partid = $("#txtPartID").val();
+
+            var req = { AreaID: v_areaid, partid: v_partid };
+
+            $.ajax({
+              type: "POST",
+              url: "/Quality/PartNumber/AddApprovedStations",
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify(req),
+              success: function () {
+                // Reload Grid
+                updateApprovedStations();
+              }
+            })
+          });
+
+          function updateApprovedStations() {
+            var grid = new MvcGrid(document.querySelector('#mvcApprovedStations'));
+            grid.requestType = 'post';
+            grid.reload();
+          };
+
+          $(document).on('click', '#mvcApprovedStations>table>tbody>tr>td>a.delRow', function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            var target = $(this).attr("href");
+
+            $.ajax({
+              type: "POST",
+              url: target,
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              success: function () {
+                // Reload Grid
+                updateApprovedStations();
+              }
+            })
+          });
+        </script>
+      </li>
+
+      @*----------------------------------------------------------RABBITS-----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            <p class="request-info">Manage Rabbits</p>
+          </div>
+        </div>
+        @{
+          var Modellist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [PartID],[PartNumber] FROM [CS_idt_partnumbers] order by PartNumber asc");
+          var Sidelist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [AutoID],[SideName] FROM [PD_idt_sides] order by AutoID asc");
+          var Arealist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [AreaID],[ARea] FROM [PD_idt_areas] order by AreaID asc");
+
+          var processlist = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery("SELECT [AutoID], [ProcessName] FROM [PART_OPERATION_AREAS_PROCESS] order by ProcessName ASC");
+        }
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            @Html.AjaxGrid(Url.Action("GetRabbits", "PartNumber", new { id = Model.PartID }))
+          </div>
+        </div>
+        <div class="uk-grid pt-3">
+          <div class="uk-width-2-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                @Html.Label("SSN Good", new { @class = "m-0 fs-14" })
+                @Html.TextBoxFor(y => y.SSN, new { @class = "md-input", id = "ddlSSN" })
+              </div>
+            </div>
+          </div>
+          <div class="uk-width-2-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                @Html.Label("SSN Bad", new { @class = "m-0 fs-14" })
+                @Html.TextBoxFor(y => y.SSN2, new { @class = "md-input", id = "ddlSSN2" })
+              </div>
+            </div>
+          </div>
+          <div class="uk-width-1-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                @Html.Label("AreaID", new { @class = "m-0 fs-14" })
+                @Html.DropDownListFor(y => y.AreaID, (IEnumerable<SelectListItem>)Arealist, new { @class = "md-input", id = "ddlAreaIDR" })
+              </div>
+            </div>
+          </div>
+          <div class="uk-width-1-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                @Html.Label("ProcessID", new { @class = "m-0 fs-14" })
+                @Html.DropDownListFor(y => y.ProcessName, (IEnumerable<SelectListItem>)processlist, new { @class = "md-input", id = "ddlProcessIDR" })
+              </div>
+            </div>
+          </div>
+
+          <div class="uk-width-1-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                @Html.Label("IsActive", new { @class = "m-0 fs-14" })
+                @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input", id = "ddlIsActive" })
+              </div>
+            </div>
+          </div>
+          <div class="uk-width-1-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                @Html.Label("Side", new { @class = "m-0 fs-14" })
+                @Html.DropDownListFor(y => y.Side, (IEnumerable<SelectListItem>)Sidelist, new { @class = "md-input", id = "ddlSides" })
+
+
+              </div>
+            </div>
+          </div>
+          <div class="uk-width-1-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                @Html.Label("AllPanel", new { @class = "m-0 fs-14" })
+                @Html.DropDownListFor(y => y.AllPanel, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input", id = "ddlAllPanel" })
+              </div>
+            </div>
+          </div>
+
+          @*<div class="uk-width-2-3">
+          <div class="uk-form-row">
+            <div class="uk-input-wrapper">
+              @Html.Label("Description", new { @class = "m-0 fs-14" })
+              @Html.TextBoxFor(y => y.ErrorNo, new { @class = "md-input", id = "ddlDescription" })
+            </div>
+          </div>
+        </div>*@
+
+          @{
+            var today2 = DateTime.Now;
+          }
+
+          <div class="uk-width-1-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                @Html.Label("Calibration Date (MM/dd/YY)", new { @class = "m-0 fs-14" })
+                @Html.Editor("Calibration", "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "md-input", id = "ddlCalibration", @Value = today2.ToString("MM/dd/yy") } })
+              </div>
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                $("#ddlLimitDate").datepicker({
+                  dateFormat: "mm/dd/y",
+                  changeMonth: true,
+                  changeYear: true,
+                  yearRange: "-1:+5"
+                });
+              </script>
+            </div>
+          </div>
+
+          <div class="uk-width-1-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                @Html.Label("Expiration Date (MM/dd/YY)", new { @class = "m-0 fs-14" })
+                @Html.Editor("Calibration", "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "md-input", id = "ddlExpiration", @Value = today2.AddMonths(+3).ToString("MM/dd/yy") } })
+              </div>
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                $("#ddlLimitDate").datepicker({
+                  dateFormat: "mm/dd/y",
+                  changeMonth: true,
+                  changeYear: true,
+                  yearRange: "-1:+5"
+                });
+              </script>
+            </div>
+          </div>
+
+          <div class="uk-width-1-3">
+            <div class="uk-form-row">
+              <div class="uk-input-wrapper">
+                <div class="col-2 ">
+                  <div class="p-0 input-group mb-3 mn-r-10">
+                    <input id="btnUpdateRabbits" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+                  </div>
+                </div>
+              </div>
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+                $('#btnUPrintRabbits').click(function (e) {
+                  e.preventDefault(); // <------------------ stop default behaviour of button
+                  // Load new data
+                  var zpl = '^XA^FO50,60^A0,40^FDWorlds Best Griddle^FS^FO60,120^BY3^BCN,60,,,,A^FD1234ABC^FS^FO25,25^GB380,200,2^FS^XZ';
+
+                  var printWindow = window.open();
+                  printWindow.document.open('text/plain')
+                  printWindow.document.write(zpl);
+                  printWindow.document.close();
+                  printWindow.focus();
+                  printWindow.print();
+                  printWindow.close();
+
+                });
+
+                $('#btnUpdateRabbits').click(function (e) {
+                  e.preventDefault(); // <------------------ stop default behaviour of button
+                  // Load new data
+                  var v_areaid = $("#ddlAreaIDR").val();
+                  var v_processid = $("#ddlProcessIDR").val()
+                  var v_partid = $("#txtPartID").val();
+                  var v_SSN = $("#ddlSSN").val();
+                  var v_Side = $("#ddlSides").val();
+                  var v_ErrorNo = $("#ddlErrorNo").val();
+                  var v_Status = $("#ddlIsActive").val();
+                  var v_IsActive = $("#ddlIsActive").val();
+                  var v_AllPanel = $("#ddlAllPanel").val();
+                  var v_Description = "";
+                  var v_SSN2 = $("#ddlSSN2").val();
+                  var v_date = $("#ddlCalibration").val();
+                  var v_datelimit = $("#ddlExpiration").val();
+
+                  var req = { AreaID: v_areaid, ProcessID: v_processid, partid: v_partid, SSN: v_SSN, Sides: v_Side, ErrorNo: v_ErrorNo, Status: v_Status, IsActive: v_IsActive, AllPanel: v_AllPanel, Description: v_Description, SSN2: v_SSN2, v_date: v_date, v_datelimit: v_datelimit };
+
+                  $.ajax({
+                    type: "POST",
+                    url: "/Quality/PartNumber/AddRabbits",
+                    async: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(req),
+                    success: function () {
+                      // Reload Grid
+                      updateRabbits();
+                    }
+                  })
+                });
+
+                function updateRabbits() {
+                  var grid = new MvcGrid(document.querySelector('#mvcRabbits'));
+                  grid.requestType = 'post';
+                  grid.reload();
+                };
+
+                $(document).on('click', '#mvcRabbits>table>tbody>tr>td>a.delRow', function (e) {
+                  e.preventDefault(); // <------------------ stop default behaviour of button
+                  var target = $(this).attr("href");
+
+                  $.ajax({
+                    type: "POST",
+                    url: target,
+                    async: false,
+                    contentType: "application/json; charset=utf-8",
+                    success: function () {
+                      // Reload Grid
+                      updateRabbits();
+                    }
+                  })
+                });
+
+
+                $(document).on('click', '#mvcRabbits>table>tbody>tr>td>a.delVal', function (e) {
+                  e.preventDefault(); // <------------------ stop default behaviour of button
+                  var target = $(this).attr("href");
+
+                  $.ajax({
+                    type: "POST",
+                    url: target,
+                    async: false,
+                    contentType: "application/json; charset=utf-8",
+                    success: function () {
+                      // Reload Grid
+                      updateRabbits();
+                    }
+                  })
+                });
+              </script>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      @*----------------------------------------------------------DEFECTS QUANTITY-----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid" style="margin-bottom:20px;">
+          <div class="uk-width-1-1">
+            <p class="request-info">Option to add Defects.</p>
+          </div>
+        </div>
+
+        @Html.AjaxGrid(Url.Action("Defects", "PartNumber", new { id = Model.PartID }))
+
+        @{
+          var sublistside = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT  [SideName],[SideName]FROM [PD_idt_sides]");
+        }
+
+        <div class="row mn-t-15" id="Toaddauthorized">
+          <div class="col-5">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  @Html.Label("Area", new { @class = "m-0 fs-14" })
+                </span>
+              </div>
+              @Html.DropDownList("AreaID", (IEnumerable<SelectListItem>)arealist, new { @class = "form-control FillStations", @id = "ddlareaid" })
+            </div>
+          </div>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+            $(document).ready(function () {
+              FillStations()
+            });
+          </script>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+            function FillStations() {
+              var AreaID = $('#ddlareaid').val();
+              var req2 = { AreaID: AreaID, All: 'ALL' };
+              $.ajax({
+                type: "POST",
+                url: "/Manage/Areas/FillStations",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(req2),
+                success: function (response) {
+                  //console.log(response);
+                  $("#ddlsubstation").html("");
+                  $.each(response, function (index, value) {
+                    $("#ddlsubstation").append(
+                      $('<option></option>').val(value.Value).html(value.Text));
+                  });
+                },
+                error: function () {
+                  $("#ddlsubstation").html("");
+                  $("#ddlsubstation").append(
+                    $('<option></option>').val(0).html("NA"));
+                }
+              });
+            }
+          </script>
+
+          <div class="col-5 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  @Html.Label("Side", new { @class = "m-0 fs-14" })
+                </span>
+              </div>
+
+              @Html.DropDownListFor(y => y.Side, (IEnumerable<SelectListItem>)sublistside, new { @class = "form-control", id = "ddlSides" })
+
+            </div>
+          </div>
+          <div class="col-5 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  @Html.Label("Qty", new { @class = "m-0 fs-14" })
+                </span>
+              </div>
+              @Html.TextBoxFor(y => y.Counter, new { @class = "form-control", id = "ddlQty" })
+            </div>
+          </div>
+
+          <div class="col-2 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <input id="btnUpdateDefects" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" nonce="@Html.ScriptNonce()">
+          $('#btnUpdateDefects').click(function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            // Load new data
+            var v_partid = $("#txtPartID").val();
+            var v_Qty = $("#ddlQty").val();
+            var v_areaid = $("#ddlareaid").val();
+            var v_Sides = $("#ddlSides").val();
+
+            var req = { PartID: v_partid, Qty: v_Qty, AreaID: v_areaid, Sides: v_Sides };
+
+            $.ajax({
+              type: "POST",
+              url: "/Quality/PartNumber/AddDefects",
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify(req),
+              success: function () {
+                // Reload Grid
+                updateDefects();
+              }
+            })
+          });
+
+          function updateDefects() {
+            var grid = new MvcGrid(document.querySelector('#mvcDefects'));
+            grid.requestType = 'post';
+            grid.reload();
+          };
+
+          $(document).on('click', '#mvcDefects>table>tbody>tr>td>a.delRow', function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            var target = $(this).attr("href");
+
+            $.ajax({
+              type: "POST",
+              url: target,
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              success: function () {
+                // Reload Grid
+                updateDefects();
+              }
+            })
+          });
+
+        </script>
+      </li>
+
+      @*----------------------------------------------------------PACKOUT CERTIFICATIONS-----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid" style="margin-bottom:20px;">
+          <div class="uk-width-1-1">
+            <p class="request-info">Option to add Certification.</p>
+          </div>
+        </div>
+
+        @Html.AjaxGrid(Url.Action("Certification", "PartNumber", new { id = Model.PartID }))
+
+        <div class="row mn-t-15" id="Toaddauthorized">
+
+          <div class="col-5 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("Description", new { @class = "m-0 fs-14" })
+
+              @Html.TextBoxFor(y => y.Description, new { @class = "md-input", id = "ddlDescriptionCertification" })
+            </div>
+          </div>
+          <div>
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("Limit", new { @class = "m-0 fs-14" })
+              @Html.Editor("Limit", "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "md-input", id = "ddlCertificationLimitDate", @Value = today.AddYears(+2).ToString("MM/dd/yy") } })
+            </div>
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              $("#ddlCertificationLimitDate").datepicker({
+                dateFormat: "mm/dd/y",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-4:+5"
+              });
+            </script>
+          </div>
+          <div class="col-2 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <input id="btnUpdateCertification" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" nonce="@Html.ScriptNonce()">
+          $('#btnUpdateCertification').click(function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            // Load new data
+            var v_partid = $("#txtPartID").val();
+            var v_Description = $("#ddlDescriptionCertification").val();
+            var v_datelimit = $("#ddlCertificationLimitDate").val();
+
+
+            var req = { PartID: v_partid, Description: v_Description, CertificationLimit: v_datelimit };
+            $.ajax({
+              type: "POST",
+              url: "/Quality/PartNumber/AddCertification",
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify(req),
+              success: function () {
+                // Reload Grid
+                updateCertification();
+              }
+            })
+          });
+
+          function updateCertification() {
+            var grid = new MvcGrid(document.querySelector('#mvcCertification'));
+            grid.requestType = 'post';
+            grid.reload();
+          };
+
+          $(document).on('click', '#mvcCertification>table>tbody>tr>td>a.delRow', function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            var target = $(this).attr("href");
+
+            $.ajax({
+              type: "POST",
+              url: target,
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              success: function () {
+                // Reload Grid
+                updateCertification();
+              }
+            })
+          });
+        </script>
+      </li>
+
+      @*----------------------------------------------------------ASSEMBLY INSTRUCTIONS-----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid mn-b-20">
+          <div class="uk-width-1-1">
+            <p class="request-info">Option to add Assembly Instructions.</p>
+          </div>
+        </div>
+
+        @{
+          var arealist_assembly = Firstronic.Framework.Functions.Dropdowns.GetAreasList(null, "");
+
+          var sublist2_assembly = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [StationID],StationName as StationName  FROM [PD_idt_stations]");
+
+          var sublistside_assembly = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT  [SideName],[SideName] FROM [PD_idt_sides]");
+        }
+
+        <div class="row mn-t-15" id="Toaddauthorized">
+          <div class="col-5">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("DocType", new { @class = "m-0 fs-14" })
+              @*@Html.DropDownList("AreaID", (IEnumerable<SelectListItem>)arealist_rates, new { @class = "md-input FillStations4", @id = "ddlareaid_assembly" })*@
+              @*@Html.DropDownListFor(y => y.DocType, (IEnumerable<SelectListItem>)DocTypelist, new { @class = "form-control toggleTextBoxFor", id = "ddlDocType" })*@
+              @Html.DropDownList("DocTypelist", (IEnumerable<SelectListItem>)DocTypelist, new { @class = "md-input", id = "ddlDocType" })
+
+            </div>
+          </div>
+          <div class="col-5">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("Area", new { @class = "m-0 fs-14" })
+              @Html.DropDownList("AreaID", (IEnumerable<SelectListItem>)arealist_rates, new { @class = "md-input FillStations4", @id = "ddlareaid_assembly" })
+            </div>
+          </div>
+          <div class="col-5 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("Substation", new { @class = "m-0 fs-14" })
+              @Html.DropDownList("Substation", (IEnumerable<SelectListItem>)sublist2_assembly, new { @class = "md-input", id = "ddlsubstation_assembly" })
+            </div>
+          </div>
+          <div class="col-5 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("Side", new { @class = "m-0 fs-14" })
+              @Html.DropDownList("Side", (IEnumerable<SelectListItem>)sublistside_assembly, new { @class = "md-input", id = "ddlside_assembly" })
+            </div>
+          </div>
+          <div class="col-5 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("Comments", new { @class = "m-0 fs-14" })
+              @Html.TextBox("Comments", "", new { @class = "md-input", @id = "txtComments_assembly" })
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("File:", new { @class = "m-0 fs-14" })
+              @Html.TextBox("File", null, new { @class = "md-input", id = "txtfileassembly", type = "file" })
+            </div>
+          </div>
+
+          <div class="col-2 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <input id="btnUpdateassembly" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+            </div>
+          </div>
+
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+            $(document).ready(function () {
+              FillStations4()
+            });
+
+            function FillStations4() {
+              var AreaID = $('#ddlareaid_assembly').val();
+              var req2 = { AreaID: AreaID };
+              $.ajax({
+                type: "POST",
+                url: "/Manage/Areas/FillProcessesAssemblyInstructions",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(req2),
+                success: function (response) {
+                  $("#ddlsubstation_assembly").html("");
+                  $.each(response, function (index, value) {
+                    $("#ddlsubstation_assembly").append(
+                      $('<option></option>').val(value.Value).html(value.Text));
+                  });
+                },
+                error: function () {
+                  $("#ddlsubstation_assembly").html("");
+                  $("#ddlsubstation_assembly").append(
+                    $('<option></option>').val(0).html("NA"));
+                }
+              });
+            }
+          </script>
+          <script type="text/javascript" nonce="@Html.ScriptNonce()">
+          $('#btnUpdateassembly').click(function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+              // Load new data
+            var v_areaid = $("#ddlareaid_assembly").val();
+            var v_substation = $("#ddlsubstation_assembly").val();
+            var v_partid = $("#txtPartID").val();
+            var v_comments = $("#txtComments_assembly").val();
+            var v_ParametersSide = $("#ddlside_assembly").val();
+            var v_DocType = $("#ddlDocType").val();
+
+            var nurl = ""
+
+            const fi = document.getElementById('txtfileassembly');
+
+              if (fi.files.length > 0) {
+                for (var i = 0; i <= fi.files.length - 1; i++) {
+                  const fsize = fi.files.item(i).size;
+                  const file = Math.round((fsize / 1024));
+                  // The size of the file.
+                  if (file >= 154096) {
+                    alert(
+                      "File too Big, please select a file less than 100mb");
+                    $("#txtfileassembly").html("");
+                  }
+                }
+
+                var fileUpload = $("#txtfileassembly").get(0);
+                var files = fileUpload.files;
+                var fileData = new FormData();
+
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                  fileData.append(files[i].name, files[i]);
+                }
+                //// Adding one more key to FormData object
+                //fileData.append('username', ‘Manas’);
+
+                v_nomber = @Model.PartID + '_' + v_ParametersSide + '_' + v_substation + '_' + @today.ToString("yyMMdd");
+
+                fileData.append("Names", v_nomber);
+
+                //var req2 = { v_AutoID: v_AutoID, nombre: v_nomber };
+
+                $.ajax({
+                  type: "POST",
+                  url: "/Quality/PartNumber/UploadAssemblyInstruction",
+                  async: false,
+                  data: fileData,
+                  contentType: false,
+                  processData: false,
+                  success: function (response) {
+                    nurl = response;
+                  },
+                  error: function () {
+
+                  }
+                });
+              }
+
+            var req = { PartID: v_partid, Side: v_ParametersSide, AreaID: v_areaid, ProcessID: v_substation, Url: nurl, Comments: v_comments, DocType: v_DocType };
+
+              $.ajax({
+                type: "POST",
+                url: "/Quality/PartNumber/AddAssemblyInstructions",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(req),
+                success: function () {
+                  // Reload Grid
+                  updateAssemblyInstruction();
+                }
+              })
+            });
+
+            function updateAssemblyInstruction() {
+              var grid = new MvcGrid(document.querySelector('#mvcAssemblyInstructions'));
+              grid.requestType = 'post';
+              grid.reload();
+            };
+
+          $(document).on('click', '#mvcAssemblyInstructions>table>tbody>tr>td>a.delRowAssemblyInstructions', function (e) {
+              e.preventDefault(); // <------------------ stop default behaviour of button
+              var target = $(this).attr("href");
+
+              $.ajax({
+                type: "POST",
+                url: target,
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                  // Reload Grid
+                  updateAssemblyInstruction();
+                }
+              })
+            });
+
+          </script>
+        </div>
+        @Html.AjaxGrid(Url.Action("GetAssemblyInstruction", "PartNumber", new { id = Model.PartID }))
+      </li>
+
+      @*-------------------------------------------------------------------------------------------CUSTOM DEFECTS----------*@
+      <li aria-hidden="true">
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+            <p class="request-info">Custom defects.</p>
+          </div>
+        </div>
+
+        <div class="uk-width-1-1">
+          @Html.AjaxGrid(Url.Action("GetDefectsCustoms", "PartNumber", new { id = Model.PartID }))
+
+        </div>
+
+        @{
+          var subareaslist_defectscodes = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT [DefectCodeID],concat([DefectCategory],' - ',[DefectCode]) as DefectCode  FROM [EN_idt_defects_codes] order by DefectCode ASC");
+        }
+
+        <div class="uk-grid mn-t-15">
+          <div>
+            <div class="p-0 input-group mb-3 mn-r-10">
+              @Html.Label("Defecto", new { @class = "m-0 fs-14" })
+              @Html.DropDownList("Defecto", (IEnumerable<SelectListItem>)subareaslist_defectscodes, new { @class = "md-input", id = "ddlDefectsCustoms" })
+            </div>
+          </div>
+          <div>
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <input id="btnUpdateDefectsCustoms" type="button" value="Add" class="md-btn md-btn-primary md-btn-small" />
+            </div>
+          </div>
+        </div>
+
+        <script type="text/javascript" nonce="@Html.ScriptNonce()">
+          $('#btnUpdateDefectsCustoms').click(function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            // Load new data
+            var v_stage = $("#ddlDefectsCustoms").val();
+            var v_partid = $("#txtPartID").val();
+
+            var req = { defectid: v_stage, PartID: v_partid };
+
+            $.ajax({
+              type: "POST",
+              url: "/Engineering/PartNumber/AddDefectsCustoms",
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify(req),
+              success: function () {
+
+                // Reload Grid
+                updateDefectsCustoms();
+              }
+            })
+          });
+
+          function updateDefectsCustoms() {
+            var grid = new MvcGrid(document.querySelector('#mvcDefectsCustoms'));
+            grid.requestType = 'post';
+            grid.reload();
+          };
+
+          $(document).on('click', '#mvcDefectsCustoms>table>tbody>tr>td>a.DelDefectsCustoms', function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            var target = $(this).attr("href");
+
+            $.ajax({
+              type: "POST",
+              url: target,
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              success: function () {
+                // Reload Grid
+                updateDefectsCustoms();
+              }
+            })
+          });
+        </script>
+      </li>
+
+      @*----------------------------------------------------------REWORK ALLOWED-----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid" style="margin-bottom:20px;">
+          <div class="uk-width-1-1">
+            <p class="request-info">Option to allow rework.</p>
+            <p></p>
+          </div>
+        </div>
+
+        @Html.AjaxGrid(Url.Action("ReworkAllowed", "PartNumber", new { id = Model.PartID }))
+
+        <div class="row mn-t-15" id="Toaddauthorized">
+          <div class="col-5 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  @Html.Label("Comments", new { @class = "m-0 fs-14" })
+                </span>
+              </div>
+              @Html.TextBox("ddlCommentsReworkAllowed", "", new { @class = "form-control", id = "ddlCommentsReworkAllowed" })
+            </div>
+          </div>
+
+          <div class="col-2 ">
+            <div class="p-0 input-group mb-3 mn-r-10">
+              <input id="btnUpdateReworkAllowed" type="button" value="Allow Rework" class="md-btn md-btn-primary md-btn-small" />
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" nonce="@Html.ScriptNonce()">
+          $('#btnUpdateReworkAllowed').click(function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            // Load new data
+            var v_partid = $("#txtPartID").val();
+            var v_Comments = $("#ddlCommentsReworkAllowed").val();
+
+
+            var req = { PartID: v_partid, Comments: v_Comments };
+            $.ajax({
+              type: "POST",
+              url: "/Quality/PartNumber/AddReworkAllowed",
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify(req),
+              success: function () {
+                // Reload Grid
+                updateReworkAllowed();
+              }
+            })
+          });
+
+          function updateReworkAllowed() {
+            var grid = new MvcGrid(document.querySelector('#mvcReworkAllowed'));
+            grid.requestType = 'post';
+            grid.reload();
+          };
+
+          $(document).on('click', '#mvcReworkAllowed>table>tbody>tr>td>a.delRow', function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            var target = $(this).attr("href");
+
+            $.ajax({
+              type: "POST",
+              url: target,
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              success: function () {
+                // Reload Grid
+                updateReworkAllowed();
+              }
+            })
+          });
+
+        </script>
+      </li>
+
+      @*----------------------------------------------------------ROUTING APPROVED -----------------------------------------------------------------*@
+      <li aria-hidden="true">
+        <div class="uk-grid">
+          <div class="uk-width-1-1">
+       
+            @Html.AjaxGrid(Url.Action("RoutingApprovedList", "PartNumber", new { Area = "Quality", id = Model.PartID }))
+
+           
+
+           
+            
+            
+
+           
+          </div>
+        </div>
+      </li>
+
+
+
+    </ul>
+    }
+
+  </div>
+</div>
+
+
+

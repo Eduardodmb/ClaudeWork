@@ -1,0 +1,165 @@
+# IT Documentation - Document ID Control
+
+**Purpose:** Central registry for all IT documentation across Safari Circuits projects.
+
+**Last Updated:** 2026-05-26
+
+---
+
+## Document ID Format
+
+| Format | Description | Example | Filename Example |
+|--------|-------------|---------|------------------|
+| **IT-XXX** | General IT documents | IT-017 | `IT-017_IT_Computer_Use_Policy.md` |
+| **IT-XXX W1** | Work instructions / manuals | IT-030 W1 | `IT-030_W1_BeFirst_Part_Number_Config.md` |
+| **IT-XXX W1 FN** | Multiple topics under same procedure | IT-030 W1 F1 | `IT-030_W1_F1_BeFirst_General_Settings.md` |
+
+**Filename Convention:** `ID_AppName_Description.md`
+- ID: IT-XXX or IT-XXX_W1 or IT-XXX_W1_FN
+- AppName: BeFirst, Plex, or IT
+- Description: Short descriptive name (use underscores for spaces)
+
+**F Number Usage:** Different topics within the same procedure (F1, F2, F3...)
+
+---
+
+## Updating the Registry
+
+To update this document registry with current files:
+
+```bash
+cd "S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub"
+python update_document_control.py
+```
+
+**What the script does:**
+- Scans configured folders for IT and BeFirst documents
+- Extracts document IDs from filenames (IT-XXX, IT-XXX W1, IT-XXX W1 FN)
+- **Only processes documents with valid IDs** (skips files without IDs)
+- Groups F variants (F1, F2, F3...) into their base document row
+- Sorts table by ID (IT-001, IT-002, IT-015, IT-015 W1, etc.)
+- Updates this table with current files
+- Creates backup (`.md.bak`) before making changes
+
+**Note:** Documents without valid IDs in their filenames are skipped. Add new documents to the table manually, then rename files with their assigned IDs.
+
+**Requirements:**
+- Python 3.x installed
+- Run from Grand Rapids IT Hub folder
+
+---
+
+## Document Locations
+
+The registry automatically scans the following locations:
+
+### IT Hub (Grand Rapids)
+- `01_Policies` - IT policies and governance
+- `02_Procedures` - IT procedures and work instructions
+- `03_Architecture_and_infrastructure` - Network diagrams, configs, manuals
+- `05_Forms` - Templates, checklists, forms
+
+### BeFirst (Product Platform)
+- `Product and Platform\BeFirst\01_User_Manuals` - User manuals (PDF only)
+- `Product and Platform\BeFirst\02_Development\00 - Dev Manuals\01 - Procedures` - Development procedures (DOCX only)
+
+**Note:** Archived folders (`99_Archive`) are automatically skipped.
+
+---
+
+## Document Registry
+
+### Complete Document List
+
+| ID | Type | Title | App | Owner | F1 | F2 | F3 | F4 | F5 | F8 | F9 | Path |
+|----|------|-------|-----|-------|----|----|----|----|----|----|----|----|
+| IT-000 | Procedure | Copy | IT | IT |  |  |  |  |  |  |  | IT Hub\02_Procedures |
+| IT-011 | Form |  | IT | IT | Form IT User Charter | Form IT Admin Charter |  |  |  |  |  | IT Hub\05_Forms |
+| IT-012 | Form | Safari GR PC Install Checklist | IT | IT |  |  |  |  |  |  |  | IT Hub\05_Forms |
+| IT-013 W1 | Work Instruction |  | BeFirst | IT | Software Development Process | Software Development Main Document | Module feature project scope | Software requirements specifications | Release plan |  | End user module feature template | BeFirst\02_Development\01_Procedures |
+| IT-015 | Procedure | Incident Response Plan | IT | IT | Incident Response Worksheet Template |  |  |  |  |  |  | IT Hub\02_Procedures |
+| IT-016 | Procedure | Risk Assessment | IT | IT |  |  |  |  |  |  |  | IT Hub\02_Procedures |
+| IT-017 | Policy | Computer Use Policy | IT | IT |  |  |  |  |  |  |  | IT Hub\01_Policies |
+| IT-018 | Procedure | Configuration Management | IT | IT |  |  |  |  |  |  |  | IT Hub\02_Procedures |
+| IT-020 | Form | Incident Report Template | IT | IT |  |  |  |  |  |  |  | IT Hub\05_Forms |
+| IT-030 | Work Instruction | W1 BeFirst PartNumbers | BeFirst | IT |  |  |  |  |  |  |  | BeFirst\01_User_Manuals |
+| IT-031 | Work Instruction | W1 BeFirst Packout | BeFirst | IT |  |  |  |  |  |  |  | BeFirst\01_User_Manuals |
+| IT-036 | Procedure | SOP Plex PC Setup | IT | IT |  |  |  |  |  |  |  | IT Hub\02_Procedures |
+| IT-037 | Procedure | Creating VM in Hyper-V Failover Cluster SOP | IT | IT |  |  |  |  |  |  |  | IT Hub\02_Procedures |
+| IT-038 | Procedure | Zabbix install Ubuntu SOP | IT | IT |  |  |  |  |  |  |  | IT Hub\02_Procedures |
+
+### Documents Pending ID Assignment
+
+**Note:** These documents need to be assigned IDs and renamed accordingly.
+
+| Filename | Type | Title | App | Path |
+|----------|------|-------|-----|------|
+| 01_Aruba_5420.docx | Manual | Aruba 5420 | IT | IT Hub\03_Architecture_and_infrastructure |
+| 01_GRP1_IT Plant Drawing.pdf | Manual | GRP1 IT Plant Drawing | IT | IT Hub\03_Architecture_and_infrastructure |
+| 02_GRP1_Network_Diagram.vsdx | Manual | GRP1 Network Diagram | IT | IT Hub\03_Architecture_and_infrastructure |
+| 02_PowerVault.docx | Manual | PowerVault | IT | IT Hub\03_Architecture_and_infrastructure |
+| 02_Veeam_Backup.pdf | Manual | Veeam Backup | IT | IT Hub\03_Architecture_and_infrastructure |
+| 03_GRP1_VLANs.xlsx | Manual | GRP1 VLANs | IT | IT Hub\03_Architecture_and_infrastructure |
+| 03_Veeam_Backup_Oct_2025.pdf | Manual | Veeam Backup Oct 2025 | IT | IT Hub\03_Architecture_and_infrastructure |
+| 03_WindowsServer_HyperV.docx | Manual | WindowsServer HyperV | IT | IT Hub\03_Architecture_and_infrastructure |
+| 04_Aruba5420_Switchs.pdf | Manual | Aruba5420 Switchs | IT | IT Hub\03_Architecture_and_infrastructure |
+| 04_GRP1_Infrastructure_Inventory.xlsx | Manual | GRP1 Infrastructure Inventory | IT | IT Hub\03_Architecture_and_infrastructure |
+| 05_GRP1_Network - IP - Port address list.xlsx | Manual | GRP1 Network - IP - Port address list | IT | IT Hub\03_Architecture_and_infrastructure |
+| 05_Powervault-ME5.pdf | Manual | Powervault-ME5 | IT | IT Hub\03_Architecture_and_infrastructure |
+| 06_GRP1_VPN_Diagram.vsdx | Manual | GRP1 VPN Diagram | IT | IT Hub\03_Architecture_and_infrastructure |
+| Part Number.pdf | Work Instruction | Part Number | BeFirst | BeFirst\01_User_Manuals |
+
+---
+
+## Document Types
+
+- **Policy** - IT governance and compliance documents
+- **Procedure** - Step-by-step IT operational procedures
+- **Work Instruction** - Detailed work instructions and user manuals
+- **Form** - Templates, checklists, and forms
+- **Manual** - Comprehensive user or system manuals
+
+---
+
+---
+
+## Next Available IDs
+
+- **Work Instructions (W1):** IT-032 W1
+- **General IT (Policies/Procedures/Forms):** IT-049
+
+---
+
+## Directory Structure
+
+```
+S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\
+├── Enterprise Solution Architecture\
+│   └── Enterprise Systems\
+│       ├── BeFirst\
+│       │   ├── 01_User_Manuals\             ← Legacy DOCX files
+│       │   └── 01_User_Manuals_MD\          ← New MD files
+│       │       └── assets\                  ← Screenshots
+│       └── Plex\
+│           ├── 01_User_Manuals\             ← Legacy DOCX files
+│           └── 01_User_Manuals_MD\          ← New MD files
+│               └── assets\                  ← Screenshots
+└── Grand Rapids IT Hub\
+    ├── 01_Policies\                         ← IT policies (IT-XXX)
+    ├── 02_Procedures\                       ← IT procedures (IT-XXX)
+    ├── 05_Forms\                            ← IT forms and templates (IT-XXX)
+    ├── DOCUMENT-ID-CONTROL.md               ← This file
+    └── README-DOCUMENT-CONTROL.md           ← Quick reference
+```
+
+---
+
+## Notes
+
+- All Markdown files use naming convention: `ID_AppName_Description.md`
+- Screenshots stored in `assets/` subfolder within each manual directory
+- Document control maintained at IT Hub level
+- F numbers track different topics/forms under the same procedure ID
+- Old DOCX/XLSX files remain in original folders until migrated
+- IT-001 shows as "W1" (was listed as "WI" - confirm if correct)
+- Some documents have non-sequential F numbers (e.g., F1, F2, F3, F4, F5, F8, F9)

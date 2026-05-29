@@ -1,0 +1,848 @@
+using Microsoft.AspNet.Identity;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Firstronic.Framework.Cache;
+using Firstronic.Framework.Attributes;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Firstronic.Framework.Entities;
+using Firstronic.Framework.Data;
+using Firstronic.Framework.Account;
+using static Firstronic.Areas.Manage.Models.User;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using DocumentFormat.OpenXml.Spreadsheet;
+using NPOI.SS.Formula.PTG;
+using System.Web;
+using System.IO;
+using DocumentFormat.OpenXml.EMMA;
+using Firstronic.Areas.Manage.Models;
+
+namespace Firstronic.Areas.Manage.Controllers
+{
+  [Authorize]
+  public partial class UserController : BaseSecurityController
+  {
+    #region Fields
+
+    private readonly DataContext db;
+    private readonly ApplicationUserService userService;
+    private readonly ICacheManager cacheManager;
+
+    #endregion Fields
+
+    #region Ctor
+
+    public UserController(ApplicationUserService _userService,
+        ICacheManager _cacheManager)
+    {
+      userService = _userService;
+      cacheManager = _cacheManager;
+
+      db = new DataContext();
+    }
+
+    #endregion Ctor
+    [AllowAnonymous]
+    public ActionResult Index()
+    {
+      var model = userService.Users.ToList().Select(x => new ApplicationUserModel
+      {
+        Id = x.Id,
+        UserName = x.UserName,
+        NormalizedUserName = x.NormalizedUserName,
+        Email = x.Email,
+        NormalizedEmail = x.NormalizedEmail,
+        Name = x.Name,
+        Surname = x.Surname,
+        Location = x.Location,
+        Badge = x.Badge,
+        EmailConfirmed = x.EmailConfirmed,
+        IsActive = x.IsActive,
+        AvatarId = x.PictureId,
+        Facility_Key = x.Facility_Key,
+        Building_Key = x.Building_Key,
+      }).ToList().AsQueryable();
+
+      return View(model);
+    }
+
+    [Authorize(Roles = "BF Administrator,BF Manage User Password,BF User Manager (Training)")]
+    public ActionResult List()
+    {
+      var model = userService.Users.ToList().Select(x => new ApplicationUserModel
+      {
+        Id = x.Id,
+        UserName = x.UserName,
+        NormalizedUserName = x.NormalizedUserName,
+        Email = x.Email,
+        NormalizedEmail = x.NormalizedEmail,
+        Name = x.Name,
+        Surname = x.Surname,
+        Location = x.Location,
+        Badge = x.Badge,
+        EmailConfirmed = x.EmailConfirmed,
+        IsActive = x.IsActive,
+        AvatarId = x.PictureId,
+        Facility_Key = x.Facility_Key,
+        Building_Key = x.Building_Key,
+      }).ToList().AsQueryable();
+
+      return View(model);
+    }
+
+    //===============================================================
+    // Create or Edit
+    //===============================================================
+    [Authorize(Roles = "BF Administrator")]
+    public ActionResult Create()
+    {
+      var model = new ApplicationUserModel();
+
+      var roles = db.Roles.Select(x => new ApplicationRoleModel
+      {
+        Id = x.Id,
+        Name = x.Name
+      }).OrderBy(x => x.Name).ToList();
+
+      model.Roles = roles;
+
+      // Load facilities for dropdown
+      model.FacilityList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(
+        "SELECT [Facility_Key],[Facility_Name] FROM [Common_Facilities]");
+
+      // Load buildings for dropdown
+      model.BuildingList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(
+        "SELECT [Building_Key],CONCAT([Building_Code],' - ',[Name]) as Name FROM [Common_Building] ORDER BY [Building_Code]");
+
+      return View(model);
+    }
+
+    /// <summary>
+    /// Create a Role
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ValidateInput(false)]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Create")]
+    [Authorize(Roles = "BF Administrator")]
+    public ActionResult Create(ApplicationUserModel model)
+    {
+      if (ModelState.IsValid)
+      {
+
+        var user = userService.FindByName(model.UserName);
+
+        if (user == null)
+        {
+          user = new ApplicationUser
+          {
+            UserName = model.UserName,
+            NormalizedEmail = model.UserName,
+            EmailConfirmed = true,
+            Building_Key = 33333, // Default system building key
+            Facility_Key = null,
+            IsActive = true
+          };
+          userService.Create(user, model.Password);
+        }
+
+        if (user == null)
+        {
+          throw new Exception("The password is probably not strong enough!");
+        }
+        else
+        {
+          return RedirectToAction("Edit", new { Id = user.Id });
+        }
+      }
+
+      return View(model);
+    }
+
+
+    [Authorize]
+    public ActionResult Edit(string id)
+    {
+
+      bool continuetopage = false;
+
+      if (Request.IsAuthenticated && (User.IsInRole("BF Administrator") || User.IsInRole("BF User Manager (Training)")))
+      {
+        continuetopage = true;
+      }
+      else
+      {
+        if (Request.IsAuthenticated && User.IsInRole("BF Administrator") == false)
+        {
+          if (User.Identity.GetUserId() == id)
+          {
+            continuetopage = true;
+          }
+        }
+      }
+
+      if (continuetopage)
+      {
+        var user = userService.GetById(id);
+        if (user == null)
+        {
+          this.NotifyError("User not found.");
+          return RedirectToAction("Index");
+        }
+
+        var roles = db.Roles.Select(x => new ApplicationRoleModel
+        {
+          Id = x.Id,
+          Name = x.Name
+        }).OrderBy(x => x.Name).ToList();
+
+        var model = new ApplicationUserModel
+        {
+          Id = user.Id,
+          Name = user.Name,
+          UserName = user.UserName,
+          Email = user.Email,
+          EmailConfirmed = user.EmailConfirmed,
+          IsActive = user.IsActive,
+          AvatarId = user.PictureId,
+          Description = user.Description,
+          Location = user.Location,
+          Badge = user.Badge,
+          Surname = user.Surname,
+          Facility_Key = user.Facility_Key,
+          Building_Key = user.Building_Key,
+          Roles = roles,
+          SelectedRoleNames = userService.GetRoles(user.Id).ToArray()
+        };
+
+        SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@Id",SqlDbType.NVarChar){Value = model.Id},
+        };
+
+        model.ControlID = Firstronic.Framework.Queries.GetIntFromQuery("Select ControlID from AspNetUsers WHERE ID=@Id", parameters);
+
+        // Load facilities for dropdown
+        model.FacilityList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(
+          "SELECT [Facility_Key],[Facility_Name] FROM [Common_Facilities]");
+
+        // Load buildings for dropdown
+        model.BuildingList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(
+          "SELECT [Building_Key],CONCAT([Building_Code],' - ',[Name]) as Name FROM [Common_Building] ORDER BY [Building_Code]");
+
+        return View(model);
+      }
+      else
+      {
+        this.NotifyError("No allowed");
+        return RedirectToAction("Index");
+      }
+    }
+
+    /// <summary>
+    /// Edit a teamMember
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [MultipleButtonAction(Name = "action", Argument = "Edit")]
+    [Authorize(Roles = "BF Administrator,BF Manage User Password,BF User Manager (Training)")]
+    public ActionResult Edit(ApplicationUserModel model)
+    {
+      model.Roles = db.Roles.Select(x => new ApplicationRoleModel
+      {
+        Id = x.Id,
+        Name = x.Name
+      }).ToList();
+
+      if (ModelState.IsValid)
+      {
+        var user = userService.FindById(model.Id);
+
+        if (user == null)
+        {
+          this.NotifyError("User not found.");
+          return RedirectToAction("Index");
+        }
+
+        var oldRoles = userService.GetRoles(model.Id).ToArray();
+        var newRoles = model.SelectedRoleNames;
+
+        user.IsActive = model.IsActive;
+        user.UserName = user.UserName;
+        user.Email = model.Email;
+        user.EmailConfirmed = model.EmailConfirmed;
+        user.Description = model.Description;
+        user.PictureId = model.AvatarId;
+        user.Name = model.Name;
+        user.Surname = model.Surname;
+        user.Location = model.Location;
+        user.Badge = model.Badge;
+        user.NormalizedUserName = user.UserName;
+        user.ControlID = model.ControlID;
+        user.Facility_Key = model.Facility_Key;
+        user.Building_Key = model.Building_Key;
+        
+
+        if (Request.IsAuthenticated && (User.IsInRole("BF Administrator")))
+        {
+          newRoles = model.SelectedRoleNames;
+        }
+        else
+        {
+          newRoles = oldRoles;
+
+          user.IsActive = user.IsActive;
+          user.UserName = user.UserName;
+          user.Email = model.Email;
+          user.EmailConfirmed = model.EmailConfirmed;
+          user.Description = model.Description;
+          user.PictureId = model.AvatarId;
+          user.Name = user.Name;
+          user.Surname = user.Surname;
+          user.Location = user.Location;
+          user.Badge = model.Badge;
+          user.NormalizedUserName = user.UserName;
+          user.ControlID = model.ControlID;
+          user.Facility_Key = model.Facility_Key;
+          user.Building_Key = model.Building_Key;
+
+        }
+       
+
+        #region AddOrRemoveRoles
+        try
+        {
+          var rolesToRemove = oldRoles.Except(newRoles);
+          foreach (var role in rolesToRemove)
+            userService.RemoveFromRole(user.Id, role);
+
+          var rolesToAdd = newRoles.Except(oldRoles);
+          foreach (var role in rolesToAdd)
+            userService.AddToRole(user.Id, role);
+        }
+        catch
+        {
+
+        }
+        #endregion AddOrRemoveRoles
+
+        var result = userService.Update(user);
+        if (result.Succeeded)
+          this.NotifySuccess("Successfully saved.");
+        else
+          this.NotifyError("User can not saved!");
+
+        return RedirectToAction("Edit", new { id = model.Id });
+      }
+
+      return View(model);
+    }
+
+    //===============================================================
+    // File Upload
+    //===============================================================
+    [Authorize(Roles = "BF User Add Image,BF User Manager (Training)")]
+    [HttpPost]
+    public ActionResult UploadFile()
+    {
+      string name = "";
+      // Checking no of files injected in Request object  
+
+      int test = Request.Files.Count;
+      if (Request.Files.Count > 0)
+      {
+        try
+        {
+          //  Get all files from Request object  
+          HttpPostedFileBase fileBase = Request.Files["file_name"];
+          HttpFileCollectionBase files = Request.Files;
+          string resultado = "";
+          for (int i = 0; i < files.Count; i++)
+          {
+            //string path = AppDomain.CurrentDomain.BaseDirectory + "Uploads/";
+            string filename = Path.GetFileName(Request.Files[i].FileName);
+            HttpPostedFileBase file = files[i];
+            string fname;
+            string fext;
+
+            // Checking for Internet Explorer  
+            if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+            {
+              string[] testfiles = file.FileName.Split(new char[] { '\\' });
+              fname = testfiles[testfiles.Length - 1];
+            }
+            else
+            {
+              fname = file.FileName;
+            }
+            fext = Path.GetExtension(fname);
+
+
+            if (Firstronic.Framework.Upload.Upload.IsValidExtension(fext) && Firstronic.Framework.Upload.Upload.IsValidName(fname))
+            {
+
+              int id = 0;
+
+              try
+              {
+                id = Firstronic.Framework.Functions.Queries.GetNextIDFromQuery("Common_Files_Uploaded", "FileID");
+              }
+              catch (Exception ex)
+              {
+                ViewBag.Message = "ERROR:" + ex.Message.ToString();
+              }
+              name = id + "_" + 0 + fext;
+              SqlParameter[] parameters = new SqlParameter[]{
+                        new SqlParameter("@FileName",SqlDbType.NVarChar){Value = name},
+                        new SqlParameter("@Extension",SqlDbType.NVarChar){Value = fext},
+                };
+
+              //var result = db.ExecuteInsertCommand($@"", parameters);
+
+              var result_Update = db.ExecuteInsertCommand(@"INSERT INTO Common_Files_Uploaded  ([FileName],Extension) VALUES (@FileName,@Extension)", parameters);
+              // Get the complete folder path and store the file inside it.  
+              fname = Path.Combine(Server.MapPath("~/UploadedFiles/Users"), name);
+              file.SaveAs(fname);
+
+              resultado = name;
+
+
+            }
+
+          }
+          // Returns message that successfully uploaded  
+          return Json(resultado);
+        }
+        catch (Exception ex)
+        {
+          ViewBag.Message = "ERROR:" + ex.Message.ToString();
+          return Json("");
+        }
+      }
+      else
+      {
+        return Json("");
+      }
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "BF User Add Image,BF User Manager (Training)")]
+    public ActionResult SavePicture(string partid, string url)
+    {
+
+      SqlParameter[] Parameters = new SqlParameter[]{
+          new SqlParameter("@FileName",SqlDbType.NVarChar){Value =(url ?? "").ToString()},
+        };
+
+      var PictureID = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [FileID] FROM [Common_Files_Uploaded] where FileName=@FileName", Parameters);
+
+      SqlParameter[] auotidParameters = new SqlParameter[]{
+                  new SqlParameter("@Id",SqlDbType.NVarChar){Value =(partid ?? "").ToString()},
+                  new SqlParameter("@PictureID",SqlDbType.Int){Value =PictureID},
+        };
+
+      var picturename = Firstronic.Framework.Queries.GetStringFromQuery("UPDATE [dbo].[AspNetUsers] SET [PictureID] = @PictureID  WHERE Id=@Id ", auotidParameters);
+
+      return RedirectToAction("Edit", "User", new { id = partid });
+    }
+
+    //===============================================================
+    // ResetPassword
+    //===============================================================
+    public ActionResult ChangePassword(string username)
+    {
+      var model = new ChangePasswordViewModel();
+
+      SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@username",SqlDbType.NVarChar){Value = username},
+        };
+
+      var userId = Firstronic.Framework.Queries.GetStringFromQuery("Select ID from AspNetUsers WHERE username=@username", parameters);
+
+      bool continuetopage = false;
+
+      if (Request.IsAuthenticated && (User.IsInRole("BF Administrator") || User.IsInRole("BF User Manager (Training)")))
+      {
+        continuetopage = true;
+      }
+      else
+      {
+        if (Request.IsAuthenticated && User.IsInRole("BF Administrator") == false)
+        {
+          if (User.Identity.GetUserId() == userId)
+          {
+            continuetopage = true;
+          }
+        }
+      }
+
+      if (continuetopage)
+      {
+        var user = userService.GetById(userId);
+        model.UserName = user.UserName;
+
+        return View(model);
+      }
+      else
+      {
+        this.NotifyError("No allowed");
+        return RedirectToAction("Index");
+      }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult ChangePassword(ChangePasswordViewModel model)
+    {
+      if (!ModelState.IsValid)
+      {
+        return View(model);
+      }
+
+      string userName = model.UserName;
+
+      var user = userService.FindByName(userName);
+      if (user.PasswordHash != null)
+      {
+        userService.RemovePassword(user.Id);
+      }
+
+      userService.AddPassword(user.Id, model.NewPassword);
+
+      this.NotifySuccess("Successfully changed.");
+
+      return RedirectToAction("Print", "Printer", new { Area="Utils", UserName = userName });
+    }
+
+
+    //===============================================================
+    // CLASS START : Suscriptions
+    //===============================================================
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult GetSuscriptions(int id, string UserID)
+    {
+      var model = new tbl_IT_Emails_Suscriptions_exclusive_FULL_partial();
+
+      model.id = id;
+      model.UserID = UserID;
+
+      SqlParameter[] idParameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id},
+        new SqlParameter("@UserID",SqlDbType.NVarChar){Value = UserID}
+      };
+
+      model.Modelo = db.Database.SqlQuery<tbl_IT_Emails_Suscriptions_exclusive_FULL>($@"SELECT IT_Emails_Suscriptions_exclusive.ReporteID, IT_idt_reports.Reporte, IT_Emails_Suscriptions_exclusive.ID
+FROM            IT_Emails_Suscriptions_exclusive INNER JOIN
+                         IT_idt_reports ON IT_Emails_Suscriptions_exclusive.ReporteID = IT_idt_reports.id WHERE  IT_Emails_Suscriptions_exclusive.UserID=@UserID", idParameters).ToArray().ToList().AsQueryable();
+
+      return PartialView("_Suscriptions", model);
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public bool DeleteSuscriptions(int id)
+    {
+      SqlParameter[] idParameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id}
+      };
+
+      var resultado = db.ExecuteCommand($@"DELETE FROM IT_Emails_Suscriptions_exclusive WHERE AutoID=@Id", idParameters);
+
+      return true;
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public bool AddSuscriptions(int ControlID, int ReportID, string v_UserID)
+    {
+      if (ControlID != 0)
+      {
+        //Search area and side to add...
+        SqlParameter[] idParameters = new SqlParameter[]{
+          new SqlParameter("@ControlID",SqlDbType.Int){Value = ControlID},
+          new SqlParameter("@ReportID",SqlDbType.Int){Value = ReportID},
+          new SqlParameter("@UserID",SqlDbType.NVarChar){Value = v_UserID}
+        };
+
+        var result = Firstronic.Framework.Queries.ExecuteSimpleQuery($@"INSERT INTO [dbo].[IT_Emails_Suscriptions_exclusive] ([ControlID],[ReporteID],[UserID]) VALUES (@ControlID,@ReportID,@UserID)", idParameters);
+      }
+
+
+      return true;
+    }
+    //===============================================================
+    // CLASS START : Suscriptions User
+    //===============================================================
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult GetSuscriptionsUser(int id, string UserID)
+    {
+      var model = new tbl_IT_Emails_Suscriptions_exclusive_FULL_partial();
+
+      model.id = id;
+      model.UserID = UserID;
+
+      SqlParameter[] idParameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id},
+        new SqlParameter("@UserID",SqlDbType.NVarChar){Value = UserID}
+      };
+
+      model.Modelo = db.Database.SqlQuery<tbl_IT_Emails_Suscriptions_exclusive_FULL>($@"SELECT IT_Emails_Suscriptions.ReporteID, IT_idt_reports.Reporte, IT_Emails_Suscriptions.ID
+FROM            IT_Emails_Suscriptions INNER JOIN
+                         IT_idt_reports ON IT_Emails_Suscriptions.ReporteID = IT_idt_reports.id WHERE  IT_Emails_Suscriptions.UserID=@UserID", idParameters).ToArray().ToList().AsQueryable();
+
+      return PartialView("_SuscriptionsUser", model);
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public bool DeleteSuscriptionsUser(int id)
+    {
+      SqlParameter[] idParameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id}
+      };
+
+      var resultado = db.ExecuteCommand($@"DELETE FROM IT_Emails_Suscriptions WHERE ID=@Id", idParameters);
+
+      return true;
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public bool AddSuscriptionsUser(int ControlID, int ReportID, string v_UserID)
+    {
+
+      if (ControlID == 0)
+      {
+        ControlID = -1;
+      }
+
+      if (ControlID != 0)
+      {
+        //Search area and side to add...
+        SqlParameter[] idParameters = new SqlParameter[]{
+          new SqlParameter("@ControlID",SqlDbType.Int){Value = ControlID},
+          new SqlParameter("@ReportID",SqlDbType.Int){Value = ReportID},
+          new SqlParameter("@UserID",SqlDbType.NVarChar){Value = v_UserID}
+        };
+
+        var result = Firstronic.Framework.Queries.ExecuteSimpleQuery($@"INSERT INTO [dbo].[IT_Emails_Suscriptions] ([ControlID],[ReporteID],[UserID]) VALUES (@ControlID,@ReportID,@UserID)", idParameters);
+      }
+
+
+      return true;
+    }
+
+    //===============================================================
+    // CLASS START : SKILLS
+    //===============================================================
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult GetSKILLS(int id)
+    {
+      var model = new tbl_PLEX_tbl_Personnel_v_employee_skill_FULL_partial();
+
+      model.id = id;
+
+      SqlParameter[] idParameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id}
+      };
+
+      model.Modelo = db.Database.SqlQuery<tbl_PLEX_tbl_Personnel_v_employee_skill_FULL>($@"SELECT PLEX_tbl_Personnel_v_employee_skill.AutoID, PLEX_tbl_Personnel_v_employee_skill.Plexus_User_No, PLEX_tbl_Personnel_v_employee_skill.Skill_Key, PLEX_tbl_Personnel_v_employee_skill.Skill_level_key, 
+                         PLEX_idt_Personnel_v_Skill.Skill FROM PLEX_tbl_Personnel_v_employee_skill INNER JOIN PLEX_idt_Personnel_v_Skill ON PLEX_tbl_Personnel_v_employee_skill.Skill_Key = PLEX_idt_Personnel_v_Skill.Skill_Key WHERE (PLEX_tbl_Personnel_v_employee_skill.Plexus_User_No = @Id)", idParameters).ToArray().ToList().AsQueryable();
+
+      return PartialView("_SKILLS", model);
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public bool DeleteSKILLS(int id)
+    {
+      SqlParameter[] idParameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id}
+      };
+
+      var resultado = db.ExecuteCommand($@"DELETE FROM PLEX_tbl_Personnel_v_employee_skill WHERE AutoID=@Id", idParameters);
+
+      return true;
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public bool AddSKILLS(int ControlID, int SkillID)
+    {
+      //Search area and side to add...
+      SqlParameter[] idParameters = new SqlParameter[]{
+           new SqlParameter("@Plexus_User_No",SqlDbType.Int){Value =ControlID},
+          new SqlParameter("@Skill_Key",SqlDbType.Int){Value =SkillID},
+          new SqlParameter("@Skill_level_key",SqlDbType.Int){Value =1299},
+        };
+
+      var result = Firstronic.Framework.Queries.InsertQuery($@"INSERT INTO [dbo].[PLEX_tbl_Personnel_v_employee_skill]
+                   (Plexus_User_No,
+					Skill_Key,
+					Skill_level_key)
+					VALUES
+                   (@Plexus_User_No,
+					@Skill_Key,
+					@Skill_level_key)", idParameters);
+
+      return true;
+    }
+
+    //===============================================================
+    // CLASS START : Alerts
+    //===============================================================
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult GetAlerts(string id)
+    {
+      var model = new tbl_IT_Emails_Suscriptions_FULL_partial();
+
+      model.id = id;
+
+      SqlParameter[] idParameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.NVarChar){Value = id}
+      };
+
+      model.Modelo = db.Database.SqlQuery<tbl_IT_Emails_Suscriptions_FULL>($@"SELECT s.ID, CASE WHEN s.AreaID = 0 THEN 'ALL' ELSE a.Area END AS Area, CASE WHEN s.StationID = 0 THEN 'ALL' ELSE e.StationName END AS Station, CASE WHEN s.Part_Key = 0 THEN 'ALL' ELSE p.PartNumber END AS PN, CASE WHEN s.CustomerID = 0 THEN 'ALL' ELSE c.CustomerName END AS Customer, CASE WHEN s.Reporteid = 0 THEN 'ALL' ELSE r.Reporte END AS Reporte,[IT_EMAIL_SUSCRIPTION_TYPE].SUSCRIPTION_TYPE FROM            IT_idt_reports AS r RIGHT JOIN IT_Emails_Suscriptions AS s LEFT JOIN PD_idt_areas AS a ON s.AreaID = a.AreaID LEFT JOIN PD_idt_stations AS e ON s.StationID = e.StationID LEFT JOIN CS_idt_partnumbers AS p ON s.Part_Key = p.Part_Key LEFT JOIN CS_idt_external_customers AS c ON s.CustomerID = c.CustomerID ON r.id = s.ReporteID LEFT JOIN [IT_EMAIL_SUSCRIPTION_TYPE] ON [IT_EMAIL_SUSCRIPTION_TYPE].Id = s.SUSCRIPTION_TYPE_NO WHERE (s.UserID  = @Id)  AND (s.ReporteID = - 1) ", idParameters).ToArray().ToList().AsQueryable();
+
+      return PartialView("_Alerts", model);
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public bool DeleteAlerts(int id)
+    {
+      SqlParameter[] idParameters = new SqlParameter[]{
+        new SqlParameter("@Id",SqlDbType.Int){Value = id}
+      };
+
+      var resultado = db.ExecuteCommand($@"DELETE FROM IT_Emails_Suscriptions WHERE ID=@Id", idParameters);
+
+      return true;
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public bool AddAlerts(string UserID, int Area, int Customer, int Suscription)
+    {
+
+      SqlParameter[] parametersControlID = new SqlParameter[]{
+        new SqlParameter("@Plexus_User_No",SqlDbType.NVarChar){Value = UserID},
+        };
+
+      var ControlID = Firstronic.Framework.Queries.GetStringFromQuery("SELECT  ControlID from ASPNETUSERS where Plexus_User_No  = @Plexus_User_No", parametersControlID);
+
+      //Search area and side to add...
+      SqlParameter[] parameters = new SqlParameter[]{
+          new SqlParameter("@ControlID",SqlDbType.Int){Value =  -1  },
+          new SqlParameter("@AreaID",SqlDbType.Int){Value =Area},
+          new SqlParameter("@StationID",SqlDbType.Int){Value =-1},
+          new SqlParameter("@PartID",SqlDbType.Int){Value =-1},
+          new SqlParameter("@CustomerID",SqlDbType.Int){Value =Customer},
+          new SqlParameter("@Suscription",SqlDbType.Int){Value =Suscription},
+          new SqlParameter("@ReporteID",SqlDbType.Int){Value =-1},
+          new SqlParameter("@Facility_Key",SqlDbType.Int){Value =0},
+          new SqlParameter("@UserPUN",SqlDbType.VarChar){Value = UserID}
+        };
+
+      var result = Firstronic.Framework.Queries.InsertQuery($@"INSERT INTO [dbo].[IT_Emails_Suscriptions]
+                   (ControlID,
+					AreaID,
+					StationID,
+					PartID,
+					CustomerID,
+					ReporteID,
+					Facility_Key,
+          UserID,SUSCRIPTION_TYPE_NO)
+					VALUES
+                   (@ControlID,
+					@AreaID,
+					@StationID,
+					@PartID,
+					@CustomerID,
+					@ReporteID,
+					@Facility_Key,
+          @UserPUN,@Suscription)", parameters);
+
+      return true;
+    }
+
+  }
+
+  //===============================================================
+  // CONTROLLER START : Change Password
+  //===============================================================
+
+  public class ChangePasswordViewModel
+  {
+    //[Required]
+    //[DataType(DataType.Password)]
+    //[Display(Name = "Current password")]
+    //public string OldPassword { get; set; }
+
+    [Required]
+    [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+    [DataType(DataType.Password)]
+    [Display(Name = "New password")]
+    public string NewPassword { get; set; }
+
+    [DataType(DataType.Password)]
+    [Display(Name = "Confirm new password")]
+    [System.ComponentModel.DataAnnotations.Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+    public string ConfirmPassword { get; set; }
+
+    [Required]
+    public string UserName { get; set; }
+  }
+  //===============================================================
+  // CLASS START : PD_tbl_unlock_station_users
+  //===============================================================
+
+  [Table("PD_tbl_unlock_station_users")]
+  public class PD_tbl_unlock_station_users : BaseEntity
+  {
+
+    [Display(Name = "AreaID")]
+    public int AreaID { get; set; }
+
+
+
+    [Display(Name = "AutoID")]
+    public int AutoID { get; set; }
+
+    [Display(Name = "ControlID")]
+    public int ControlID { get; set; }
+
+    [Display(Name = "LevelID")]
+    public int LevelID { get; set; }
+
+    [Display(Name = "Facility_Key")]
+    public int Facility_Key { get; set; }
+
+    [Display(Name = "Name")]
+    public string Name { get; set; }
+
+    [Display(Name = "Area")]
+    public string Area { get; set; }
+
+
+
+
+    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+  }
+
+  public class PD_tbl_unlock_station_users_FULL : PD_tbl_unlock_station_users
+  {
+    [Display(Name = "Facility")]
+    public string Facility_Name { get; set; }
+
+  }
+
+  public class PD_tbl_unlock_station_users_FULL_partial : PD_tbl_unlock_station_users
+  {
+    public IQueryable<PD_tbl_unlock_station_users_FULL> Modelo { get; set; }
+
+    public int id { get; set; }
+  }
+
+}

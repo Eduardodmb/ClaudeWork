@@ -1,0 +1,57 @@
+# Setup Project Memory Sync
+# This script creates a symlink from ~/.claude/projects to personal-claude-docs/.claude/project-memory
+# Run this script with: powershell -ExecutionPolicy Bypass -File setup-project-memory-sync.ps1
+
+$ErrorActionPreference = "Stop"
+
+$claudeProjectsPath = "$env:USERPROFILE\.claude\projects"
+$personalClaudeDocsPath = "$env:USERPROFILE\personal-claude-docs\.claude\project-memory"
+
+Write-Host "Setting up project memory sync..." -ForegroundColor Cyan
+
+# 1. Create project-memory directory if it doesn't exist
+if (-not (Test-Path $personalClaudeDocsPath)) {
+    Write-Host "Creating $personalClaudeDocsPath..." -ForegroundColor Yellow
+    New-Item -ItemType Directory -Path $personalClaudeDocsPath -Force | Out-Null
+}
+
+# 2. If projects directory exists and is not a symlink, backup and remove it
+if (Test-Path $claudeProjectsPath) {
+    $item = Get-Item $claudeProjectsPath
+
+    if ($item.LinkType -ne "SymbolicLink") {
+        Write-Host "Backing up existing projects directory..." -ForegroundColor Yellow
+
+        # Copy contents to personal-claude-docs
+        Copy-Item -Path "$claudeProjectsPath\*" -Destination $personalClaudeDocsPath -Recurse -Force
+
+        Write-Host "Removing old projects directory..." -ForegroundColor Yellow
+        Write-Host "If this fails, close all Claude Code sessions and run this script again." -ForegroundColor Red
+
+        # Remove the directory
+        Remove-Item -Path $claudeProjectsPath -Recurse -Force
+
+        # Wait a moment for file system
+        Start-Sleep -Seconds 2
+    } else {
+        Write-Host "Symlink already exists at $claudeProjectsPath" -ForegroundColor Green
+        Write-Host "Target: $($item.Target)" -ForegroundColor Green
+        exit 0
+    }
+}
+
+# 3. Create the symlink
+Write-Host "Creating symlink..." -ForegroundColor Yellow
+New-Item -ItemType SymbolicLink -Path $claudeProjectsPath -Target $personalClaudeDocsPath | Out-Null
+
+# 4. Verify
+$link = Get-Item $claudeProjectsPath
+if ($link.LinkType -eq "SymbolicLink") {
+    Write-Host "`nSuccess! Project memory sync is set up." -ForegroundColor Green
+    Write-Host "  Source: $claudeProjectsPath" -ForegroundColor Gray
+    Write-Host "  Target: $($link.Target)" -ForegroundColor Gray
+    Write-Host "`nProject memory will now sync via personal-claude-docs git repo." -ForegroundColor Cyan
+} else {
+    Write-Host "`nFailed to create symlink" -ForegroundColor Red
+    Write-Host "Please close all Claude Code sessions and try again." -ForegroundColor Yellow
+}

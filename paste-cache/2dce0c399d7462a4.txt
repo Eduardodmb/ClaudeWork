@@ -1,0 +1,34 @@
+  
+    To prevent possible data loss before loading the designer, the following errors must be resolved:   
+ 
+    
+  
+    1 Error   
+  
+  Ignore and Continue   
+    Why am I seeing this page?   
+ 
+ 
+  
+ 
+  
+   Argument 'picture' must be a picture that can be used as a Icon.     
+ 
+  
+ 
+  
+ 
+Instances of this error (1)  
+ 
+1.   Hide Call Stack 
+ 
+at System.Drawing.Icon.Initialize(Int32 width, Int32 height)
+at System.Drawing.Icon..ctor(Stream stream, Int32 width, Int32 height)
+at System.Drawing.Icon..ctor(Stream stream)
+at System.Drawing.IconConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
+at Microsoft.DotNet.DesignTools.Utilities.Resources.ResXDataNode.GenerateObjectFromDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService typeResolver)
+at Microsoft.DotNet.DesignTools.Utilities.Resources.ResXDataNode.GetValue(ITypeResolutionService typeResolver)
+at Microsoft.DotNet.DesignTools.Utilities.Resources.ResXResourceReader.ParseDataNode(XmlTextReader reader, Boolean isMetaData)
+at Microsoft.DotNet.DesignTools.Utilities.Resources.ResXResourceReader.ParseXml(XmlTextReader reader)  
+ 
+ 

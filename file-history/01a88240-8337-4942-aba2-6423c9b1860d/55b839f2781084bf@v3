@@ -1,0 +1,512 @@
+# CLAUDE.md
+
+**BeFirst_Docs** - Single source of truth for BeFirst Manufacturing Intelligence Platform documentation.
+
+## Core Principles
+
+- ✅ **Everything in Git** - All documentation assets version controlled here
+- ✅ **Deliverables committed** - Generated HTML, PDF, DOCX committed to `deliverables/`
+- ✅ **Self-contained** - No external dependencies (OneDrive, file shares)
+- ❌ **No parallel documentation** - This repo is the single source
+
+## Quick Start
+
+```bash
+# Clone and setup
+git clone <repository-url>
+cd BeFirst_Docs
+
+# Create Python virtual environment
+python -m venv venv
+venv\Scripts\Activate.ps1  # Windows
+source venv/bin/activate    # macOS/Linux
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Build documentation
+python scripts/build_docs.py --config complete-docs
+
+# Deactivate when done
+deactivate
+```
+
+**See `docs/08_SETUP.md` for detailed setup and `docs/09_TROUBLESHOOTING.md` for common issues.**
+
+## Platform Overview
+
+**BeFirst Platform**: 13-repository manufacturing intelligence ecosystem for Safari Circuits
+
+**Architecture:**
+```
+PLEX ERP (Source) → ETL (Talend) → 4 Databases → APIs/Services → Portal/Apps
+```
+
+**Key Components:**
+- **6 Application Repos**: Portal (ASP.NET MVC 5), APIs (.NET Core 7.0), Services (VB.NET), Desktop apps
+- **4 Database Repos**: PROD_DWH (49 tables), MES (824 tables), MACHINES_RESULTS (22), TESTERS_RESULTS (4)
+- **1 ETL Repo**: Talend Open Studio (40+ modules)
+- **1 Reporting Repo**: SSRS (54+ dashboards)
+- **1 Documentation Repo**: **BeFirst_Docs (this repo)**
+
+**Facilities:** GRA1 (Granby, QC), JUA1/JUA2 (Ciudad Juárez, Mexico)
+
+**See `docs/02_ARCHITECTURE.md` for complete architecture details.**
+
+## Repository Structure
+
+```
+S:\01_Repos\BeFirst_Docs\
+├── docs/                              # TECHNICAL DOCS (Platform/System)
+│   ├── 01_README.md                   # Platform overview
+│   ├── 02_ARCHITECTURE.md             # Complete architecture
+│   ├── 04_DATABASE.md                 # Database schemas
+│   ├── 05_API.md                      # REST API docs
+│   ├── 11_BUILD_DOCS_GUIDE.md         # Documentation builder guide
+│   ├── diagrams/                      # Architecture diagrams
+│   └── integrations/                  # Integration patterns
+├── knowledge-base/                    # BUSINESS KNOWLEDGE (Processes/Departments)
+│   ├── purchasing/                    # PUR-* files (no subfolders)
+│   ├── manufacturing/                 # MFG-* files
+│   ├── quality/                       # QUA-* files
+│   ├── DOCUMENT-ID-CONTROL.md         # Document ID standards
+│   └── README.md                      # Knowledge base guide
+├── deliverables/                      # GENERATED OUTPUTS (committed to Git)
+│   ├── html/                          # HTML documentation builds
+│   ├── manuals/                       # User manuals (MD + DOCX)
+│   ├── presentations/                 # PowerPoint files
+│   └── reports/                       # Generated reports
+├── scripts/                           # Build scripts
+│   └── build_docs.py                  # Python documentation builder
+├── config/                            # Build configurations
+│   └── docs_builder.yaml              # Doc builder configs
+├── .claude/                           # Claude Code templates/skills
+│   ├── templates/                     # HTML templates, Python generators
+│   └── skills/                        # Custom skills
+├── requirements.txt                   # Python dependencies
+└── README.md                          # Repository overview
+```
+
+## Documentation Types
+
+**docs/ vs knowledge-base/**:
+
+| Location | Content | Scope | Audience |
+|----------|---------|-------|----------|
+| **docs/** | Technical platform documentation | BeFirst-specific | IT/Developers |
+| **knowledge-base/** | Business processes | Company-wide | All teams |
+
+**Examples:**
+- BeFirst database schemas → `docs/04_DATABASE.md`
+- How suppliers submit reports → `knowledge-base/purchasing/PUR-PR-001-*.md`
+- BeFirst API endpoints → `docs/05_API.md`
+- User manuals → `deliverables/manuals/[ID]-[title].md` (edit in Typora → export DOCX)
+
+## Common Tasks
+
+### Build Documentation
+
+```bash
+# Activate venv first
+venv\Scripts\activate
+
+# Build complete docs
+python scripts/build_docs.py --config complete-docs
+
+# Build specific configs
+python scripts/build_docs.py --config api-reference
+python scripts/build_docs.py --config developer-guide
+python scripts/build_docs.py --config architecture-guide
+
+# List all configs
+python scripts/build_docs.py --list-configs
+```
+
+**Output:** `deliverables/html/[name].html`
+
+**Pre-defined configs:** complete-docs, api-reference, developer-guide, architecture-guide, operations-guide, database-guide
+
+### Generate User Manuals
+
+**Workflow:** Markdown → Edit in Typora → Export DOCX → Commit both
+
+```bash
+# 1. Claude creates: deliverables/manuals/[ID]-[title].md
+# 2. Edit in Typora (add screenshots, refine content)
+# 3. Export to DOCX via Typora: File → Export → Word (.docx)
+# 4. Commit both files
+git add deliverables/manuals/[name].md deliverables/manuals/[name].docx
+git commit -m "DELIVERABLE: Create [title] manual"
+```
+
+### Update Documentation
+
+```bash
+# 1. Pull latest
+git pull origin main
+
+# 2. Create feature branch
+git checkout -b feature/update-api-docs
+
+# 3. Edit markdown in docs/
+# (make changes)
+
+# 4. Rebuild affected deliverables
+python scripts/build_docs.py --config api-reference
+
+# 5. Commit source + deliverables
+git add docs/ deliverables/
+git commit -m "DOCS: Update API documentation with new endpoints"
+
+# 6. Push and create PR
+git push origin feature/update-api-docs
+```
+
+## Git Workflow
+
+**Branch Strategy:**
+- `main` - Production-ready documentation
+- `feature/*` - Documentation updates
+- `hotfix/*` - Urgent corrections
+
+**Commit Message Standards:**
+- `DOCS:` - Documentation content updates
+- `BUILD:` - Build script/config changes
+- `TEMPLATE:` - Template modifications
+- `DELIVERABLE:` - New deliverable generated
+- `FIX:` - Documentation corrections
+
+## Technology Stack
+
+**Web:**
+- Portal: ASP.NET MVC 5, .NET Framework 4.8, EF 6
+- APIs: ASP.NET Core 7.0, EF Core 7.0
+- Auth: Azure AD (OAuth2/OIDC, JWT)
+
+**Services:**
+- VB.NET, .NET Framework 4.8, Windows Services
+
+**ETL:**
+- Talend Open Studio 8.0.1, Java 8+, JS7 JobScheduler
+
+**Database:**
+- SQL Server 2016+
+
+**Documentation:**
+- Python 3.7+, Markdown, Jinja2, PyYAML
+- Typora for manual editing
+
+## Key Platform Concepts
+
+### Portal Areas (18)
+Accounting, Assemblies, BOM, Customers, DataImport, Engineering, HR, Inventory, Machines, Manufacturing, Nomenclatures, OEE, Params, Planning, Purchasing, Quality, Shipping, Suppliers
+
+**See `docs/06_WORKFLOWS.md` for complete area descriptions.**
+
+### API Controllers (15)
+All secured with JWT Bearer (Azure AD), exposing REST endpoints for Portal/external consumers
+
+**See `docs/05_API.md` for endpoint documentation.**
+
+### Databases
+- **PLEX** (source): 10.122.40.10:1438, read-only
+- **PROD_DWH** (warehouse): 10.122.40.10:1439, read/write (49 tables)
+- **MES**: Manufacturing execution (824 tables)
+- **MACHINES_RESULTS**: Equipment OEE (22 tables)
+- **TESTERS_RESULTS**: Test data (4 tables)
+
+**See `docs/04_DATABASE.md` for complete schemas.**
+
+## Documentation Standards
+
+**Formatting:**
+- GitHub-flavored Markdown
+- Tables for structured data
+- Code blocks with language hints (```sql, ```bash, etc.)
+- Mermaid diagrams for architecture visuals
+- **No emojis** in generated documentation - use plain text (e.g., "Note:", "Warning:")
+- Relative links for cross-references
+
+**When Updating:**
+1. Pull latest changes first
+2. Edit markdown sources in `docs/` or `knowledge-base/`
+3. Maintain consistency with existing structure
+4. Update cross-references if needed
+5. Regenerate deliverables
+6. Commit both source and deliverables
+7. Create PR for review
+
+**When Creating Deliverables:**
+1. Use `python scripts/build_docs.py --config [name]`
+2. Test output in browser
+3. Verify formatting (tables, code blocks, navigation)
+4. Save to correct `deliverables/` subdirectory
+5. Commit to Git
+
+## Team Sharing
+
+**Repository Location:** `S:\01_Repos\BeFirst_Docs`
+
+**Access:**
+- **IT team**: Git clone + full access
+- **Operations**: Read-only Git or `deliverables/` folder
+- **Management**: Deliverables via email or network share
+- **External**: Specific files only (no repo access)
+
+**Distribution (optional secondary):**
+- PLEX manuals: `S:\OneDrive - Safari Circuits, LLC\...\01_PLEX`
+- BeFirst manuals: `S:\OneDrive - Safari Circuits, LLC\...\02_BeFirst`
+- **Primary source remains Git repository**
+
+## Portal Sync
+
+**BeFirst_Portal** (`S:\01_Repos\BeFirst_Portal`) is the primary source for documentation updates.
+
+**When Portal changes:**
+1. Check recent commits: `git -C "S:\01_Repos\BeFirst_Portal" log --oneline -20`
+2. Map changes to docs:
+   - New/deleted areas → `docs/06_WORKFLOWS.md` + `docs/02_ARCHITECTURE.md`
+   - Database changes → `docs/04_DATABASE.md`
+   - API changes → `docs/05_API.md`
+   - Rebranding → `docs/02_ARCHITECTURE.md`
+   - Business process → `knowledge-base/{department}/`
+3. Update markdown sources
+4. Rebuild affected deliverables
+
+**Always read Portal's CLAUDE.md first** for accurate architecture context.
+
+## Knowledge Base
+
+**Location:** `knowledge-base/`
+
+**Purpose:** Claude's growing brain for BeFirst business processes
+
+**Structure:**
+- Department folders (purchasing, manufacturing, quality, etc.)
+- Files directly in department folder with document IDs (PUR-PR-001, MFG-DS-002, etc.)
+- **No subfolders** - flat structure with IDs
+
+**How to Use:**
+- Tell Claude about processes conversationally
+- Claude creates/updates files with document IDs
+- Process definitions link to technical docs
+- Knowledge grows organically over time
+
+**See `knowledge-base/README.md` for complete guide.**
+
+## Deliverables Strategy
+
+**Commit deliverables to Git** for team-wide sharing:
+- ✅ Teams without Python can access HTML/DOCX immediately
+- ✅ Version history shows what docs existed at any point
+- ✅ Single source of truth (no "which version?" confusion)
+- ✅ Git distribution more reliable than file shares
+
+**Commit:** HTML, DOCX, PDF, PPTX
+**Don't commit:** Build logs, venv/, temp files
+
+## Templates
+
+**Location:** `.claude/templates/`
+
+**HTML Templates:**
+- `documentation_template.html` - Documentation builds
+- `presentation_template.html` - Presentations (keyboard navigation)
+- `report_template.html` - Reports
+
+**Python Generators:**
+- `generate_sop_document.py` - SOP/manual generator (DOCX)
+- `generate_slide_deck.py` - PowerPoint generator
+
+**Placeholder syntax:** `{{DOC_TITLE}}`, `{{COMPANY_NAME}}`, `{{DOC_CONTENT}}`, etc.
+
+## Contact
+
+**Repository Owner:** SafariCircuitsLLC GitHub organization
+**Location:** `S:\01_Repos\BeFirst_Docs`
+**IT Manager:** Eduardo D. Marquez (GR_IT@safaricircuits.com)
+
+**For Documentation Updates:**
+1. Create feature branch
+2. Edit markdown sources
+3. Regenerate deliverables
+4. Commit and create PR
+
+**For Help:**
+- Setup: `docs/08_SETUP.md`
+- Troubleshooting: `docs/09_TROUBLESHOOTING.md`
+- Build guide: `docs/11_BUILD_DOCS_GUIDE.md`
+- Contact IT team for repository access
+
+## Key Documentation Files
+
+| Document | Purpose |
+|----------|---------|
+| `docs/01_README.md` | Platform overview and quick start |
+| `docs/02_ARCHITECTURE.md` | Complete system architecture |
+| `docs/04_DATABASE.md` | Database schemas (all 4 databases) |
+| `docs/05_API.md` | REST API endpoints (15 controllers) |
+| `docs/06_WORKFLOWS.md` | Application workflows (Portal, Services, ETL) |
+| `docs/08_SETUP.md` | Development environment setup |
+| `docs/09_TROUBLESHOOTING.md` | Common issues and solutions |
+| `docs/11_BUILD_DOCS_GUIDE.md` | Complete documentation builder guide |
+| `knowledge-base/README.md` | Knowledge base guide and structure |
+
+**Start with `docs/01_README.md` for platform overview.**
+
+## Learnings & Patterns
+
+*Captured insights about BeFirst Platform development patterns and architecture decisions.*
+
+### Report Organization (Portal)
+
+**Pattern:** `Index` as landing page + specific report actions (2026-05-12)
+
+**Structure:**
+```
+Areas/{AreaName}/Controllers/ReportsController.cs
+  ├── Index()              → Landing page listing all reports
+  ├── {ReportName}()       → Specific report (e.g., UserMemberships)
+  └── Get{Data}()          → AJAX partials for report sections
+
+Areas/{AreaName}/Views/Reports/
+  ├── Index.cshtml         → Report cards/links
+  ├── {ReportName}.cshtml  → Full report page
+  └── _{Partial}.cshtml    → Reusable sections
+```
+
+**Key Characteristics:**
+- **Landing Page:** `Index.cshtml` displays cards with report descriptions and links
+- **Specific Actions:** Each report gets its own action (e.g., `UserMemberships()`, `BonusHistory()`)
+- **Scalability:** Easy to add new reports without breaking existing ones
+- **Authorization:** Controller-level `[Authorize(Roles = "...")]` for area-wide access
+- **Partials:** AJAX-loaded partials for performance (load on-demand)
+- **Print Styling:** `@@media print` with CSP nonce for compliance documentation
+
+**Location Examples:**
+- `Manage/Reports/UserMemberships` - User role/position audit
+- `Personnel/Reports/BonusHistory` - Employee bonus tracking
+
+**Technical Patterns:**
+- Use `Firstronic.Framework.Queries.GetDatatableFromQuery()` for raw SQL
+- DataTable → View model for reporting queries
+- `<script nonce="@Html.ScriptNonce()">` inline (no `@section scripts`)
+- Layout `_Layout_portal.cshtml` supports: `head`, `Footer`, `FooterBottom` sections only
+
+**Why This Pattern:**
+- Multiple reports per area without URL conflicts
+- Clear navigation hierarchy for users
+- Maintainable structure for developers
+- Follows existing Personnel/Reports pattern
+
+### Multi-Repository Development Workflow (2026-05-12)
+
+**Context:** BeFirst Platform spans 13 repositories in `S:\01_Repos\`. When developing in one repository, you often need to check other repositories to ensure correct functionality and understand the full data flow.
+
+**Repository Structure:**
+```
+S:\01_Repos\
+├── BeFirst_Portal              # ASP.NET MVC 5 - Main web UI (18 areas)
+├── BeFirst_APIs                # ASP.NET Core 7.0 - REST API (15 controllers)
+├── BeFirst_Services            # VB.NET - Windows Services (40+ services)
+├── BeFirst_Production          # WinForms - Floor monitoring app
+├── BeFirst_Planning_Tool       # WinForms - Production planning app
+├── BeFirst_ICTInline           # Python - Keysight ICT integration
+├── BeFirst_Database_DWH        # SQL - Data Warehouse (49 tables)
+├── BeFirst_Database_MES_Database # SQL - MES hub (824 tables)
+├── BeFirst_Database_MACHINES_RESULTS # SQL - Equipment metrics (22 tables)
+├── BeFirst_Database_TESTERS_RESULTS  # SQL - Test results (4 tables)
+├── BeFirst_ETL                 # Talend - ETL jobs (40+ modules)
+├── BeFirst_SSRS                # SSRS - Reporting (54+ dashboards)
+└── BeFirst_Docs                # Documentation - This repo
+```
+
+**Data Flow Architecture:**
+```
+PLEX ERP (Source)
+  ↓
+ETL (Talend) + Services (VB.NET)
+  ↓
+Databases (DWH, MES, MACHINES_RESULTS, TESTERS_RESULTS)
+  ↓
+APIs (REST) + Services (Background) + SSRS (Reports)
+  ↓
+Portal (Web) + Production (Desktop) + Planning Tool (Desktop)
+```
+
+**Cross-Repository Dependencies - When to Check Other Repos:**
+
+| Developing In | Must Check | Why |
+|---------------|-----------|-----|
+| **Portal** | APIs, Databases | Portal consumes APIs; validate endpoints exist and schemas match |
+| **Portal** | Services | Some Portal features trigger background services; verify service contracts |
+| **Portal** | Docs (CLAUDE.md) | Architecture overview, patterns, database schemas |
+| **APIs** | Databases | APIs query databases directly; verify table schemas, SPs, views |
+| **APIs** | Services | Some endpoints trigger Windows Services; verify service interfaces |
+| **Services** | Databases | Services read/write to MES and DWH; verify schemas and permissions |
+| **Services** | ETL | Services may depend on ETL-populated tables; verify data availability |
+| **ETL** | Databases | ETL populates DWH and MES; verify target schemas and constraints |
+| **Databases** | All consumers | Schema changes impact Portal, APIs, Services, ETL, SSRS; check all |
+| **Production/Planning** | MES Database | Desktop apps connect directly to MES; verify schemas and permissions |
+
+**Common Development Scenarios:**
+
+1. **Adding a new Portal report:**
+   - Check: `BeFirst_Database_*` for available tables/views
+   - Check: `BeFirst_APIs` if report needs API endpoint
+   - Check: `BeFirst_Docs` for existing report patterns
+   - Check: `BeFirst_SSRS` for similar SSRS reports (may reuse queries)
+
+2. **Adding a new API endpoint:**
+   - Check: `BeFirst_Database_*` for schema definitions
+   - Check: `BeFirst_Portal` to see how Portal will consume it
+   - Check: `BeFirst_Services` if endpoint triggers background processing
+
+3. **Modifying a database schema:**
+   - **CRITICAL:** Check ALL consumers before making changes:
+     - `BeFirst_Portal` - Views, controllers, LINQ queries
+     - `BeFirst_APIs` - API models, query methods
+     - `BeFirst_Services` - Service queries, data access
+     - `BeFirst_ETL` - Talend jobs that populate tables
+     - `BeFirst_SSRS` - Reports querying tables
+     - `BeFirst_Production` / `BeFirst_Planning_Tool` - Desktop app queries
+
+4. **Adding a new Windows Service:**
+   - Check: `BeFirst_Database_*` for data access needs
+   - Check: `BeFirst_Portal` if Portal triggers the service
+   - Check: `BeFirst_APIs` if API endpoints invoke the service
+
+5. **Creating new ETL job:**
+   - Check: `BeFirst_Database_DWH` for target schema
+   - Check: PLEX source schema (read-only connection)
+   - Check: `BeFirst_Services` if services depend on this data
+
+**Key Interdependencies:**
+
+| Component | Depends On | Depended On By |
+|-----------|-----------|----------------|
+| **Portal** | APIs, MES Database | Users (primary UI) |
+| **APIs** | All 4 Databases | Portal, external integrations |
+| **MES Database** | ETL, Services | Portal, APIs, Production, Planning, Services |
+| **DWH Database** | ETL | APIs, SSRS, Services |
+| **Services** | MES, DWH, PLEX | Portal (triggered), ETL (scheduled) |
+| **ETL** | PLEX, DWH, MES | All data consumers |
+
+**Best Practices:**
+
+1. **Before making changes:** Always check `BeFirst_Docs/docs/02_ARCHITECTURE.md` for data flow
+2. **Schema changes:** Use database migration scripts; never modify tables directly in production
+3. **API changes:** Update Swagger docs; notify Portal team of breaking changes
+4. **Service changes:** Document service contracts; coordinate with Portal/API teams
+5. **Read CLAUDE.md first:** Each repository should have patterns and gotchas documented
+
+**Repository Locations:**
+- All repos cloned to: `S:\01_Repos\BeFirst_*`
+- Documentation: `S:\01_Repos\BeFirst_Docs`
+- Architecture diagrams: `BeFirst_Docs/docs/diagrams/`
+
+**When in doubt:**
+1. Check `BeFirst_Docs/docs/02_ARCHITECTURE.md` for system overview
+2. Check `BeFirst_Docs/docs/04_DATABASE.md` for all database schemas
+3. Check `BeFirst_Docs/docs/05_API.md` for API endpoints
+4. Check target repository's CLAUDE.md (if exists) for patterns

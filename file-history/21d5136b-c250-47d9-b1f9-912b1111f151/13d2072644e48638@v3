@@ -1,0 +1,226 @@
+#!/usr/bin/env python3
+"""
+Safari Circuits PowerPoint Generator
+Generates PowerPoint presentations from YAML configuration files using Safari template.
+"""
+
+import json
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any
+from pptx import Presentation
+from pptx.util import Inches, Pt
+from pptx.enum.text import PP_ALIGN
+from pptx.dml.color import RGBColor
+
+# Safari Circuits brand colors (adjust based on actual template)
+COLORS = {
+    'green': RGBColor(76, 175, 80),    # Success/Advantage
+    'yellow': RGBColor(255, 193, 7),   # Warning/Adequate
+    'red': RGBColor(244, 67, 54),      # Error/Concern
+    'blue': RGBColor(33, 150, 243),    # Info/Neutral
+    'dark_gray': RGBColor(66, 66, 66), # Text
+}
+
+TEMPLATE_PATH = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\10_Templates\01_PPT_Template.pptx"
+
+
+def load_config(config_file: Path) -> Dict[str, Any]:
+    """Load presentation configuration from YAML or JSON file."""
+    with open(config_file, 'r', encoding='utf-8') as f:
+        if config_file.suffix in ['.yaml', '.yml']:
+            return yaml.safe_load(f)
+        elif config_file.suffix == '.json':
+            return json.load(f)
+        else:
+            raise ValueError(f"Unsupported config format: {config_file.suffix}")
+
+
+def add_title_slide(prs: Presentation, config: Dict) -> None:
+    """Add title slide."""
+    slide = prs.slides.add_slide(prs.slide_layouts[0])  # Title slide layout
+
+    title = slide.shapes.title
+    subtitle = slide.placeholders[1]
+
+    title.text = config.get('title', '')
+    subtitle.text = config.get('subtitle', '')
+
+
+def add_section_header(prs: Presentation, title: str) -> None:
+    """Add section header slide."""
+    slide = prs.slides.add_slide(prs.slide_layouts[2])  # Section header layout
+    slide.shapes.title.text = title
+
+
+def add_content_slide(prs: Presentation, slide_config: Dict) -> None:
+    """Add content slide with title and bullet points."""
+    slide = prs.slides.add_slide(prs.slide_layouts[1])  # Title and content layout
+
+    title = slide.shapes.title
+    title.text = slide_config.get('title', '')
+
+    # Add content to text placeholder
+    if 'content' in slide_config:
+        body_shape = slide.placeholders[1]
+        tf = body_shape.text_frame
+        tf.clear()
+
+        for item in slide_config['content']:
+            p = tf.add_paragraph()
+            p.text = item
+            p.level = 0
+
+
+def add_comparison_table(prs: Presentation, slide_config: Dict) -> None:
+    """Add comparison table slide."""
+    slide = prs.slides.add_slide(prs.slide_layouts[5])  # Blank layout
+
+    # Add title
+    title_shape = slide.shapes.title
+    title_shape.text = slide_config.get('title', '')
+
+    # Table dimensions
+    rows = len(slide_config['rows']) + 1  # +1 for header
+    cols = len(slide_config['columns'])
+
+    # Create table
+    left = Inches(0.5)
+    top = Inches(1.5)
+    width = Inches(9.0)
+    height = Inches(0.5 * rows)
+
+    table = slide.shapes.add_table(rows, cols, left, top, width, height).table
+
+    # Set column headers
+    for col_idx, col_name in enumerate(slide_config['columns']):
+        cell = table.cell(0, col_idx)
+        cell.text = col_name
+        cell.text_frame.paragraphs[0].font.bold = True
+        cell.text_frame.paragraphs[0].alignment = PP_ALIGN.CENTER
+
+    # Fill table data
+    for row_idx, row_data in enumerate(slide_config['rows'], start=1):
+        for col_idx, cell_value in enumerate(row_data):
+            cell = table.cell(row_idx, col_idx)
+
+            # Handle colored cells (e.g., "🟢 YES", "🔴 NO")
+            if isinstance(cell_value, str):
+                cell.text = cell_value
+
+                # Apply color coding
+                if '🟢' in cell_value or 'YES' in cell_value.upper():
+                    cell.fill.solid()
+                    cell.fill.fore_color.rgb = COLORS['green']
+                elif '🔴' in cell_value or 'NO' in cell_value.upper():
+                    cell.fill.solid()
+                    cell.fill.fore_color.rgb = COLORS['red']
+                elif '🟡' in cell_value:
+                    cell.fill.solid()
+                    cell.fill.fore_color.rgb = COLORS['yellow']
+
+
+def add_cost_chart_slide(prs: Presentation, slide_config: Dict) -> None:
+    """Add cost comparison chart slide."""
+    slide = prs.slides.add_slide(prs.slide_layouts[5])  # Blank layout
+
+    title_shape = slide.shapes.title
+    title_shape.text = slide_config.get('title', '')
+
+    # For now, add as table - could be enhanced with actual charts
+    # This would require more complex chart creation with python-pptx
+    add_comparison_table(prs, slide_config)
+
+
+def clean_template_slides(prs: Presentation) -> None:
+    """Remove all slides from template except first and last."""
+    slides_to_keep = []
+    total_slides = len(prs.slides)
+
+    if total_slides <= 2:
+        # If 2 or fewer slides, keep all
+        return
+
+    # Keep first slide (index 0)
+    slides_to_keep.append(0)
+
+    # Keep last slide (index total_slides - 1)
+    slides_to_keep.append(total_slides - 1)
+
+    # Remove slides in reverse order (to maintain indices)
+    for idx in range(total_slides - 1, -1, -1):
+        if idx not in slides_to_keep:
+            rId = prs.slides._sldIdLst[idx].rId
+            prs.part.drop_rel(rId)
+            del prs.slides._sldIdLst[idx]
+
+    print(f"Cleaned template: kept {len(slides_to_keep)} slides (first and last)")
+
+
+def generate_presentation(config_file: Path, output_file: Path) -> None:
+    """Generate PowerPoint presentation from configuration file."""
+
+    print(f"Loading configuration from: {config_file}")
+    config = load_config(config_file)
+
+    print(f"Loading template from: {TEMPLATE_PATH}")
+    prs = Presentation(TEMPLATE_PATH)
+
+    # Clean template slides (keep only first and last)
+    clean_template_slides(prs)
+
+    # Add title slide
+    if 'title_slide' in config:
+        add_title_slide(prs, config['title_slide'])
+
+    # Process slides
+    for slide_config in config.get('slides', []):
+        slide_type = slide_config.get('type', 'content')
+
+        if slide_type == 'section_header':
+            add_section_header(prs, slide_config['title'])
+        elif slide_type == 'content':
+            add_content_slide(prs, slide_config)
+        elif slide_type == 'table':
+            add_comparison_table(prs, slide_config)
+        elif slide_type == 'cost_chart':
+            add_cost_chart_slide(prs, slide_config)
+        else:
+            print(f"Warning: Unknown slide type '{slide_type}', skipping")
+
+    # Save presentation
+    print(f"Saving presentation to: {output_file}")
+    prs.save(str(output_file))
+    print("[OK] Presentation generated successfully!")
+
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description='Generate Safari Circuits PowerPoint presentations from YAML/JSON config'
+    )
+    parser.add_argument('config', type=Path, help='Configuration file (YAML or JSON)')
+    parser.add_argument('-o', '--output', type=Path, help='Output PPTX file')
+
+    args = parser.parse_args()
+
+    if not args.config.exists():
+        print(f"Error: Configuration file not found: {args.config}")
+        return 1
+
+    if not args.output:
+        args.output = args.config.with_suffix('.pptx')
+
+    try:
+        generate_presentation(args.config, args.output)
+        return 0
+    except Exception as e:
+        print(f"Error generating presentation: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+
+if __name__ == '__main__':
+    exit(main())

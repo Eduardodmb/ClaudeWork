@@ -1,0 +1,39 @@
+@using Firstronic.Areas.Manage.Controllers
+@using NonFactors.Mvc.Grid;
+
+@model IQueryable<tbl_Common_Building>
+
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text">Manage Buildings</h3>
+  </div>
+  <div class="md-card-content">
+    @(Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(model => model.Building_Code).RenderedAs(model => Html.ActionLink(model.Building_Code?.ToString() ?? "", "Edit", "Building", new { id = model.Building_Key }, new { })).Titled("Building Code");
+            columns.Add(model => model.Name).Titled("Building Name");
+            columns.Add(model => model.Facility_Name).Titled("Facility");
+            columns.Add(model => model.PRODUCTION ? "Yes" : "No").Titled("Production");
+            columns.Add(model => model.WAREHOUSE ? "Yes" : "No").Titled("Warehouse");
+            columns.Add(model => model.SHIPPING ? "Yes" : "No").Titled("Shipping");
+            columns.Add(model => "<a href=\"Building/Edit/" + model.Building_Key + "\" class=\"editbutton\">Edit</a>").RenderedAs(model => Html.ActionLink("Edit", "Edit", new { id = model.Building_Key }, new { @class = "editbutton" })).Css("editlink");
+        })
+        .Empty("No data found")
+        .Pageable(pager =>
+        {
+            pager.PagesToDisplay = 10;
+            pager.RowsPerPage = 15;
+        })
+        .Filterable()
+        .Sortable()
+    )
+    <div class="mn-t-20">
+      <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("Create", "Building")">
+        @Resources.Actions.Add
+      </a>
+    </div>
+  </div>
+
+</div>

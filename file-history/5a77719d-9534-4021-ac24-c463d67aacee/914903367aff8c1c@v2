@@ -1,0 +1,412 @@
+@using System.Data
+@model Int32?
+
+@{
+  ViewBag.Title = "5S Results";
+}
+@{
+  // Use for create Dropdowns...
+  var FirstronicFacilitiesList = new List<SelectListItem>();
+  FirstronicFacilitiesList = Firstronic.Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+
+  var ZonesList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery(@"SELECT[Zone_Key],[Zone_Name] FROM[Quality_Contamination_Particle_Zones]");
+}
+
+@{
+  var today = DateTime.Now;
+
+}
+
+@section head
+{
+  <style>
+    .checkbox_text > input {
+      font: 13px "Microsoft Yahei";
+      display: table;
+      font-size: 11px;
+      padding: 10px 20px 10px 10px;
+      background-color: rgba(0,140,186,1);
+      color: #b3b3b3;
+      border-radius: 5px;
+      -webkit-border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+    }
+
+      .checkbox_text > input:not(:checked) + label {
+        background-color: #DDDDDD;
+        color: #a7a7a7;
+      }
+
+    .checkbox_text + label > span.checkbox_text-unchecked,
+    .checkbox_text + label > span.checkbox_text-checked {
+      display: inline-block;
+      line-height: 16px;
+      margin-left: 7px;
+      vertical-align: bottom;
+    }
+
+    .hide {
+      display: none;
+    }
+  </style>
+
+  <script src="~/Content/vendor/FileSaver/js/FileSaver.js"></script>
+  <script src="~/Content/vendor/chartjs/Chart.min.js"></script>
+}
+
+<div class="md-card">
+  <div class="md-card-content">
+    @Html.Partial("_Breadcrumb", "5S Results")
+
+
+    <div class="row pb-2 mn-t-20">
+      <div class="col-12">
+        Selected Areas
+      </div>
+    </div>
+
+    @{
+      DataTable dt_zones = Firstronic.Framework.Functions.Dropdowns.GetAreasDataTable(
+        areaTypeIds: new int[] { 1, 2 });
+    }
+
+    <div class="row">
+      @foreach (DataRow row in dt_zones.Rows)
+      {
+        <div class="col-md-1 pd-10">
+          <span class="button-checkbox w-100">
+            <button type="button" class="md-btn md-btn-block md-btn-small btn-fst">@row["Area"].ToString()</button>
+            @Html.CheckBox(@row["Area"].ToString(), new { @id = "ch_" + @row["AreaID"].ToString(), @value = @row["AreaID"].ToString(), @class = "hide fst_checkbox", @checked = "Checked" })
+          </span>
+        </div>
+      }
+
+      <script type="text/javascript" nonce="@Html.ScriptNonce()">
+            $(function () {
+                $('.button-checkbox').each(function () {
+                    // Settings
+                    var $widget = $(this),
+                        $button = $widget.find('button'),
+                        $checkbox = $widget.find('input:checkbox'),
+                        color = 'primary';
+
+                    // Event Handlers
+                    $button.on('click', function () {
+                        $checkbox.prop('checked', !$checkbox.is(':checked'));
+                        $checkbox.triggerHandler('change');
+                        updateDisplay();
+                    });
+
+                    $checkbox.on('change', function () {
+                        updateDisplay();
+                    });
+
+                    // Actions
+                    function updateDisplay() {
+                        var isChecked = $checkbox.is(':checked');
+
+                        // Set the button's state
+                        $button.data('state', (isChecked) ? "on" : "off");
+               
+
+                        // Update the button's color
+                        if (isChecked) {
+                            $button
+                                .removeClass('btn-default')
+                                .addClass('md-btn-' + color + ' active');
+                        }
+                        else {
+                            $button
+                                .removeClass('md-btn-' + color + ' active')
+                                .addClass('btn-default');
+                        }
+                    }
+
+                    // Initialization
+                    function init() {
+
+                        updateDisplay();
+                        
+                    }
+                    init();
+                });
+            });
+      </script>
+
+    </div>
+
+    <div class="row justify-content-end mn-t-25 border-top pd-t-25">
+
+      <div class="col-2">
+        <input id="btn_update" type="button" value="Update Chart" class="md-btn md-btn-primary md-btn-small" />
+      </div>
+      <div class="col-2">
+        <input id="btn_download" type="button" value="Download" class="md-btn md-btn-primary md-btn-small" />
+      </div>
+    </div>
+
+    <div class="row pb-2 mn-t-30">
+      <div class="col-8 text-center">
+        <div class="dvalues" style="min-height:400px;">
+          <canvas id="MonthChart" width="800" height="300"></canvas>
+        </div>
+      </div>
+      <div class="col-1">
+
+      </div>
+      <div class="col-3 text-center">
+        <div class="dvalues" style="min-height:400px;">
+          <canvas id="MonthChartRadar" width="300" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+
+
+    <script type="text/javascript" nonce="@Html.ScriptNonce()">
+        $('#btn_download').click(function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            downloaddata();
+        });
+
+        function downloaddata() {
+
+            var date = new Date();
+            var n =
+                ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+                ("00" + date.getDate()).slice(-2) + "-" +
+                date.getFullYear() + "-" +
+                ("00" + date.getHours()).slice(-2) + "-" +
+                ("00" + date.getMinutes()).slice(-2) + "-" +
+                ("00" + date.getSeconds()).slice(-2);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", '/Quality/Poll5S/GetDataAsJson', true);
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+            xhr.setRequestHeader("Accept", "application/octet-stream");
+            //xhr.setRequestHeader("Authorization", "Bearer ......");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var blob = new Blob([xhr.response], { type: "octet/stream" });
+                    var fileName = "Poll5S" + n + ".csv";
+                    saveAs(blob, fileName);
+                }
+            }
+            xhr.responseType = "arraybuffer";
+            xhr.send();
+        }
+    </script>
+
+    <script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+        $(document).ready(function () {
+
+
+
+            var req = { Zones: '' };
+
+            GetMonthChart(req);
+
+
+        });
+
+        $('#btn_update').click(function (e) {
+            e.preventDefault(); // <------------------ stop default behaviour of button
+            // Load new data
+            var items = document.getElementsByClassName('fst_checkbox');
+            var selectedItems = "";
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].type == 'checkbox' && items[i].checked == true)
+                    selectedItems += "\'" + items[i].value + "\',";
+            }
+
+            var req = { Zones: selectedItems, Search: "Si" };
+
+            GetMonthChart(req);
+        });
+
+        function GetMonthChart(req) {
+
+            $.ajax({
+                type: "POST",
+                url: "/Quality/Poll5S/Dash_Average",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(req),
+                success: function (chData) {
+
+                    var aData = chData;
+                    var aLabels = aData[0];
+                    var aDatasets1 = aData[1];
+                    var aDatasets2 = aData[2];
+                    var aDatasets3 = aData[3];
+                    var aDatasets4 = aData[4];
+                    var aDatasets5 = aData[5];
+                    var aDatasets6 = aData[6];
+
+                    var dataT = {
+                        labels: aLabels,
+                        datasets: [{
+                            label: 'Sort',
+                            type: "line",
+                            data: aDatasets1,
+                            borderColor: "#5cbae6",
+                            borderWidth: 1,
+                            fill: false
+                        }, {
+                            label: "Set in order",
+                            type: "line",
+                            borderColor: "#b6d957",
+                            borderWidth: 1,
+                            data: aDatasets2,
+                            fill: false
+                        }, {
+                            label: "Shinning",
+                            type: "line",
+                            borderColor: "#fac364",
+                            borderWidth: 1,
+                            data: aDatasets3,
+                            fill: false
+                        }, {
+                            label: "Standardize",
+                            type: "line",
+                            borderColor: "#8cd3ff",
+                            borderWidth: 1,
+                            data: aDatasets4,
+                            fill: false
+                        }, {
+                            label: "Sustain",
+                            type: "line",
+                            borderColor: "#d998cb",
+                            borderWidth: 1,
+                            data: aDatasets5,
+                            fill: false
+                        }, {
+                            label: "Security",
+                            type: "line",
+                            borderColor: "#f2d249",
+                            borderWidth: 1,
+                            data: aDatasets6,
+                            fill: false
+                        }]
+                    };
+
+                    var ctx1 = document.getElementById("MonthChart").getContext("2d");
+                    var myChart1 = new Chart(ctx1, {
+                        type: "line",
+                        data: dataT,
+                        options: {
+                            legend: {
+                                display: true,
+                                labels: {
+                                    filter: function (legendItem, data) {
+                                        return legendItem.index != 1
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+
+                    var dataT2 = {
+                        labels: aLabels,
+                        datasets: [{
+                            label: 'Sort',
+                            data: aDatasets1,
+                            borderColor: "#5cbae6",
+                            fill: false
+                        }, {
+                            label: "Set in order",
+                            borderColor: "#b6d957",
+                            data: aDatasets2,
+                            fill: false
+                        }, {
+                            label: "Shinning",
+                            borderColor: "#fac364",
+                            data: aDatasets3,
+                            fill: false
+                        }, {
+                            label: "Standardize",
+                            borderColor: "#8cd3ff",
+                            data: aDatasets4,
+                            fill: false
+                        }, {
+                            label: "Sustain",
+                            borderColor: "#d998cb",
+                            data: aDatasets5,
+                            fill: false
+                        }, {
+                            label: "Security",
+                            borderColor: "#f2d249",
+                            data: aDatasets6,
+                            fill: false
+                        }]
+                    };
+
+                    var ctx2 = document.getElementById("MonthChartRadar").getContext("2d");
+                    var myChart2 = new Chart(ctx2, {
+                        type: "radar",
+                        data: dataT2
+                    });
+                },
+                async: false
+            })
+
+            $.ajax({
+                type: "POST",
+                url: "/Quality/Poll5S/Dash_Average_Radar",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(req),
+                success: function (chData) {
+
+                    var aData = chData;
+                    var aLabels = aData[0];
+                    var aDatasets1 = aData[1];
+                    var aDatasets2 = aData[2];
+                    var aDatasets3 = aData[3];
+                    var aDatasets4 = aData[4];
+                    var aDatasets5 = aData[5];
+                    var aDatasets6 = aData[6];
+
+                    var dataT2 = {
+                        labels: ['Sort', 'Set in order', 'Shinning', 'Standardize', 'Sustain', 'Security'],
+                        datasets: [{
+                            label: 'Sort',
+                            data: [aDatasets1[0], aDatasets2[0], aDatasets3[0], aDatasets4[0], aDatasets5[0], aDatasets6[0]],
+                            borderColor: "#5cbae6",
+                            backgroundColor: "#5cbae652"
+                        }]
+                    };
+
+                    var ctx2 = document.getElementById("MonthChartRadar").getContext("2d");
+                    var myChart2 = new Chart(ctx2, {
+                        type: "radar",
+                        data: dataT2,
+                        options: {
+                            legend: {
+                                display: false
+                            },
+                            scale: {
+                                min: 1,
+                                max: 5,
+                                ticks: {
+                                    max: 5,
+                                    min: 1,
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    });
+                },
+                async: false
+            })
+        };
+
+    </script>
+  </div>
+</div>
+

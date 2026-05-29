@@ -1,0 +1,56 @@
+"""
+Extract content from DOCX file for translation
+"""
+from docx import Document
+from docx.shared import Inches
+import sys
+
+def extract_docx_content(file_path):
+    """Extract text and image information from DOCX file"""
+    doc = Document(file_path)
+
+    print("=" * 80)
+    print("DOCUMENT STRUCTURE")
+    print("=" * 80)
+
+    for i, para in enumerate(doc.paragraphs):
+        if para.text.strip():
+            style = para.style.name if para.style else "Normal"
+            print(f"\n[Paragraph {i+1}] [{style}]")
+            print(f"Text: {para.text}")
+
+    # Check for images
+    print("\n" + "=" * 80)
+    print("IMAGES")
+    print("=" * 80)
+
+    image_count = 0
+    for rel in doc.part.rels.values():
+        if "image" in rel.target_ref:
+            image_count += 1
+            print(f"Image {image_count}: {rel.target_ref}")
+
+    if image_count == 0:
+        print("No images found in document relationships.")
+
+    # Check for tables
+    print("\n" + "=" * 80)
+    print("TABLES")
+    print("=" * 80)
+
+    if doc.tables:
+        for i, table in enumerate(doc.tables):
+            print(f"\n[Table {i+1}]")
+            for row_idx, row in enumerate(table.rows):
+                row_text = [cell.text for cell in row.cells]
+                print(f"Row {row_idx + 1}: {' | '.join(row_text)}")
+    else:
+        print("No tables found.")
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python extract_docx_content.py <path_to_docx>")
+        sys.exit(1)
+
+    file_path = sys.argv[1]
+    extract_docx_content(file_path)

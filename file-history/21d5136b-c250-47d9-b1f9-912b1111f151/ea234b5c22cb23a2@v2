@@ -1,0 +1,99 @@
+# General Docs Scripts
+
+Reusable automation scripts for Eduardo's workflows.
+
+**Location:** `C:\Users\emarquez\personal-claude-doc` (General Docs)
+
+---
+
+## PowerPoint Generator
+
+**Script:** `generate_presentation.py`
+
+Generates Safari Circuits PowerPoint presentations from YAML/JSON configuration files.
+
+### Requirements
+
+```powershell
+py -m pip install python-pptx PyYAML
+```
+
+### Usage
+
+```powershell
+# Basic usage (output inferred from config filename)
+py generate_presentation.py presentation-config.yaml
+
+# Specify output file
+py generate_presentation.py presentation-config.yaml -o output.pptx
+```
+
+### Configuration Format
+
+YAML file structure:
+
+```yaml
+title_slide:
+  title: "Presentation Title"
+  subtitle: "Subtitle\nPresenter Name\nDate"
+
+slides:
+  - type: content
+    title: "Slide Title"
+    content:
+      - "Bullet point 1"
+      - "Bullet point 2"
+
+  - type: table
+    title: "Comparison Table"
+    columns: ["Column 1", "Column 2", "Column 3"]
+    rows:
+      - ["Row 1 Col 1", "Row 1 Col 2", "Row 1 Col 3"]
+      - ["Row 2 Col 1", "Row 2 Col 2", "Row 2 Col 3"]
+```
+
+### Supported Slide Types
+
+| Type | Description | Required Fields |
+|------|-------------|-----------------|
+| `content` | Title + bullet points | `title`, `content` (list) |
+| `table` | Comparison table | `title`, `columns`, `rows` |
+| `section_header` | Section divider | `title` |
+
+### Color Coding
+
+The script automatically applies color coding to table cells:
+
+| Pattern | Color | Use Case |
+|---------|-------|----------|
+| `🟢` or `YES` | Green | Advantage/Best |
+| `🟡` | Yellow | Adequate/Acceptable |
+| `🔴` or `NO` | Red | Concern/Issue |
+
+### Template
+
+Uses Safari Circuits official template:
+```
+S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Grand Rapids IT Hub\10_Templates\01_PPT_Template.pptx
+```
+
+### Example
+
+CMMC Level 2 presentation example:
+```powershell
+cd "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude_Safari\05-Projects\Safari-CMMC-Level-2\02-Drafts"
+
+py "C:\Users\emarquez\personal-claude-doc\scripts\generate_presentation.py" `
+   cmmc-presentation-config.yaml `
+   -o cmmc-executive-presentation-2026-05-11.pptx
+```
+
+---
+
+## Future Scripts
+
+Add additional reusable scripts here as they're created.
+
+---
+
+**Note:** This directory (`personal-claude-doc`) is separate from `personal-claude-docs` (plural), which is the Git-managed Claude Code configuration repository.

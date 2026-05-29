@@ -1,0 +1,326 @@
+import os
+import subprocess
+import ctypes
+import psutil
+import time
+import sys
+
+# Set the path where the .reg files are stored
+REG_FOLDER = r"C:\Users\emarquez\OneDrive\12 - Lacroix\0 - Repos\env_config"
+
+def is_admin():
+    """Check if script is running with administrator privileges."""
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+def run_as_admin():
+    """Relaunch the script with administrator privileges."""
+    if not is_admin():
+        print("\nAdministrator privileges required to modify system environment variables.")
+        print("Relaunching with elevated privileges...\n")
+        try:
+            # Get the python executable and script path
+            script = os.path.abspath(sys.argv[0])
+            params = ' '.join([script] + sys.argv[1:])
+
+            # Relaunch as admin
+            ctypes.windll.shell32.ShellExecuteW(
+                None, "runas", sys.executable, params, None, 1
+            )
+            sys.exit(0)
+        except Exception as e:
+            print(f"Error elevating privileges: {e}")
+            return False
+    return True
+
+def import_reg_file(site):
+    """Import the registry file using reg import."""
+    reg_file = os.path.join(REG_FOLDER, f"{site}.reg")
+
+    if not os.path.exists(reg_file):
+        print(f"Error: The file {reg_file} does not exist.")
+        return False
+
+    try:
+        # Use reg import command and capture output
+        result = subprocess.run(
+            ['reg', 'import', reg_file],
+            capture_output=True,
+            text=True,
+            shell=True
+        )
+
+        # Check if the command succeeded
+        if result.returncode == 0:
+            print(f"Successfully imported {reg_file}")
+            return True
+        else:
+            print(f"Error importing {reg_file}:")
+            print(f"  Return code: {result.returncode}")
+            if result.stderr:
+                print(f"  Error message: {result.stderr.strip()}")
+            return False
+    except Exception as e:
+        print(f"Error importing {reg_file}: {e}")
+        return False
+
+def get_registry_environment():
+    """Read environment variables directly from the registry."""
+    import winreg
+
+    env = {}
+
+    # Read system environment variables from HKLM
+    try:
+        key = winreg.OpenKey(
+            winreg.HKEY_LOCAL_MACHINE,
+            r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+            0,
+            winreg.KEY_READ
+        )
+        i = 0
+        while True:
+            try:
+                name, value, _ = winreg.EnumValue(key, i)
+                env[name] = value
+                i += 1
+            except WindowsError:
+                break
+        winreg.CloseKey(key)
+    except Exception as e:
+        print(f"Warning: Could not read system environment: {e}")
+
+    # Read user environment variables from HKCU
+    try:
+        key = winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER,
+            r"Environment",
+            0,
+            winreg.KEY_READ
+        )
+        i = 0
+        while True:
+            try:
+                name, value, _ = winreg.EnumValue(key, i)
+                env[name] = value
+                i += 1
+            except WindowsError:
+                break
+        winreg.CloseKey(key)
+    except Exception as e:
+        print(f"Warning: Could not read user environment: {e}")
+
+    return env
+
+def get_visual_studio_processes():
+    """Detect running Visual Studio instances."""
+    vs_processes = []
+    vs_names = ["devenv.exe", "msbuild.exe"]
+
+    for proc in psutil.process_iter(['pid', 'name', 'exe']):
+        try:
+            if proc.info['name'] and proc.info['name'].lower() in vs_names:
+                vs_processes.append(proc)
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            pass
+
+    return vs_processes
+
+def restart_explorer():
+    """Restart Windows Explorer to refresh environment for all applications."""
+    print("\nRestarting Windows Explorer refreshes environment for ALL applications.")
+    restart = input("Restart Explorer? (y/n): ").strip().lower()
+
+    if restart == 'y':
+        try:
+            print("Restarting Explorer.exe...")
+            # Kill explorer
+            os.system("taskkill /f /im explorer.exe")
+            time.sleep(2)
+            # Restart explorer
+            subprocess.Popen(["explorer.exe"])
+            print("Explorer restarted. All new applications will use updated environment.")
+            return True
+        except Exception as e:
+            print(f"Error restarting Explorer: {e}")
+            return False
+    return False
+
+def restart_visual_studio():
+    """Restart Visual Studio instances."""
+    vs_processes = get_visual_studio_processes()
+
+    if not vs_processes:
+        print("\nNo Visual Studio instances detected.")
+        print("You can restart Explorer to refresh environment for all applications,")
+        print("or manually restart VS/VS Code after this completes.")
+        restart_explorer()
+        return
+
+    print(f"\nDetected {len(vs_processes)} Visual Studio process(es) running:")
+    for proc in vs_processes:
+        try:
+            print(f"  - {proc.info['name']} (PID: {proc.info['pid']})")
+        except:
+            pass
+
+    restart = input("\nRestart Visual Studio to apply changes? (y/n): ").strip().lower()
+
+    if restart == 'y':
+        # Save VS executable paths before terminating
+        vs_exes = []
+        for proc in vs_processes:
+            try:
+                if proc.info['exe'] and 'devenv.exe' in proc.info['name'].lower():
+                    vs_exes.append(proc.info['exe'])
+            except:
+                pass
+
+        # Terminate all VS processes
+        print("\nClosing Visual Studio instances...")
+        for proc in vs_processes:
+            try:
+                proc.terminate()
+            except:
+                pass
+
+        # Wait for processes to close
+        gone, alive = psutil.wait_procs(vs_processes, timeout=10)
+
+        # Force kill if still alive
+        for proc in alive:
+            try:
+                proc.kill()
+            except:
+                pass
+
+        time.sleep(2)
+
+        # Restart Visual Studio instances with fresh environment
+        if vs_exes:
+            print("Restarting Visual Studio with fresh environment from registry...")
+
+            for exe in set(vs_exes):  # Remove duplicates
+                try:
+                    # Use ShellExecuteW to launch VS - it reads fresh environment from registry
+                    # This is better than subprocess.Popen which inherits current process environment
+                    result = ctypes.windll.shell32.ShellExecuteW(
+                        None,           # hwnd
+                        "open",         # operation
+                        exe,            # file
+                        None,           # parameters
+                        None,           # directory
+                        1               # show command (SW_SHOWNORMAL)
+                    )
+
+                    # ShellExecuteW returns > 32 on success
+                    if result > 32:
+                        print(f"  Started: {exe}")
+                    else:
+                        print(f"  Error starting {exe}: ShellExecute returned {result}")
+                except Exception as e:
+                    print(f"  Error starting {exe}: {e}")
+
+            print("\nVisual Studio restarted with fresh environment variables from registry.")
+            print("Note: VS Code and other apps may need manual restart to see new environment.")
+
+            # Offer to restart Explorer for system-wide refresh
+            print("\nFor VS Code and other apps to see changes without manual restart:")
+            restart_explorer()
+    else:
+        print("\nSkipping VS restart. You'll need to manually restart applications.")
+        print("\nAlternatively, restart Explorer to refresh environment for all applications:")
+        restart_explorer()
+
+def main():
+    # Check for admin privileges and relaunch if needed
+    if not run_as_admin():
+        return
+
+    print("Available Sites:")
+    sites = [f.split(".reg")[0] for f in os.listdir(REG_FOLDER) if f.endswith(".reg")]
+
+    if not sites:
+        print("No .reg files found.")
+        return
+
+    for idx, site in enumerate(sites, 1):
+        print(f"{idx}. {site}")
+
+    choice = input("Select a site (enter number or name): ").strip()
+
+    if choice.isdigit():
+        choice = int(choice)
+        if 1 <= choice <= len(sites):
+            site = sites[choice - 1]
+        else:
+            print("Invalid selection.")
+            input("\nPress Enter to exit...")
+            return
+    else:
+        site = choice
+
+    if site in sites:
+        success = import_reg_file(site)
+        if success:
+            # Verify the changes were applied
+            verify_environment_variable("BeFirst:Site")
+            refresh_environment()
+            restart_visual_studio()
+        else:
+            print("\nFailed to import registry file. Environment not changed.")
+            input("\nPress Enter to exit...")
+    else:
+        print("Invalid site name.")
+        input("\nPress Enter to exit...")
+
+def verify_environment_variable(var_name="BeFirst:Site"):
+    """Verify that an environment variable was set correctly."""
+    try:
+        import winreg
+        # Check HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
+        key = winreg.OpenKey(
+            winreg.HKEY_LOCAL_MACHINE,
+            r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+            0,
+            winreg.KEY_READ
+        )
+        try:
+            value, _ = winreg.QueryValueEx(key, var_name)
+            winreg.CloseKey(key)
+            print(f"\nVerification: {var_name} = {value}")
+            return True
+        except WindowsError:
+            winreg.CloseKey(key)
+            print(f"\nWarning: Could not find {var_name} in registry")
+            return False
+    except Exception as e:
+        print(f"\nWarning: Could not verify environment variable: {e}")
+        return False
+
+def refresh_environment():
+    """Broadcast environment variable changes to running applications."""
+    try:
+        HWND_BROADCAST = 0xFFFF
+        WM_SETTINGCHANGE = 0x1A
+        SMTO_ABORTIFHUNG = 0x0002
+
+        # Use SendMessageTimeout for more reliable broadcasting
+        result = ctypes.c_long()
+        ctypes.windll.user32.SendMessageTimeoutW(
+            HWND_BROADCAST,
+            WM_SETTINGCHANGE,
+            0,
+            "Environment",
+            SMTO_ABORTIFHUNG,
+            5000,  # 5 second timeout
+            ctypes.byref(result)
+        )
+        print("Environment variables broadcast to running applications.")
+    except Exception as e:
+        print(f"Error refreshing environment variables: {e}")
+
+if __name__ == "__main__":
+    main()

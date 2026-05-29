@@ -1,0 +1,62 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(gh:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "Bash(python:*)",
+      "Bash(ls:*)",
+      "Bash(dir:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(wc:*)",
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)",
+      "Bash(touch:*)",
+      "Bash(curl:*)",
+      "Bash(az:*)",
+      "Bash(powershell:*)",
+      "Bash(where:*)",
+      "Bash(which:*)",
+      "Bash(test:*)",
+      "Bash(timeout:*)",
+      "Bash(claude:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:learn.microsoft.com)",
+      "WebFetch(domain:dev.azure.com)"
+    ],
+    "additionalDirectories": [
+      "~/projects/",
+      "~/organizational-docs/"
+    ]
+  },
+  "attribution": {
+    "commit": "\n\nCo-Authored-By: Claude Code <noreply@anthropic.com>"
+  },
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": [
+    "azure-devops",
+    "ms-365",
+    "powerbi-desktop",
+    "chrome-devtools",
+    "confluent-kafka",
+    "postgresql",
+    "mssql",
+    "iceberg",
+    "trino",
+    "openmetadata",
+    "kubernetes",
+    "spark-history",
+    "dbt",
+    "Safari MCP",
+    "microsoft-entra"
+  ]
+}

@@ -1,0 +1,782 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data;
+using System.Data.OleDb;
+using System.Xml;
+using System.Data.SqlClient;
+using System.Configuration;
+
+
+using Firstronic.Framework.Data;
+using Firstronic.Core.Entities.App.Mobile;
+using Firstronic.Core.Entities.App.First;
+using Firstronic.Framework.Attributes;
+using Microsoft.AspNet.Identity;
+using Firstronic.Core.Entities.App.Materials;
+using static Firstronic.Areas.Production.Models.Reports;
+using NPOI.SS.Formula.Functions;
+
+namespace Firstronic.Areas.Production.Controllers
+{
+  public class ReportsController : BaseSecurityController
+  {
+    #region Fields
+    private readonly DataContext db;
+    #endregion Fields
+
+
+    #region Ctor
+
+    public ReportsController()
+    {
+
+      db = new DataContext();
+      db.Configuration.UseDatabaseNullSemantics = true;
+    }
+
+    #endregion Ctor
+
+    //===============================================================
+    // Defect 
+    //===============================================================
+    public ActionResult Failures_Report(DateTime? stardate, DateTime? enddate, bool execute = false)
+    {
+
+      DateTime stardate2 = DateTime.Now.Date;
+      DateTime enddate2 = DateTime.Now.Date;
+
+      if (stardate != null)
+      {
+        stardate2 = stardate ?? DateTime.Now.Date;
+      }
+
+      if (enddate != null)
+      {
+        enddate2 = enddate ?? DateTime.Now.Date;
+      }
+
+      var model = new Failures_Report();
+
+      model.stardate = stardate2.AddHours(+6);
+
+      model.enddate = enddate2.AddHours(+6).AddDays(+1);
+
+      model.execute = execute;
+
+
+      return View("Failures_Report", model);
+    }
+
+    //===============================================================
+    // Full Production Summary
+    //===============================================================
+    public ActionResult ProductionSummary(DateTime? dateStart, DateTime? dateEnd, string selectedCustomers = "",string selectedPartID = "", int StationID = 0, int AreaID = 0 , bool execute = false, bool prepareDownload = false, bool defectsDownload = false)
+    {
+
+      var model = new Firstronic.Areas.Production.Models.Reports.ProductionSummary();
+
+      model.dateStart = dateStart;
+
+      if (dateStart is null)
+      {
+        model.dateStart = DateTime.Now;
+      }
+
+      model.dateEnd = dateEnd;
+
+      if (dateEnd is null)
+      {
+        model.dateEnd = DateTime.Now;
+      }
+
+      model.selectedCustomers = selectedCustomers;
+
+      model.selectedPartID = selectedPartID;
+
+      model.AreaID = AreaID;
+
+      model.StationID = StationID;
+
+      model.execute = execute;
+
+      model.prepareDownload = prepareDownload;
+
+      model.defectsDownload = defectsDownload;
+
+      return View(model);
+    }
+
+    public ActionResult FailuresSummary(DateTime? dateStart, DateTime? dateEnd, string selectedCustomers = "", string selectedPartNo = "", int StationID = 0, int AreaID = 0, int ssnindex=1, bool execute = false, bool prepareDownload = false, bool defectsDownload = false, string AreaName = "")
+    {
+
+      var model = new Firstronic.Areas.Production.Models.Reports.ProductionSummary();
+
+      model.dateStart = dateStart;
+
+      if (dateStart is null)
+      {
+        model.dateStart = DateTime.Now;
+      }
+
+      model.dateEnd = dateEnd;
+
+      if (dateEnd is null)
+      {
+        model.dateEnd = DateTime.Now;
+      }
+
+      model.selectedCustomers = selectedCustomers;
+
+      model.selectedPartID = selectedPartNo;
+
+      model.AreaID = AreaID;
+
+      if (AreaName != "")
+      {
+        SqlParameter[] parameters = new SqlParameter[]
+         {
+            new SqlParameter("@Area",SqlDbType.VarChar){Value = AreaName}
+         };
+
+        model.AreaID = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [AreaID] FROM [PART_OPERATION_AREAS] WHERE Area=@Area", parameters);
+      }
+
+      model.StationID = StationID;
+
+      model.execute = execute;
+
+      model.prepareDownload = prepareDownload;
+
+      model.defectsDownload = defectsDownload;
+
+      return View(model);
+    }
+
+    public ActionResult SuccessesSummary(DateTime? dateStart, DateTime? dateEnd, string selectedCustomers = "", string selectedPartNo = "", int StationID = 0, int AreaID = 0, int ssnindex = 1, bool execute = false, bool prepareDownload = false, string AreaName = "")
+    {
+
+      var model = new Firstronic.Areas.Production.Models.Reports.ProductionSummary();
+
+      model.dateStart = dateStart;
+
+      if (dateStart is null)
+      {
+        model.dateStart = DateTime.Now;
+      }
+
+      model.dateEnd = dateEnd;
+
+      if (dateEnd is null)
+      {
+        model.dateEnd = DateTime.Now;
+      }
+
+      model.selectedCustomers = selectedCustomers;
+
+      model.selectedPartID = selectedPartNo;
+
+      model.AreaID = AreaID;
+
+      if (AreaName != "")
+      {
+        SqlParameter[] parameters = new SqlParameter[]
+         {
+            new SqlParameter("@Area",SqlDbType.VarChar){Value = AreaName}
+         };
+
+        model.AreaID = Firstronic.Framework.Queries.GetIntFromQuery("SELECT [AreaID] FROM [PART_OPERATION_AREAS] WHERE Area=@Area", parameters);
+      }
+
+      model.StationID = StationID;
+
+      model.execute = execute;
+
+      model.prepareDownload = prepareDownload;
+
+      return View(model);
+    }
+
+    //===============================================================
+    // Full Production Report
+    //===============================================================
+    public ActionResult ProductionFullReport(DateTime? dateStart, DateTime? dateEnd, string selectedPN = "", int? Shift = 0, int? StationID = 0, int? AreaID = 0, string JobID = "", bool? KanbanFlag = false, bool? IgnoreREV = false)
+    {
+
+      var model = new Firstronic.Areas.Production.Models.Reports.ProductionFullReport();
+
+      model.dateStart = dateStart;
+
+      if (dateStart is null)
+      {
+        model.dateStart = DateTime.Now;
+      }
+
+      model.dateEnd = dateEnd;
+
+      if (dateEnd is null)
+      {
+        model.dateEnd = DateTime.Now;
+      }
+
+      model.selectedPN = selectedPN;
+
+      model.Shift = (int)Shift;
+
+      model.StationID = (int)StationID;
+
+      model.AreaID = (int)AreaID;
+
+      model.JobID = JobID;
+
+      model.KanbanFlag = (bool)KanbanFlag;
+
+      model.IgnoreREV = (bool)IgnoreREV;
+
+      return View(model);
+    }
+
+    public ActionResult ProductionFullReportSerials(DateTime? dateStart, DateTime? dateEnd, string selectedPN = "", int? Shift = 0, int? StationID = 0, int? AreaID = 0, string JobID = "", bool? KanbanFlag = false, bool? IgnoreREV = false)
+    {
+
+      var model = new Firstronic.Areas.Production.Models.Reports.ProductionFullReport();
+
+      model.dateStart = dateStart;
+
+      if (dateStart is null)
+      {
+        model.dateStart = DateTime.Now;
+      }
+
+      model.dateEnd = dateEnd;
+
+      if (dateEnd is null)
+      {
+        model.dateEnd = DateTime.Now;
+      }
+
+      model.selectedPN = selectedPN;
+
+      model.Shift = (int)Shift;
+
+      model.StationID = (int)StationID;
+
+      model.AreaID = (int)AreaID;
+
+      model.JobID = JobID;
+
+      model.KanbanFlag = (bool)KanbanFlag;
+
+      model.IgnoreREV = (bool)IgnoreREV;
+
+      return View(model);
+    }
+    //===============================================================
+    // BeFirst vs Hanwha
+    //===============================================================
+    public ActionResult ProductionVsHanwha(DateTime? dateStart, DateTime? dateEnd, bool execute = false)
+    {
+
+      var model = new Firstronic.Areas.Production.Models.Reports.ProductionVsHanwha();
+
+      model.dateStart = dateStart;
+
+      if (dateStart is null)
+      {
+        model.dateStart = DateTime.Now;
+      }
+
+      model.dateEnd = dateEnd;
+
+      if (dateEnd is null)
+      {
+        model.dateEnd = DateTime.Now;
+      }
+
+      model.execute = execute;
+
+      return View(model);
+    }
+
+
+    //===============================================================
+    // Serialization Grade Validation
+    //===============================================================
+    public ActionResult GradeValidation(DateTime? dateStart, DateTime? dateEnd, bool execute = false)
+    {
+
+      var model = new Firstronic.Areas.Production.Models.Reports.GradeValidation();
+
+      model.dateStart = dateStart;
+
+      if (dateStart is null)
+      {
+        model.dateStart = DateTime.Now;
+      }
+
+      model.dateEnd = dateEnd;
+
+      if (dateEnd is null)
+      {
+        model.dateEnd = DateTime.Now;
+      }
+
+      model.execute = execute;
+
+      return View(model);
+    }
+
+
+
+
+
+    //===============================================================
+    // Schedule Planning Report
+    //===============================================================
+    [AllowAnonymous]
+    public ActionResult SchedulePlanning()
+    {
+      return View();
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult SchedulePlanning_Datatable(DateTime stardate)
+    {
+
+      // v_Type: 1 BackFlahs, 2 Delta, 3 Summary
+
+      var model = new Firstronic.Areas.Production.Models.Reports.Schedule_Planning();
+
+      model.stardate = stardate;
+
+      return PartialView("_SchedulePlanning", model);
+
+    }
+
+
+    //===============================================================
+    // Efficency Report
+
+    public ActionResult ScheduleProduction()
+    {
+      return View();
+    }
+
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult GetScheduleProductionDetails(DateTime stardate)
+    {
+      var model = new Models.Reports.Schedule_Report();
+
+      model.stardate = stardate;
+
+      return PartialView("ScheduleProductionDetails", model);
+    }
+
+    //===============================================================
+    // Efficency Report
+    [Authorize(Roles = "BF Administrator,BF Transactions Report")]
+    public ActionResult PackNoSMT()
+    {
+      return View();
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult PackNoSMT_Datatable(DateTime stardate, DateTime enddate, string vstation)
+    {
+
+      // v_Type: 1 BackFlahs, 2 Delta, 3 Summary
+
+      var model = new Firstronic.Areas.Production.Models.Reports.Station_PackNoSMT();
+
+      model.stardate = stardate;
+
+      model.enddate = enddate.AddDays(+1);
+
+      model.vstations = vstation;
+
+      return PartialView("_PackNoSMT", model);
+
+    }
+
+    //===============================================================
+    // Efficency Report
+    [Authorize(Roles = "BF Administrator,BF Reels Report")]
+    public ActionResult StationReels()
+    {
+      return View();
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult StationReels_Datatable(DateTime stardate, DateTime enddate, string vstation)
+    {
+
+      // v_Type: 1 BackFlahs, 2 Delta, 3 Summary
+
+      var model = new Firstronic.Areas.Production.Models.Reports.Station_Reels();
+
+      model.stardate = stardate;
+
+      model.enddate = enddate.AddDays(+1);
+
+      model.vstations = vstation;
+
+      return PartialView("_Station_Reels", model);
+
+    }
+    //===============================================================
+    // changing models 
+    [Authorize(Roles = "BF Administrator,BF ChangeOvers")]
+    public ActionResult changingmodels()
+    {
+      return View();
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult changingmodels_Datatable(DateTime stardate, DateTime enddate, string vstation)
+    {
+
+      // v_Type: 1 BackFlahs, 2 Delta, 3 Summary
+
+      var model = new Firstronic.Areas.Production.Models.Reports.changing_models();
+
+      model.stardate = stardate;
+
+      model.enddate = enddate.AddDays(+1);
+
+      model.vstations = vstation;
+
+      return PartialView("ChangingModels_Details", model);
+
+    }
+    //===============================================================
+    // Efficency Report
+    [Authorize(Roles = "BF Administrator,BF Efficiency Report")]
+    public ActionResult StationEficency()
+    {
+      return View();
+    }
+
+    [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+    public PartialViewResult StationEficency_Datatable(DateTime stardate, DateTime enddate, string vstation)
+    {
+
+      // v_Type: 1 BackFlahs, 2 Delta, 3 Summary
+
+      var model = new Firstronic.Areas.Production.Models.Reports.Station_Eficency();
+
+      model.stardate = stardate;
+
+      model.enddate = enddate.AddDays(+1);
+
+      model.vstations = vstation;
+
+      return PartialView("_StationEficency", model);
+
+    }
+
+
+    //===============================================================
+    // PlexVSBeFirst
+    //===============================================================
+    [Authorize(Roles = "BF Administrator,BF Transactions Report")]
+    public ActionResult PlexVSBeFirst(DateTime? stardate, DateTime? enddate, string serial = "", string LoadID = "")
+    {
+
+      DateTime stardate2 = DateTime.Now;
+      DateTime enddate2 = DateTime.Now;
+
+
+      if (stardate != null)
+      {
+        stardate2 = stardate ?? DateTime.Now;
+      }
+
+      if (enddate != null)
+      {
+        enddate2 = enddate ?? DateTime.Now;
+      }
+
+      var model = new Firstronic.Areas.Production.Models.Reports.Transaction_Report();
+
+      try
+      {
+        model.Serial_no = serial;
+        model.stardate = stardate2;
+        model.enddate = enddate2;
+        model.LoadID = LoadID;
+      }
+      catch
+      {
+        model.Serial_no = serial;
+        model.stardate = stardate2;
+        model.enddate = enddate2;
+        model.LoadID = LoadID;
+      }
+
+      return View("PlexVSBeFirst", model);
+    }
+
+    //===============================================================
+    // Transactions Report
+    [Authorize(Roles = "BF Administrator,BF Transactions Report")]
+    public ActionResult PlexVSBeFirst_Area(DateTime? stardate, DateTime? enddate, string serial = "", string LoadID = "", int areaid = 0,int PartID =0)
+    {
+
+      DateTime stardate2 = DateTime.Now;
+      DateTime enddate2 = DateTime.Now;
+
+
+
+      if (stardate != null)
+      {
+        stardate2 = stardate ?? DateTime.Now;
+      }
+
+      if (enddate != null)
+      {
+        enddate2 = enddate ?? DateTime.Now;
+      }
+
+      var model = new Firstronic.Areas.Production.Models.Reports.Transaction_Report();
+
+      try
+      {
+        model.Serial_no = serial;
+        model.stardate = stardate2;
+        model.enddate = enddate2;
+        model.LoadID = LoadID;
+        model.areaid = areaid;
+        model.partid = PartID;
+      }
+      catch
+      {
+        model.Serial_no = serial;
+        model.stardate = stardate2;
+        model.enddate = enddate2;
+        model.LoadID = LoadID;
+        model.areaid = areaid;
+        model.partid = PartID;
+      }
+
+      return View("PlexVSBeFirst_Area", model);
+    }
+
+    //===============================================================
+    // Transactions Report
+    [Authorize(Roles = "BF Administrator,BF Transactions Report")]
+    public ActionResult PlexTransactions(DateTime? stardate, DateTime? enddate, string serial = "", string LoadID = "", string workcenter_key = "", string PartNo = "")
+    {
+
+      DateTime stardate2 = DateTime.Now;
+      DateTime enddate2 = DateTime.Now;
+
+
+      if (stardate != null)
+      {
+        stardate2 = stardate ?? DateTime.Now;
+      }
+
+      if (enddate != null)
+      {
+        enddate2 = enddate ?? DateTime.Now;
+      }
+
+      var model = new Firstronic.Areas.Production.Models.Reports.Transaction_Report();
+
+      try
+      {
+        model.Serial_no = serial;
+        model.stardate = stardate2;
+        model.enddate = enddate2;
+        model.LoadID = LoadID;
+        model.workcenter_key = workcenter_key;
+        model.Part_No = PartNo;
+      }
+      catch
+      {
+        model.Serial_no = serial;
+        model.stardate = stardate2;
+        model.enddate = enddate2;
+        model.LoadID = LoadID;
+        model.workcenter_key = workcenter_key;
+        model.Part_No = PartNo;
+      }
+
+      return View("PlexTransactions", model);
+    }
+
+    //===============================================================
+    // Transactions Report
+    [Authorize(Roles = "BF Administrator,BF Reprint Report")]
+    public ActionResult ReprintsShippingLabels(DateTime? stardate, DateTime? enddate, string serial = "", string LoadID = "")
+    {
+
+      DateTime stardate2 = DateTime.Now;
+      DateTime enddate2 = DateTime.Now;
+
+
+      if (stardate != null)
+      {
+        stardate2 = stardate ?? DateTime.Now;
+      }
+
+      if (enddate != null)
+      {
+        enddate2 = enddate ?? DateTime.Now;
+      }
+
+      var model = new Firstronic.Areas.Production.Models.Reports.Transaction_Report();
+
+      try
+      {
+        model.Serial_no = serial;
+        model.stardate = stardate2;
+        model.enddate = enddate2;
+        model.LoadID = LoadID;
+      }
+      catch
+      {
+        model.Serial_no = serial;
+        model.stardate = stardate2;
+        model.enddate = enddate2;
+        model.LoadID = LoadID;
+      }
+
+      return View("ReprintsShippingLabels", model);
+    }
+
+    public ActionResult ReportPasta()
+    {
+      var model = db.Database.SqlQuery<tbl_MT_tbl_pasta_FULL>($@"SELECT TOP (1000) [AutoID],[Serie],CONVERT(varchar,[InDate]) as InDate,CONVERT(varchar,[OutDate])as OutDate ,CONVERT(varchar,[UsedDate]) as UsedDate,CONVERT(varchar,[Removed]) as Removed,[Comments],[ControlID],CONVERT(varchar,[StationID]) as StationID ,[ToControlID],CONVERT(varchar,[UsedControlID]) as UsedControlID,CONVERT(varchar,PastaType) as[PastaType] ,[Facility_Key] FROM [MT_tbl_pasta] order by AutoID desc").ToArray().ToList().AsQueryable();
+
+      return View(model);
+
+    }
+
+    //===============================================================
+    // HC to BeFirst 
+    [Authorize(Roles = "BF Administrator,BF HeadCount Edit")]
+    public ActionResult HCtoBeFirst()
+    {
+      return View();
+    }
+
+    [HttpPost]
+    public ActionResult HCtoBeFirst(HttpPostedFileBase file)
+    {
+      DataSet ds = new DataSet();
+      if (Request.Files["file"].ContentLength > 0)
+      {
+        string fileExtension = System.IO.Path.GetExtension(Request.Files["file"].FileName);
+
+        if (fileExtension == ".xls" || fileExtension == ".xlsx" || fileExtension == ".XLSX")
+        {
+          string fileLocation = Server.MapPath("~/Content/") + Request.Files["file"].FileName;
+          if (System.IO.File.Exists(fileLocation))
+          {
+
+            System.IO.File.Delete(fileLocation);
+          }
+          Request.Files["file"].SaveAs(fileLocation);
+          string excelConnectionString = string.Empty;
+          excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+          //connection String for xls file format.
+          if (fileExtension == ".xls")
+          {
+            excelConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+          }
+          //connection String for xlsx file format.
+          else if (fileExtension == ".xlsx")
+          {
+
+            excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+          }
+          //Create Connection to Excel work book and add oledb namespace
+          OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
+          excelConnection.Open();
+          DataTable dt = new DataTable();
+
+          dt = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+          if (dt == null)
+          {
+            return null;
+          }
+
+          String[] excelSheets = new String[dt.Rows.Count];
+          int t = 0;
+          //excel data saves in temp file here.
+          foreach (DataRow row in dt.Rows)
+          {
+            excelSheets[t] = row["TABLE_NAME"].ToString();
+            t++;
+          }
+          OleDbConnection excelConnection1 = new OleDbConnection(excelConnectionString);
+
+
+          string query = string.Format("Select * from [{0}]", excelSheets[0]);
+          using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, excelConnection1))
+          {
+            dataAdapter.Fill(ds);
+          }
+        }
+        if (fileExtension.ToString().ToLower().Equals(".xml"))
+        {
+          string fileLocation = Server.MapPath("~/Content/") + Request.Files["FileUpload"].FileName;
+          if (System.IO.File.Exists(fileLocation))
+          {
+            System.IO.File.Delete(fileLocation);
+          }
+
+          Request.Files["FileUpload"].SaveAs(fileLocation);
+          XmlTextReader xmlreader = new XmlTextReader(fileLocation);
+          // DataSet ds = new DataSet();
+          ds.ReadXml(xmlreader);
+          xmlreader.Close();
+        }
+        int flag_Delte = 0;
+        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+        {
+          flag_Delte = i;
+          string Numero = ds.Tables[0].Rows[i][0].ToString();
+
+          int addcero = 9 - Numero.Length;
+          String Gafete = "";
+
+          for (int ii = 1; ii <= addcero; ii++)
+          {
+            Gafete = Gafete + "0";
+          }
+
+          Gafete = "R" + Gafete + ds.Tables[0].Rows[i][0].ToString() + "A";
+
+          string ApellidoPaterno = ds.Tables[0].Rows[i][1].ToString().Replace("'", "");
+          string ApellidoMaterno = ds.Tables[0].Rows[i][2].ToString().Replace("'", "");
+          string Nombres = ds.Tables[0].Rows[i][3].ToString().Replace("'","");
+          string Puesto = ds.Tables[0].Rows[i][4].ToString().Replace("'", "");
+          string Confidencialidad = ds.Tables[0].Rows[i][5].ToString().Replace("'", "");
+          string Productivo = ds.Tables[0].Rows[i][6].ToString().Replace("'", "");
+          string Area = ds.Tables[0].Rows[i][7].ToString().Replace("'", "");
+          string Supervisor = ""; // ds.Tables[0].Rows[i][8].ToString();
+          string Turno = ""; //ds.Tables[0].Rows[i][9].ToString();
+          string Tiempo = ""; //ds.Tables[0].Rows[i][10].ToString();
+          string antiguedad = ""; //ds.Tables[0].Rows[i][11].ToString();
+          string Proyecto = ""; //ds.Tables[0].Rows[i][12].ToString();
+          string Genero = ""; //ds.Tables[0].Rows[i][13].ToString();
+          string Ingreso = ""; //ds.Tables[0].Rows[i][14].ToString();
+
+          //string query = "Insert into Person(Name,Email,Mobile) Values('" + ds.Tables[0].Rows[i][0].ToString() + "','" + ds.Tables[0].Rows[i][1].ToString() + "','" + ds.Tables[0].Rows[i][2].ToString() + "')";
+
+
+          SMT.Load_HC_Bonus result = Firstronic.Framework.Functions.App.SMT.HC_Bonus_Add(Numero, ApellidoPaterno, ApellidoMaterno, Nombres, Puesto, Confidencialidad, Productivo, Area, Supervisor, Turno, Tiempo, antiguedad, Proyecto, Genero, Ingreso, flag_Delte, Gafete);
+
+        }
+
+      }
+      return RedirectToAction("HCtoBeFirst", "Reports", new { Area = "Production" });
+
+    }
+  }
+}

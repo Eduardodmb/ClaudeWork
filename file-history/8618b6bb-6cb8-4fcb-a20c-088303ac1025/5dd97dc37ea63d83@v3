@@ -1,0 +1,158 @@
+@model Firstronic.Core.Entities.App.Engineering.tbl_COMMON_CUSTOMER_FULL
+@{
+  bool isNew = !(Model != null && Model.Customer_No > 0);
+}
+@{
+  ViewBag.Title = isNew ? "Create Customer" : "Edit Customer";
+}
+<div class="md-card">
+  <div class="md-card-toolbar">
+    <h3 class="md-card-toolbar-heading-text"> @ViewBag.Title @(isNew ? "" : " - " + Model.Name) </h3>
+  </div>
+  <div class="md-card-content">
+    @using (Html.BeginForm())
+    {
+      @Html.AntiForgeryToken()
+      @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+      @Html.Hidden("Customer_No", Model.Customer_No, new { data_val = "false" })
+      <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#tabs_customer'}">
+        <li class="uk-width-1-2 uk-active" aria-expanded="true"><a href="#">General Information</a></li>
+        <li class="uk-width-1-2" aria-expanded="false"><a href="#">Contact & Business Details</a></li>
+      </ul>
+      <ul id="tabs_customer" class="uk-switcher uk-margin">
+        <!-- Tab 1: General Information -->
+        <li aria-hidden="false" class="uk-active">
+          <div class="uk-grid pt-3">
+            @if (!isNew)
+            {
+              <div class="uk-width-1-3@s">
+                @Html.LabelFor(y => y.Customer_No)
+                <p class="md-input-static">@Model.Customer_No</p>
+              </div>
+            }
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Name)
+              @Html.TextBoxFor(y => y.Name, new { @class = "md-input", required = "required" })
+              @Html.ValidationMessageFor(y => y.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Customer_Code)
+              @Html.TextBoxFor(y => y.Customer_Code, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Facility_Key)
+              @Html.DropDownListFor(y => y.Facility_Key, (IEnumerable<SelectListItem>)Model.FacilityList, "-- Select Facility --", new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Customer_Status)
+              @Html.TextBoxFor(y => y.Customer_Status, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Customer_Type)
+              @Html.TextBoxFor(y => y.Customer_Type, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Customer_Since)
+              @Html.TextBoxFor(y => y.Customer_Since, new { @class = "md-input", type = "date" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Customer_Supplier_Code)
+              @Html.TextBoxFor(y => y.Customer_Supplier_Code, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Tax_ID_No)
+              @Html.TextBoxFor(y => y.Tax_ID_No, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Assigned_To)
+              @Html.TextBoxFor(y => y.Assigned_To, new { @class = "md-input", type = "number" })
+            </div>
+          </div>
+        </li>
+        <!-- Tab 2: Contact & Business Details -->
+        <li aria-hidden="true">
+          <div class="uk-grid pt-3">
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Phone)
+              @Html.TextBoxFor(y => y.Phone, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Fax)
+              @Html.TextBoxFor(y => y.Fax, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Contact_Note)
+              @Html.TextBoxFor(y => y.Contact_Note, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Email)
+              @Html.TextBoxFor(y => y.Email, new { @class = "md-input", type = "email" })
+              @Html.ValidationMessageFor(y => y.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="uk-width-1-2@s">
+              @Html.LabelFor(y => y.Web_Address)
+              @Html.TextBoxFor(y => y.Web_Address, new { @class = "md-input", type = "url" })
+            </div>
+            <div class="uk-width-1-2@s">
+              @Html.LabelFor(y => y.Business_Type)
+              @Html.TextBoxFor(y => y.Business_Type, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-2@s">
+              @Html.LabelFor(y => y.Payment_Method)
+              @Html.TextBoxFor(y => y.Payment_Method, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-2@s">
+              @Html.LabelFor(y => y.Terms)
+              @Html.TextBoxFor(y => y.Terms, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-1@s">
+              @Html.LabelFor(y => y.Products_And_Markets)
+              @Html.TextAreaFor(y => y.Products_And_Markets, new { @class = "md-input", rows = "3" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Estimated_Annual_Sales)
+              @Html.TextBoxFor(y => y.Estimated_Annual_Sales, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Estimated_Employees)
+              @Html.TextBoxFor(y => y.Estimated_Employees, new { @class = "md-input" })
+            </div>
+            <div class="uk-width-1-3@s">
+              @Html.LabelFor(y => y.Lead_Source)
+              @Html.TextBoxFor(y => y.Lead_Source, new { @class = "md-input" })
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div class="tab-pane text-right">
+        <div class="form-group">
+          <div class="form-group mt-4 pt-4">
+            <button type="submit" name="action:@(isNew ? "Create": "Edit")" class="md-btn md-btn-primary md-btn-small">
+              <i class="fa fa-save mr-1 fs-14"></i> @Resources.Actions.Save
+            </button>
+            @if (!isNew)
+            {
+              <button type="submit" name="action:Delete" class="md-btn md-btn-danger md-btn-small" onclick="return confirm('Are you sure you want to delete this customer?');">
+                <i class="fa fa-trash mr-1 fs-14"></i> @Resources.Actions.Delete
+              </button>
+            }
+            <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("Index", "Customer")">
+              <i class="fa fa-arrow-left mr-1 fs-12"></i> @Resources.Actions.Back
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+<div class="uk-clearfix md-card-overlay-header mn-t-25">
+  <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("Index", "Customer")">
+    <i class="fa fa-arrow-left mr-1 fs-12"></i> @Resources.Actions.Back
+  </a>
+  <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("Create", "Customer")">
+    <i class="fa fa-plus mr-1 fs-12"></i> @Resources.Actions.Add_New
+  </a>
+</div>
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+}

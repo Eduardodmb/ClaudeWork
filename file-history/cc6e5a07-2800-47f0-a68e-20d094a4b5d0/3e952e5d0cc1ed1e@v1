@@ -1,0 +1,371 @@
+#Requires -Version 5.1
+<#
+.SYNOPSIS
+    Bootstrap Personal Claude Environment - works on Home, Work, and Laptop.
+
+.DESCRIPTION
+    Creates symlinks from ~/.claude/ to personal-claude-docs enterprise layer.
+    Also wires Obsidian vault _claude-* folders to the same targets.
+
+    Source of truth:   personal-claude-docs/.claude/enterprise/  (this repo)
+    Claude reads from: ~/.claude/{commands,skills,learning,reference,agents}
+    Obsidian sees:     {vault}/0X-{Section}/_claude-{name}  (same real dirs)
+
+    Auto-detects computer profile by OneDrive location.
+    Falls back to directory junctions when symlinks require elevation.
+
+.PARAMETER Profile
+    Computer profile: "home" | "work" | "laptop" | "auto" (default: auto)
+
+.PARAMETER Force
+    Remove and recreate existing symlinks/junctions.
+
+.PARAMETER BackupExisting
+    Backup real directories in ~/.claude/ before replacing with symlinks.
+
+.EXAMPLE
+    .\setup-personal.ps1
+    .\setup-personal.ps1 -Force
+    .\setup-personal.ps1 -Profile work -Force
+#>
+
+[CmdletBinding()]
+param(
+    [ValidateSet("auto","home","work","laptop")]
+    [string]$Profile = "auto",
+
+    [switch]$Force,
+    [switch]$BackupExisting
+)
+
+$ErrorActionPreference = "Stop"
+
+function Write-Step    { param([string]$m) Write-Host "  -> $m" -ForegroundColor Cyan }
+function Write-Ok      { param([string]$m) Write-Host "  OK  $m" -ForegroundColor Green }
+function Write-Skip    { param([string]$m) Write-Host "  --  $m" -ForegroundColor Gray }
+function Write-Warn    { param([string]$m) Write-Host "  !!  $m" -ForegroundColor Yellow }
+function Write-Fail    { param([string]$m) Write-Host "  XX  $m" -ForegroundColor Red }
+
+Write-Host ""
+Write-Host "============================================" -ForegroundColor Blue
+Write-Host "  Personal Claude Environment - Bootstrap  " -ForegroundColor Blue
+Write-Host "============================================" -ForegroundColor Blue
+Write-Host ""
+
+# ─── 1. Detect profile ───────────────────────────────────────────────────────
+
+if ($Profile -eq "auto") {
+    # Detect by username (more reliable than vault path since OneDrive syncs both)
+    $currentUser = $env:USERNAME
+    if     ($currentUser -eq "eduar")    { $Profile = "home" }
+    elseif ($currentUser -eq "emarquez") { $Profile = "work" }
+    else {
+        Write-Warn "Cannot auto-detect profile for user: $currentUser"
+        Write-Host "  Use -Profile home|work|laptop explicitly" -ForegroundColor Gray
+        Write-Host "  Expected usernames: eduar (home) | emarquez (work)" -ForegroundColor Gray
+        exit 1
+    }
+}
+
+switch ($Profile) {
+    "home" {
+        $claudeRoot  = "C:\Users\eduar\.claude"
+        $vaultPath   = "D:\OneDrive\16 - Obsidian\01_Claude_Home"
+    }
+    "work" {
+        $claudeRoot  = "C:\Users\emarquez\.claude"
+        $vaultPath   = "C:\Users\emarquez\OneDrive\16 - Obsidian\00_Claude"
+    }
+    "laptop" {
+        $claudeRoot  = "$env:USERPROFILE\.claude"
+        $vaultPath   = "$env:USERPROFILE\OneDrive\16 - Obsidian\01_Claude_Home"
+    }
+}
+
+# Repo root = two levels up from this script (.claude/scripts/ -> .claude/ -> repo root)
+$repoRoot        = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+$enterpriseSrc   = Join-Path $repoRoot ".claude\enterprise"
+$personalSrc     = Join-Path $repoRoot ".claude\users\emarquez-personal"
+
+Write-Host "  Profile    : $Profile"
+Write-Host "  Repo       : $repoRoot"
+Write-Host "  Claude dir : $claudeRoot"
+Write-Host "  Vault      : $vaultPath"
+Write-Host ""
+
+# ─── 2. Preflight ────────────────────────────────────────────────────────────
+
+$canSymlink = $false
+try {
+    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+        [Security.Principal.WindowsBuiltInRole]::Administrator)
+    $devMode = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" `
+        -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense -eq 1
+    $canSymlink = $isAdmin -or $devMode
+} catch {}
+
+$linkMethod = if ($canSymlink) { "symlink" } else { "junction (no admin - fallback)" }
+Write-Host "  Link method: $linkMethod" -ForegroundColor $(if ($canSymlink) { "Green" } else { "Yellow" })
+Write-Host ""
+
+if (-not (Test-Path $claudeRoot)) {
+    Write-Fail "Claude dir not found: $claudeRoot"
+    Write-Host "  Run Claude Code once to initialize it." -ForegroundColor Gray
+    exit 1
+}
+if (-not (Test-Path $enterpriseSrc)) {
+    Write-Fail "Enterprise source not found: $enterpriseSrc"
+    Write-Host "  Clone personal-claude-docs first." -ForegroundColor Gray
+    exit 1
+}
+
+# ─── 3. Helpers ──────────────────────────────────────────────────────────────
+
+function Set-Link {
+    param([string]$LinkPath, [string]$Target, [string]$Label)
+
+    if (-not (Test-Path $Target)) {
+        Write-Warn "$Label : target missing ($Target)"
+        return
+    }
+
+    if (Test-Path $LinkPath) {
+        $existing = Get-Item $LinkPath -Force
+        $isLink   = $existing.Attributes -band [IO.FileAttributes]::ReparsePoint
+
+        if ($Force) {
+            if ($isLink) {
+                # Remove junction/symlink without touching target contents
+                try {
+                    [System.IO.Directory]::Delete($LinkPath)
+                } catch {
+                    try { Remove-Item $LinkPath -Force -ErrorAction Stop }
+                    catch { Write-Warn "$Label : could not remove existing link - $_"; return }
+                }
+            } else {
+                # Real directory - backup if has content, delete if empty
+                $isEmpty = (@(Get-ChildItem $LinkPath -Force -ErrorAction SilentlyContinue)).Count -eq 0
+                if ($isEmpty) {
+                    Remove-Item $LinkPath -Force -Recurse
+                } elseif ($BackupExisting) {
+                    $bk = "$LinkPath.bak-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+                    Rename-Item $LinkPath $bk
+                    Write-Ok "$Label : backed up to $(Split-Path $bk -Leaf)"
+                } else {
+                    Write-Warn "$Label : real directory with content - use -Force -BackupExisting to replace"
+                    return
+                }
+            }
+        } else {
+            if ($isLink) { Write-Skip "$Label : already linked" }
+            else         { Write-Warn "$Label : real directory exists (use -Force to replace)" }
+            return
+        }
+    }
+
+    $parent = Split-Path $LinkPath -Parent
+    if (-not (Test-Path $parent)) { New-Item -ItemType Directory -Path $parent -Force | Out-Null }
+
+    if ($existing.PSIsContainer -or (Test-Path $Target -PathType Container)) {
+        # Directory link
+        if ($canSymlink) {
+            New-Item -ItemType SymbolicLink -Path $LinkPath -Target $Target -Force | Out-Null
+        } else {
+            cmd /c mklink /J "$LinkPath" "$Target" 2>&1 | Out-Null
+        }
+    } else {
+        # File link
+        if ($canSymlink) {
+            New-Item -ItemType SymbolicLink -Path $LinkPath -Target $Target -Force | Out-Null
+        } else {
+            Copy-Item $Target $LinkPath -Force
+            Write-Warn "$Label : copied (file symlinks need admin - re-run as admin for live link)"
+            return
+        }
+    }
+
+    if (Test-Path $LinkPath) { Write-Ok "$Label" }
+    else                     { Write-Fail "$Label : creation failed" }
+}
+
+# ─── 4. ~/.claude/ symlinks ──────────────────────────────────────────────────
+
+Write-Step "Linking ~/.claude/ -> enterprise dirs"
+Set-Link "$claudeRoot\commands"   "$enterpriseSrc\commands"  "commands"
+Set-Link "$claudeRoot\skills"     "$enterpriseSrc\skills"    "skills"
+Set-Link "$claudeRoot\learning"   "$enterpriseSrc\learning"  "learning"
+Set-Link "$claudeRoot\reference"  "$enterpriseSrc\reference" "reference"
+Set-Link "$claudeRoot\agents"     "$enterpriseSrc\agents"    "agents"
+Set-Link "$claudeRoot\enterprise" "$enterpriseSrc"           "enterprise (for @-imports)"
+Set-Link "$claudeRoot\personal"   "$personalSrc"             "personal   (for @-imports)"
+
+# ─── 5. ~/.claude/CLAUDE.md ──────────────────────────────────────────────────
+
+Write-Host ""
+Write-Step "Setting up CLAUDE.md"
+$claudeMdTarget = "$claudeRoot\CLAUDE.md"
+$claudeMdSource = "$enterpriseSrc\CLAUDE.md"
+
+if ((Test-Path $claudeMdTarget) -and -not $Force) {
+    Write-Skip "CLAUDE.md : already exists (use -Force to regenerate)"
+} else {
+    if (Test-Path $claudeMdTarget) { Remove-Item $claudeMdTarget -Force }
+
+    $machineName = switch ($Profile) {
+        "home"   { "Home (eduar)" }
+        "work"   { "Work (emarquez)" }
+        "laptop" { "Laptop ($env:USERNAME)" }
+    }
+    $oneDrive = switch ($Profile) {
+        "home"   { "D:\OneDrive\" }
+        "work"   { "C:\Users\emarquez\OneDrive\" }
+        "laptop" { "$env:USERPROFILE\OneDrive\" }
+    }
+
+@"
+# Claude Global Config - $machineName
+# Auto-generated by setup-personal.ps1 - edit enterprise/CLAUDE.md for shared config.
+
+@enterprise/CLAUDE.md
+@personal/CLAUDE.md
+
+---
+
+## Machine: $machineName
+
+| Item | Path |
+|------|------|
+| OneDrive | ``$oneDrive`` |
+| Obsidian vault | ``$vaultPath`` |
+| ClaudeDocs | ``$repoRoot`` |
+| Claude dir | ``$claudeRoot`` |
+
+### New Machine Setup
+``````powershell
+git clone https://github.com/Eduardodmb/ClaudeDocs.git "`$env:USERPROFILE\personal-claude-docs"
+& "`$env:USERPROFILE\personal-claude-docs\.claude\scripts\setup-personal.ps1"
+``````
+"@ | Out-File $claudeMdTarget -Encoding utf8
+
+    Write-Ok "CLAUDE.md : generated with @enterprise and @personal imports"
+}
+
+# ─── 6. Runtime dirs (local only) ────────────────────────────────────────────
+
+Write-Host ""
+Write-Step "Ensuring runtime directories"
+foreach ($d in @("state","worktrees")) {
+    $p = "$claudeRoot\$d"
+    if (-not (Test-Path $p)) {
+        New-Item -ItemType Directory -Path $p -Force | Out-Null
+        Write-Ok "$d/ created"
+    } else {
+        Write-Skip "$d/ exists"
+    }
+}
+
+# ─── 7. Install .setup/ scripts ──────────────────────────────────────────────
+
+Write-Host ""
+Write-Step "Installing .setup/ scripts"
+
+$setupDir     = "$claudeRoot\.setup"
+$scriptsSrc   = $PSScriptRoot
+
+if (-not (Test-Path $setupDir)) {
+    New-Item -ItemType Directory -Path $setupDir -Force | Out-Null
+}
+
+foreach ($scriptName in @("claude-session.ps1", "sidebar.ps1")) {
+    $src  = Join-Path $scriptsSrc $scriptName
+    $dest = Join-Path $setupDir   $scriptName
+    if (Test-Path $src) {
+        Copy-Item $src $dest -Force
+        Write-Ok ".setup/$scriptName"
+    } else {
+        Write-Warn ".setup/$scriptName : source not found at $src"
+    }
+}
+
+# ─── 8. PowerShell profile shortcut ──────────────────────────────────────────
+
+Write-Host ""
+Write-Step "Setting up PowerShell profile shortcut"
+
+try {
+    $profilePath = $PROFILE
+    if ([string]::IsNullOrEmpty($profilePath)) {
+        $profilePath = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+        Write-Warn "profile : `$PROFILE is empty, using default: $profilePath"
+    }
+
+    $snippet = @'
+
+# ── Claude Code ───────────────────────────────────────────────────────────────
+function claude-session {
+    param([string]$Project = "")
+    & "$env:USERPROFILE\.claude\.setup\claude-session.ps1" @PSBoundParameters
+}
+Set-Alias cs claude-session
+'@
+
+    $profileDir = Split-Path $profilePath -Parent
+    if (-not (Test-Path $profileDir)) {
+        New-Item -ItemType Directory -Path $profileDir -Force | Out-Null
+    }
+
+    if (Test-Path $profilePath) {
+        $existing = Get-Content $profilePath -Raw -ErrorAction SilentlyContinue
+        if ($existing -match "claude-session") {
+            Write-Skip "profile : claude-session already present"
+        } else {
+            Add-Content -Path $profilePath -Value $snippet -Encoding utf8
+            Write-Ok "profile : shortcut appended to $profilePath"
+        }
+    } else {
+        Set-Content -Path $profilePath -Value $snippet.TrimStart() -Encoding utf8
+        Write-Ok "profile : created $profilePath with shortcut"
+    }
+    Write-Host "  Run 'cs' or 'claude-session' to launch with sidebar." -ForegroundColor DarkGray
+    Write-Host "  Reload with: . `$PROFILE" -ForegroundColor DarkGray
+} catch {
+    Write-Warn "profile : Could not set up PowerShell profile shortcut - $_"
+    Write-Host "  You can manually add 'claude-session' function later if needed" -ForegroundColor DarkGray
+}
+
+# ─── 9. Verification ─────────────────────────────────────────────────────────
+
+Write-Host ""
+Write-Host "  Verification" -ForegroundColor White
+
+$checks = @(
+    @{ Path = "$claudeRoot\commands";   Label = "commands  " },
+    @{ Path = "$claudeRoot\skills";     Label = "skills    " },
+    @{ Path = "$claudeRoot\learning";   Label = "learning  " },
+    @{ Path = "$claudeRoot\reference";  Label = "reference " },
+    @{ Path = "$claudeRoot\agents";     Label = "agents    " },
+    @{ Path = "$claudeRoot\enterprise"; Label = "enterprise" },
+    @{ Path = "$claudeRoot\personal";   Label = "personal  " },
+    @{ Path = "$claudeRoot\CLAUDE.md";  Label = "CLAUDE.md " }
+)
+
+$allOk = $true
+foreach ($c in $checks) {
+    if (Test-Path $c.Path) {
+        $item = Get-Item $c.Path -Force
+        $tag  = if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { "link" } else { "real" }
+        Write-Host "    OK [$tag] $($c.Label)" -ForegroundColor Green
+    } else {
+        Write-Host "    XX       $($c.Label) MISSING" -ForegroundColor Red
+        $allOk = $false
+    }
+}
+
+Write-Host ""
+if ($allOk) {
+    Write-Host "  All links OK. Claude Code will use personal-claude-docs on next session." -ForegroundColor Cyan
+} else {
+    Write-Host "  Some links missing. Re-run with -Force or check errors above." -ForegroundColor Yellow
+    exit 1
+}
+Write-Host ""

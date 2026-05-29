@@ -1,0 +1,1272 @@
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Views\TVs\Station_Efficency.cshtml-131-      int defect_toal_ict = 0;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Views\TVs\Station_Efficency.cshtml-132-      int qty_total_ict = 0;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Views\TVs\Station_Efficency.cshtml-133-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Views\TVs\Station_Efficency.cshtml:134:      bool Station_Downtime_Sensors = Firstronic.Framework.Queries.GetBooleanIfExistFromQuery("SELECT [StationID] FROM [Part_Station_Downtime_Sensors] WHERE StationID=@StationId", parameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Views\TVs\Station_Efficency.cshtml-135-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Views\TVs\Station_Efficency.cshtml:136:      bool usetickets = Firstronic.Framework.Functions.Queries.GetBooleanFromQuery("SELECT cast([Result] as bit) FROM [CF_idt_defaults] WHERE Description = 'DownTime_From_Tickets'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Views\TVs\Station_Efficency.cshtml-137-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Views\TVs\Station_Efficency.cshtml-138-      bool haveSubstations = false;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Views\TVs\Station_Efficency.cshtml-139-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-46-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-47-      model.FacilityList = FirstronicFacilitiesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-48-      var IsEnable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs:49:      IsEnable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-50-      model.IsEnable_List = IsEnable_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-51-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-52-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-130-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-131-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-132-      var IsEnable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs:133:      IsEnable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-134-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-135-      var model = new tbl_IT_Devices_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\IT\Controllers\DevicesController.cs-136-      {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-15-  Model.AreaList = AreaList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-16-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-17-  var IsActiveList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:18:  IsActiveList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-19-  Model.IsActiveList = IsActiveList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-20-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-21-  var LockStatusList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:22:  LockStatusList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-23-  Model.LockStatusList = LockStatusList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-24-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-25-  var BeFirstActiveList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:26:  BeFirstActiveList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-27-  Model.BeFirstActiveList = BeFirstActiveList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-28-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-29-  var DashVisibleList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:30:  DashVisibleList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-31-  Model.DashVisibleList = DashVisibleList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-32-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-33-  var ProdVisibleList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:34:  ProdVisibleList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-35-  Model.ProdVisibleList = ProdVisibleList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-36-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-37-  var LockMachinesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:38:  LockMachinesList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-39-  Model.LockMachinesList = LockMachinesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-40-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-41-  var Allow_Plex_TransactionsList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:42:  Allow_Plex_TransactionsList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-43-  Model.Allow_Plex_TransactionsList = Allow_Plex_TransactionsList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-44-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-45-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-46-  // GET Other Values...
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-47-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-48-  var AutoScanList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:49:  AutoScanList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-50-  Model.AutoScanList = AutoScanList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-51-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-52-  Model.AutoScan = false;
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-56-          new SqlParameter("@AreaID",SqlDbType.Int){Value = Model.AreaID ?? -1},
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-57-        };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-58-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:59:  //Model.AutoScan = Firstronic.Framework.Queries.GetBooleanFromQuery("Select CAST(CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS BIT) FROM PD_tbl_station_autoscan WHERE stationid=@Id", parameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-60-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-61-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-62-  var ValidationToRunList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:63:  ValidationToRunList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-64-  Model.ValidationToRunList = ValidationToRunList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-65-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-66-  Model.ValidationToRun = false;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-67-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:68:  Model.ValidationToRun = Firstronic.Framework.Queries.GetBooleanFromQuery("Select CAST(CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS BIT) FROM PD_tbl_stations_req_val WHERE stationid=@Id", parameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-69-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-70-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-71-  var Shipping_ValidateQtyList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:72:  Shipping_ValidateQtyList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-73-  Model.Shipping_ValidateQtyList = Shipping_ValidateQtyList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-74-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-75-  Model.Shipping_ValidateQty = false;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-76-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:77:  Model.Shipping_ValidateQty = Firstronic.Framework.Queries.GetBooleanFromQuery("Select CAST(CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS BIT) FROM Part_Operation_Shipping_Validate_BoxQty WHERE stationid=@Id", parameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-78-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-79-  var Allow_LoadMaterial_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:80:  Allow_LoadMaterial_List = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-81-  var Custom_Labels_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:82:  Custom_Labels_List = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-83-  var Allow_Plex_Transactions_2_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:84:  Allow_Plex_Transactions_2_List = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-85-  var AbleToLock_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml:86:  AbleToLock_List = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-87-}
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-88-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Station\_CreateOrUpdate.cshtml-89-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ReplaceMaterial.cshtml-46-    if (PositionReques == "" || PositionReques == "0")
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ReplaceMaterial.cshtml-47-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ReplaceMaterial.cshtml-48-        //Review if as station is required
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ReplaceMaterial.cshtml:49:        Boolean PositionInLine = Firstronic.Framework.Queries.GetBooleanIfExistFromQuery("Select AutoID FROM Part_Station_Material_Load_Position WHERE StationID=@StationID", stationParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ReplaceMaterial.cshtml-50-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ReplaceMaterial.cshtml-51-        if (PositionInLine)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ReplaceMaterial.cshtml-52-        {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-633-          //TODO: UPDATE POR SOUrcE POSITIONS when it is available.
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-634-          DataTable dtloaded = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [Serial_No] FROM [PLEX_BF_Part_Container_Load] where Serial_No=@Serial_Out and setupid=@SetupID", ssnNvarcharParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-635-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs:636:          Boolean AvoidNoLoaded = Firstronic.Framework.Functions.Queries.GetBooleanFromQuery("SELECT cast(Result as bit) FROM CF_idt_defaults WHERE Description='Portal_SMT_Merge_AllowMaterialNoLoaded'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-637-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-638-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-639-          if (dtloaded.Rows.Count > 0 | AvoidNoLoaded)
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-641-            //2021-04-19 EM: Out reall already merged...
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-642-            DataTable dtmerged = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [Serial_No_Out] FROM [PLEX_BF_Part_Container_Merge] where Serial_No_Out=@Serial_Out AND Is_Correct=1", ssnNvarcharParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-643-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs:644:            Boolean AvoidPreviousMerge = Firstronic.Framework.Functions.Queries.GetBooleanFromQuery("SELECT cast(Result as bit) FROM CF_idt_defaults WHERE Description='Portal_SMT_Merge_AvoidMergedPreviousMerged'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-645-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-646-            if (dtmerged.Rows.Count > 0 && AvoidPreviousMerge)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-647-            {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1329-          //2021-04-19 EM: Check if is loaded -
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1330-          //TODO: UPDATE POR SOUrcE POSITIONS when it is available.
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1331-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs:1332:          Boolean AvoidNoLoaded = Firstronic.Framework.Functions.Queries.GetBooleanFromQuery("SELECT cast(Result as bit) FROM CF_idt_defaults WHERE Description='Portal_SMT_Merge_AllowMaterialNoLoaded'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1333-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1334-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1335-          if (true | AvoidNoLoaded)
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1341-            //2021-04-19 EM: Out reall already merged...
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1342-            DataTable dtmerged = Firstronic.Framework.Queries.GetDatatableFromQuery("SELECT [Serial_No_Out] FROM [PLEX_BF_Part_Container_Merge] where Serial_No_Out=@SerialOut AND Is_Correct=1", Serialparameter);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1343-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs:1344:            Boolean AvoidPreviousMerge = Firstronic.Framework.Functions.Queries.GetBooleanFromQuery("SELECT cast(Result as bit) FROM CF_idt_defaults WHERE Description='Portal_SMT_Merge_AvoidMergedPreviousMerged'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1345-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1346-            if (dtmerged.Rows.Count > 0 && AvoidPreviousMerge)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1347-            {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1827-            new SqlParameter("@ModelIssueTypeID",SqlDbType.Int){Value = model.IssueTypeID}
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1828-          };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1829-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs:1830:          Boolean dt_downtime = Firstronic.Framework.Queries.GetBooleanFromQuery("Select cast([Downtime] as bit) FROM [PD_idt_issuestype] Where IssueTypeID=@ModelIssueTypeID", IssueTypeparameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1831-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1832-          if (dt_open.Rows.Count > 0 && dt_downtime)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\SMTController.cs-1833-          {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\MergeFunctions.cshtml-40-  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\MergeFunctions.cshtml-41-    
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\MergeFunctions.cshtml-42-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\MergeFunctions.cshtml:43:    Boolean PositionInLine = Firstronic.Framework.Queries.GetBooleanIfExistFromQuery("Select AutoID FROM Part_Station_Material_Load_Position WHERE StationID=@StationID", stationParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\MergeFunctions.cshtml-44-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\MergeFunctions.cshtml-45-    if (PositionInLine)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\MergeFunctions.cshtml-46-    {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-63-         new SqlParameter("@Guid",SqlDbType.NVarChar){Value = System.Guid.NewGuid().ToString()}
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-64-      };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-65-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs:66:      bool firstimeLogin = Firstronic.Framework.Queries.GetBooleanFromQuery(@"SELECT cast(CASE WHEN PasswordHash IS NULL THEN 0 ELSE 1 END As bit) as Ready FROM [AspNetUsers] where UserName=@UserName", sqlParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-67-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-68-      if (firstimeLogin == false)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-69-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-70-        //Check if user exist
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs:71:        bool exitUser = Firstronic.Framework.Queries.GetBooleanFromQuery(@"SELECT CAST(CASE WHEN EXISTS(SELECT * FROM[AspNetUsers] where UserName =@UserName) THEN 1 ELSE 0 END AS BIT)", sqlParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-72-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-73-        if (exitUser == true) //User exist
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-74-        {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-218-               new SqlParameter("@UserName",SqlDbType.NVarChar){Value = model.Username}
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-219-            };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-220-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs:221:      bool usert_exist = Firstronic.Framework.Queries.GetBooleanFromQuery(@"SELECT CAST(CASE WHEN EXISTS(SELECT * FROM [AspNetUsers] where UserName = @UserName) THEN 1 ELSE 0 END AS BIT)", sqlParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-222-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-223-      if (usert_exist == true)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Controllers\AccountController.cs-224-      {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Views\BonusPosition\Index.cshtml-13-  SqlParameter[] parametersisvalid = new SqlParameter[]{
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Views\BonusPosition\Index.cshtml-14-              new SqlParameter("@StationID",SqlDbType.Int){Value =Model},
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Views\BonusPosition\Index.cshtml-15-          };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Views\BonusPosition\Index.cshtml:16:  bool isvalid = Firstronic.Framework.Queries.GetBooleanFromQuery("SELECT BeFirstActive FROM [PD_idt_stations] where StationID=@StationID ", parametersisvalid);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Views\BonusPosition\Index.cshtml-17-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Views\BonusPosition\Index.cshtml-18-  <div class="container container-big" id="ContainerBig">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Views\BonusPosition\Index.cshtml-19-    @Html.AntiForgeryToken()
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\LoaderFunctions.cshtml-60-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\LoaderFunctions.cshtml-61-  String PositionReques = Firstronic.Framework.Functions.Queries.GetStringFromQuery("SELECT Result FROM CF_idt_defaults WHERE Description='Portal_SMT_Position_Request'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\LoaderFunctions.cshtml-62-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\LoaderFunctions.cshtml:63:  Boolean PositionInLine = Firstronic.Framework.Queries.GetBooleanIfExistFromQuery("Select AutoID FROM Part_Station_Material_Load_Position WHERE StationID=@StationID", pendings_dtparameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\LoaderFunctions.cshtml-64-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\LoaderFunctions.cshtml-65-  bool ValidatePosition = false;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\LoaderFunctions.cshtml-66-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\VerifyManufacturerPartNo.cshtml-21-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\VerifyManufacturerPartNo.cshtml-22-  String PositionReques = Firstronic.Framework.Functions.Queries.GetStringFromQuery("SELECT Result FROM CF_idt_defaults WHERE Description='Portal_SMT_Position_Request'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\VerifyManufacturerPartNo.cshtml-23-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\VerifyManufacturerPartNo.cshtml:24:  Boolean PositionInLine = Firstronic.Framework.Queries.GetBooleanIfExistFromQuery("Select AutoID FROM Part_Station_Material_Load_Position WHERE StationID=@StationID", Positionparameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\VerifyManufacturerPartNo.cshtml-25-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\VerifyManufacturerPartNo.cshtml-26-  bool ValidatePosition = false;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\VerifyManufacturerPartNo.cshtml-27-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\DefectCodes\_CreateOrUpdate.cshtml-53-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\DefectCodes\_CreateOrUpdate.cshtml-54-            <div class="uk-width-1-3@s">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\DefectCodes\_CreateOrUpdate.cshtml-55-              @Html.LabelFor(y => y.IsActive)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\DefectCodes\_CreateOrUpdate.cshtml:56:              @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\DefectCodes\_CreateOrUpdate.cshtml-57-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\DefectCodes\_CreateOrUpdate.cshtml-58-            <div class="uk-width-1-3@s">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\DefectCodes\_CreateOrUpdate.cshtml-59-              @Html.LabelFor(y => y.DefectShowName)
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ValidateNext.cshtml-64-    @{
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ValidateNext.cshtml-65-[Omitted long context line]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ValidateNext.cshtml-66-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ValidateNext.cshtml:67:      bool LockMissSerialization = Firstronic.Framework.Functions.Queries.GetBooleanFromQuery("SELECT cast([Result] as bit) FROM [CF_idt_defaults] WHERE Description='Production_SMT_StopWithoutSerialization'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ValidateNext.cshtml-68-    }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ValidateNext.cshtml-69-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Mobile\Views\SMT\ValidateNext.cshtml-70-  <ul class="list-unstyled mb-0">
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-64-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-65-      var model = new tbl_EN_tbl_visualAids_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-66-      var Active_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs:67:      Active_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-68-      model.Active_List = Active_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-69-      var Aproved_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs:70:      Aproved_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-71-      model.Aproved_List = Aproved_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-72-      var aprovedvisible_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs:73:      aprovedvisible_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-74-      model.aprovedvisible_List = aprovedvisible_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-75-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-76-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-170-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-171-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-172-      var Active_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs:173:      Active_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-174-      var Aproved_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs:175:      Aproved_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-176-      var aprovedvisible_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs:177:      aprovedvisible_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-178-      var model = new tbl_EN_tbl_visualAids_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-179-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-180-        Active_List = Active_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-461-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-462-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-463-      var Active_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs:464:      Active_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-465-      var Aproved_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs:466:      Aproved_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-467-      var aprovedvisible_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs:468:      aprovedvisible_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-469-      var model = new tbl_EN_tbl_visualAids_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-470-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\AssemblyInstructionsController.cs-471-        Active_List = Active_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-42-    public ActionResult Create()
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-43-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-44-      var model = new tbl_EN_idt_defects_codes_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs:45:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs:46:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs:47:      model.IsActive_List = IsActive_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-48-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-49-    }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-50-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-125-        return RedirectToAction("Index");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-126-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-127-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs:128:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs:129:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-130-      var model = new tbl_EN_idt_defects_codes_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-131-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs:132:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-133-        DefectCodeID = model0.DefectCodeID,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-134-        PrefijoScan = model0.PrefijoScan,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\DefectCodesController.cs-135-        DefectCode = model0.DefectCode,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-41-    public ActionResult Create()
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-42-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-43-      var model = new tbl_Maintenance_Machines_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs:44:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs:45:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs:46:      model.IsActive_List = IsActive_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-47-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-48-    }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-49-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-145-        return RedirectToAction("Index");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-146-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-147-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs:148:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs:149:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-150-      var model = new tbl_Maintenance_Machines_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-151-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs:152:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-153-        MachineID = model0.MachineID,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-154-        MachineName = model0.MachineName,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\MachinesController.cs-155-        Brand = model0.Brand,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-43-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-44-      var model = new tbl_Part_Labels_Extra_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-45-      var OnlyReprint_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs:46:      OnlyReprint_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-47-      model.OnlyReprint_List = OnlyReprint_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-48-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-49-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-126-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-127-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-128-      var OnlyReprint_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs:129:      OnlyReprint_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-130-      var model = new tbl_Part_Labels_Extra_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-131-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\OthersLabelsController.cs-132-        OnlyReprint_List = OnlyReprint_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-74-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-75-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-76-      model.FacilityList = FirstronicFacilitiesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:77:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:78:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-79-      var IsCritical_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:80:      IsCritical_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:81:      model.IsActive_List = IsActive_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-82-      model.IsCritical_List = IsCritical_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-83-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:84:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-85-      model.IsSmtByPanel_List = IsSmtByPanel_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-86-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:87:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-88-      model.HavePVS_List = HavePVS_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-89-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:90:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-91-      model.IsSerializationByPanel_List = IsSerializationByPanel_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-92-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:93:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-94-      model.IsSerializationByPanelAuto_List = IsSerializationByPanelAuto_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-95-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:96:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-97-      model.IsLaser_List = IsLaser_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-98-      var LabelByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:99:      LabelByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-100-      model.LabelByPanel_List = LabelByPanel_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-101-      var IsOOBA_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:102:      IsOOBA_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-103-      model.IsOOBA_List = IsOOBA_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-104-      var Layers_Allow_Duplicate_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:105:      Layers_Allow_Duplicate_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-106-      model.Layers_Allow_Duplicate_List = Layers_Allow_Duplicate_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-107-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-108-      model.PartSerialFormatEasy = "NA";
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-287-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-288-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-289-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:290:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-291-      var IsCritical_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:292:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:293:      IsCritical_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-294-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:295:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-296-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:297:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-298-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:299:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-300-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:301:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-302-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:303:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-304-      var LabelByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:305:      LabelByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-306-      var IsOOBA_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:307:      IsOOBA_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-308-      var Layers_Allow_Duplicate_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:309:      Layers_Allow_Duplicate_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-310-      var model = new tbl_CS_idt_partnumbers_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-311-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:312:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-313-        IsCritical_List = IsCritical_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-314-        HavePVS_List = HavePVS_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-315-        IsSerializationByPanel_List = IsSerializationByPanel_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-392-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-393-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-394-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:395:      model.IsLaser = Firstronic.Framework.Queries.GetBooleanFromQuery("SELECT CAST( CASE WHEN EXISTS(SELECT * FROM CS_tbl_partnumber_sertype WHERE PartID=@Id) THEN 1 ELSE 0 END AS BIT) ", idParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-396-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-397-      model.LabelsCode = Firstronic.Framework.Queries.GetStringFromQuery("SELECT isnull([LabelCode],'') as LabelCode  FROM [PR_tbl_labelscode_pn]  WHERE PartID=@Id", idParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-398-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-399-      model.Packout_Stock_location = Firstronic.Framework.Queries.GetIntFromQuery("SELECT isnull([Location],0) as Location  FROM Part_Operation_Default_Stock_Location WHERE PartID=@Id AND AreaID='14'", idParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-400-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:401:      model.NoFilters = Firstronic.Framework.Queries.GetBooleanFromQuery("SELECT CAST( CASE WHEN EXISTS(SELECT [AutoID] FROM [Part_Operation_Packout_No_Filters_Engineering] where partid=@Id UNION SELECT [AutoID] FROM [Part_Operation_Packout_No_Filters] where partid=@Id) THEN 1 ELSE 0 END AS BIT)", idParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-402-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:403:      model.validatescrews = Firstronic.Framework.Queries.GetBooleanFromQuery("SELECT CAST( CASE WHEN EXISTS(SELECT [AutoID] FROM [Part_Operation_Packout_Tester_Screws] where partid=@Id) THEN 1 ELSE 0 END AS BIT)", idParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-404-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:405:      model.validateKeyence = Firstronic.Framework.Queries.GetBooleanFromQuery("SELECT CAST( CASE WHEN EXISTS(SELECT [AutoID] FROM [Part_Operation_Packout_Scanner_Small] where partid=@Id) THEN 1 ELSE 0 END AS BIT)", idParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-406-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs:407:      model.AllowMixPackout = Firstronic.Framework.Queries.GetBooleanFromQuery("SELECT CAST( CASE WHEN EXISTS(SELECT [AutoID] FROM [PART_OPERATION_PACKOUT_ALLOW_MIX] where partid=@Id) THEN 1 ELSE 0 END AS BIT)", idParameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-408-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-409-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\PartNumberController.cs-410-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\Machines.cs-55-  public class tbl_Maintenance_Machines_FULL : tbl_Maintenance_Machines
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\Machines.cs-56-  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\Machines.cs-57-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\Machines.cs:58:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\Machines.cs-59-    [Display(Name = "MachineCategory")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\Machines.cs-60-    public string MachineCategory { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\Machines.cs-61-    [Display(Name = "MachineStyle")]
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\DefectCodes.cs-39-  public class tbl_EN_idt_defects_codes_FULL : tbl_EN_idt_defects_codes
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\DefectCodes.cs-40-  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\DefectCodes.cs-41-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\DefectCodes.cs:42:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\DefectCodes.cs-43-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\DefectCodes.cs-44-  }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\DefectCodes.cs-45-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-49-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-50-      model.FacilityList = FirstronicFacilitiesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-51-      var Is_Active_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs:52:      Is_Active_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-53-      model.Is_Active_List = Is_Active_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-54-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-55-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-136-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-137-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-138-      var Is_Active_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs:139:      Is_Active_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-140-      var model = new tbl_EN_idt_pastas_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-141-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\SolderPasteController.cs-142-        Is_Active_List = Is_Active_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-160-    public string Facility_Name { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-161-    [Display(Name = "CustomerName")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-162-    public string CustomerName { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs:163:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-164-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-165-    public virtual IEnumerable<SelectListItem> IsCritical_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-166-    public virtual IEnumerable<SelectListItem> IsSmtByPanel_List { get; set; }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-1240-    [Display(Name = "Facility")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-1241-    public string Facility_Name { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-1242-    public virtual IEnumerable<SelectListItem> ByPN_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs:1243:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-1244-    public virtual IEnumerable<SelectListItem> TestMode_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-1245-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Models\PartNumber.cs-1246-  }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-47-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-48-      var model = new tbl_ENGINEERING_TOOLS_TYPE_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-49-      var ToLocation_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs:50:      ToLocation_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-51-      model.ToLocation_List = ToLocation_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-52-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-53-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-115-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-116-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-117-      var ToLocation_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs:118:      ToLocation_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-119-      var model = new tbl_ENGINEERING_TOOLS_TYPE_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-120-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Controllers\ToolTypeController.cs-121-        ToLocation_List = ToLocation_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Controllers\BonusPositionController.cs-114-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Controllers\BonusPositionController.cs-115-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Controllers\BonusPositionController.cs-116-      var QA_Approved_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Controllers\BonusPositionController.cs:117:      QA_Approved_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Controllers\BonusPositionController.cs-118-      var model = new tbl_Personel_Bonus_Cells_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Controllers\BonusPositionController.cs-119-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Personnel\Controllers\BonusPositionController.cs-120-        Bonus_Cell_ID = model0.Bonus_Cell_ID,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml-160-          <div class="uk-width-1-3@m">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml-161-            <div class="input-group mb-3">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml-162-              @Html.LabelFor(y => y.IsActive, new { @class = "m-0 fs-14" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml:163:              @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml-164-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml-165-          </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\PartNumber\_CreateOrUpdate.cshtml-166-          <div class="uk-width-1-3@m">
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-55-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-56-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-57-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:58:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:59:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-60-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:61:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-62-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:63:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-64-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:65:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-66-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:67:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-68-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:69:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-70-      var LabelByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:71:      LabelByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-72-      var IsOOBA_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:73:      IsOOBA_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-74-      var Layers_Allow_Duplicate_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:75:      Layers_Allow_Duplicate_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-76-      var model = new tbl_CS_idt_partnumbers_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-77-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs:78:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-79-        HavePVS_List = HavePVS_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-80-        IsSerializationByPanel_List = IsSerializationByPanel_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Dashboards\Controllers\AssemblyInstructionsController.cs-81-        IsSerializationByPanelAuto_List = IsSerializationByPanelAuto_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Container.cs-71-    public string Container_Source { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Container.cs-72-    [Display(Name = "Part_No")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Container.cs-73-    public string Part_No { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Container.cs:74:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Container.cs-75-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Container.cs-76-  }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Container.cs-77-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Part.cs-181-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Part.cs-182-  public class tbl_PART_FULL : tbl_PART
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Part.cs-183-  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Part.cs:184:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Part.cs-185-    public virtual IEnumerable<SelectListItem> IsSmtByPanel_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Part.cs-186-    public virtual IEnumerable<SelectListItem> HavePVS_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Models\Part.cs-187-    public virtual IEnumerable<SelectListItem> IsSerializationByPanel_List { get; set; }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-52-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-53-      var model = new tbl_MATERIAL_KANBAN_PART_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-54-      var ACTIVE_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs:55:      ACTIVE_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-56-      model.ACTIVE_List = ACTIVE_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-57-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-58-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-139-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-140-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-141-      var ACTIVE_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs:142:      ACTIVE_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-143-      var model = new tbl_MATERIAL_KANBAN_PART_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-144-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\KanbanController.cs-145-        ACTIVE_List = ACTIVE_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-47-    public ActionResult Create(string PrintSerialNo = "")
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-48-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-49-      var model = new tbl_Part_Container_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs:50:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs:51:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs:52:      model.IsActive_List = IsActive_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-53-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-54-      model.Location = "ELP Receiving Area";
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-55-      model.IsActive = true;
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-163-        return RedirectToAction("Index");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-164-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-165-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs:166:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs:167:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-168-      var model = new tbl_Part_Container_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-169-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs:170:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-171-        AutoID = model0.AutoID,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-172-        Container_Source_Key = model0.Container_Source_Key,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ReceivingController.cs-173-        Container_Key = model0.Container_Key,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\Machines\_CreateOrUpdate.cshtml-90-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\Machines\_CreateOrUpdate.cshtml-91-            <div class="uk-width-1-3@s">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\Machines\_CreateOrUpdate.cshtml-92-              @Html.LabelFor(y => y.IsActive)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\Machines\_CreateOrUpdate.cshtml:93:              @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\Machines\_CreateOrUpdate.cshtml-94-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\Machines\_CreateOrUpdate.cshtml-95-            <div class="uk-width-1-3@s">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Engineering\Views\Machines\_CreateOrUpdate.cshtml-96-              @Html.LabelFor(y => y.IPAdress)
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1087-            {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1088-              string location = model.Move_To;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1089-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs:1090:              bool checkFIFO = Firstronic.Framework.Functions.Queries.GetBooleanFromQuery("SELECT cast([Result] as bit) FROM [CF_idt_defaults] WHERE Description='Material_FIFO_Active'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1091-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1092-              if (checkFIFO)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1093-              {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1116-                    new SqlParameter("@Serial_No",SqlDbType.NVarChar){Value =(model.Serial_no ?? "").ToString()}
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1117-                  };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1118-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs:1119:                  if (Firstronic.Framework.Queries.GetBooleanIfExistFromQuery("SELECT Serial_No FROM [Part_Container_FIFO_Skip] where Serial_No=@Serial_No AND TrnDate>DATEADD(DAY,-1,GETDATE())", parameters) == false)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1120-                  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1121-                    ModelState.Clear();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1122-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1762-            {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1763-              string location = model.Move_To;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1764-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs:1765:              bool checkFIFO = Firstronic.Framework.Functions.Queries.GetBooleanFromQuery("SELECT cast([Result] as bit) FROM [CF_idt_defaults] WHERE Description='Material_FIFO_Active'");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1766-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1767-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1768-              if (checkFIFO)
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1792-                    new SqlParameter("@Serial_No",SqlDbType.NVarChar){Value =(model.Serial_no ?? "").ToString()}
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1793-                  };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1794-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs:1795:                  if (Firstronic.Framework.Queries.GetBooleanIfExistFromQuery("SELECT Serial_No FROM [Part_Container_FIFO_Skip] where Serial_No=@Serial_No AND TrnDate>DATEADD(DAY,-1,GETDATE())", parameters) == false)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1796-                  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1797-                    ModelState.Clear();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\WarehouseController.cs-1798-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-51-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-52-      model.FacilityList = FirstronicFacilitiesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-53-      var Removed_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs:54:      Removed_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-55-      model.Removed_List = Removed_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-56-      if (PasteType != null)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-57-      {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-159-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-160-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-161-      var Removed_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs:162:      Removed_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-163-      var model = new tbl_MT_tbl_pasta_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-164-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Controllers\ToolCribController.cs-165-        Removed_List = Removed_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-73-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-74-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-75-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs:76:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs:77:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-78-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs:79:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-80-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs:81:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-82-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs:83:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-84-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs:85:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-86-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs:87:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-88-      var model = new tbl_CS_idt_partnumbers_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-89-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs:90:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-91-        HavePVS_List = HavePVS_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-92-        IsSerializationByPanel_List = IsSerializationByPanel_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\StartupErrorsController.cs-93-        IsSerializationByPanelAuto_List = IsSerializationByPanelAuto_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Views\Receiving\_CreateOrUpdate.cshtml-58-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Views\Receiving\_CreateOrUpdate.cshtml-59-            <div class="uk-width-1-3@s">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Views\Receiving\_CreateOrUpdate.cshtml-60-              @Html.LabelFor(y => y.IsActive)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Views\Receiving\_CreateOrUpdate.cshtml:61:              @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Views\Receiving\_CreateOrUpdate.cshtml-62-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Views\Receiving\_CreateOrUpdate.cshtml-63-            <div class="uk-width-1-3@s">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Materials\Views\Receiving\_CreateOrUpdate.cshtml-64-              @Html.LabelFor(y => y.MasterCode)
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-73-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-74-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-75-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs:76:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs:77:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-78-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs:79:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-80-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs:81:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-82-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs:83:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-84-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs:85:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-86-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs:87:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-88-      var model = new tbl_CS_idt_partnumbers_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-89-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs:90:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-91-        HavePVS_List = HavePVS_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-92-        IsSerializationByPanel_List = IsSerializationByPanel_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Testing\Controllers\ProgramsReadyController.cs-93-        IsSerializationByPanelAuto_List = IsSerializationByPanelAuto_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-52-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-53-      var model = new tbl_API_TIStore_Items_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-54-      var Enable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs:55:      Enable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-56-      model.Enable_List = Enable_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-57-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-58-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-144-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-145-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-146-      var Enable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs:147:      Enable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-148-      var model = new tbl_API_TIStore_Items_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-149-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Purchasing\Controllers\TIStoreController.cs-150-        Enable_List = Enable_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Areas\_CreateOrUpdate.cshtml-76-          <div class="input-group mb-3">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Areas\_CreateOrUpdate.cshtml-77-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Areas\_CreateOrUpdate.cshtml-78-            @Html.LabelFor(y => y.IsVisible, new { @class = "m-0 fs-14" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Areas\_CreateOrUpdate.cshtml:79:            @Html.DropDownListFor(y => y.IsVisible, (IEnumerable<SelectListItem>)Model.IsVisible_List, new { @class = "md-input" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Areas\_CreateOrUpdate.cshtml-80-          </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Areas\_CreateOrUpdate.cshtml-81-        </li>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Areas\_CreateOrUpdate.cshtml-82-        <li aria-hidden="true">
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-55-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-56-      var model = new tbl_Agent_Agent_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-57-      var IsEnabled_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs:58:      IsEnabled_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-59-      model.IsEnabled_List = IsEnabled_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-60-      var IsConnected_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs:61:      IsConnected_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-62-      model.IsConnected_List = IsConnected_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-63-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-64-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-159-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-160-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-161-      var IsEnabled_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs:162:      IsEnabled_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-163-      var IsConnected_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs:164:      IsConnected_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-165-      var model = new tbl_Agent_Agent_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-166-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AgentsController.cs-167-        IsEnabled_List = IsEnabled_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Customers\_CreateOrUpdate.cshtml-148-            @Html.ValidationMessageFor(y => y.CFT_ID, "", new { @class = "text-danger small" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Customers\_CreateOrUpdate.cshtml-149-            <div class="uk-width-1-3@s">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Customers\_CreateOrUpdate.cshtml-150-              @Html.LabelFor(y => y.IsVisible)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Customers\_CreateOrUpdate.cshtml:151:              @Html.DropDownListFor(y => y.IsVisible, (IEnumerable<SelectListItem>)Model.IsVisible_List, new { @class = "md-input" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Customers\_CreateOrUpdate.cshtml-152-              @Html.ValidationMessageFor(y => y.IsVisible, "", new { @class = "text-danger small" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Customers\_CreateOrUpdate.cshtml-153-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Views\Customers\_CreateOrUpdate.cshtml-154-          </div>
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasRelationController.cs-266-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasRelationController.cs-267-      model.AreaList = Firstronic.Framework.Functions.Dropdowns.GetAreasList(null, "");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasRelationController.cs-268-      model.FacilityList = Firstronic.Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasRelationController.cs:269:      model.FlagList = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasRelationController.cs-270-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasRelationController.cs-271-      model.SideList = new List<SelectListItem>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasRelationController.cs-272-      {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-53-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-54-      model.FacilityList = FirstronicFacilitiesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-55-      var ActiveReport_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:56:      ActiveReport_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-57-      model.ActiveReport_List = ActiveReport_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-58-      var PlexOperation_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:59:      PlexOperation_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-60-      model.PlexOperation_List = PlexOperation_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-61-      var Active_Inventory_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:62:      Active_Inventory_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-63-      model.Active_Inventory_List = Active_Inventory_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-64-      var Able_To_Lock_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:65:      Able_To_Lock_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-66-      model.Able_To_Lock_List = Able_To_Lock_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-67-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-68-      var Area_Type_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-69-      Area_Type_List = Framework.Functions.Dropdowns.GetAreasTypeList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-70-      model.Area_Type_List = Area_Type_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-71-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:72:      var IsVisible_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:73:      IsVisible_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:74:      model.IsVisible_List = IsVisible_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-75-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-76-      var VerifyPlex_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:77:      VerifyPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-78-      model.VerifyPlex_List = VerifyPlex_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-79-      var RecordPlex_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:80:      RecordPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-81-      model.RecordPlex_List = RecordPlex_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-82-      var SetUpPlex_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:83:      SetUpPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-84-      model.SetUpPlex_List = SetUpPlex_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-85-      var PrintLabelPlex_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:86:      PrintLabelPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-87-      model.PrintLabelPlex_List = PrintLabelPlex_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-88-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-89-      return View(model);
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-172-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-173-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-174-      var ActiveReport_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:175:      ActiveReport_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-176-      var PlexOperation_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:177:      PlexOperation_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-178-      var Active_Inventory_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:179:      Active_Inventory_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-180-      var Able_To_Lock_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:181:      Able_To_Lock_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-182-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-183-      var Area_Type_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-184-      Area_Type_List = Framework.Functions.Dropdowns.GetAreasTypeList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-185-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:186:      var IsVisible_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:187:      IsVisible_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-188-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-189-      var VerifyPlex_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:190:      VerifyPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-191-      var RecordPlex_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:192:      RecordPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-193-      var SetUpPlex_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:194:      SetUpPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-195-      var PrintLabelPlex_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:196:      PrintLabelPlex_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-197-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-198-      var model = new tbl_PD_idt_areas_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-199-      {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-202-        Active_Inventory_List = Active_Inventory_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-203-        Able_To_Lock_List = Able_To_Lock_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-204-        Area_Type_List = Area_Type_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:205:        IsVisible_List = IsVisible_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-206-        AreaID = model0.AreaID,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-207-        Area = model0.Area,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-208-        ActiveReport = model0.ActiveReport,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-220-        PrintLabelPlex_List = PrintLabelPlex_List
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-221-      };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-222-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs:223:      model.RecordPlex = Firstronic.Framework.Queries.GetBooleanFromQuery($@"SELECT  case when COUNT(*) >0 then cast(1 as bit) else cast(0 as bit) end  FROM PD_tbl_Areas_RecordPlex WHERE areaid=@Id", parameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-224-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-225-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\AreasController.cs-226-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-40-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-41-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-42-      model.FacilityList = FirstronicFacilitiesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs:43:      model.IsVisible_List = Framework.Functions.Dropdowns.GetBoolList(true);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-44-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-45-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-46-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-103-      // Repopulate dropdowns when validation fails
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-104-      var FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-105-      model.FacilityList = FirstronicFacilitiesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs:106:      model.IsVisible_List = Framework.Functions.Dropdowns.GetBoolList(model.IsVisible);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-107-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-108-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-109-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-138-        IsVisible = model0.IsVisible,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-139-        Facility_Key = model0.Facility_Key,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-140-        FacilityList = FirstronicFacilitiesList,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs:141:        IsVisible_List = Framework.Functions.Dropdowns.GetBoolList(model0.IsVisible)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-142-      };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-143-      return View(model);//
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-144-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-202-      // Repopulate dropdowns when validation fails
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-203-      var FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-204-      model.FacilityList = FirstronicFacilitiesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs:205:      model.IsVisible_List = Framework.Functions.Dropdowns.GetBoolList(model.IsVisible);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-206-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-207-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\CustomersController.cs-208-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-175-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-176-    public virtual IEnumerable<SelectListItem> Able_To_Lock_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-177-    public virtual IEnumerable<SelectListItem> Area_Type_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs:178:    public virtual IEnumerable<SelectListItem> IsVisible_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-179-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-180-    [NotMapped]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-181-    public bool VerifyPlex { get; set; }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-282-    public int? Facility_Key { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-283-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-284-    public virtual IEnumerable<SelectListItem> FacilityList { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs:285:    public virtual IEnumerable<SelectListItem> IsVisible_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-286-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-287-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-288-  }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-742-  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-743-    [Display(Name = "Facility")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-744-    public string Facility_Name { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs:745:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-746-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-747-  }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-748-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-1935-    [Display(Name = "Facility")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-1936-    public string Facility_Name { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-1937-    public virtual IEnumerable<SelectListItem> IsGood_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs:1938:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-1939-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-1940-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-1941-  }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-2191-public class tbl_CS_IDT_PARTNUMBERS_FULL : tbl_CS_IDT_PARTNUMBERS
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-2192-{
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-2193-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs:2194:  public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-2195-  public virtual IEnumerable<SelectListItem> IsSmtByPanel_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-2196-  public virtual IEnumerable<SelectListItem> HavePVS_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\FirstronicOld.cs-2197-  public virtual IEnumerable<SelectListItem> IsSerializationByPanel_List { get; set; }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-38-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-39-      var model = new tbl_Machines_Extractor_AOI_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-40-      var Active_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs:41:      Active_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-42-      model.Active_List = Active_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-43-      var IsEnabled_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs:44:      IsEnabled_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-45-      model.IsEnabled_List = IsEnabled_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-46-      var IsInServer_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs:47:      IsInServer_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-48-      model.IsInServer_List = IsInServer_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-49-      var IsInMachine_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs:50:      IsInMachine_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-51-      model.IsInMachine_List = IsInMachine_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-52-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-53-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-163-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-164-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-165-      var Active_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs:166:      Active_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-167-      var IsEnabled_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs:168:      IsEnabled_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-169-      var IsInServer_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs:170:      IsInServer_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-171-      var IsInMachine_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs:172:      IsInMachine_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-173-      var model = new tbl_Machines_Extractor_AOI_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-174-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsAOIController.cs-175-        Active_List = Active_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\FacilitiesController.cs-104-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\FacilitiesController.cs-105-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\FacilitiesController.cs-106-      var Main_Facility_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\FacilitiesController.cs:107:      Main_Facility_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\FacilitiesController.cs-108-      var model = new tbl_Common_Facilities
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\FacilitiesController.cs-109-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\FacilitiesController.cs-110-        Facility_Key = model0.Facility_Key,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\CFT.cs-89-    [Display(Name = "Facility")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\CFT.cs-90-    public string Facility_Name { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\CFT.cs-91-    public virtual IEnumerable<SelectListItem> Packout_Validation_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\CFT.cs:92:    public virtual IEnumerable<SelectListItem> IsVisible_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\CFT.cs-93-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\CFT.cs-94-  }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Models\CFT.cs-95-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-47-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-48-      var model = new tbl_CF_tbl_extractors_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-49-      var IsEnable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs:50:      IsEnable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-51-      model.IsEnable_List = IsEnable_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-52-      var RequestStage_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs:53:      RequestStage_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-54-      model.RequestStage_List = RequestStage_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-55-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-56-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-152-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-153-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-154-      var IsEnable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs:155:      IsEnable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-156-      var RequestStage_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs:157:      RequestStage_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-158-      var model = new tbl_CF_tbl_extractors_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-159-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Manage\Controllers\ExtractorsController.cs-160-        IsEnable_List = IsEnable_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ProcessAudits\_CreateOrUpdate.cshtml-43-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ProcessAudits\_CreateOrUpdate.cshtml-44-            <div class="uk-width-1-3@s">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ProcessAudits\_CreateOrUpdate.cshtml-45-              @Html.LabelFor(y => y.IsActive)
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ProcessAudits\_CreateOrUpdate.cshtml:46:              @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ProcessAudits\_CreateOrUpdate.cshtml-47-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ProcessAudits\_CreateOrUpdate.cshtml-48-            <div class="uk-width-1-3@s">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ProcessAudits\_CreateOrUpdate.cshtml-49-              @Html.LabelFor(y => y.Help)
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Defects\_CreateOrUpdate.cshtml-3-@{
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Defects\_CreateOrUpdate.cshtml-4-  bool isNew = !(Model != null && Model.DefectCodeID > 0);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Defects\_CreateOrUpdate.cshtml-5-  var FacilityList = Firstronic.Framework.Functions.Queries.GetSelectedFromQuery("SELECT [Facility_Key],[Facility_Name] FROM [Common_Facilities]");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Defects\_CreateOrUpdate.cshtml:6:  Model.IsActive_List = new List<SelectListItem>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Defects\_CreateOrUpdate.cshtml-7-  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Defects\_CreateOrUpdate.cshtml-8-      new SelectListItem { Value = "True", Text = "Yes" },
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Defects\_CreateOrUpdate.cshtml-9-      new SelectListItem { Value = "False", Text = "No" }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Rabbits\Index.cshtml-44-                
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Rabbits\Index.cshtml-45-              };
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Rabbits\Index.cshtml-46-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Rabbits\Index.cshtml:47:          bool tiene = Firstronic.Framework.Queries.GetBooleanIfExistFromQuery("SELECT [AutoID] FROM [RW_tbl_units_more_five_exceptions] where Model=@partid and AreaID=@areaid",Parameters);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Rabbits\Index.cshtml-48-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Rabbits\Index.cshtml-49-          newrow[ii] = tiene;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\Rabbits\Index.cshtml-50-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\PartNumber_Approve.cshtml-123-                    @Html.LabelFor(y => y.IsActive, new { @class = "m-0 fs-14" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\PartNumber_Approve.cshtml-124-                  </span>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\PartNumber_Approve.cshtml-125-                </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\PartNumber_Approve.cshtml:126:                @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "form-control", @readonly = "readonly" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\PartNumber_Approve.cshtml-127-              </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\PartNumber_Approve.cshtml-128-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\PartNumber_Approve.cshtml-129-            <div class="col-6">
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-55-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-56-      model.FacilityList = FirstronicFacilitiesList;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-57-      var IsEnable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs:58:      IsEnable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-59-      model.IsEnable_List = IsEnable_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-60-      model.PartID = "-1";
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-61-      model.AreaID = -1;
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-150-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-151-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-152-      var IsEnable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs:153:      IsEnable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-154-      var model = new tbl_QA_tbl_alerts_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-155-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\AlertsController.cs-156-        IsEnable_List = IsEnable_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ParticleCounterZones\_CreateOrUpdate.cshtml-3-@{
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ParticleCounterZones\_CreateOrUpdate.cshtml-4-    bool isNew = !(Model != null && !String.IsNullOrEmpty(Model.Zone_Name));
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ParticleCounterZones\_CreateOrUpdate.cshtml-5-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ParticleCounterZones\_CreateOrUpdate.cshtml:6:    var Is_Enabled_List = Firstronic.Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ParticleCounterZones\_CreateOrUpdate.cshtml-7-}
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ParticleCounterZones\_CreateOrUpdate.cshtml-8-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\ParticleCounterZones\_CreateOrUpdate.cshtml-9-@using (Html.BeginForm())
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Audit.cs-30-  public class tbl_QUALITY_PROCESS_AUDIT_QUESTIONS_FULL : tbl_QUALITY_PROCESS_AUDIT_QUESTIONS
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Audit.cs-31-  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Audit.cs-32-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Audit.cs:33:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Audit.cs-34-    [Display (Name = "Area")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Audit.cs-35-    public string Area { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Audit.cs-36-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-109-            <div class="input-group mb-3">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-110-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-111-              @Html.LabelFor(y => y.IsActive, new { @class = "m-0 fs-14" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml:112:              @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-113-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-114-          </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-115-          <div class="uk-width-1-1">
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-572-            <div class="uk-form-row">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-573-              <div class="uk-input-wrapper">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-574-                @Html.Label("IsActive", new { @class = "m-0 fs-14" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml:575:                @Html.DropDownListFor(y => y.IsActive, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input", id = "ddlIsActive" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-576-              </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-577-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-578-          </div>
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-590-            <div class="uk-form-row">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-591-              <div class="uk-input-wrapper">
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-592-                @Html.Label("AllPanel", new { @class = "m-0 fs-14" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml:593:                @Html.DropDownListFor(y => y.AllPanel, (IEnumerable<SelectListItem>)Model.IsActive_List, new { @class = "md-input", id = "ddlAllPanel" })
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-594-              </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-595-            </div>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Views\PartNumber\_CreateOrUpdate.cshtml-596-          </div>
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-53-    public ActionResult Create()
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-54-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-55-      var model = new tbl_QUALITY_DEFECTS_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs:56:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs:57:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs:58:      model.IsActive_List = IsActive_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-59-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-60-    }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-61-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-144-        return RedirectToAction("Index");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-145-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-146-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs:147:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs:148:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-149-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-150-      var DefectCategory_List = new List<SelectListItem>
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-151-      {
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-160-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-161-      var model = new tbl_QUALITY_DEFECTS_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-162-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs:163:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-164-        DefectCategory_List = DefectCategory_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-165-        DefectCodeID = model0.DefectCodeID,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\DefectsController.cs-166-        PrefijoScan = model0.PrefijoScan,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-175-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-176-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-177-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs:178:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs:179:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-180-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs:181:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-182-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs:183:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-184-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs:185:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-186-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs:187:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-188-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs:189:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-190-      var model = new Quality_ESDaudit_Audit_History_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-191-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-192-        AutoID = model0.AutoID,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-640-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-641-      var model = new tbl_Quality_ESDaudit_Questions_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-642-      var Muestra_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs:643:      Muestra_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-644-      model.Muestra_List = Muestra_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-645-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-646-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-714-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-715-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-716-      var Muestra_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs:717:      Muestra_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-718-      var model = new tbl_Quality_ESDaudit_Questions_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-719-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ESDauditController.cs-720-        Muestra_List = Muestra_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-53-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-54-      var model = new tbl_ENGINEERING_TOOLS_FIRST_PIECE_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-55-      var Muestra_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs:56:      Muestra_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-57-      model.Muestra_List = Muestra_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-58-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-59-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-141-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-142-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-143-      var Muestra_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs:144:      Muestra_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-145-      var model = new tbl_ENGINEERING_TOOLS_FIRST_PIECE_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-146-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\FirstPieceController.cs-147-        Muestra_List = Muestra_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Defects.cs-43-  {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Defects.cs-44-    [Display(Name = "Facility_Name")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Defects.cs-45-    public string Facility_Name { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Defects.cs:46:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Defects.cs-47-    public virtual IEnumerable<SelectListItem> DefectCategory_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Defects.cs-48-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Defects.cs-49-  }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-114-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-115-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-116-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs:117:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs:118:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-119-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs:120:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-121-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs:122:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-123-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs:124:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-125-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs:126:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-127-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs:128:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-129-      var model = new Quality_Measurement_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-130-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\MeasurementController.cs-131-        AutoID = model0.AutoID,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-80-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-81-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-82-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:83:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:84:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-85-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:86:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-87-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:88:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-89-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:90:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-91-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:92:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-93-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:94:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-95-      var model = new tbl_CS_idt_partnumbers_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-96-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:97:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-98-        HavePVS_List = HavePVS_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-99-        IsSerializationByPanel_List = IsSerializationByPanel_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-100-        IsSerializationByPanelAuto_List = IsSerializationByPanelAuto_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-364-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-365-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-366-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:367:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:368:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-369-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:370:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-371-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:372:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-373-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:374:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-375-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:376:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-377-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:378:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-379-      var model = new tbl_CS_idt_partnumbers_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-380-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs:381:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-382-        HavePVS_List = HavePVS_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-383-        IsSerializationByPanel_List = IsSerializationByPanel_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\PartNumberController.cs-384-        IsSerializationByPanelAuto_List = IsSerializationByPanelAuto_List,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-60-    [Display(Name = "Facility")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-61-    public string Facility_Name { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-62-    public virtual IEnumerable<SelectListItem> IsGood_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs:63:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-64-    [Display(Name = "PartNumber")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-65-    public string PartNumber { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-66-    [Display(Name = "Area")]
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-122-    [Display(Name = "Facility")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-123-    public string Facility_Name { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-124-    public virtual IEnumerable<SelectListItem> IsGood_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs:125:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-126-    [Display(Name = "Area")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-127-    public string Area { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-128-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-205-    [Display(Name = "Facility")]
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-206-    public string Facility_Name { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-207-    public virtual IEnumerable<SelectListItem> IsGood_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs:208:    public virtual IEnumerable<SelectListItem> IsActive_List { get; set; }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-209-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-210-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Models\Rabbits.cs-211-  }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-168-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-169-      var FirstronicFacilitiesList = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-170-      FirstronicFacilitiesList = Framework.Functions.Dropdowns.GetFirstronicFacilitiesList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs:171:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs:172:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-173-      var IsSmtByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs:174:      IsSmtByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-175-      var HavePVS_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs:176:      HavePVS_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-177-      var IsSerializationByPanel_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs:178:      IsSerializationByPanel_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-179-      var IsSerializationByPanelAuto_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs:180:      IsSerializationByPanelAuto_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-181-      var IsLaser_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs:182:      IsLaser_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-183-      var model = new tbl_Quality_Rabbits_Delivery_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-184-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RabbitsDeliveryController.cs-185-        AutoID = model0.AutoID,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-42-    public ActionResult Create()
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-43-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-44-      var model = new tbl_QUALITY_PROCESS_AUDIT_QUESTIONS_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs:45:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs:46:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs:47:      model.IsActive_List = IsActive_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-48-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-49-    }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-50-
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-116-        return RedirectToAction("Index");
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-117-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-118-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs:119:      var IsActive_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs:120:      IsActive_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-121-      var model = new tbl_QUALITY_PROCESS_AUDIT_QUESTIONS_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-122-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs:123:        IsActive_List = IsActive_List,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-124-        QuestionID = model0.QuestionID,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-125-        Question = model0.Question,
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\ProcessAuditsController.cs-126-        AreaID = model0.AreaID,
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-41-    {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-42-      var model = new tbl_Quality_Reminders_FULL();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-43-      var IsEnable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs:44:      IsEnable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-45-      model.IsEnable_List = IsEnable_List;
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-46-      return View(model);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-47-    }
+--
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-136-      }
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-137-
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-138-      var IsEnable_List = new List<SelectListItem>();
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs:139:      IsEnable_List = Framework.Functions.Dropdowns.GetBooleanList(null);
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-140-      var model = new tbl_Quality_Reminders_FULL
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-141-      {
+S:\01_Repos\BeFirst_Portal\firstronic\Areas\Quality\Controllers\RemindersController.cs-142-        IsEnable_List = IsEnable_List,

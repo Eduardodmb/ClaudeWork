@@ -1,0 +1,307 @@
+"""
+Translate IT-013 W1 F9 Part Number manual from Spanish to English
+Preserves all images and formatting
+"""
+from docx import Document
+from docx.shared import Inches, Pt, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+import sys
+import os
+
+# Translation dictionary
+translations = {
+    # Document headers
+    "Document summary": "Document summary",
+    "Document history": "Document history",
+    "Manual para configurar número de parte": "Part Number Configuration Manual",
+    "Guía para para configurar número de parte": "Guide to configure part numbers",
+    "Objetivo": "Objective",
+    "Document Name": "Document Name",
+    "Version": "Version",
+    "Date": "Date",
+    "Description": "Description",
+    "Author": "Author",
+    "First Draft": "First Draft",
+
+    # Section headings
+    "General": "General",
+    "Image": "Image",
+    "Serialization": "Serialization",
+    "Tools Validation": "Tools Validation",
+    "Packout Options": "Packout Options",
+    "Areas by panel": "Areas by panel",
+    "Areas with gages": "Areas with gages",
+    "Areas Formats": "Areas Formats",
+    "Areas with pallets": "Areas with pallets",
+    "Areas Locks": "Areas Locks",
+    "2 Min Defects": "2 Min Defects",
+    "2 Custom Defects": "2 Custom Defects",
+    "2 Row Label test": "2 Row Label test",
+    "2 Reprint options validations": "2 Reprint options validations",
+    "2 Label shipping validation": "2 Label shipping validation",
+    "BOM": "BOM",
+    "Print Option": "Print Option",
+    "Packout Alternate": "Packout Alternate",
+    "Approved Stations": "Approved Stations",
+    "Parameter stations": "Parameter stations",
+    "Routing": "Routing",
+    "Rates": "Rates",
+    "Assembly Instructions": "Assembly Instructions",
+    "Groups": "Groups",
+    "Bins": "Bins",
+    "Group Bins": "Group Bins",
+    "Printers": "Printers",
+    "Force AOI": "Force AOI",
+    "Search AOI": "Search AOI",
+
+    # Content translations
+    "En esta opción podremos modificar los siguientes campos": "In this option we can modify the following fields",
+    "Componente=número de parte de un componente": "Component=component part number",
+    "Wip=número de parte de piso": "Wip=shop floor part number",
+    "Cambiar cliente": "Change customer",
+    "Desactivar número de parte": "Deactivate part number",
+    "Elegir entre Juárez o el paso": "Choose between Juarez or El Paso",
+    "Agregar una descripción al número de parte": "Add a description to the part number",
+    "Esta opción es para agregar una imagen al producto, solo se selecciona la imagen    y se da clic en el botón guardar": "This option is to add an image to the product, just select the image and click the save button",
+    "Indicar cuando el modelo es Laser": "Indicate when the model is Laser",
+    "Activar que se puedan imprimir etiquetas por panel": "Enable printing labels by panel",
+    "Poner nombre de etiqueta": "Enter label name",
+    "Numero de piezas por panel": "Number of pieces per panel",
+    "Hacer merge": "Perform merge",
+    "Generar el panel cuando se serializa": "Generate the panel when serializing",
+    "Formato individual": "Individual format",
+    "Formato panel": "Panel format",
+    "En esta opción podremos agregar pastas,conformal coating y  hojas de parámetros": "In this option we can add solder paste, conformal coating and parameter sheets",
+    "En esta opción podremos modificar los siguientes campos": "In this option we can modify the following fields",
+    "Se agrega el precio de la pieza": "Add the price of the piece",
+    "Se agrega el costo de la pieza": "Add the cost of the piece",
+    "Se agrega cuando quieres que se escanee en PVS": "Add when you want it to be scanned in PVS",
+    "Es el tamaño de piezas por caja": "Box size (pieces per box)",
+    "Es el tamaño de capas que lleva por caja": "Number of layers per box",
+    "Permitir capas duplicadas": "Allow duplicate layers",
+    "Es el tiempo permitido de pruebas": "Allowed time for tests",
+    "El tipo de escaneo que se va a realizar": "Type of scan to be performed",
+    "Cantidad de piezas por escaneo": "Quantity of pieces per scan",
+    "Opción (Serial modify.) tiene dos secciones   substring": "Option (Serial modify.) has two sections - substring",
+    "En esta opción  mi serial en todas las estaciones  es (C310820101381) pero en empaque  se convierte a (#80A906093C    ##812774456#060920*X57 A3B3003FVG3*=300820102045C80A) con esta opción podemos hacer que  BEFIRST lea una parte del  serial para este caso  haremos lo siguiente  en área ponemos PackOUT  y en fomat (51,2) que vendría siendo (Inicio, Total de caracteres)": "In this option my serial in all stations is (C310820101381) but in packing it converts to (#80A906093C    ##812774456#060920*X57 A3B3003FVG3*=300820102045C80A) with this option we can make BEFIRST read a part of the serial, for this case we will do the following: in area we put PackOUT and in format (51,2) which would be (Start, Total characters)",
+    "Opción (Defines the default number of partial allowed.) esta opcion define cuantas parciales se pueden tener abiertas": "Option (Defines the default number of partial allowed.) this option defines how many partials can be open",
+    "Solo colocas el número de cajas y seleccionas add": "Just enter the number of boxes and select add",
+    "Si deseas eliminar esta opción presionas el botón delete": "If you want to remove this option press the delete button",
+    "Opción (Serial modify.) opción   supstring": "Option (Serial modify.) option - supstring",
+    "Siguiendo el ejemplo anterior del serial (#80A906093C    ##812774456#060920*X57 A3B3003FVG3*=300820102045C80A) vamos a tomar el fomat (51,2)   agregado en SUBSTRING pero le agregaremos C y lo modificaremos  de la siguiente manera": "Following the previous serial example (#80A906093C    ##812774456#060920*X57 A3B3003FVG3*=300820102045C80A) we will take the format (51,2) added in SUBSTRING but we will add C and modify it as follows",
+    "En área seleccionaremos (Packout)  y en SupString (C{SN})": "In area we will select (Packout) and in SupString (C{SN})",
+    "Esta opción se utiliza para AUDI": "This option is used for AUDI",
+    "Escaneo de un componente en empaque": "Scanning a component in packing",
+    "Ejemplo para osram se escanea un cable con el código (12345679) con esta opción  en el campo Format  agregamos el  formato de  nuestro código  y en titulo el nombre del componente que deseamos escanear en empaque": "Example for osram: scan a cable with code (12345679) with this option in the Format field we add our code format and in title the name of the component we want to scan in packing",
+    "Opción (Validate screw) esta opción es para GR": "Option (Validate screw) this option is for GR",
+    "Opción (Layers)": "Option (Layers)",
+    "En esta opción se activa se configura de la siguiente manera": "This option is activated and configured as follows",
+    "Define si se escanea en ooba": "Define if scanning in OOBA",
+    "Indica el numero de charolas o tapas vacías que van al inicio": "Indicates the number of empty trays or lids at the beginning",
+    "Define si se va a escanear charola o tapa": "Define if tray or lid will be scanned",
+    "Indica el número de charolas o tapas vacías que van al final": "Indicates the number of empty trays or lids at the end",
+    "Formato del código de charola o tapa": "Format of tray or lid code",
+    "En esta opción agregaremos las áreas donde se escaneará por panel": "In this option we will add the areas where scanning will be done by panel",
+    "Donde solo seleccionamos el área y presionamos el botón ADD": "Where we only select the area and press the ADD button",
+    "Si deseamos eliminar una are de por panel solo presionamos el botón (Delete)": "If we want to remove a panel area just press the (Delete) button",
+    "En esta opción agregaremos los Gages y el área donde se usaran": "In this option we will add the Gages and the area where they will be used",
+    "Primero seleccionamos el área donde se usará": "First we select the area where it will be used",
+    "El nombre del gage": "The gage name",
+    "Si deseamos eliminar el gage solo presionamos el botón de (delete)": "If we want to remove the gage just press the (delete) button",
+    "En esta opción se utiliza cuando el formato de número de serie cambia entre estaciones": "This option is used when the serial number format changes between stations",
+    "Seleccionamos el área donde aplica": "Select the area where it applies",
+    "Agregamos el formato del nuevo número de serie y presionamos el botón ADD": "Add the format of the new serial number and press the ADD button",
+    "Si deseamos eliminar el formato solo presionamos el botón (Delete)": "If we want to remove the format just press the (Delete) button",
+    "Esta opción se utiliza para definir un formato de pallet en un área especifica": "This option is used to define a pallet format in a specific area",
+    "Agregamos el formato del pallet y presionamos el botón ADD": "Add the pallet format and press the ADD button",
+    "Esta opción es exclusiva de administradores de Befirst": "This option is exclusive to BeFirst administrators",
+    "Esta opción aplica para cuando quieres que un área se bloquee si existe una falla entre 15 minutos de diferencia": "This option applies when you want an area to be blocked if there is a failure within 15 minutes difference",
+    "Seleccionamos el área donde aplica y presionamos el botón ADD": "Select the area where it applies and press the ADD button",
+    "Si deseamos eliminar el área solo presionamos el botón (Delete)": "If we want to remove the area just press the (Delete) button",
+    "En esta opción podremos agregar defectos específicos al número de parte": "In this option we can add specific defects to the part number",
+    "Donde solo seleccionamos el defecto y presionamos el botón ADD": "Where we only select the defect and press the ADD button",
+    "Si deseamos eliminar solo presionamos el botón (delete)": "If we want to remove just press the (delete) button",
+    "Esta opción es para validar las reimpresiones de etiquetas": "This option is to validate label reprints",
+    "Agregamos el formato y presionamos el botón ADD": "Add the format and press the ADD button",
+    "Esta opción es para asignar el orden de validación de etiquetas y el formato que debe llevar": "This option is to assign the validation order of labels and the format it should have",
+    "Se agrega el tipo de etiqueta": "Add the label type",
+    "Se agrega un formato": "Add a format",
+    "Y el orden en que se validara": "And the order in which it will be validated",
+    "Si se desea eliminar algún elemento, solo presionamos el botón eliminar": "If you want to delete any element, just press the delete button",
+    "Esta opción muestra el BOM del número de parte": "This option shows the BOM of the part number",
+    "Si no se encuentran algún elemento   damos clic en el botón (Update)": "If any element is not found, click the (Update) button",
+    "Define las impresoras que se utilizaran en MLS (Etiquetas Azules y verdes)": "Define the printers to be used in MLS (Blue and green labels)",
+    "Seleccionamos la estación donde se va a imprimir": "Select the station where it will be printed",
+    "Agregamos el nombre de la impresora": "Add the printer name",
+    "En Force Values lo dejamos en lancos": "In Force Values we leave it blank",
+    "Presionamos ADD": "Press ADD",
+    "Si deseamos eliminar la impresora, presionamos el boton delete": "If we want to remove the printer, press the delete button",
+    "Esta opción verifica los componentes del número de parte y verifica si lleva alternos, si los lleva imprimirá una etiqueta indicando que lleva alternos.": "This option checks the components of the part number and verifies if it has alternates, if it does it will print a label indicating that it has alternates.",
+    "Aquí solo debemos presionar el botón ADD": "Here we just need to press the ADD button",
+    "Para anular opción solo presionamos el botón eliminar": "To cancel the option just press the delete button",
+    "Con esta opción solo se podrá correr en el área seleccionada": "With this option it can only run in the selected area",
+    "Seleccionas área": "Select area",
+    "Seleccionas estación": "Select station",
+    "Presionas el botón (ADD)": "Press the (ADD) button",
+    "Si deseas activar esta opción    presionas el botón (Delete)": "If you want to activate this option, press the (Delete) button",
+    "Esta opción es para agregar hojas de parámetros": "This option is to add parameter sheets",
+    "Seleccionamos estación": "Select station",
+    "Seleccionamos lado": "Select side",
+    "Seleccionamos la hoja de parámetros": "Select the parameter sheet",
+    "después presionamos botón (ADD)": "then press the (ADD) button",
+    "sí deseamos eliminar algún parámetro presionamos el botón eliminar": "if we want to remove any parameter press the delete button",
+    "Esta opción sirve para ver las rutas de BF y poder actualizarlas, definir packout o evitar estación anterior": "This option is used to view BF routes and update them, define packout or skip previous station",
+    "Si solo deseamos actualizar rutas solo presionamos el botón update": "If we only want to update routes just press the update button",
+    "Si deseamos evitar la estación anterior seleccionamos área, lado y la fecha hasta donde  estará activo": "If we want to skip the previous station we select area, side and the date until it will be active",
+    "Si deseamos cancelar esta opción presionamos el botón (Clear Skips)": "If we want to cancel this option press the (Clear Skips) button",
+    "Si deseamos definir la ruta como packout presionamos (Set Packout)": "If we want to define the route as packout press (Set Packout)",
+    "Esta opción es para cargar los rates": "This option is to load the rates",
+    "Seleccionamos área, estación, Lado y agregamos el rate  una vez llenos todos los campos presionamos el botón (ADD)": "Select area, station, Side and add the rate. Once all fields are filled press the (ADD) button",
+    "Esta opción es para cargar las ayudas visuales": "This option is to load visual aids",
+    "Ahora llenamos los siguientes datos (área, Subestación, Lado comentarios y cargamos la instrucción de trabajo )": "Now we fill in the following data (area, Substation, Side, comments and load the work instruction)",
+    "Una vez llenados todos los campos presionamos el boton ADD": "Once all fields are filled press the ADD button",
+    "La instrucción de trabajo no deberá aprobarse, al momento de darse de alta quedará aprobada en automático.": "The work instruction should not need approval, it will be automatically approved when created.",
+    "Esta opción es para agregar grupos a los números de partes": "This option is to add groups to part numbers",
+    "En gruoupname agregamos  el nombre de grupo": "In groupname we add the group name",
+    "Si deseamos eliminar un grupo presionamos el botón eliminar": "If we want to remove a group press the delete button",
+    "Esta opción es para agregar BINS a los números de partes.": "This option is to add BINS to part numbers.",
+    "En BINNAME agregamos  el nombre del BIN": "In BINNAME we add the BIN name",
+    "Si aplica conversión llenamos ese campo": "If conversion applies fill that field",
+    "Si deseamos eliminar un BIN presionamos el botón eliminar": "If we want to remove a BIN press the delete button",
+    "Esta opción es para agregar Group BINS a los números de partes.": "This option is to add Group BINS to part numbers.",
+    "Seleccionas el grupo, numero de parte, Bin y si es padre, también eliges el número de veces que se va a escanear": "Select the group, part number, Bin and if it is parent, also choose the number of times it will be scanned",
+    "Esta opción se utiliza para osram e imprime la lista de seriales de la caja en una hoja que se embarca a cliente.": "This option is used for osram and prints the list of serials in the box on a sheet that is shipped to the customer.",
+    "Solo pones el nombre de la impresora y unidades por hoja y presionas el botón (ADD)": "Just enter the printer name and units per sheet and press the (ADD) button",
+    "Si deseas eliminar la configuración presionas el botón (Delete)": "If you want to remove the configuration press the (Delete) button",
+    "Esta opción es para que befirst escanee en automático en SMT": "This option is for befirst to scan automatically in SMT",
+    "Nota para esta opción tenemos que asegurar que la AOI lea los QR y sean enviados a BEFIRST": "Note: for this option we must ensure that the AOI reads the QR codes and they are sent to BEFIRST",
+    "Para configurarla solo seleccionamos área y lado y presionamos en el botón ADD": "To configure it just select area and side and press the ADD button",
+    "Para eliminarla solo presionamos el botón ADD": "To remove it just press the ADD button",
+    "Esta opción es para pedir que befirst requiera que las piezas tengan registro de AOI": "This option is to request that befirst requires parts to have AOI record",
+    "Seleccionamos el área y lado donde queremos que solicite el escaneo de AOI después presionamos el botón ADD": "Select the area and side where we want it to request AOI scanning then press the ADD button",
+    "Si deseamos eliminar esta opción presionamos el botón DElete": "If we want to remove this option press the DElete button",
+}
+
+def translate_text(text):
+    """Translate Spanish text to English"""
+    # Direct translation if found
+    if text in translations:
+        return translations[text]
+
+    # Return original if not found (likely proper nouns or technical terms)
+    return text
+
+def create_english_version(source_path, dest_path):
+    """Create English version of the document"""
+    print(f"Reading source document: {source_path}")
+    doc = Document(source_path)
+
+    # Create new document with same styles
+    new_doc = Document()
+
+    # Copy all sections, preserving images and formatting
+    print("Translating content...")
+
+    for element in doc.element.body:
+        # Handle paragraphs
+        if element.tag.endswith('p'):
+            # Find corresponding paragraph in doc
+            para_index = [i for i, p in enumerate(doc.paragraphs) if p._element == element]
+            if para_index:
+                old_para = doc.paragraphs[para_index[0]]
+
+                # Create new paragraph with same style
+                new_para = new_doc.add_paragraph()
+                new_para.style = old_para.style
+                new_para.alignment = old_para.alignment
+
+                # Translate text
+                translated_text = translate_text(old_para.text)
+
+                # Check if paragraph contains images
+                if old_para._element.xpath('.//pic:pic'):
+                    # Paragraph has images, need to preserve them
+                    # Copy runs to preserve images
+                    for run in old_para.runs:
+                        new_run = new_para.add_run()
+
+                        # Copy run properties
+                        new_run.bold = run.bold
+                        new_run.italic = run.italic
+                        new_run.underline = run.underline
+                        if run.font.size:
+                            new_run.font.size = run.font.size
+                        if run.font.name:
+                            new_run.font.name = run.font.name
+
+                        # Check if run contains image
+                        if run._element.xpath('.//pic:pic'):
+                            # Copy image
+                            for drawing in run._element.xpath('.//w:drawing'):
+                                new_run._element.append(drawing)
+                        else:
+                            # Translate text
+                            new_run.text = translate_text(run.text)
+                else:
+                    # No images, just translate text
+                    new_para.text = translated_text
+
+                    # Copy formatting from first run if exists
+                    if old_para.runs:
+                        first_run = old_para.runs[0]
+                        new_run = new_para.runs[0]
+                        new_run.bold = first_run.bold
+                        new_run.italic = first_run.italic
+                        new_run.underline = first_run.underline
+                        if first_run.font.size:
+                            new_run.font.size = first_run.font.size
+                        if first_run.font.name:
+                            new_run.font.name = first_run.font.name
+
+        # Handle tables
+        elif element.tag.endswith('tbl'):
+            # Find corresponding table in doc
+            table_index = [i for i, t in enumerate(doc.tables) if t._element == element]
+            if table_index:
+                old_table = doc.tables[table_index[0]]
+
+                # Create new table with same dimensions
+                new_table = new_doc.add_table(rows=len(old_table.rows), cols=len(old_table.columns))
+                new_table.style = old_table.style
+
+                # Copy and translate cell content
+                for row_idx, old_row in enumerate(old_table.rows):
+                    for col_idx, old_cell in enumerate(old_row.cells):
+                        new_cell = new_table.rows[row_idx].cells[col_idx]
+
+                        # Translate cell text
+                        translated = translate_text(old_cell.text)
+                        new_cell.text = translated
+
+                        # Copy cell formatting
+                        if old_cell.paragraphs:
+                            for para_idx, old_para in enumerate(old_cell.paragraphs):
+                                if para_idx < len(new_cell.paragraphs):
+                                    new_para = new_cell.paragraphs[para_idx]
+                                    new_para.alignment = old_para.alignment
+
+                                    # Copy run formatting
+                                    if old_para.runs and new_para.runs:
+                                        for run_idx, old_run in enumerate(old_para.runs):
+                                            if run_idx < len(new_para.runs):
+                                                new_run = new_para.runs[run_idx]
+                                                new_run.bold = old_run.bold
+                                                new_run.italic = old_run.italic
+                                                if old_run.font.size:
+                                                    new_run.font.size = old_run.font.size
+
+    # Save the new document
+    print(f"Saving English version to: {dest_path}")
+    new_doc.save(dest_path)
+    print("Done!")
+
+if __name__ == "__main__":
+    source = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Enterprise Solution Architecture\Enterprise Systems\BeFirst\01_User_Manuals\IT-013 W1 F9 Part Number.docx"
+    dest = r"S:\OneDrive - Safari Circuits, LLC\Information Technology - Documents\Enterprise Solution Architecture\Enterprise Systems\BeFirst\01_User_Manuals\IT-013 W1 F9 Part Number (English).docx"
+
+    create_english_version(source, dest)

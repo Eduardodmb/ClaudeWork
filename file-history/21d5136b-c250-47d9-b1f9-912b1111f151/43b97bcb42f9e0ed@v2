@@ -1,0 +1,360 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+---
+
+## Repository Purpose
+
+**personal-claude-docs** (aka ClaudeDocs) is a shared Claude Code knowledge base synchronized across multiple computers via Git. It contains:
+
+- Enterprise configuration (workflow, principles, patterns)
+- Custom commands (`/status`, `/plan`, `/implement`, etc.)
+- Reusable skills and agents
+- Learning pipeline (ideas → best practices → enforced standards)
+- Personal preferences and tech stack
+
+This repo is **NOT** a project to build software. It's **infrastructure** that wires Claude Code to work consistently across home, work, and laptop computers.
+
+---
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ personal-claude-docs (this repo)                                │
+│   └── .claude/enterprise/   ← Shared config (git-synced)       │
+│   └── .claude/users/         ← Personal prefs (git-synced)     │
+│   └── .claude/scripts/       ← Setup and verification tools    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              │ Symlinked by setup-personal.ps1
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ ~/.claude/ (machine-specific repo: ClaudeHome or ClaudeWork)    │
+│   commands/    ──symlink──► personal-claude-docs/enterprise/commands
+│   skills/      ──symlink──► personal-claude-docs/enterprise/skills
+│   learning/    ──symlink──► personal-claude-docs/enterprise/learning
+│   agents/      ──symlink──► personal-claude-docs/enterprise/agents
+│   reference/   ──symlink──► personal-claude-docs/enterprise/reference
+│   enterprise/  ──symlink──► personal-claude-docs/enterprise/
+│   personal/    ──symlink──► personal-claude-docs/users/emarquez-personal/
+│   CLAUDE.md    ← Auto-generated loader (@enterprise + @personal)
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              │ Mirrored via symlinks (for Obsidian editing)
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ OneDrive\16 - Obsidian\{vault}/   (01_Claude_Home or 00_Claude) │
+│   04-Commands/_claude-commands   ──symlink──► ~/.claude/commands
+│   03-Skills/_claude-skills       ──symlink──► ~/.claude/skills
+│   02-Learnings/_claude-learning  ──symlink──► ~/.claude/learning
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Three-layer sync:**
+1. **Git** (primary): personal-claude-docs → GitHub → other computers
+2. **Symlinks** (runtime): personal-claude-docs → ~/.claude/ (Claude Code reads here)
+3. **Obsidian** (editing): ~/.claude/ → vault (optional, for visual editing)
+
+**Key invariant:** Git is the source of truth. OneDrive mirrors are read-only for Claude.
+
+---
+
+## Setup and Maintenance
+
+### Initial Setup on New Machine
+
+```powershell
+# 1. Clone this repo
+git clone https://github.com/Eduardodmb/ClaudeDocs.git "$env:USERPROFILE\personal-claude-docs"
+
+# 2. Run setup (auto-detects home vs work based on username)
+& "$env:USERPROFILE\personal-claude-docs\.claude\scripts\setup-personal.ps1"
+
+# 3. Verify setup
+& "$env:USERPROFILE\personal-claude-docs\.claude\enterprise\scripts\verify-sync.ps1" -Detailed
+```
+
+**What setup-personal.ps1 does:**
+- Detects computer profile (home: `eduar`, work: `emarquez`, laptop: auto)
+- Creates symlinks from `~/.claude/` → `personal-claude-docs/.claude/enterprise/`
+- Generates `~/.claude/CLAUDE.md` with `@enterprise` and `@personal` imports
+- Links project memory to enable git-based sync of session state
+- (Work only) Wires Safari Circuits organizational standards via `@safari` layer
+- Falls back to junctions if admin rights unavailable
+- Adds PowerShell profile shortcut (`claude-session` / `cs`)
+
+### Daily Sync Workflow
+
+```powershell
+# Morning: Pull latest changes from other computer
+cd $env:USERPROFILE\personal-claude-docs
+git pull
+
+# During work: Claude Code uses symlinked content automatically
+
+# Evening: Commit and push changes
+git add .claude/enterprise/ .claude/users/
+git commit -m "Learn: [what you discovered]"
+git push
+```
+
+**No restart needed after pull** — symlinks keep `~/.claude/` pointing to latest content.
+
+### Verification
+
+```powershell
+# Quick check
+& "$env:USERPROFILE\personal-claude-docs\.claude\enterprise\scripts\verify-sync.ps1"
+
+# Detailed report (command count, symlink targets, git status)
+& "$env:USERPROFILE\personal-claude-docs\.claude\enterprise\scripts\verify-sync.ps1" -Detailed
+
+# Manual check
+Get-Item ~/.claude/commands
+# Should show: Mode: l----- (symlink) Target: ...\personal-claude-docs\.claude\enterprise\commands
+```
+
+**Success criteria:**
+- All symlinks resolve
+- Command count matches across computers
+- Git status shows latest commit from other machine after pull
+
+See `.claude/enterprise/scripts/SYNC-TEST-GUIDE.md` for comprehensive testing procedures.
+
+---
+
+## Adding and Modifying Content
+
+### Adding a Custom Command
+
+```powershell
+# 1. Create file in enterprise/commands/
+cd $env:USERPROFILE\personal-claude-docs
+New-Item .claude\enterprise\commands\my-command.md
+
+# 2. Edit with standard format:
+#    - Description
+#    - Parameters
+#    - Implementation
+#    - Examples
+
+# 3. Commit and push
+git add .claude/enterprise/commands/my-command.md
+git commit -m "Add /my-command for [purpose]"
+git push
+
+# 4. Use immediately in new session
+# (Restart Claude Code or `/clear` to reload commands)
+/my-command
+```
+
+**Command format:** See existing commands in `.claude/enterprise/commands/` for templates.
+
+### Adding a Skill
+
+```powershell
+# 1. Create skill directory
+cd $env:USERPROFILE\personal-claude-docs
+New-Item -ItemType Directory .claude\enterprise\skills\my-skill
+
+# 2. Create SKILL.md with skill definition
+# See .claude/enterprise/skills/example-skill/SKILL.md for template
+
+# 3. Commit
+git add .claude/enterprise/skills/my-skill/
+git commit -m "Add my-skill for [purpose]"
+git push
+```
+
+### Capturing Learnings
+
+**Quick capture:**
+```powershell
+# Append to ideas backlog (unvalidated notes)
+Add-Content .claude\enterprise\learning\ideas\backlog.md "`n- [$(Get-Date -Format 'yyyy-MM-dd')] Learning: [insight]"
+git add .claude/enterprise/learning/ideas/backlog.md
+git commit -m "Learn: [insight]"
+git push
+```
+
+**Promotion pipeline:**
+1. **Idea** → `.claude/enterprise/learning/ideas/backlog.md`
+2. **Validated** → `.claude/enterprise/learning/best-practices/{topic}.md`
+3. **Standard** → `.claude/enterprise/CLAUDE.md` (enforced by Claude)
+
+See `.claude/enterprise/learning/PIPELINE.md` for full promotion criteria.
+
+### Modifying Configuration
+
+**Enterprise config (shared across all computers):**
+```powershell
+# Edit the master config
+notepad $env:USERPROFILE\personal-claude-docs\.claude\enterprise\CLAUDE.md
+
+# Commit
+git add .claude/enterprise/CLAUDE.md
+git commit -m "Update enterprise config: [what changed]"
+git push
+```
+
+**Personal config (user preferences, tech stack):**
+```powershell
+# Edit personal layer
+notepad $env:USERPROFILE\personal-claude-docs\.claude\users\emarquez-personal\CLAUDE.md
+
+# Commit
+git add .claude/users/emarquez-personal/
+git commit -m "Update personal prefs: [what changed]"
+git push
+```
+
+**Machine-specific config (local paths only):**
+```powershell
+# This is auto-generated by setup-personal.ps1
+# To regenerate:
+& "$env:USERPROFILE\personal-claude-docs\.claude\scripts\setup-personal.ps1" -Force
+```
+
+---
+
+## Key Files and Directories
+
+| Path | Purpose | Sync Method |
+|------|---------|-------------|
+| `.claude/enterprise/CLAUDE.md` | Core workflow, principles, patterns | Git |
+| `.claude/enterprise/commands/` | Custom `/commands` | Git |
+| `.claude/enterprise/skills/` | Reusable workflows | Git |
+| `.claude/enterprise/learning/` | Knowledge capture pipeline | Git |
+| `.claude/enterprise/agents/` | Subagent definitions | Git |
+| `.claude/enterprise/scripts/` | Setup and verification tools | Git |
+| `.claude/users/emarquez-personal/CLAUDE.md` | Personal preferences | Git |
+| `.claude/scripts/setup-personal.ps1` | Bootstrap script (called by machine-specific setup) | Git |
+| `.claude/project-memory/` | Session state and project memory | Git (NEW: syncs across machines) |
+
+**Do NOT commit to this repo:**
+- Workspace-specific files from other projects
+- API keys, credentials, secrets
+- Large binary files
+- Temporary test files
+
+---
+
+## Troubleshooting
+
+### Symlinks Broken
+
+**Symptom:** Commands don't work, verification fails
+
+**Fix:**
+```powershell
+& "$env:USERPROFILE\personal-claude-docs\.claude\scripts\setup-personal.ps1" -Force
+```
+
+### Git Conflicts on Pull
+
+**Symptom:** Merge conflicts when pulling changes
+
+**Fix:**
+```powershell
+cd $env:USERPROFILE\personal-claude-docs
+git status          # Review conflicts
+git stash           # Stash local changes if needed
+git pull            # Pull clean
+git stash pop       # Re-apply local changes
+# Resolve conflicts manually, then:
+git add .
+git commit -m "Merge: resolve conflicts"
+git push
+```
+
+### Different File Counts Between Computers
+
+**Symptom:** Home has 13 commands, work has 8
+
+**Fix:**
+```powershell
+cd $env:USERPROFILE\personal-claude-docs
+git fetch --all
+git status  # Check if behind origin
+git pull
+```
+
+### Commands Not Available After Pull
+
+**Symptom:** Files exist but commands don't work in Claude Code
+
+**Fix:** Restart Claude Code session or use `/clear` to reload
+
+---
+
+## Architecture Decisions
+
+### Why Symlinks Instead of Git Clones?
+
+**Problem:** Multiple repos (ClaudeHome, ClaudeWork, ClaudeDocs) would drift out of sync.
+
+**Solution:** One shared repo (ClaudeDocs) symlinked into each machine's `~/.claude/`.
+- Single source of truth
+- Instant sync (no re-clone needed)
+- Works with Obsidian vaults simultaneously
+
+### Why Three Layers (Git + Symlinks + OneDrive)?
+
+**Git:** Source of truth, cross-machine sync, version control
+**Symlinks:** Runtime wiring (Claude Code reads from `~/.claude/`)
+**OneDrive:** Optional visual editing in Obsidian, automatic backup
+
+Each layer has a specific purpose and doesn't duplicate the others.
+
+### Why Separate Enterprise and Personal Layers?
+
+**Enterprise:** Shared workflow practices (Boris Cherny methodology, RPI pattern)
+**Personal:** Tech stack, communication style, current focus areas
+**Work:** Safari Circuits organizational standards (work computer only)
+
+Separation allows:
+- Reuse enterprise layer for other users/teams
+- Customize personal prefs without affecting workflow
+- Keep work context isolated to work machine
+
+### Project Memory Sync (New)
+
+Previously, `~/.claude/projects/` (project memory) was local-only.
+Now it's symlinked to `.claude/project-memory/` and synced via Git.
+
+**Benefit:** Session state and learnings follow you across machines.
+**Trade-off:** Must manually resolve conflicts if working on same project from both computers simultaneously.
+
+---
+
+## Work Computer Integration (Safari Circuits)
+
+On work computer (`emarquez` user), setup-personal.ps1 adds:
+
+```powershell
+~/.claude/safari/              → organizational-docs/.claude/
+~/.claude/reference/safari/    → organizational-docs/shared/
+~/.claude/CLAUDE.md includes   → @safari/CLAUDE.md
+```
+
+This wires organizational standards (branding, APIs, security policies) into Claude sessions.
+
+**Requirement:** `organizational-docs` repo must exist at `~/organizational-docs`.
+
+---
+
+## References
+
+- **Setup script:** `.claude/scripts/setup-personal.ps1`
+- **Verification:** `.claude/enterprise/scripts/verify-sync.ps1`
+- **Testing guide:** `.claude/enterprise/scripts/SYNC-TEST-GUIDE.md`
+- **Learning pipeline:** `.claude/enterprise/learning/PIPELINE.md`
+- **Enterprise config:** `.claude/enterprise/CLAUDE.md`
+- **Personal config:** `.claude/users/emarquez-personal/CLAUDE.md`
+
+**External sources:**
+- [Boris Cherny's Claude Code workflow](https://x.com/bcherny/status/2007179832300581177)
+- [Advanced Context Engineering](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents)
+- [12-Factor Agents](https://github.com/humanlayer/12-factor-agents)

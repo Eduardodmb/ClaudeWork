@@ -1,0 +1,98 @@
+@using System.Data
+@model DataTable
+
+@if (Model == null || Model.Rows.Count == 0)
+{
+  <div class="alert alert-info">
+    <i class="fa fa-info-circle"></i> No roles found matching the criteria.
+  </div>
+}
+else
+{
+  <div class="table-responsive">
+    <table class="role-members-table">
+      <thead>
+        <tr>
+          <th style="width: 50px;">#</th>
+          <th>Role Name</th>
+          <th style="width: 150px;">Facility</th>
+          <th style="width: 120px; text-align: center;">Member Count</th>
+          <th style="width: 100px; text-align: center;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @{
+          int rowIndex = 1;
+          foreach (DataRow row in Model.Rows)
+          {
+            string roleId = row["Id"].ToString();
+            string roleName = row["Name"].ToString();
+            string facilityKey = row["Facility_Key"] != DBNull.Value ? row["Facility_Key"].ToString() : "N/A";
+            int memberCount = row["MemberCount"] != DBNull.Value ? Convert.ToInt32(row["MemberCount"]) : 0;
+
+            // Clean roleId for use in HTML IDs (remove hyphens and special chars)
+            string cleanRoleId = roleId.Replace("-", "").Replace(" ", "");
+
+            <tr>
+              <td>@rowIndex</td>
+              <td>
+                <strong>@roleName</strong>
+              </td>
+              <td>@facilityKey</td>
+              <td style="text-align: center;">
+                @if (memberCount > 0)
+                {
+                  <span class="badge badge-primary">@memberCount</span>
+                }
+                else
+                {
+                  <span class="badge badge-secondary">0</span>
+                }
+              </td>
+              <td style="text-align: center;">
+                @if (memberCount > 0)
+                {
+                  <button type="button" class="expand-btn" onclick="toggleRoleMembers('@roleId', '@Html.Raw(roleName.Replace("'", "\\'"))')">
+                    <i id="expand-icon-@cleanRoleId" class="fa fa-chevron-down"></i>
+                    View Members
+                  </button>
+                }
+                else
+                {
+                  <span class="text-muted"><em>No members</em></span>
+                }
+              </td>
+            </tr>
+
+            if (memberCount > 0)
+            {
+              <tr>
+                <td colspan="5" style="padding: 0; border: none;">
+                  <div id="members-@cleanRoleId" class="member-list" data-loaded="false">
+                    <p class="text-muted"><em>Loading members...</em></p>
+                  </div>
+                </td>
+              </tr>
+            }
+
+            rowIndex++;
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-3">
+    <p class="text-muted">
+      <strong>Total Roles:</strong> @Model.Rows.Count
+      @if (ViewBag.ActiveOnly)
+      {
+        <span> | <em>Showing active users only</em></span>
+      }
+      else
+      {
+        <span> | <em>Showing all users (active and inactive)</em></span>
+      }
+    </p>
+  </div>
+}

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 900 550" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrow-slate" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#60a5fa"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34d399"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fb923c"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#9B1C1C"/>
+    </marker>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="550" fill="url(#bgGrad)"/>
+
+  <!-- Title -->
+  <text x="450" y="40" text-anchor="middle" fill="#e2e8f0" font-size="24" font-weight="bold" font-family="system-ui, sans-serif">Context Evolution Path</text>
+  <text x="450" y="65" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="system-ui, sans-serif">From Conversation to Enforced Policy</text>
+
+  <!-- Stage 1: Conversation -->
+  <g transform="translate(50, 110)">
+    <rect width="120" height="120" fill="#1e293b" stroke="#64748b" stroke-width="2" rx="8"/>
+    <rect width="120" height="30" fill="#64748b" rx="8" ry="0"/>
+    <text x="60" y="22" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Conversation</text>
+    <text x="60" y="55" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Ephemeral</text>
+    <text x="60" y="75" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Chat history</text>
+    <text x="60" y="90" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Session context</text>
+    <text x="60" y="105" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Working memory</text>
+  </g>
+
+  <!-- Stage 2: Captured -->
+  <g transform="translate(200, 110)">
+    <rect width="120" height="120" fill="#1e293b" stroke="#60a5fa" stroke-width="2" rx="8"/>
+    <rect width="120" height="30" fill="#60a5fa" rx="8" ry="0"/>
+    <text x="60" y="22" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Captured</text>
+    <text x="60" y="55" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Persisted</text>
+    <text x="60" y="75" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Ideas, reminders</text>
+    <text x="60" y="90" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Brain dumps</text>
+    <text x="60" y="105" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Raw notes</text>
+  </g>
+
+  <!-- Stage 3: Learning -->
+  <g transform="translate(350, 110)">
+    <rect width="120" height="120" fill="#1e293b" stroke="#34d399" stroke-width="2" rx="8"/>
+    <rect width="120" height="30" fill="#34d399" rx="8" ry="0"/>
+    <text x="60" y="22" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Learning</text>
+    <text x="60" y="55" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Documented</text>
+    <text x="60" y="75" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Patterns found</text>
+    <text x="60" y="90" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Mistakes corrected</text>
+    <text x="60" y="105" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Knowledge gained</text>
+  </g>
+
+  <!-- Stage 4: Best Practice -->
+  <g transform="translate(500, 110)">
+    <rect width="120" height="120" fill="#1e293b" stroke="#fb923c" stroke-width="2" rx="8"/>
+    <rect width="120" height="30" fill="#fb923c" rx="8" ry="0"/>
+    <text x="60" y="22" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Best Practice</text>
+    <text x="60" y="55" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Validated</text>
+    <text x="60" y="75" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Proven effective</text>
+    <text x="60" y="90" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Repeatable</text>
+    <text x="60" y="105" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Documented</text>
+  </g>
+
+  <!-- Stage 5: Standard -->
+  <g transform="translate(650, 110)">
+    <rect width="120" height="120" fill="#1e293b" stroke="#a78bfa" stroke-width="2" rx="8"/>
+    <rect width="120" height="30" fill="#a78bfa" rx="8" ry="0"/>
+    <text x="60" y="22" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Standard</text>
+    <text x="60" y="55" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Adopted</text>
+    <text x="60" y="75" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Team-wide use</text>
+    <text x="60" y="90" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">SHOULD follow</text>
+    <text x="60" y="105" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Default choice</text>
+  </g>
+
+  <!-- Stage 6: Policy -->
+  <g transform="translate(730, 280)">
+    <rect width="120" height="120" fill="#1e293b" stroke="#9B1C1C" stroke-width="3" rx="8" filter="url(#glow)"/>
+    <rect width="120" height="30" fill="#9B1C1C" rx="8" ry="0"/>
+    <text x="60" y="22" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="bold" font-family="system-ui, sans-serif">Policy</text>
+    <text x="60" y="55" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="system-ui, sans-serif">Enforced</text>
+    <text x="60" y="75" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">MUST follow</text>
+    <text x="60" y="90" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Non-negotiable</text>
+    <text x="60" y="105" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Auto-enforced</text>
+  </g>
+
+  <!-- Arrows -->
+  <line x1="170" y1="170" x2="200" y2="170" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-slate)"/>
+  <line x1="320" y1="170" x2="350" y2="170" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <line x1="470" y1="170" x2="500" y2="170" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <line x1="620" y1="170" x2="650" y2="170" stroke="#fb923c" stroke-width="2" marker-end="url(#arrow-orange)"/>
+  <!-- Down to Policy -->
+  <line x1="710" y1="230" x2="710" y2="250" stroke="#a78bfa" stroke-width="2"/>
+  <line x1="710" y1="250" x2="790" y2="250" stroke="#a78bfa" stroke-width="2"/>
+  <line x1="790" y1="250" x2="790" y2="280" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+  <!-- Promotion Criteria -->
+  <g transform="translate(50, 280)">
+    <rect width="650" height="160" fill="#0f172a" stroke="#334155" stroke-width="1" rx="8"/>
+    <text x="325" y="25" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="bold" font-family="system-ui, sans-serif">Promotion Criteria</text>
+
+    <!-- Captured criteria -->
+    <g transform="translate(20, 45)">
+      <circle cx="8" cy="8" r="6" fill="#60a5fa"/>
+      <text x="20" y="12" fill="#60a5fa" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Captured</text>
+      <text x="20" y="28" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Useful for future reference</text>
+    </g>
+
+    <!-- Learning criteria -->
+    <g transform="translate(170, 45)">
+      <circle cx="8" cy="8" r="6" fill="#34d399"/>
+      <text x="20" y="12" fill="#34d399" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Learning</text>
+      <text x="20" y="28" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Pattern identified, documented</text>
+    </g>
+
+    <!-- Best Practice criteria -->
+    <g transform="translate(340, 45)">
+      <circle cx="8" cy="8" r="6" fill="#fb923c"/>
+      <text x="20" y="12" fill="#fb923c" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Best Practice</text>
+      <text x="20" y="28" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Tested and proven effective</text>
+    </g>
+
+    <!-- Standard criteria -->
+    <g transform="translate(510, 45)">
+      <circle cx="8" cy="8" r="6" fill="#a78bfa"/>
+      <text x="20" y="12" fill="#a78bfa" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Standard</text>
+      <text x="20" y="28" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Team adoption, consensus</text>
+    </g>
+
+    <!-- Policy criteria -->
+    <g transform="translate(20, 95)">
+      <circle cx="8" cy="8" r="6" fill="#9B1C1C"/>
+      <text x="20" y="12" fill="#9B1C1C" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Policy</text>
+      <text x="20" y="28" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Critical for safety/quality, must be auto-enforced</text>
+    </g>
+
+    <!-- Feedback loop note -->
+    <g transform="translate(300, 95)">
+      <text x="0" y="12" fill="#fbbf24" font-size="10" font-weight="bold" font-family="system-ui, sans-serif">Continuous Feedback</text>
+      <text x="0" y="28" fill="#94a3b8" font-size="9" font-family="system-ui, sans-serif">Learnings flow back from all stages to improve earlier phases</text>
+    </g>
+  </g>
+
+  <!-- Pipeline reference -->
+  <g transform="translate(50, 470)">
+    <text x="0" y="0" fill="#64748b" font-size="11" font-family="system-ui, sans-serif">Pipeline: ~/.claude/learning/PIPELINE.md</text>
+    <text x="0" y="18" fill="#64748b" font-size="11" font-family="system-ui, sans-serif">Catalog: ~/.claude/learning/</text>
+  </g>
+
+  <!-- Safari logo -->
+  <circle cx="850" cy="40" r="25" fill="#9B1C1C" filter="url(#glow)"/>
+  <text x="850" y="47" text-anchor="middle" fill="#e2e8f0" font-size="20" font-weight="bold" font-family="system-ui, sans-serif">S</text>
+</svg>

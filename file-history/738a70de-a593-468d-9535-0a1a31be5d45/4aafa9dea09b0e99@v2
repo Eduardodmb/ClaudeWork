@@ -1,0 +1,47 @@
+@using Firstronic.Areas.Manage.Controllers
+@using NonFactors.Mvc.Grid;
+
+@model IQueryable<tbl_Common_Building>
+
+<div class="container container-big" id="ContainerBig">
+    <div class="row">
+        <div class="col-md-9">
+            @Html.Partial("_Breadcrumb", "Manage Buildings")
+
+            @(Html
+              .Grid(Model)
+              .Build(columns =>
+              {
+                  columns.Add(model => model.Building_Code).RenderedAs(model => Html.ActionLink(model.Building_Code?.ToString() ?? "", "Edit", "Building", new { id = model.Building_Key }, new { })).Titled("Building Code");
+                  columns.Add(model => model.Name).Titled("Building Name");
+                  columns.Add(model => model.Facility_Name).Titled("Facility");
+                  columns.Add(model => model.PRODUCTION ? "Yes" : "No").Titled("Production");
+                  columns.Add(model => model.WAREHOUSE ? "Yes" : "No").Titled("Warehouse");
+                  columns.Add(model => model.SHIPPING ? "Yes" : "No").Titled("Shipping");
+                  columns.Add(model => "<a href=\"Building/Edit/" + model.Building_Key + "\" class=\"editbutton\">Edit</a>").RenderedAs(y => Html.ActionLink("Edit", "Edit", new { id = y.Building_Key }, new { @class = "editbutton" })).Css("editlink");
+              })
+              .Empty("No data found")
+              .Pageable(pager =>
+              {
+                  pager.PagesToDisplay = 10;
+                  pager.RowsPerPage = 15;
+              })
+              .Filterable()
+              .Sortable()
+            )
+        </div>
+        <div class="col-md-3">
+            <div class="pageSide">
+                <ul class="js-scroll-nav duik-content-nav">
+                    <li class="duik-content-nav__item contents">Actions</li>
+                    <li>
+                        <a class="md-btn md-btn-primary md-btn-small" href="@Url.Action("Create", "Building")">
+                            @Resources.Actions.Add
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>

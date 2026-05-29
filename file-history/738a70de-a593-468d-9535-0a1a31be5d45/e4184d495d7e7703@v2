@@ -1,0 +1,285 @@
+﻿using APIs_BeFirst.Models.DataBase;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using static APIs_BeFirst.Models.Response.AccountResponse;
+using static APIs_BeFirst.Models.Request.AccountRequest;
+using Microsoft.EntityFrameworkCore;
+//using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
+using System.Text.RegularExpressions;
+
+namespace APIs_BeFirst.Service.Account
+{
+    public class LoginpssService : ILoginpssService
+    {
+        private readonly IUserService _userService;
+        private UserManager<IdentityUser> _userManager;
+        protected readonly ProdMesDbContext _context;
+
+        public LoginpssService(ProdMesDbContext context, UserManager<IdentityUser> userManager, IUserService userService)
+        {
+            _userManager = userManager;
+            _context = context;
+            _userService = userService;
+        }
+
+
+        // Obtener los detalles del login del usuario
+        public async Task<UserLogin> GetUserLoginAsync(string username, string? password = "")
+        {
+            var newModel = new UserLogin();
+
+            try
+            {
+                // 1. Buscar el usuario por `Username` o `Badge`
+                var user = await _context.Aspnetusers
+                    .AsNoTracking()
+                    .Where(u => u.IsActive == true && (u.UserName == username || u.Badge == username))
+                    .FirstOrDefaultAsync();
+
+                if (user != null)
+                {
+                    // Asignamos valores al modelo `UserLogin`
+                    newModel.Name = user.Name;
+                    newModel.Badge = user.Badge;
+                    newModel.ASPNET_ID = user.Id;
+                    newModel.ASPNET_Username = user.UserName;
+                    newModel.PLEX_Username = user.UserName; // PLEX_Username es igual al UserName aquí
+                    newModel.PLEX_User_No = Convert.ToString(user.PlexusUserNo);
+                }
+                else
+                {
+                    if (username.StartsWith("R"))
+                    {
+
+                        username = Regex.Replace(username, @"\D", "").TrimStart('0');
+
+                        var user2 = await _context.Aspnetusers
+                             .AsNoTracking()
+                             .Where(u => u.IsActive == true && (u.UserName == username || u.Badge == username))
+                             .FirstOrDefaultAsync();
+
+                        if (user2 != null)
+                        {
+                            // Asignamos valores al modelo `UserLogin`
+                            newModel.Name = user2.Name;
+                            newModel.Badge = user2.Badge;
+                            newModel.ASPNET_ID = user2.Id;
+                            newModel.ASPNET_Username = user2.UserName;
+                            newModel.PLEX_Username = user2.UserName; // PLEX_Username es igual al UserName aquí
+                            newModel.PLEX_User_No = Convert.ToString(user2.PlexusUserNo);
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Username or Badge not found");
+                        }
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Username or Badge not found");
+                    }
+                }
+
+                var userId = newModel.PLEX_Username; // El valor de @PLEX_Username
+
+                try
+                {
+                    var query = @"SELECT User_ID AS UserID, Building_Key AS BuildingKey
+                                FROM OPENQUERY([PLEX], '
+                                    SELECT Pcpu.User_ID, Cb.Building_Key
+                                    FROM Plexus_Control_v_Plexus_User_e AS Pcpu
+                                    JOIN Common_v_Building_e AS Cb
+                                        ON Pcpu.Plexus_Customer_No = Cb.Plexus_Customer_No
+                                        AND Pcpu.Building_Key = Cb.Building_Key
+                                ')
+                                WHERE User_ID = @UserId"; // Nota cómo usamos el parámetro en el SQL
+
+                    var result = await _context.UserBuildingResults
+                        .FromSqlRaw(query, new SqlParameter("@UserId", userId))
+                        .FirstOrDefaultAsync();
+
+                    newModel.Building_Key = Convert.ToInt32(result.BuildingKey);
+                }
+                catch
+                {
+                    // If PLEX connection fails, load the user's default building_key from ASPNETUSERS
+                    var userWithBuildingKey = await _context.Aspnetusers
+                        .AsNoTracking()
+                        .Where(u => u.Id == newModel.ASPNET_ID)
+                        .Select(u => u.BuildingKey)
+                        .FirstOrDefaultAsync();
+
+                    newModel.Building_Key = userWithBuildingKey != 0 ? userWithBuildingKey : 33333;
+                }
+
+                var userfound = await _context.Aspnetusers
+                    .AsNoTracking()
+                    .Where(u => u.Id == newModel.ASPNET_ID)
+                    .FirstOrDefaultAsync();
+
+                if (userfound != null)
+                {
+                    newModel.ASPNET_ID = userfound.Id;
+                    newModel.ASPNET_Username = userfound.UserName;
+
+
+                    // 3. Obtener el ControlID y Username desde la tabla `HR_idt_users`
+                    var userControl = await _context.HrIdtUsers
+                        .AsNoTracking()
+                        .Where(u => u.UserId == userfound.UserName)
+                        .Select(u => new { u.ControlId, u.Username })
+                        .FirstOrDefaultAsync();
+
+                    if (userControl != null)
+                    {
+                        newModel.BeFirst_ControlID = Convert.ToString(userControl.ControlId);
+                        newModel.BeFirst_Username = userControl.Username;
+                    }
+
+                    // 4. Verificar si el usuario tiene el rol "BF Administrator"
+                    bool userRequirePassword = await HadUsernameRolAsync(newModel.ASPNET_ID, "BF Administrator");
+
+                    // 5. Si el rol requiere una contraseña, validamos la contraseña
+                    if (userRequirePassword)
+                    {
+                        var userASP = await _userService.FindByIdAsync(userfound.Id);
+
+                        if (userASP != null)
+                        {
+                            var isPasswordValid = await _userService.CheckPasswordAsync(userASP, password);
+
+                            if (isPasswordValid)
+                            {
+
+                                return newModel;
+                            }
+                            else
+                            {
+                                newModel = new UserLogin(); // Regresamos el modelo vacío
+                                newModel.passwordRequired = true; // Marca que la contraseña es requerida
+                            }
+                        }
+                        else
+                        {
+                            return newModel;
+                        }
+                    }
+                    else
+                    {
+                        return newModel;
+                    }
+                }
+                else
+                {
+                    return null; // Usuario no encontrado
+                }
+
+                return newModel;
+            }
+            catch (Exception)
+            {
+                return null; // Manejo genérico de errores
+            }
+        }
+
+
+
+        public async Task<bool> HadUsernameRolAsync(string userId, string roleName)
+        {
+            // Verificamos si el usuario tiene el rol especificado
+            var roleExists = await _context.Aspnetuserroles
+                .AnyAsync(ur => ur.UserId == userId && ur.Role.Name == roleName);
+
+            return roleExists;
+        }
+
+        public async Task<bool> IsUserPasswordCorrect(string username, string password)
+        {
+            // Verificamos si el usuario tiene el rol especificado
+            var newModel = new UserLogin();
+
+            try
+            {
+                // 1. Buscar el usuario por `Username` o `Badge`
+                var user = await _context.Aspnetusers
+                    .AsNoTracking()
+                    .Where(u => u.IsActive == true && (u.UserName == username || u.Badge == username))
+                    .FirstOrDefaultAsync();
+
+                if (user != null)
+                {
+                    newModel.ASPNET_ID = user.Id;
+                    newModel.ASPNET_Username = user.UserName;
+                }
+                else
+                {
+                    if (username.StartsWith("R"))
+                    {
+                        username = Regex.Replace(username, @"\D", "").TrimStart('0');
+
+                        var user2 = await _context.Aspnetusers
+                             .AsNoTracking()
+                             .Where(u => u.IsActive == true && (u.UserName == username || u.Badge == username))
+                             .FirstOrDefaultAsync();
+
+                        if (user2 != null)
+                        {
+                            newModel.ASPNET_ID = user2.Id;
+                            newModel.ASPNET_Username = user2.UserName;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                var userfound = await _context.Aspnetusers
+                    .AsNoTracking()
+                    .Where(u => u.Id == newModel.ASPNET_ID && u.IsActive == true)
+                    .FirstOrDefaultAsync();
+
+                if (userfound != null)
+                {
+                    newModel.ASPNET_ID = userfound.Id;
+                    newModel.ASPNET_Username = userfound.UserName;
+
+                    var userASP = await _userService.FindByIdAsync(userfound.Id);
+
+                    if (userASP != null)
+                    {
+                        var isPasswordValid = await _userService.CheckPasswordAsync(userASP, password);
+
+                        if (isPasswordValid)
+                        {
+
+                            return true;
+                        }
+                        else
+                        {
+                            return false; // Contrasenas invalidas.
+                        }
+                    }
+                    else
+                    {
+                        return false; // Usuario no encontrado
+                    }
+                }
+                else
+                {
+                    return false; // Usuario no encontrado
+                }
+            }
+            catch (Exception)
+            {
+                return false; // Manejo genérico de errores
+            }
+        }
+
+
+    }
+}

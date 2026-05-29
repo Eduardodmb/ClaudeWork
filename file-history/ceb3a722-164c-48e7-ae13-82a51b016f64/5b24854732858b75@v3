@@ -1,0 +1,1785 @@
+
+@using System.Data;
+@using System.Data.SqlClient;
+
+@model Firstronic.Areas.Dashboards.Models.customreport_station
+
+@{
+  /**/
+  SqlParameter[] stationParameters = new SqlParameter[]{
+  new SqlParameter("@StationID",SqlDbType.Int) {Value = Model.stationid},
+};
+
+  DateTime dia_current = new DateTime(Model.year, Model.month, Model.day);
+  DateTime dia_yesterday = dia_current.AddDays(-1);
+  DateTime dia_tomorrow = dia_current.AddDays(+1);
+
+  var u_yesterday = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_yesterday.Add("year", dia_yesterday.Year);
+  u_yesterday.Add("month", dia_yesterday.Month);
+  u_yesterday.Add("day", dia_yesterday.Day);
+
+  var u_tomorrow = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+  u_tomorrow.Add("year", dia_tomorrow.Year);
+  u_tomorrow.Add("month", dia_tomorrow.Month);
+  u_tomorrow.Add("day", dia_tomorrow.Day);
+
+  Model.current = dia_current;
+
+  DataTable dt_workcenters = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT    PD_idt_stations.StationID, PD_idt_stations.StationName, PD_idt_stations.AreaID, PD_idt_stations.IsActive, PD_idt_stations.DownTimeCodeID, PD_idt_stations.LastPieceTime, PD_idt_stations.LastPartID, PD_idt_stations.LastJob, PD_idt_stations.LastJobText, PD_idt_stations.LastJobType, PD_idt_stations.LastJobQty, PD_idt_stations.LastJobQtyBuild, PD_idt_stations.LastHourQty, PD_idt_stations.LastRate, PD_idt_stations.LastSide, PD_idt_stations.BeFirstActive, PD_idt_stations.LockStatus, PD_idt_stations.LastFormat, PD_idt_stations.DashVisible, PD_idt_stations.ProdVisible, PD_idt_stations.LockMachines, PD_idt_stations.Alias, PD_idt_stations.LastBinID, PD_idt_stations.PLC_Name, PD_idt_stations.Workcenter_Key, PD_idt_stations.Workcenter_Key_Kanban, PD_idt_stations.Workcenter_PLC_Name, PD_idt_stations.Workcenter_PLC_Name_Kanban, PD_idt_stations.AutoID, PD_idt_stations.Facility_Key, PD_idt_stations.Allow_Plex_Transactions, PD_idt_stations.Workcenter_Key_1, PD_idt_stations.Workcenter_Key_2, PD_idt_stations.Workcenter_Key_Kanban_1, PD_idt_stations.Workcenter_Key_Kanban_2, PD_idt_stations.Workcenter_PLC_Name_1, PD_idt_stations.Workcenter_PLC_Name_2, PD_idt_stations.Workcenter_PLC_Name_Kanban_1, PD_idt_stations.Workcenter_PLC_Name_Kanban_2, PD_idt_stations.Allow_LoadMaterial, PD_idt_stations.Custom_Labels, PD_idt_stations.Allow_Plex_Transactions_2, CS_idt_partnumbers.PartNumber, EN_idt_downtimes_codes.RazonSpecific,datediff(MINUTE,LastPieceTime,GETDATE()) as Downtime FROM            PD_idt_stations LEFT JOIN CS_idt_partnumbers ON PD_idt_stations.LastPartID = CS_idt_partnumbers.PartID LEFT JOIN EN_idt_downtimes_codes ON PD_idt_stations.DownTimeCodeID = EN_idt_downtimes_codes.DownTimeCodeID WHERE (PD_idt_stations.stationid = @StationID)", stationParameters);
+
+  var StationID = Model.stationid;
+  var StationName = "";
+  var areaid = "0";
+  try
+  {
+    StationName = dt_workcenters.Rows[0]["StationName"].ToString();
+    areaid = dt_workcenters.Rows[0]["AreaID"].ToString();
+  }
+  catch
+  {
+
+  }
+
+  SqlParameter[] areaParameters = new SqlParameter[]{
+  new SqlParameter("@AreaID",SqlDbType.Int) {Value = areaid},
+};
+
+  DataTable dt_areas = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT    PD_idt_stations.StationID, PD_idt_stations.StationName, PD_idt_stations.AreaID, PD_idt_stations.IsActive, PD_idt_stations.DownTimeCodeID, PD_idt_stations.LastPieceTime, PD_idt_stations.LastPartID, PD_idt_stations.LastJob, PD_idt_stations.LastJobText, PD_idt_stations.LastJobType, PD_idt_stations.LastJobQty, PD_idt_stations.LastJobQtyBuild, PD_idt_stations.LastHourQty, PD_idt_stations.LastRate, PD_idt_stations.LastSide, PD_idt_stations.BeFirstActive, PD_idt_stations.LockStatus, PD_idt_stations.LastFormat, PD_idt_stations.DashVisible, PD_idt_stations.ProdVisible, PD_idt_stations.LockMachines, PD_idt_stations.Alias, PD_idt_stations.LastBinID, PD_idt_stations.PLC_Name, PD_idt_stations.Workcenter_Key, PD_idt_stations.Workcenter_Key_Kanban, PD_idt_stations.Workcenter_PLC_Name, PD_idt_stations.Workcenter_PLC_Name_Kanban, PD_idt_stations.AutoID, PD_idt_stations.Facility_Key, PD_idt_stations.Allow_Plex_Transactions, PD_idt_stations.Workcenter_Key_1, PD_idt_stations.Workcenter_Key_2, PD_idt_stations.Workcenter_Key_Kanban_1, PD_idt_stations.Workcenter_Key_Kanban_2, PD_idt_stations.Workcenter_PLC_Name_1, PD_idt_stations.Workcenter_PLC_Name_2, PD_idt_stations.Workcenter_PLC_Name_Kanban_1, PD_idt_stations.Workcenter_PLC_Name_Kanban_2, PD_idt_stations.Allow_LoadMaterial, PD_idt_stations.Custom_Labels, PD_idt_stations.Allow_Plex_Transactions_2, CS_idt_partnumbers.PartNumber, EN_idt_downtimes_codes.RazonSpecific, datediff(MINUTE, LastPieceTime, GETDATE()) as Downtime FROM            PD_idt_stations LEFT JOIN CS_idt_partnumbers ON PD_idt_stations.LastPartID = CS_idt_partnumbers.PartID LEFT JOIN EN_idt_downtimes_codes ON PD_idt_stations.DownTimeCodeID = EN_idt_downtimes_codes.DownTimeCodeID WHERE (PD_idt_stations.AreaID = @AreaID) AND (PD_idt_stations.DashVisible = 1) Order by PD_idt_stations.SortNo", areaParameters);
+
+
+  string nextareaid = Model.stationid.ToString();
+  string nextarea = StationName;
+
+  string prevareaid = Model.stationid.ToString();
+  string prevarea = StationName;
+
+  int index = -1;
+  DataRow[] rows = dt_areas.Select("StationID='" + Model.stationid + "'");
+  if (rows.Count() > 0)
+  {
+    index = dt_areas.Rows.IndexOf(rows[0]);
+  }
+
+  try
+  {
+    nextareaid = dt_areas.Rows[index + 1][0].ToString();
+    nextarea = dt_areas.Rows[index + 1][1].ToString();
+  }
+  catch
+  {
+    nextareaid = dt_areas.Rows[0][0].ToString();
+    nextarea = dt_areas.Rows[0][1].ToString();
+  }
+
+  try
+  {
+    prevareaid = dt_areas.Rows[index - 1][0].ToString();
+    prevarea = dt_areas.Rows[index - 1][1].ToString();
+  }
+  catch
+  {
+    prevareaid = dt_areas.Rows[dt_areas.Rows.Count - 1][0].ToString();
+    prevarea = dt_areas.Rows[dt_areas.Rows.Count - 1][1].ToString();
+  }
+
+}
+
+@section head{
+  <script src="~/Content/vendor/raphael/raphael.min.js"></script>
+  <script src="~/Content/vendor/morris/morris.js"></script>
+  <link href="~/Content/vendor/morris/morris.css" rel="stylesheet">
+
+  @* Try multiple CDN sources for Chart.js *@
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
+          integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+          onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js';">
+  </script>
+
+  <style>
+    :root {
+      --theme-bg-primary: #ffffff;
+      --theme-bg-secondary: #f8f8f8;
+      --theme-text-primary: #000000;
+      --theme-text-secondary: #666666;
+      --theme-border: #adadad;
+      --theme-card-bg: #ffffff;
+      --theme-goal-color: #4CAF50;
+      --theme-actual-color: #2196F3;
+      --theme-efficiency-color: #FF9800;
+      --theme-oee-color: #9C27B0;
+    }
+
+    [data-theme="dark"] {
+      --theme-bg-primary: #1e1e1e;
+      --theme-bg-secondary: #2d2d2d;
+      --theme-text-primary: #ffffff;
+      --theme-text-secondary: #b0b0b0;
+      --theme-border: #444444;
+      --theme-card-bg: #2d2d2d;
+      --theme-goal-color: #66BB6A;
+      --theme-actual-color: #42A5F5;
+      --theme-efficiency-color: #FFA726;
+      --theme-oee-color: #AB47BC;
+    }
+
+    .theme-toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 10px 20px;
+      background-color: var(--theme-card-bg);
+      border: 1px solid var(--theme-border);
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--theme-text-primary);
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .theme-toggle-btn:hover {
+      opacity: 0.8;
+    }
+
+    [data-theme="dark"] .md-card,
+    [data-theme="dark"] .uk-card {
+      background-color: var(--theme-card-bg);
+      color: var(--theme-text-primary);
+    }
+
+    [data-theme="dark"] .mvc-grid table {
+      background-color: var(--theme-bg-secondary);
+      color: var(--theme-text-primary);
+    }
+
+    [data-theme="dark"] .mvc-grid th {
+      background-color: #3d3d3d;
+      color: var(--theme-text-primary);
+    }
+    #mypopup {
+      width: 260px;
+      padding: 6px;
+      font-family: Arial, sans-serif;
+      font-size: 10pt !important;
+      background-color: #000000;
+      color: #fff;
+      border-radius: 6px;
+      position: absolute;
+      display: none;
+      min-height: 40px;
+      border: 1px solid #000000;
+    }
+
+      #mypopup p {
+        padding: 0px;
+        margin-bottom: 0px;
+      }
+
+      #mypopup::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        transform: rotate(45deg);
+        background-color: #000000;
+        position: absolute;
+        left: -6px;
+        top: 20px;
+        border-left: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+    #mypopup_details {
+      width: 260px;
+      padding: 6px;
+      font-family: Arial, sans-serif;
+      font-size: 10pt !important;
+      background-color: #000000;
+      color: #fff;
+      border-radius: 6px;
+      position: absolute;
+      display: none;
+      min-height: 40px;
+      border: 1px solid #000000;
+    }
+
+      #mypopup_details p {
+        padding: 0px;
+        margin-bottom: 0px;
+      }
+
+      #mypopup_details::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        transform: rotate(45deg);
+        background-color: #000000;
+        position: absolute;
+        left: -6px;
+        top: 20px;
+        border-left: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+    #mypopup_ticket {
+      width: 260px;
+      padding: 6px;
+      font-family: Arial, sans-serif;
+      font-size: 10pt !important;
+      background-color: #000000;
+      color: #fff;
+      border-radius: 6px;
+      position: absolute;
+      display: none;
+      min-height: 40px;
+      border: 1px solid #000000;
+    }
+
+      #mypopup_ticket p {
+        padding: 0px;
+        margin-bottom: 0px;
+      }
+
+      #mypopup_ticket::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        transform: rotate(45deg);
+        background-color: #000000;
+        position: absolute;
+        left: -6px;
+        top: 20px;
+        border-left: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+  </style>
+}
+
+<button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">
+  <span class="material-icons" style="vertical-align: middle;">brightness_6</span> Toggle Theme
+</button>
+
+<div class="uk-card md-card mn-b-25">
+  <div class="md-card-content fw-600 fs-14">
+    <div class="uk-clearfix">
+      <div class="uk-float-left">
+        @StationName @dia_current.ToString("yyyy-MM-dd")
+        @Html.HiddenFor(y => y.stationid, new { id = "txtStationID" })
+      </div>
+      <div class="uk-float-right">
+        <div class="uk-grid" uk-grid>
+          <div class="uk-width-1-1 text-right fs-12">
+            <a href="~/Dashboards/Station/Index/@prevareaid?year=@Model.year&month=@Model.month&day=@Model.day" class="pd-r-20">
+              <span class="material-icons">arrow_left</span> @prevarea
+            </a>
+            <a href="#">
+              @StationName
+            </a>
+            <a href="~/Dashboards/Station/Index/@nextareaid?year=@Model.year&month=@Model.month&day=@Model.day" class="pd-l-20">
+              @nextarea <span class="material-icons">arrow_right</span>
+            </a>
+            <a href="~/Dashboards/Areas/Index/@areaid?year=@Model.year&month=@Model.month&day=@Model.day" class="text-c-purple pd-l-20">
+              <span class="material-icons">arrow_upward</span> Up Area
+            </a>
+          </div>
+          <div class="uk-width-1-1 text-right uk-margin-small-top fs-12">
+            <a href="@Url.RouteUrl(u_yesterday)"><span class="material-icons">arrow_left</span></a>
+
+            @Html.TextBoxFor(y => y.current, new { @id = "ddlDateUpdate", @Value = Model.current.ToString("MM/dd/yyyy") })
+
+            <a href="@Url.RouteUrl(u_tomorrow)"><span class="material-icons">arrow_right</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@* MACHINES *@
+
+<div class="uk-card">
+  <div class="uk-grid" uk-grid>
+
+    @{
+      DataTable dt_machines = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT  Maintenance_Machines_Position.PositionID, Maintenance_Machines_Position.Equipment_Key AS Expr2, Maintenance_Machines_Position.Read_Connection, Maintenance_Machines_Position.Write_Connection, PLEX_Maintenance_v_Equipment.*, PLEX_Maintenance_v_Equipment_Type.Equipment_Type FROM            Maintenance_Machines_Position INNER JOIN PLEX_Maintenance_v_Equipment ON Maintenance_Machines_Position.Equipment_Key = PLEX_Maintenance_v_Equipment.Equipment_Key INNER JOIN PLEX_Maintenance_v_Equipment_Type ON PLEX_Maintenance_v_Equipment.Equipment_Type_Key = PLEX_Maintenance_v_Equipment_Type.Equipment_Type_Key WHERE Maintenance_Machines_Position.stationid=@StationID AND PLEX_Maintenance_v_Equipment.Equipment_ID not like '%ANUAL%' AND PLEX_Maintenance_v_Equipment.Equipment_ID not like '%TRIMESTRAL%' AND PLEX_Maintenance_v_Equipment.Equipment_ID not like '%TRIMETRAL%' ORDER BY PositionID ASC", stationParameters);
+    }
+
+
+    @if (dt_machines.Rows.Count > 0)
+    {
+      foreach (DataRow machine in dt_machines.Rows)
+
+      {
+
+        <div class="uk-width-1-10@l uk-width-1-5@m uk-width-1-2@s mvc-grid mvc-grid-excel-mode">
+          <table id="myTable" class="table text-center bg-white" cellspacing="0">
+            <thead>
+              <tr>
+                <th><a href="~/Dashboards/Machines/Index/@machine["Equipment_Key"].ToString()">@machine["Equipment_ID"].ToString().Split(' ')[0].ToString()</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="height:80px;vertical-align:middle;">
+                <td>
+                  @switch (@machine["Equipment_Type"].ToString())
+                  {
+                    case "SMT Loader":
+                      <img src="~/Content/img/machine/smticons/c_loader.jpg" class="h-81" />
+                      break;
+                    case "SMT Paste Print":
+                      <img src="~/Content/img/machine/smticons/c_dek.jpg" class="h-81" />
+                      break;
+                    case "SMT Glue":
+                      <img src="~/Content/img/machine/smticons/c_dek.jpg" class="h-81" />
+                      break;
+                    case "SMT Conveyor":
+                      <img src="~/Content/img/machine/smticons/c_conveyor.jpg" class="h-81" />
+                      break;
+                    case "SMT Inspection":
+                      <img src="~/Content/img/machine/smticons/c_aoi.jpg" class="h-81" />
+                      break;
+                    case "SMT Placement":
+                      <img src="~/Content/img/machine/smticons/c_smt.jpg" class="h-81" />
+                      break;
+                    case "SMT Reflow":
+                      <img src="~/Content/img/machine/smticons/c_oven.jpg" class="h-81" />
+                      break;
+                    default:
+                      <img src="~/Content/img/missing.png" class="h-81" />
+                      break;
+                  }
+
+                </td>
+              </tr>
+
+              <tr>
+                @if (@machine["Read_Connection"].ToString() == "1")
+                {
+                  <td>
+                    Read:
+                    <img src="~/Content/img/machine/btngreen.png" width="12" class="mn-l-5" />
+                  </td>
+                }
+                else if (@machine["Read_Connection"].ToString() == "0")
+                {
+                  <td>
+                    Read:
+                    <img src="~/Content/img/machine/btnred.png" width="12" class="mn-l-5" />
+                  </td>
+                }
+                else
+                {
+                  <td>
+                    Read:
+                    <img src="~/Content/img/machine/btngray.png" width="12" class="mn-l-5" />
+                  </td>
+                }
+              </tr>
+
+              <tr>
+                @if (@machine["Write_Connection"].ToString() == "-1")
+                {
+                  <td>
+                    Write:
+                    <img src="~/Content/img/machine/btngray.png" width="12" class="mn-l-5" />
+                  </td>
+                }
+                else
+                {
+                  <td>
+                    Write:
+                    <img src="~/Content/img/machine/btngreen.png" width="12" class="mn-l-5" />
+                  </td>
+                }
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <div class="uk-width-1-10@l uk-width-1-5@m uk-width-1-2@s mvc-grid mvc-grid-excel-mode">
+        <table id="myTable" class="table text-center bg-white" cellspacing="0">
+          <thead>
+            <tr>
+              <th><a href="~/Dashboards/Station/Connectivity/@StationID?year=@Model.year&month=@Model.month&day=@Model.day">Dashboard</a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="height:80px;vertical-align:middle;">
+              <td>
+                <img src="~/Content/img/missing.png" class="h-81" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Read:
+                <img src="~/Content/img/machine/btngray.png" width="12" class="mn-l-5" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Write:
+                <img src="~/Content/img/machine/btngray.png" width="12" class="mn-l-5" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    }
+    else
+    {
+      <div class="col-12 text-center pd-t-20">
+        <h5 class="l1-txt1 txt-center p-b-10">
+          Data No Available
+        </h5>
+        <p>
+          <img src="~/Content/img/machine/brokenconnection.png" width="80" />
+        </p>
+        <p class="txt-center l1-txt2 p-b-60">
+          This station doesn't have any data connection, please wait for a update.
+        </p>
+      </div>
+    }
+  </div>
+</div>
+
+
+@* EXTRA INFO *@
+
+<div class="uk-card mn-t-25">
+  <div class="uk-grid" uk-grid>
+    <div class="uk-width-2-3@m uk-width-1-1@s">
+      <div class="md-card">
+        <div class="md-card-toolbar">
+          <h3 class="md-card-toolbar-heading-text">Timeline</h3>
+        </div>
+        <div class="md-card-content">
+          <div class="uk-grid">
+            <div id="TimeLine" class="col-12"></div>
+            <div id="TimeLineLocks" class="col-12"></div>
+            <div id="TimeLineTickets" class="col-12"></div>
+            <div class="portal-widget-small-dash col-12 disabled text-right">
+              <div class="row justify-content-end">
+                <div class="col-sm-3">
+                  @if (areaid == "1")
+                  {
+                    <a style="color:#000000;width:120px" href="~/Dashboards/Station/Loaded_Material/@Model.stationid.ToString()">
+                      <h5 class="mb-0">Clic to see loaded material</h5>
+                    </a>
+                  }
+                </div>
+
+              </div>
+            </div>
+            <script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+                $(document).ready(function () {
+
+                    GetTimeLineChart();
+
+                    GetTimeUnlockChart();
+
+                    GetTimeTicketChart();
+
+
+                });
+
+                function downtime_details(evt) {
+
+                        alert("General: " + evt.getAttribute("RazonGral") + "\nDetails: " + evt.getAttribute("RazonDtsl") + "\nStart: " + parseJsonDate(evt.getAttribute("RazonInicia")) + "\nEnd: " + parseJsonDate(evt.getAttribute("RazonFinaliza")));
+                };
+
+                function hidePopup_details(evt) {
+                  mypopup_details.style.display = "none";
+                }
+
+                function showPopup_details(evt) {
+                  var iconPos = evt.getBoundingClientRect();
+                  var ScrollY = window.scrollY;
+                  var ScrennY = window.screenY;
+                  mypopup_details.style.left = (iconPos.left + 10 + 130 ) + "px";
+                  mypopup_details.style.top = (iconPos.top + window.scrollY - 20 ) + "px";
+                  mypopup_details.style.display = "block";
+                  mypopup_details.style.zIndex = "99999";
+                  mypopup_details.innerHTML = "";
+
+                  var h3 = document.createElement("h6");
+                  h3.innerHTML = "Category: " + evt.getAttribute("RazonGral");
+                  mypopup_details.appendChild(h3);
+
+                  var p1 = document.createElement("p");
+                  p1.innerHTML = "Details: " + evt.getAttribute("RazonDtsl");
+                  mypopup_details.appendChild(p1);
+
+                  var p2 = document.createElement("p");
+                  p2.innerHTML = "Start: " + parseJsonDate(evt.getAttribute("RazonInicia")) ;
+                  mypopup_details.appendChild(p2);
+
+                  var p3 = document.createElement("p");
+                  p3.innerHTML = "End: " + parseJsonDate(evt.getAttribute("RazonFinaliza"));
+                  mypopup_details.appendChild(p3);
+                }
+
+                  function GetTimeLineChart() {
+
+                      $('#TimeLine').html("");
+
+                      const c_width = $('#TimeLine').width(), c_height = 40;
+
+                      var pardata = JSON.stringify({
+                          'year': @Model.year,
+                          'month': @Model.month,
+                          'day': @Model.day,
+                          'StationID': @Model.stationid,'Width': c_width
+                          });
+
+                      var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                      var div = document.getElementById('TimeLine');
+                      svg.id = "Timeline_map";
+                      svg.setAttribute("width", c_width);
+                      svg.setAttribute("height", c_height);
+                      svg.setAttribute("zIndex", 8);
+                      svg.style.border = "1px solid #adadad";
+                      svg.style.background = "#13c707";
+
+                      var svg0 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                      svg0.setAttribute("width", c_width);
+                      svg0.setAttribute("height", 14);
+                      svg0.setAttribute("zIndex", 8);
+
+                      div.appendChild(svg0);
+                      div.appendChild(svg);
+
+                      $.ajax({
+                          type: "POST",
+                          data: pardata,
+                          url: "/Dashboards/Station/DowntimeChart",
+                          contentType: "application/json; charset=utf-8",
+                          success: function (chData) {
+
+                              var aData = chData;
+                              var aDateTime = aData[0];
+                              var aDateTim2 = aData[1];
+                              var aDetails = aData[2];
+                              var aRazonGral = aData[3];
+                              var aMinutes = aData[4];
+                              var aPosmin = aData[5];
+                              var aPosline = aData[6];
+
+                              for (i = 0; i < aPosline.length; i++) {
+
+                                  let newElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                                  if (aRazonGral[i] == "Cambio de modelo") {
+                                      newElement.setAttribute('fill', '#0780c7');
+                                  } else if (aRazonGral[i] == "No yet") {
+                                      newElement.setAttribute('fill', '#F8F8F8');
+                                  } else {
+                                      newElement.setAttribute('fill', '#c70739');
+                                  }
+                                  newElement.setAttribute('x', aPosline[i]);
+                                  newElement.setAttribute('y', 0);
+                                  newElement.setAttribute('width', aPosmin[i]);
+                                  newElement.setAttribute('height', c_height);
+                                  newElement.setAttribute('RazonGral', aRazonGral[i]);
+                                  newElement.setAttribute('RazonDtsl', aDetails[i]);
+                                  newElement.setAttribute('RazonInicia', aDateTime[i]);
+                                newElement.setAttribute('RazonFinaliza', aDateTim2[i]);
+
+                                newElement.setAttribute('onmousemove', 'showPopup_details(this)');
+                                newElement.setAttribute('onmouseout', 'hidePopup_details(this)');
+                                newElement.setAttribute('onclick', 'downtime_details(this)');
+
+                                  svg.appendChild(newElement);
+                              }
+
+                              var c_ww = Math.floor(c_width / 24);
+
+                              for (i = 6; i < 31; i++) {
+
+                                  let newElement = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                                  newElement.setAttribute('x', c_ww * (i-6));
+                                  newElement.setAttribute('y', 10);
+                                  newElement.setAttribute('style', 'font-family: Times New Roman; font-size: 10;');
+
+                                  var h = i;
+                                  if (h >= 24) {
+                                      h = h - 24;
+                                  }
+
+                                  var t = document.createTextNode(h);
+                                  newElement.appendChild(t);
+
+                                  svg0.appendChild(newElement);
+                              }
+
+                              var minutesno = 0;
+                              var minutesdw = 0;
+
+                              for (var k in aMinutes) {
+                                  if (aDetails[k]==="No yet") {
+                                      minutesno = minutesno + aMinutes[k];
+                                  } else {
+                                      minutesdw = minutesdw + aMinutes[k];
+                                  }
+                              }
+
+                              var minutesday = 1440 - minutesno;
+
+                              var el = document.getElementById("tb_uti");
+                              el.innerHTML = "ON " + (minutesday - minutesdw);
+
+
+                              var el = document.getElementById("tb_uti2");
+                              el.innerHTML = "OFF " + minutesdw;
+
+                              var el = document.getElementById("tb_uti0");
+                              el.innerHTML = "Machine Downtime: " + Math.floor(((minutesday - minutesdw) / minutesday) * 100) + "%";
+
+                          },
+                          async: false
+                      });
+
+                  };
+
+                  function unlock_details(evt) {
+                      alert("Date: " + parseJsonDate(evt.getAttribute("aTrnDate")) + "\nDefects: " + evt.getAttribute("aDefect") + "\nPartnumber: " + evt.getAttribute("aPartNumber") + " " + evt.getAttribute("aSide") + "\nQty: " + evt.getAttribute("aQty") + "\nUnlock By: " + evt.getAttribute("aUnlockBy") + "\nComments: " + evt.getAttribute("aComments"));
+                  };
+
+                  function GetTimeUnlockChart() {
+
+                      $('#TimeLineLocks').html("");
+
+                      const c_width = $('#TimeLineLocks').width(), c_height = 10;
+
+                      var pardata = JSON.stringify({
+                          'year': @Model.year,
+                          'month': @Model.month,
+                          'day': @Model.day,
+                          'StationID': @Model.stationid,'Width': c_width
+                          });
+
+                      var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                      var div = document.getElementById('TimeLineLocks');
+                      svg.id = "Timeline_map";
+                      svg.setAttribute("width", c_width);
+                      svg.setAttribute("height", c_height);
+                      svg.setAttribute("zIndex", 8);
+                      svg.style.border = "1px solid #adadad";
+                      svg.style.background = "#f8f8f8";
+
+                      div.appendChild(svg);
+
+                      $.ajax({
+                          type: "POST",
+                          data: pardata,
+                          url: "/Dashboards/Station/UnlockChart",
+                          contentType: "application/json; charset=utf-8",
+                          success: function (chData) {
+
+                              var aData = chData;
+                              var aAutoID = aData[0];
+                              var aTrnDate = aData[1];
+                              var aStation = aData[2];
+                              var aPartNumber = aData[3];
+                              var aSide = aData[4];
+                              var aDefect = aData[5];
+                              var aDetails = aData[6];
+                              var aQty = aData[7];
+                              var aUnlockBy = aData[8];
+                              var aComments = aData[9];
+                              var aDatasets10 = aData[10];
+                              var aDatasets11 = aData[11];
+                              var aDatasets12 = aData[12];
+                              var aPosmin = aData[13];
+                              var aPosline = aData[14];
+
+                              for (i = 0; i < aPosline.length; i++) {
+
+                                  let newElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                                  if (1 == 0) {
+                                      newElement.setAttribute('fill', '#FFDF00');
+                                  } else {
+                                      newElement.setAttribute('fill', '#FFDF00');
+                                  }
+                                  newElement.setAttribute('x', aPosline[i]);
+                                  newElement.setAttribute('y', 0);
+                                  newElement.setAttribute('width', aPosmin[i]);
+                                  newElement.setAttribute('height', c_height);
+                                  newElement.setAttribute('aTrnDate', aTrnDate[i]);
+                                  newElement.setAttribute('aStation', aStation[i]);
+                                  newElement.setAttribute('aPartNumber', aPartNumber[i]);
+                                  newElement.setAttribute('aSide', aSide[i]);
+                                  newElement.setAttribute('aDefect', aDefect[i]);
+                                  newElement.setAttribute('aQty', aQty[i]);
+                                  newElement.setAttribute('aUnlockBy', aUnlockBy[i]);
+                                  newElement.setAttribute('aComments', aComments[i]);
+
+                                  newElement.setAttribute('onclick', 'unlock_details(this)');
+
+                                  svg.appendChild(newElement);
+                              }
+
+                          },
+                          async: false
+                      });
+
+              };
+
+                  function downtime_Ticket(evt) {
+
+                  };
+
+                  function hidePopup_Ticket(evt) {
+                    mypopup_ticket.style.display = "none";
+                  }
+
+                  function showPopup_Ticket(evt) {
+                    var iconPos = evt.getBoundingClientRect();
+                    mypopup_ticket.style.left = (iconPos.left + 10 + 110) + "px";
+                    mypopup_ticket.style.top = (iconPos.top + window.scrollY - 20) + "px";
+                    mypopup_ticket.style.display = "block";
+                    mypopup_ticket.style.zIndex = "99999";
+                    mypopup_ticket.innerHTML = "";
+
+                    var h3 = document.createElement("h6");
+                    h3.innerHTML = "Category: " + evt.getAttribute("aType");
+                    mypopup_ticket.appendChild(h3);
+
+                    var p1 = document.createElement("p");
+                    p1.innerHTML = "Details: " + evt.getAttribute("aDesc");
+                    mypopup_ticket.appendChild(p1);
+
+                    var p2 = document.createElement("p");
+                    p2.innerHTML = "Comments: " + parseJsonDate(evt.getAttribute("aComments"));
+                    mypopup_ticket.appendChild(p2);
+
+                    var p4 = document.createElement("p");
+                    p4.innerHTML = "Start: " + parseJsonDate(evt.getAttribute("aTrnDate"));
+                    mypopup_ticket.appendChild(p4);
+
+                    var p3 = document.createElement("p");
+                    p3.innerHTML = "End: " + parseJsonDate(evt.getAttribute("aSolveDate"));
+                    mypopup_ticket.appendChild(p3);
+                  }
+
+                  function GetTimeTicketChart() {
+
+                      $('#TimeLineTickets').html("");
+
+                      const c_width = $('#TimeLineTickets').width(), c_height = 10;
+
+                      var pardata = JSON.stringify({
+                          'year': @Model.year,
+                          'month': @Model.month,
+                          'day': @Model.day,
+                          'StationID': @Model.stationid,'Width': c_width
+                          });
+
+                      var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                      var div = document.getElementById('TimeLineTickets');
+                      svg.id = "Timeline_map";
+                      svg.setAttribute("width", c_width);
+                      svg.setAttribute("height", c_height);
+                      svg.setAttribute("zIndex", 8);
+                      svg.style.border = "1px solid #adadad";
+                      svg.style.background = "#f8f8f8";
+
+                      div.appendChild(svg);
+
+                      $.ajax({
+                          type: "POST",
+                          data: pardata,
+                          url: "/Dashboards/Station/TicketsChart",
+                          contentType: "application/json; charset=utf-8",
+                          success: function (chData) {
+
+                              var aData = chData;
+                              var aTrnDate = aData[0];
+                              var aComments = aData[1];
+                              var aSolved = aData[2];
+                              var aSolution = aData[3];
+                              var aSide = aData[4];
+                              var aSolveDate = aData[5];
+                              var aType = aData[6];
+                              var aDesc = aData[7];
+                              var aPartNumber = aData[8];
+                              var aPosmin = aData[10];
+                              var aPosline = aData[11];
+
+                              for (i = 0; i < aPosline.length; i++) {
+
+                                  let newElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                                  if (1 == 0) {
+                                      newElement.setAttribute('fill', '#FF00FF');
+                                  } else {
+                                      newElement.setAttribute('fill', '#FF00FF');
+                                  }
+                                  newElement.setAttribute('x', aPosline[i]);
+                                  newElement.setAttribute('y', 0);
+                                  newElement.setAttribute('width', aPosmin[i]);
+                                  newElement.setAttribute('height', c_height);
+                                  newElement.setAttribute('aTrnDate', aTrnDate[i]);
+                                  newElement.setAttribute('aSolution', aSolution[i]);
+                                  newElement.setAttribute('aPartNumber', aPartNumber[i]);
+                                  newElement.setAttribute('aSide', aSide[i]);
+                                  newElement.setAttribute('aType', aType[i]);
+                                  newElement.setAttribute('aDesc', aDesc[i]);
+                                  newElement.setAttribute('aSolveDate', aSolveDate[i]);
+                                  newElement.setAttribute('aComments', aComments[i]);
+
+                                newElement.setAttribute('onmousemove', 'showPopup_Ticket(this)');
+                                newElement.setAttribute('onmouseout', 'hidePopup_Ticket(this)');
+                                newElement.setAttribute('onclick', 'downtime_Ticket(this)');
+
+                                  svg.appendChild(newElement);
+                              }
+                          },
+                          async: false
+                      });
+
+                  };
+
+            </script>
+          </div>
+        </div>
+      </div>
+      <div class="uk-grid mn-t-25" uk-grid>
+        <div class="uk-width-1-4@m uk-width-1-1@s">
+          <div class="md-card mn-b-25">
+            <div class="md-card-toolbar">
+              <h3 class="md-card-toolbar-heading-text">OEE <span id="txt_Summary"></span> (<span id="txt_SummaryOEE"></span>/<span id="txt_SummaryTotal"></span>)</h3>
+            </div>
+            <div class="md-card-content">
+              <div id="bar-fg_@StationID" class="h-120">
+              </div>
+              <div class="fs-11 text-center">
+                <div>
+                  <a class="editdetailstv" href="~/Dashboards/TVs/Station_Efficency/@StationID?year=@Model.year&month=@Model.month&day=@Model.day&all=1">
+                    Availability: <span id="txtDis_@StationID"></span>%
+                  </a>
+                  (<span id="txtProgW_@StationID"></span>/<span id="txtProgA_@StationID"></span>)
+                </div>
+                <div>
+                  <a class="editdetailstv" href="~/Dashboards/TVs/Station_Efficency/@StationID?year=@Model.year&month=@Model.month&day=@Model.day&all=1">
+                    Efficency: <span id="txtEfi_@StationID"></span>%
+                  </a>
+                  (<span id="txtEfiT_@StationID"></span>/<span id="txtEfiH_@StationID"></span>)
+                </div>
+                <div>
+                  <a class="editdetailstv" href="~/Dashboards/TVs/Station_Efficency/@StationID?year=@Model.year&month=@Model.month&day=@Model.day&all=1">
+                    Quality: <span id="txtCal_@StationID"></span>%
+                  </a>
+                  (<span id="txtQuaT_@StationID"></span>/<span id="txtQuaH_@StationID"></span>)
+                </div>
+                <div class="">
+                </div>
+              </div>
+
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              function updatehistory_@StationID.ToString()_f() {
+
+              var data_st = JSON.stringify({
+                   'year': @Model.year,
+                  'month': @Model.month,
+                  'day': @Model.day,
+                  'StationID': '@StationID'
+                });
+
+              let totalminutesprogrammed = 0;
+              let totalMinutesOEE = 0;
+
+                //GET VALUES.
+              var disponibilidad = 80;
+              var eficiencia = 90;
+              var calidad = 70;
+
+              var minutesworked = 0;
+              var eficienciaH = 0;
+
+              var minutesavailables = 0;
+              var minutesprogrammed = 0;
+              var minutesOEE = 0;
+
+              $.ajax({
+                  type: "POST",
+                  data: data_st,
+                  url: "/Dashboards/Manufacturing/CalculateOEE",
+                  contentType: "application/json; charset=utf-8",
+                  success: function (chData) {
+                    var aData = $.parseJSON(chData);
+                    disponibilidad = aData[0];
+                    eficiencia = aData[1];
+                    calidad = aData[2];
+                    minutesworked = aData[3];
+                    eficienciaH = aData[4];
+                    minutesavailables = aData[5];
+                    minutesprogrammed = aData[6];
+                    minutesOEE = aData[7];
+                  },
+                  async: false
+                });
+
+              $("#txtDis_@StationID").html((disponibilidad * 100).toFixed(2));
+              $("#txtEfi_@StationID").html((eficiencia * 100).toFixed(2));
+              $("#txtCal_@StationID").html((calidad * 100).toFixed(2));
+
+              $("#txtEfiT_@StationID").html(minutesworked);
+              $("#txtEfiH_@StationID").html(eficienciaH);
+
+              $("#txtProgW_@StationID").html(minutesavailables);
+                  $("#txtProgA_@StationID").html(minutesprogrammed);
+
+                  $("#txtQuaT_@StationID").html(minutesOEE);
+                    $("#txtQuaH_@StationID").html(minutesworked);
+
+                // CALCULATE OEE
+                  var good = Math.floor(((parseFloat(disponibilidad) * parseFloat(eficiencia) * parseFloat(calidad))) * 100);
+                  var bad = 100 - good;
+
+                  totalminutesprogrammed = totalminutesprogrammed + minutesprogrammed;
+                  totalMinutesOEE = totalMinutesOEE + minutesOEE;
+
+                  $("#txt_Summary").html(parseFloat(good).toFixed(2) + "%");
+                  $("#txt_SummaryOEE").html(totalMinutesOEE);
+                  $("#txt_SummaryTotal").html(totalminutesprogrammed);
+
+
+                var data_fg = JSON.stringify({
+                  'good': good,
+                  'bad': bad
+                });
+
+              var colors_array = ['#bc3c3c', '#79bc3c'];
+
+              if (good == 0) {
+                colors_array[0] = "#888";
+                colors_array[1] = "#888";
+              }
+
+                //GET DATA FOR BAR
+                $.ajax({
+                  type: "POST",
+                  data: data_fg,
+                  url: "/Dashboards/Manufacturing/CurrentOEE",
+                  contentType: "application/json; charset=utf-8",
+                  success: function (chData) {
+                    var aData = $.parseJSON(chData);
+
+                    if (aData.length > 0) {
+                      var morrisDonut = Morris.Donut({
+                        element: 'bar-fg_@StationID',
+                        data: aData,
+                        formatter: function (x) { return x + "%" },
+                        colors: colors_array,
+                        resize: true,
+                        redraw: true
+                      });
+                      morrisDonut.select(1);
+                    }
+                  },
+                  async: false
+                });
+              };
+
+              $(document).ready(function () {
+                updatehistory_@StationID.ToString()_f();
+              })
+              </script>
+
+
+              <div class="fs-11  text-center hide" id="tb_uti0">
+
+              </div>
+              <div class="fs-11 text-c-green  text-center hide" id="tb_uti">
+
+              </div>
+              <div class="fs-11 text-c-red  text-center hide" id="tb_uti2">
+
+              </div>
+
+              <div class="text-center hide">
+                @if (areaid == "4")
+                {
+                  <a style="color:#000000" class="editdetailstv" href="~/Dashboards/TVs/Station_Availability/@Model.stationid?year=@Model.year&month=@Model.month&day=@Model.day&all=1">
+                    <h5 class="fs-12">Clic to Details</h5>
+                  </a>
+                }
+
+                @if (areaid == "2" || areaid == "29")
+                {
+                  <a style="color:#000000" class="editdetailstv" href="~/Dashboards/TVs/Station_Preview_Pallet/@Model.stationid?year=@Model.year&month=@Model.month&day=@Model.day&all=1">
+                    <h5 class="fs-12">Clic to Pallets</h5>
+                  </a>
+                }
+              </div>
+            </div>
+          </div>
+
+
+          <div class="md-card">
+            <div class="md-card-toolbar">
+              <h3 class="md-card-toolbar-heading-text">Production</h3>
+            </div>
+            <div class="md-card-content">
+              @{
+                System.Data.SqlClient.SqlParameter[] prodparameters = new System.Data.SqlClient.SqlParameter[]{
+                  new System.Data.SqlClient.SqlParameter("@StationID",SqlDbType.Int){Value = Model.stationid},
+                  new System.Data.SqlClient.SqlParameter("@DiaCurrent",SqlDbType.DateTime){Value = dia_current.ToString("MM/dd/yyyy 06:00:00")},
+                  new System.Data.SqlClient.SqlParameter("@DiaTomorrow",SqlDbType.DateTime){Value = dia_tomorrow.ToString("MM/dd/yyyy 06:00:00")}
+                };
+
+                DataTable dt_prod = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT CS_idt_partnumbers.PartNumber, PD_tbl_units_tracking.JobSide, COUNT(ssn) as Qty FROM            PD_tbl_units_tracking INNER JOIN CS_idt_partnumbers ON PD_tbl_units_tracking.PartID = CS_idt_partnumbers.PartID WHERE AreaID = (select areaid from PD_idt_stations WHERE stationid=@StationID) AND (Stationid = @StationID OR stationid in (SELECT Sub_Station_ID  FROM [Part_Station_SubStation] WHERE Station_ID= @StationID) ) AND TrnDate between @DiaCurrent and @DiaTomorrow AND IsRework = 0 and SSNIndex = 1 GROUP BY CS_idt_partnumbers.PartNumber, PD_tbl_units_tracking.JobSide Order BY CS_idt_partnumbers.PartNumber ASC, PD_tbl_units_tracking.JobSide ASC", prodparameters);
+              }
+
+              <div class="mvc-grid mvc-grid-excel-mode">
+                <table>
+                  <tr>
+                    <th>PartNumber</th>
+                    <th>Side</th>
+                    <th>Qty</th>
+                  </tr>
+
+                  @foreach (DataRow row in dt_prod.Rows)
+                  {
+                    <tr>
+                      <td>@row["PartNumber"].ToString()</td>
+                      <td>@row["JobSide"].ToString()</td>
+                      <td>@row["Qty"].ToString()</td>
+                    </tr>
+                  }
+
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="uk-width-3-4@m uk-width-1-1@s">
+          <div class="md-card">
+            <div class="md-card-toolbar">
+              <h3 class="md-card-toolbar-heading-text">Tickets</h3>
+            </div>
+            <div class="md-card-content">
+              <div class="mvc-grid mvc-grid-excel-mode">
+                @{
+
+                  DateTime dialimit = dia_tomorrow;
+
+                  if (DateTime.Now < dia_tomorrow)
+                  {
+                    dialimit = DateTime.Now;
+                  }
+                  else
+                  {
+                    dialimit = dialimit.AddHours(6);
+                  }
+
+                  System.Data.SqlClient.SqlParameter[] dtTicketsparameters = new System.Data.SqlClient.SqlParameter[]{
+                    new System.Data.SqlClient.SqlParameter("@StationID",SqlDbType.Int){Value = Model.stationid},
+                    new System.Data.SqlClient.SqlParameter("@DiaCurrent",SqlDbType.DateTime){Value = dia_current.ToString("MM/dd/yyyy 06:00:00")},
+                    new System.Data.SqlClient.SqlParameter("@DiaTomorrow",SqlDbType.DateTime){Value = dia_tomorrow.ToString("MM/dd/yyyy 06:00:00")},
+                    new System.Data.SqlClient.SqlParameter("@DiaLimit",SqlDbType.DateTime){Value = dialimit.ToString("MM/dd/yyyy HH:mm:ss")}
+                  };
+
+                  DataTable dt_tickets_yesterday = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT TOP 1 PD_tbl_station_issues.AutoID, PD_tbl_station_issues.StationID, cast(@DiaCurrent as datetime) as TrnDate, PD_tbl_station_issues.ControlID, PD_tbl_station_issues.IssueTypeID, PD_tbl_station_issues.IssueID, PD_tbl_station_issues.IssueComments, PD_tbl_station_issues.IssueSolve, PD_tbl_station_issues.IssueSolution, PD_tbl_station_issues.SolveBy, PD_tbl_station_issues.CategoryLevel, PD_tbl_station_issues.PartID, PD_tbl_station_issues.Side, PD_tbl_station_issues.Facility_Key, isnull(IssueSolveDate,@DiaLimit) as IssueSolveDate, PD_idt_areas.Area, PD_idt_issuestype.IssueType, PD_tbl_issue_ids.IssueDescription, CS_idt_partnumbers.PartNumber,PD_idt_stations.StationName, DATEDIFF(MINUTE,cast(@DiaCurrent as datetime),isnull(IssueSolveDate,@DiaLimit)) as Minutes FROM PD_tbl_station_issues LEFT JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID LEFT JOIN   PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID LEFT JOIN  PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID LEFT JOIN   PD_tbl_issue_ids ON PD_tbl_station_issues.IssueID = PD_tbl_issue_ids.IssueID LEFT JOIN CS_idt_partnumbers ON PD_tbl_station_issues.PartID = CS_idt_partnumbers.PartID  WHERE TrnDate< @DiaCurrent AND IssueSolveDate>@DiaCurrent AND (PD_idt_stations.stationid = @StationID OR PD_idt_stations.stationid in (SELECT Sub_Station_ID  FROM [Part_Station_SubStation] WHERE Station_ID= @StationID) ) Order by TrnDate desc", dtTicketsparameters);
+
+                  DataTable dt_tickets = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT PD_tbl_station_issues.AutoID, PD_tbl_station_issues.StationID, PD_tbl_station_issues.TrnDate, PD_tbl_station_issues.ControlID, PD_tbl_station_issues.IssueTypeID, PD_tbl_station_issues.IssueID, PD_tbl_station_issues.IssueComments, PD_tbl_station_issues.IssueSolve, PD_tbl_station_issues.IssueSolution, PD_tbl_station_issues.SolveBy, PD_tbl_station_issues.CategoryLevel, PD_tbl_station_issues.PartID, PD_tbl_station_issues.Side, PD_tbl_station_issues.Facility_Key, isnull(IssueSolveDate,@DiaLimit) as IssueSolveDate, PD_idt_areas.Area, PD_idt_issuestype.IssueType, PD_tbl_issue_ids.IssueDescription, CS_idt_partnumbers.PartNumber,PD_idt_stations.StationName, DATEDIFF(MINUTE,TrnDate,isnull(IssueSolveDate,@DiaLimit)) as Minutes FROM PD_tbl_station_issues LEFT JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID LEFT JOIN   PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID LEFT JOIN  PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID LEFT JOIN   PD_tbl_issue_ids ON PD_tbl_station_issues.IssueID = PD_tbl_issue_ids.IssueID LEFT JOIN CS_idt_partnumbers ON PD_tbl_station_issues.PartID = CS_idt_partnumbers.PartID  WHERE TrnDate between @DiaCurrent and @DiaTomorrow AND (PD_idt_stations.stationid = @StationID OR PD_idt_stations.stationid in (SELECT Sub_Station_ID  FROM [Part_Station_SubStation] WHERE Station_ID= @StationID) ) Order by TrnDate desc", dtTicketsparameters);
+
+                  DataTable dt_tickets_tomorrow = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT TOP 1 PD_tbl_station_issues.AutoID, PD_tbl_station_issues.StationID, PD_tbl_station_issues.TrnDate, PD_tbl_station_issues.ControlID, PD_tbl_station_issues.IssueTypeID, PD_tbl_station_issues.IssueID, PD_tbl_station_issues.IssueComments, PD_tbl_station_issues.IssueSolve, PD_tbl_station_issues.IssueSolution, PD_tbl_station_issues.SolveBy, PD_tbl_station_issues.CategoryLevel, PD_tbl_station_issues.PartID, PD_tbl_station_issues.Side, PD_tbl_station_issues.Facility_Key, cast(@DiaLimit as datetime) as IssueSolveDate, PD_idt_areas.Area, PD_idt_issuestype.IssueType, PD_tbl_issue_ids.IssueDescription, CS_idt_partnumbers.PartNumber,PD_idt_stations.StationName, DATEDIFF(MINUTE,TrnDate,cast(@DiaLimit as datetime)) as Minutes FROM PD_tbl_station_issues LEFT JOIN PD_idt_stations ON PD_tbl_station_issues.StationID = PD_idt_stations.StationID LEFT JOIN   PD_idt_areas ON PD_idt_stations.AreaID = PD_idt_areas.AreaID LEFT JOIN  PD_idt_issuestype ON PD_tbl_station_issues.IssueTypeID = PD_idt_issuestype.IssueTypeID LEFT JOIN   PD_tbl_issue_ids ON PD_tbl_station_issues.IssueID = PD_tbl_issue_ids.IssueID LEFT JOIN CS_idt_partnumbers ON PD_tbl_station_issues.PartID = CS_idt_partnumbers.PartID  WHERE TrnDate < @DiaTomorrow AND isnull(IssueSolveDate,getdate())>@DiaTomorrow AND (PD_idt_stations.stationid = @StationID OR PD_idt_stations.stationid in (SELECT Sub_Station_ID  FROM [Part_Station_SubStation] WHERE Station_ID= @StationID) ) Order by TrnDate desc", dtTicketsparameters);
+
+                  dt_tickets.Merge(dt_tickets_tomorrow);
+                  dt_tickets_yesterday.Merge(dt_tickets);
+
+                  dt_tickets_yesterday.DefaultView.Sort = "TrnDate";
+                  dt_tickets_yesterday = dt_tickets_yesterday.DefaultView.ToTable();
+                }
+
+                <table>
+                  <tr>
+                    <th>TrnDate</th>
+                    <th>Station</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Comments</th>
+                    <th>Solved</th>
+                    <th>Minutes</th>
+                    <th>Edit</th>
+                  </tr>
+
+                  @foreach (DataRow row in dt_tickets_yesterday.Rows)
+                  {
+                    <tr>
+                      <td>@row["TrnDate"].ToString()</td>
+                      <td>@row["StationName"].ToString()</td>
+                      <td>@row["IssueType"].ToString()</td>
+                      <td>@row["IssueDescription"].ToString()</td>
+                      <td>@row["IssueComments"].ToString()</td>
+                      <td>@row["IssueSolve"].ToString()</td>
+                      <td>@row["Minutes"].ToString()</td>
+                      <td class="bc-gray" width="70px"><a class="editdetails" href="@Url.Action("Details", "Portal", new { Area="Tickets",id = row["AutoID"].ToString() })">Edit</a></td>
+                    </tr>
+                  }
+
+                </table>
+
+              </div>
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                $(document).on('click', 'a.editdetails', function (e) {
+                  var w = 1200;
+                  var h = 900;
+                  var left = window.screen.availLeft + (screen.width / 2) - (w / 2);
+                  var top = window.screen.availTop + (screen.height / 2) - (h / 2);
+                  var url = $(this).attr('href');
+                  window.open(url, "Details", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+                  return false;
+                });
+              </script>
+
+              <div id="bar-chart-tickets"></div>
+
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+              function updatehistory() {
+
+              var data_area = JSON.stringify({
+                   'year': @Model.year,
+                  'month': @Model.month,
+                  'day': @Model.day,
+                  'id': '@Model.stationid'
+              });
+
+              var colors_array = ['#bc3c3c', '#79bc3c'];
+
+                //GET DATA FOR BAR
+                $.ajax({
+                  type: "POST",
+                  data: data_area,
+                  url: "/Dashboards/Station/DowntimeChart_Group",
+                  contentType: "application/json; charset=utf-8",
+                  success: function (chData) {
+                    var aData = $.parseJSON(chData);
+
+                    if (aData.length > 0) {
+                      var morrisDonut = Morris.Bar({
+                        element: 'bar-chart-tickets',
+                        data: aData,
+                        xkey: 'label',
+                        ykeys: ['value'],
+                        labels: ['Minutes: ']
+                      });
+                    }
+
+
+
+                  },
+                  async: false
+                });
+
+
+                $.ajax({
+                  type: "POST",
+                  data: data_area,
+                  url: "/Dashboards/Station/DowntimeChart_Json",
+                  contentType: "application/json; charset=utf-8",
+                  success: function (chData) {
+
+                    // CREATE TABLE...
+                    var list = chData;
+
+                    var cols = ["Reason", "Minutes"];
+
+                    var rows = [];
+                    var rows_values = [];
+
+                    var aDetails = chData[2];
+                    var aMinutes = chData[3];
+
+
+                    //GET GROUP
+                    for (var k in aDetails) {
+                      if (rows.indexOf(aDetails[k]) === -1) {
+                        // Push all keys to the array
+                        rows.push(aDetails[k]);
+                        rows_values.push(0);
+                      }
+                    }
+
+                    for (var k in aDetails) {
+                      var idx = rows.indexOf(aDetails[k]);
+                      if (idx > -1) {
+                        // Push all keys to the array
+                        rows_values[idx] = rows_values[idx] + aMinutes[k];
+                      }
+                    }
+
+                    // Create a table element
+                    var table = document.createElement("table");
+
+                    // Create table row tr element of a table
+                    var tr = table.insertRow(-1);
+
+                    // Columns data
+                    for (var i = 0; i < cols.length; i++) {
+
+                      // Create the table header th element
+                      var theader = document.createElement("th");
+                      theader.innerHTML = cols[i];
+
+                      // Append columnName to the table row
+                      tr.appendChild(theader);
+                    }
+
+                    //Adding the data to the table
+                    for (var i = 0; i < rows.length; i++) {
+
+                      // Create a new row
+                      trow = table.insertRow(-1);
+                      var cell = trow.insertCell(-1);
+                      cell.innerHTML = rows[i];
+
+                      var cell2 = trow.insertCell(-1);
+                      cell2.innerHTML = rows_values[i];
+                    }
+
+                    var el = document.getElementById("tbdvalues");
+                    el.innerHTML = "";
+                    el.appendChild(table);
+
+                  },
+                  async: false
+                });
+              };
+
+              $(document).ready(function () {
+                updatehistory()
+              })
+              </script>
+
+            </div>
+          </div>
+
+          <div class="md-card">
+            <div class="md-card-toolbar">
+              <h3 class="md-card-toolbar-heading-text">Tickets summary</h3>
+            </div>
+            <div class="md-card-content">
+              <div class="mvc-grid mvc-grid-excel-mode" id="tbdvalues">
+
+              </div>
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                $(document).on('click', 'a.editdetails', function (e) {
+                  var w = 1200;
+                  var h = 900;
+                  var left = window.screen.availLeft + (screen.width / 2) - (w / 2);
+                  var top = window.screen.availTop + (screen.height / 2) - (h / 2);
+                  var url = $(this).attr('href');
+                  window.open(url, "Details", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+                  return false;
+                });
+              </script>
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                $(document).on('click', 'a.editdetailstv', function (e) {
+                  var w = 1400;
+                  var h = 900;
+                  var left = window.screen.availLeft + (screen.width / 2) - (w / 2);
+                  var top = window.screen.availTop + (screen.height / 2) - (h / 2);
+                  var url = $(this).attr('href');
+                  window.open(url, "Details", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=1, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+                  return false;
+                });
+              </script>
+
+            </div>
+          </div>
+
+          <div class="md-card">
+            <div class="md-card-toolbar">
+              <h3 class="md-card-toolbar-heading-text">Unlocks</h3>
+            </div>
+            <div class="md-card-content">
+              <div class="mvc-grid mvc-grid-excel-mode">
+                @{
+
+                  DataTable dt_Unlocks = Firstronic.Framework.Queries.GetDatatableFromQuery(@"SELECT PD_tbl_unlock_station_history.AutoID, PD_tbl_unlock_station_history.Trndate, PD_idt_stations.StationName, CS_idt_partnumbers.PartNumber, PD_tbl_unlock_station_history.Side, EN_idt_defect_department.DefectDepartment, PD_tbl_unlock_station_history.Details, PD_tbl_unlock_station_history.QtyDefects, CONCAT(HR_idt_users.FirstName,' ' ,HR_idt_users.LastName) as UnlockBy, PD_tbl_unlock_station_history.Comments, PD_tbl_unlock_station_history.GActions, PD_tbl_unlock_station_history.GactionsDate,validos.trndate2 FROM PD_tbl_unlock_station_history INNER JOIN PD_idt_stations ON PD_tbl_unlock_station_history.StationID = PD_idt_stations.StationID INNER JOIN CS_idt_partnumbers ON PD_tbl_unlock_station_history.PartID = CS_idt_partnumbers.PartID INNER JOIN HR_idt_users ON PD_tbl_unlock_station_history.ControlID = HR_idt_users.ControlID INNER JOIN EN_idt_defect_department ON PD_tbl_unlock_station_history.DefectDepartment = EN_idt_defect_department.AutoID LEFT  JOIN (select stationid, jobid, jobtype, partid,side,max(trndate) as 'trndate2' From PD_tbl_unlock_station_history Group by stationid, jobid, jobtype, partid,side) validos ON PD_tbl_unlock_station_history.StationID=validos.StationID and PD_tbl_unlock_station_history.JobID=validos.JobID and PD_tbl_unlock_station_history.JobType=validos.JobType and PD_tbl_unlock_station_history.PartID=validos.PartID and PD_tbl_unlock_station_history.side=validos.side Where Notify=1 AND PD_tbl_unlock_station_history.QtyDefects>1 and PD_tbl_unlock_station_history.StationID=@StationID AND PD_tbl_unlock_station_history.Trndate Between @DiaCurrent and @DiaTomorrow order by trndate2 desc,PD_tbl_unlock_station_history.stationid, PD_tbl_unlock_station_history.jobid, PD_tbl_unlock_station_history.jobtype, PD_tbl_unlock_station_history.partid,PD_tbl_unlock_station_history.side,PD_tbl_unlock_station_history.Trndate asc", dtTicketsparameters);
+                }
+
+                <table>
+                  <tr>
+                    <th>TrnDate</th>
+                    <th>PartNumber</th>
+                    <th>Qty</th>
+                    <th>Details</th>
+                    <th>UnlockBy</th>
+                    <th>Comments</th>
+                  </tr>
+
+                  @foreach (DataRow row in dt_Unlocks.Rows)
+                  {
+                    <tr>
+                      <td>@row["TrnDate"].ToString()</td>
+                      <td>@row["PartNumber"].ToString() @row["Side"].ToString()</td>
+                      <td>@row["QtyDefects"].ToString()</td>
+                      <td>@row["Details"].ToString()</td>
+                      <td>@row["UnlockBy"].ToString()</td>
+                      <td>@row["Comments"].ToString()</td>
+                    </tr>
+                  }
+
+                </table>
+              </div>
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                $(document).on('click', 'a.editdetails', function (e) {
+                  var w = 1200;
+                  var h = 900;
+                  var left = window.screen.availLeft + (screen.width / 2) - (w / 2);
+                  var top = window.screen.availTop + (screen.height / 2) - (h / 2);
+                  var url = $(this).attr('href');
+                  window.open(url, "Details", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+                  return false;
+                });
+              </script>
+              <script type="text/javascript" nonce="@Html.ScriptNonce()">
+                $(document).on('click', 'a.editdetailstv', function (e) {
+                  var w = 1400;
+                  var h = 900;
+                  var left = window.screen.availLeft + (screen.width / 2) - (w / 2);
+                  var top = window.screen.availTop + (screen.height / 2) - (h / 2);
+                  var url = $(this).attr('href');
+                  window.open(url, "Details", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=1, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+                  return false;
+                });
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="uk-width-1-3@m uk-width-1-1@s">
+      <div class="md-card mn-b-25">
+        <div class="md-card-toolbar">
+          <h3 class="md-card-toolbar-heading-text">Hourly Performance</h3>
+        </div>
+        <div class="md-card-content">
+          <div style="position: relative; height: 400px;">
+            <canvas id="hourlyPerformanceChart"></canvas>
+          </div>
+          <div class="fs-11 text-center mn-t-10">
+            <div style="display: inline-block; margin: 0 10px;">
+              <span style="display: inline-block; width: 12px; height: 12px; background-color: var(--theme-goal-color); border-radius: 2px;"></span> Goal
+            </div>
+            <div style="display: inline-block; margin: 0 10px;">
+              <span style="display: inline-block; width: 12px; height: 12px; background-color: var(--theme-actual-color); border-radius: 2px;"></span> Actual
+            </div>
+            <div style="display: inline-block; margin: 0 10px;">
+              <span style="display: inline-block; width: 12px; height: 2px; background-color: var(--theme-efficiency-color);"></span> Efficiency
+            </div>
+            <div style="display: inline-block; margin: 0 10px;">
+              <span style="display: inline-block; width: 12px; height: 2px; background-color: var(--theme-oee-color);"></span> OEE
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="md-card">
+        <div class="md-card-toolbar">
+          <h3 class="md-card-toolbar-heading-text">Dashboard Details</h3>
+        </div>
+        <div class="md-card-content">
+          <div class="mvc-grid mvc-grid-excel-mode">
+            <table class=" w-100">
+              <tr>
+                <th class="b-left b-top">Hour</th>
+                <th class="b-left b-top">PN</th>
+                <th class="b-left b-top">Goal</th>
+                <th class="b-left b-top">Total</th>
+                <th class="b-left b-top">FPY</th>
+                <th class="b-left b-top">Availability</th>
+                <th class="b-left b-top">Efficency</th>
+                <th class="b-left b-top">Downtime</th>
+                <th class="b-left b-top b-right">Comments</th>
+              </tr>
+
+              @{
+                DateTime recordtime = dia_current;
+              }
+              @for (int i = 6; i < 30; i++)
+              {
+                DateTime recordWithHour = recordtime.AddHours(+i);
+
+                Firstronic.Framework.APIs.Station.HourOEE houdetails = Model.Items.FirstOrDefault(n => n.hour == recordWithHour.Hour && n.year == recordWithHour.Year && n.month == recordWithHour.Month && n.day == recordWithHour.Day);
+
+                if (houdetails != null)
+                {
+                  if (houdetails.Details != null)
+                  {
+                    if (houdetails.Details.Count > 0)
+                    {
+                      double util = 0;
+                      try
+                      {
+                        util = ((60 - houdetails.Downtime_Programmed - houdetails.Downtime_NoProgrammed) / (60));
+                        if (double.IsNaN(util))
+                        {
+                          util = 0;
+                        }
+                      }
+                      catch
+                      {
+
+                      }
+
+                      foreach (Firstronic.Framework.APIs.Station.HourOEE_Detail subrow in houdetails.Details)
+                      {
+                        if (subrow.Total > 0)
+                        {
+                          <tr>
+                            <td class="b-left b-top">@(i % 12 == 0 ? 12 : i % 12)</td>
+                            <td class="b-bottom b-left b-top">@subrow.PN</td>
+                            <td class="b-bottom b-left b-top">@subrow.Goal</td>
+                            <td class="b-bottom b-left b-top">@subrow.Total</td>
+                            <td class="b-bottom b-left b-top">@(((double)subrow.FPY).ToString("P0"))</td>
+                            <td class="b-bottom b-left b-top">@(((double)util).ToString("P0"))</td>
+                            <td class="b-bottom b-left b-top">@(((double)subrow.Efficency).ToString("P0"))</td>
+                            <td class="b-bottom b-left b-top">@subrow.Downtime</td>
+                            <td class="b-bottom b-left b-top  b-right">@subrow.Comments</td>
+                            @*<td></td>
+                              <td class="b-bottom b-top b-left">@subrow.Good / @subrow.Bad</td>
+                              <td class="b-bottom b-left b-top">@subrow.Issue1</td>
+                              <td class="b-bottom b-left b-top b-right">@subrow.Issue2</td>*@
+                          </tr>
+                        }
+                      }
+                    }
+                    else
+                    {
+                      <tr>
+                        <td class="b-bottom b-left b-top">@(i % 12 == 0 ? 12 : i % 12)</td>
+                        <td class="b-bottom b-left  b-top"></td>
+                        <td class="b-bottom b-left b-top"></td>
+                        <td class="b-bottom b-left b-top"></td>
+                        <td class="b-bottom b-left b-top"></td>
+                        <td class="b-bottom b-left b-top"></td>
+                        <td class="b-bottom b-left b-top"></td>
+                        <td class="b-bottom b-left b-top"></td>
+                        <td class="b-bottom b-left b-top  b-right"></td>
+                        @*<td></td>
+                          <td class="b-bottom b-top b-left"></td>
+                          <td class="b-bottom b-left b-top"></td>
+                          <td class="b-bottom b-left b-top b-right"></td>*@
+                      </tr>
+                    }
+                  }
+                  else
+                  {
+                    <tr>
+                      <td class="b-bottom b-left b-top">@(i % 12 == 0 ? 12 : i % 12)</td>
+                      <td class="b-bottom b-left  b-top"></td>
+                      <td class="b-bottom b-left b-top"></td>
+                      <td class="b-bottom b-left b-top"></td>
+                      <td class="b-bottom b-left b-top"></td>
+                      <td class="b-bottom b-left b-top"></td>
+                      <td class="b-bottom b-left b-top"></td>
+                      <td class="b-bottom b-left b-top"></td>
+                      <td class="b-bottom b-left b-top  b-right"></td>
+                      @*<td></td>
+                        <td class="b-bottom b-top b-left"></td>
+                        <td class="b-bottom b-left b-top"></td>
+                        <td class="b-bottom b-left b-top b-right"></td>*@
+                    </tr>
+                  }
+
+                }
+                else
+                {
+                  <tr>
+                    <td class="b-bottom b-left b-top">@(i % 12 == 0 ? 12 : i % 12)</td>
+                    <td class="b-bottom b-left  b-top"></td>
+                    <td class="b-bottom b-left b-top"></td>
+                    <td class="b-bottom b-left b-top"></td>
+                    <td class="b-bottom b-left b-top"></td>
+                    <td class="b-bottom b-left b-top"></td>
+                    <td class="b-bottom b-left b-top"></td>
+                    <td class="b-bottom b-left b-top"></td>
+                    <td class="b-bottom b-left b-top  b-right"></td>
+                    @*<td></td>
+                      <td class="b-bottom b-top b-left"></td>
+                      <td class="b-bottom b-left b-top"></td>
+                      <td class="b-bottom b-left b-top b-right"></td>*@
+                  </tr>
+                }
+              }
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="mypopup_details">
+
+</div>
+
+<div id="mypopup_ticket">
+
+</div>
+
+<script type="text/javascript" nonce="@Html.ScriptNonce()">
+
+  // Theme Toggle
+  function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+
+    // Reload chart with new theme
+    if (window.hourlyChart) {
+      loadHourlyPerformanceChart();
+    }
+  }
+
+  // Load saved theme
+  (function() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+
+  // Hourly Performance Chart
+  let hourlyChart = null;
+
+  function loadHourlyPerformanceChart() {
+    // Check if Chart.js is loaded
+    if (typeof Chart === 'undefined') {
+      console.error('Chart.js is not loaded. Retrying in 1 second...');
+      setTimeout(loadHourlyPerformanceChart, 1000);
+      return;
+    }
+
+    var data_chart = JSON.stringify({
+      'year': @Model.year,
+      'month': @Model.month,
+      'day': @Model.day,
+      'StationID': @Model.stationid
+    });
+
+    $.ajax({
+      type: "POST",
+      data: data_chart,
+      url: "/Dashboards/Station/GetHourlyPerformanceData",
+      contentType: "application/json; charset=utf-8",
+      success: function (chartData) {
+        const ctx = document.getElementById('hourlyPerformanceChart');
+
+        if (!ctx) {
+          console.error('Canvas element not found');
+          return;
+        }
+
+        if (hourlyChart) {
+          hourlyChart.destroy();
+        }
+
+        const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
+        const textColor = isDarkTheme ? '#ffffff' : '#000000';
+        const gridColor = isDarkTheme ? '#444444' : '#adadad';
+
+        try {
+          hourlyChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: chartData.labels,
+            datasets: [
+              {
+                label: 'Goal',
+                data: chartData.goalData,
+                backgroundColor: isDarkTheme ? 'rgba(102, 187, 106, 0.7)' : 'rgba(76, 175, 80, 0.7)',
+                borderColor: isDarkTheme ? 'rgba(102, 187, 106, 1)' : 'rgba(76, 175, 80, 1)',
+                borderWidth: 1,
+                stack: 'production',
+                yAxisID: 'y'
+              },
+              {
+                label: 'Actual',
+                data: chartData.actualData,
+                backgroundColor: isDarkTheme ? 'rgba(66, 165, 245, 0.7)' : 'rgba(33, 150, 243, 0.7)',
+                borderColor: isDarkTheme ? 'rgba(66, 165, 245, 1)' : 'rgba(33, 150, 243, 1)',
+                borderWidth: 1,
+                stack: 'production',
+                yAxisID: 'y'
+              },
+              {
+                label: 'Efficiency %',
+                data: chartData.efficiencyData,
+                type: 'line',
+                backgroundColor: 'transparent',
+                borderColor: isDarkTheme ? '#FFA726' : '#FF9800',
+                borderWidth: 3,
+                pointRadius: 4,
+                pointBackgroundColor: isDarkTheme ? '#FFA726' : '#FF9800',
+                tension: 0.3,
+                yAxisID: 'y1'
+              },
+              {
+                label: 'OEE %',
+                data: chartData.oeeData,
+                type: 'line',
+                backgroundColor: 'transparent',
+                borderColor: isDarkTheme ? '#AB47BC' : '#9C27B0',
+                borderWidth: 3,
+                pointRadius: 4,
+                pointBackgroundColor: isDarkTheme ? '#AB47BC' : '#9C27B0',
+                tension: 0.3,
+                yAxisID: 'y1'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: 'index',
+              intersect: false
+            },
+            plugins: {
+              legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                  color: textColor,
+                  usePointStyle: true,
+                  padding: 15
+                }
+              },
+              tooltip: {
+                backgroundColor: isDarkTheme ? '#2d2d2d' : '#ffffff',
+                titleColor: textColor,
+                bodyColor: textColor,
+                borderColor: gridColor,
+                borderWidth: 1,
+                callbacks: {
+                  label: function(context) {
+                    let label = context.dataset.label || '';
+                    if (label) {
+                      label += ': ';
+                    }
+                    if (context.parsed.y !== null) {
+                      if (context.dataset.yAxisID === 'y1') {
+                        label += context.parsed.y.toFixed(2) + '%';
+                      } else {
+                        label += context.parsed.y + ' units';
+                      }
+                    }
+                    return label;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                stacked: true,
+                grid: {
+                  color: gridColor
+                },
+                ticks: {
+                  color: textColor,
+                  maxRotation: 45,
+                  minRotation: 45
+                }
+              },
+              y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                stacked: true,
+                title: {
+                  display: true,
+                  text: 'Production (Units)',
+                  color: textColor
+                },
+                grid: {
+                  color: gridColor
+                },
+                ticks: {
+                  color: textColor
+                }
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                min: 0,
+                max: 100,
+                title: {
+                  display: true,
+                  text: 'Performance (%)',
+                  color: textColor
+                },
+                grid: {
+                  drawOnChartArea: false
+                },
+                ticks: {
+                  color: textColor,
+                  callback: function(value) {
+                    return value + '%';
+                  }
+                }
+              }
+            }
+          }
+        });
+        } catch (chartError) {
+          console.error("Error creating chart:", chartError);
+          document.getElementById('hourlyPerformanceChart').parentElement.innerHTML =
+            '<div style="padding: 20px; text-align: center; color: #ff0000;">Error loading chart. Please refresh the page.</div>';
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error("Error loading hourly performance chart data:", error);
+        document.getElementById('hourlyPerformanceChart').parentElement.innerHTML =
+          '<div style="padding: 20px; text-align: center; color: #ff0000;">Error loading data. Please try again.</div>';
+      },
+      async: true
+    });
+  }
+
+  $(document).ready(function () {
+    // Wait for Chart.js to be fully loaded before initializing
+    if (typeof Chart === 'undefined') {
+      console.log('Waiting for Chart.js to load...');
+      setTimeout(function() {
+        loadHourlyPerformanceChart();
+      }, 500);
+    } else {
+      loadHourlyPerformanceChart();
+    }
+  });
+
+  // ddlDate update in changes
+  ddlDateUpdate_Update = () => {
+    try {
+      WaitingForm_Start()
+    } catch {
+
+    }
+
+    try {
+      var AreaID = $("#txtStationID").val();
+      if (AreaID > 0) {
+
+        try {
+          var trndate = $("#ddlDateUpdate").val();
+          var res = trndate.split("/");
+          var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname + '?year=' + res[2] + '&month=' + res[0] + '&day=' + res[1];
+          window.location = newURL;
+
+        } catch (err) {
+          var x = 2;
+        }
+      }
+    } catch (err) {
+
+    }
+  }
+</script>
